@@ -1,0 +1,11 @@
+{
+	"id": "library-link-generator",
+	"name": "Library Linker",
+	"version": "0.1.0",
+	"minAppVersion": "0.15.0",
+	"description": "Converts JW Library references to actual links in JW Library.",
+	"author": "Martin Sakowski",
+	"authorUrl": "https://msakowski.com",
+	"fundingUrl": "https://msakowski.com",
+	"isDesktopOnly": false
+}
