@@ -33,9 +33,9 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 		const line = editor.getLine(cursor.line);
 		const subString = line.substring(0, cursor.ch);
 		
-		// Modified patterns to better handle spaces
-		const matchLink = subString.match(/\/b\s+([a-z0-9äöüß]+)\s*(\d+:\d+(?:-\d+)?)?$/i);
-		const matchOpen = subString.match(/\/bo\s+([a-z0-9äöüß]+)\s*(\d+:\d+(?:-\d+)?)?$/i);
+		// Modified regex to make space between book and chapter optional
+		const matchLink = subString.match(/\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i);
+		const matchOpen = subString.match(/\/bo\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i);
 		
 		if (!matchLink && !matchOpen) return null;
 
@@ -48,18 +48,21 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 				line: cursor.line
 			},
 			end: cursor,
-			query: {
-				text: match[1] && match[2] ? `${match[1]} ${match[2]}` : '',
-				command: matchOpen ? 'open' : 'link'
-			}
+			query: match[1] || ''
 		};
 	}
 
-	getSuggestions(context: EditorSuggestContext & { query: BibleSuggestion }): BibleSuggestion[] {
-		if (context.query.text.match(/^[a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?$/i)) {
+	getSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
+		const query = context.query;
+		// Get the full line to check for /bo
+		const line = context.editor.getLine(context.start.line);
+		const isOpenCommand = line.substring(0, context.start.ch + 3) === '/bo';
+		
+		// Regex that handles both with and without space
+		if (query.match(/^[a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?$/i)) {
 			return [{
-				text: context.query.text,
-				command: context.query.command
+				text: query,
+				command: isOpenCommand ? 'open' : 'link'
 			}];
 		}
 		return [];
@@ -120,18 +123,15 @@ export default class LibraryLinkerPlugin extends Plugin {
 
 		const formattedReference = `${formattedReferenceStart}-${formattedReferenceEnd}`;
 		
-		// Construct the new URL format
 		return `jwlibrary:///finder?bible=${formattedReference}`;
 	}
 
 	private convertPublicationReference(url: string): string {
-		// Extract the publication reference parts
 		const parts = url.split('/');
 		const pubRef = parts[3];
 		const [locale, docId] = pubRef.split(':');
 		const paragraph = parts[4];
 		
-		// Construct the new URL format
 		return `jwlibrary:///finder?wtlocale=${locale}&docid=${docId}&par=${paragraph}`;
 	}
 
@@ -164,13 +164,13 @@ export default class LibraryLinkerPlugin extends Plugin {
 	private parseBibleReference(input: string): BibleReference {
 		input = input.trim().toLowerCase();
 		
-		const match = input.match(/^([a-z0-9äöüß]+)\s*(\d+):(\d+)(?:-(\d+))?$/i);
+		const match = input.match(/^([a-z0-9äöüß]+?)(?:\s*(\d+)\s*:\s*(\d+)(?:\s*-\s*(\d+))?$)/i);
 		if (!match) {
 			throw new Error("Invalid format");
 		}
 
-		const [, bookQuery, chapter, verse, endVerse] = match;
-		const bookIndex = this.findBookIndex(bookQuery);
+		const [, bookName, chapter, verseStart, verseEnd] = match;
+		const bookIndex = this.findBookIndex(bookName.trim());
 		if (bookIndex === -1) {
 			throw new Error("Book not found");
 		}
@@ -178,14 +178,18 @@ export default class LibraryLinkerPlugin extends Plugin {
 		return {
 			book: bookIndex < 10 ? `0${bookIndex}` : bookIndex.toString(),
 			chapter: chapter.padStart(3, "0"),
-			verse: verse.padStart(3, "0"),
-			endVerse: endVerse?.padStart(3, "0")
+			verse: verseStart.padStart(3, "0"),
+			endVerse: verseEnd ? verseEnd.padStart(3, "0") : undefined
 		};
 	}
 
 	private findBookIndex(bookQuery: string): number {
+		bookQuery = bookQuery.toLowerCase().trim();
 		for (let i = 0; i < bibleBooksDE.length; i++) {
-			if (bibleBooksDE[i].includes(bookQuery)) {
+			const bookEntry = bibleBooksDE[i];
+			// Only match the abbreviation, not the full name
+			const abbreviation = Object.keys(bookEntry)[0].toLowerCase();
+			if (bookQuery === abbreviation) {
 				return i + 1;
 			}
 		}
@@ -201,46 +205,35 @@ export default class LibraryLinkerPlugin extends Plugin {
 	}
 
 	private formatBibleText(input: string): string {
-		// Remove extra spaces and ensure consistent formatting
-		const trimmed = input.trim();
-		// Match the pattern "book chapter:verse-verse"
-		const match = trimmed.match(/^([a-z0-9äöüß]+)\s*(\d+):(\d+)(?:-(\d+))?$/i);
-		if (!match) return input;
-
-		const [, book, chapter, verse, endVerse] = match;
-		
-		// Find the book index and get the full name
-		const bookIndex = this.findBookIndex(book);
-		let formattedBook = book;
-		if (bookIndex !== -1) {
-			formattedBook = bibleBooksDE[bookIndex - 1][1]; // Use the second value (full name)
+		try {
+			const reference = this.parseBibleReference(input);
+			const bookIndex = parseInt(reference.book) - 1;
+			const bookEntry = bibleBooksDE[bookIndex];
+			const formattedBook = Object.values(bookEntry)[0];
+			
+			// Format the verse reference
+			const verseRef = reference.endVerse 
+				? `${parseInt(reference.verse)}-${parseInt(reference.endVerse)}` 
+				: parseInt(reference.verse);
+			
+			return `${formattedBook} ${parseInt(reference.chapter)}:${verseRef}`;
+		} catch (error) {
+			return input;
 		}
-		// Format book title according to rules
-		if (formattedBook) {
-			if (formattedBook.match(/^\d/)) {
-				// Starts with number: Add dot and space, capitalize word
-				formattedBook = formattedBook.replace(/^(\d+)(\w+)/, (_, num, word) => 
-					`${num}. ${word.charAt(0).toUpperCase()}${word.slice(1)}`
-				);
-			} else if (formattedBook.includes(" ")) {
-				// Two words: Capitalize both
-				formattedBook = formattedBook.split(" ")
-					.map(word => word.charAt(0).toUpperCase() + word.slice(1))
-					.join(" ");
-			} else {
-				// Single word: Capitalize first letter
-				formattedBook = formattedBook.charAt(0).toUpperCase() + formattedBook.slice(1);
-			}
-		}
-		return endVerse 
-			? `${formattedBook} ${chapter}:${verse}-${endVerse}`
-			: `${formattedBook} ${chapter}:${verse}`;
 	}
 
 	public convertBibleTextToMarkdownLink(input: string): string {
-		const url = this.convertBibleTextToLink(input);
-		const formattedText = this.formatBibleText(input);
-		return `[${formattedText}](${url})`;
+		try {
+			const url = this.convertBibleTextToLink(input);
+			const formattedText = this.formatBibleText(input);
+			// Only create markdown link if conversion was successful
+			if (url !== input) {
+				return `[${formattedText}](${url})`;
+			}
+			return input;
+		} catch (error) {
+			return input;
+		}
 	}
 
 	async onload() {
