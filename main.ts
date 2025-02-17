@@ -1,4 +1,15 @@
-import { App, Editor, EditorPosition, EditorSuggest, EditorSuggestContext, EditorSuggestTriggerInfo, MarkdownView, Plugin, PluginSettingTab, TFile } from 'obsidian';
+import {
+	App,
+	Editor,
+	EditorPosition,
+	EditorSuggest,
+	EditorSuggestContext,
+	EditorSuggestTriggerInfo,
+	MarkdownView,
+	Plugin,
+	PluginSettingTab,
+	TFile,
+} from 'obsidian';
 import { bibleBooksDE } from './src/bibleBooks';
 
 interface LinkReplacerSettings {
@@ -7,11 +18,12 @@ interface LinkReplacerSettings {
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
 	// Default settings will go here
-}
+};
 
 interface BibleSuggestion {
 	text: string;
 	command: 'link' | 'open';
+	description: string;
 }
 
 interface BibleReference {
@@ -29,64 +41,68 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 		this.plugin = plugin;
 	}
 
-	onTrigger(cursor: EditorPosition, editor: Editor): EditorSuggestTriggerInfo | null {
+	onTrigger(
+		cursor: EditorPosition,
+		editor: Editor,
+	): EditorSuggestTriggerInfo | null {
 		const line = editor.getLine(cursor.line);
 		const subString = line.substring(0, cursor.ch);
-		
-		// Modified regex to make space between book and chapter optional
-		const matchLink = subString.match(/\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i);
-		const matchOpen = subString.match(/\/bo\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i);
-		
-		if (!matchLink && !matchOpen) return null;
 
-		const match = matchOpen || matchLink;
+		// Modified regex to make space between book and chapter optional
+		const match = subString.match(
+			/\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i,
+		);
+
 		if (!match) return null;
 
 		return {
 			start: {
 				ch: match.index!,
-				line: cursor.line
+				line: cursor.line,
 			},
 			end: cursor,
-			query: match[1] || ''
+			query: match[1] || '',
 		};
 	}
 
 	getSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
 		const query = context.query;
-		// Get the full line to check for /bo
-		const line = context.editor.getLine(context.start.line);
-		const isOpenCommand = line.substring(0, context.start.ch + 3) === '/bo';
-		
+
 		// Regex that handles both with and without space
 		if (query.match(/^[a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?$/i)) {
-			return [{
-				text: query,
-				command: isOpenCommand ? 'open' : 'link'
-			}];
+			return [
+				{
+					text: query,
+					command: 'link',
+					description: 'Create JW Library link',
+				},
+				{
+					text: query,
+					command: 'open',
+					description: 'Create JW Library link and open',
+				},
+			];
 		}
 		return [];
 	}
 
 	renderSuggestion(suggestion: BibleSuggestion, el: HTMLElement): void {
-		const action = suggestion.command === 'open' ? 'Convert and open' : 'Convert';
-		el.setText(`${action} "${suggestion.text}" to JW Library link`);
+		el.setText(`${suggestion.description}`);
 	}
 
 	selectSuggestion(suggestion: BibleSuggestion): void {
 		if (!this.context) return;
+
 		const { context } = this;
 		const editor = context.editor;
-		
+
 		// Convert the Bible reference to a link
-		const convertedLink = this.plugin.convertBibleTextToMarkdownLink(suggestion.text);
-		
-		// Replace the entire command and reference with the converted link
-		editor.replaceRange(
-			convertedLink,
-			context.start,
-			context.end
+		const convertedLink = this.plugin.convertBibleTextToMarkdownLink(
+			suggestion.text,
 		);
+
+		// Replace the entire command and reference with the converted link
+		editor.replaceRange(convertedLink, context.start, context.end);
 
 		// If this was a /bo command, open the link
 		if (suggestion.command === 'open') {
@@ -106,12 +122,14 @@ export default class LibraryLinkerPlugin extends Plugin {
 		// Extract the Bible reference parts
 		const parts = url.split('/');
 		const bibleRef = parts[parts.length - 1];
-		
+
 		// Extract book, chapter and verse
-		const [startBookChapterVerse, endBookChapterVerse] = bibleRef.split('-');
-		const [bookStart, chapterStart, verseStart] = startBookChapterVerse.split(':');
+		const [startBookChapterVerse, endBookChapterVerse] =
+			bibleRef.split('-');
+		const [bookStart, chapterStart, verseStart] =
+			startBookChapterVerse.split(':');
 		const [bookEnd, chapterEnd, verseEnd] = endBookChapterVerse.split(':');
-		
+
 		// Format the numbers to ensure proper padding
 		const formattedChapterStart = chapterStart.padStart(3, '0');
 		const formattedVerseStart = verseStart.padStart(3, '0');
@@ -122,7 +140,7 @@ export default class LibraryLinkerPlugin extends Plugin {
 		const formattedReferenceEnd = `${bookEnd}${formattedChapterEnd}${formattedVerseEnd}`;
 
 		const formattedReference = `${formattedReferenceStart}-${formattedReferenceEnd}`;
-		
+
 		return `jwlibrary:///finder?bible=${formattedReference}`;
 	}
 
@@ -131,20 +149,29 @@ export default class LibraryLinkerPlugin extends Plugin {
 		const pubRef = parts[3];
 		const [locale, docId] = pubRef.split(':');
 		const paragraph = parts[4];
-		
+
 		return `jwlibrary:///finder?wtlocale=${locale}&docid=${docId}&par=${paragraph}`;
 	}
 
-	private convertLinks(content: string, type?: 'bible' | 'publication' | 'all'): string {
+	private convertLinks(
+		content: string,
+		type?: 'bible' | 'publication' | 'all',
+	): string {
 		const wikiLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-		
+
 		return content.replace(wikiLinkRegex, (match, text, url) => {
 			// Handle Bible references
-			if (url.startsWith('jwpub://b/') && (type === 'bible' || type === 'all')) {
+			if (
+				url.startsWith('jwpub://b/') &&
+				(type === 'bible' || type === 'all')
+			) {
 				return `[${text}](${this.convertBibleReference(url)})`;
 			}
 			// Handle publication references
-			if (url.startsWith('jwpub://p/') && (type === 'publication' || type === 'all')) {
+			if (
+				url.startsWith('jwpub://p/') &&
+				(type === 'publication' || type === 'all')
+			) {
 				return `[${text}](${this.convertPublicationReference(url)})`;
 			}
 			return match;
@@ -156,30 +183,32 @@ export default class LibraryLinkerPlugin extends Plugin {
 			const reference = this.parseBibleReference(input);
 			return this.formatJWLibraryLink(reference);
 		} catch (error) {
-			console.error("Error converting Bible text:", error.message);
+			console.error('Error converting Bible text:', error.message);
 			return input;
 		}
 	}
 
 	private parseBibleReference(input: string): BibleReference {
 		input = input.trim().toLowerCase();
-		
-		const match = input.match(/^([a-z0-9äöüß]+?)(?:\s*(\d+)\s*:\s*(\d+)(?:\s*-\s*(\d+))?$)/i);
+
+		const match = input.match(
+			/^([a-z0-9äöüß]+?)(?:\s*(\d+)\s*:\s*(\d+)(?:\s*-\s*(\d+))?$)/i,
+		);
 		if (!match) {
-			throw new Error("Invalid format");
+			throw new Error('Invalid format');
 		}
 
 		const [, bookName, chapter, verseStart, verseEnd] = match;
 		const bookIndex = this.findBookIndex(bookName.trim());
 		if (bookIndex === -1) {
-			throw new Error("Book not found");
+			throw new Error('Book not found');
 		}
 
 		return {
 			book: bookIndex < 10 ? `0${bookIndex}` : bookIndex.toString(),
-			chapter: chapter.padStart(3, "0"),
-			verse: verseStart.padStart(3, "0"),
-			endVerse: verseEnd ? verseEnd.padStart(3, "0") : undefined
+			chapter: chapter.padStart(3, '0'),
+			verse: verseStart.padStart(3, '0'),
+			endVerse: verseEnd ? verseEnd.padStart(3, '0') : undefined,
 		};
 	}
 
@@ -198,7 +227,7 @@ export default class LibraryLinkerPlugin extends Plugin {
 
 	private formatJWLibraryLink(reference: BibleReference): string {
 		const baseReference = `${reference.book}${reference.chapter}${reference.verse}`;
-		const rangeReference = reference.endVerse 
+		const rangeReference = reference.endVerse
 			? `-${reference.book}${reference.chapter}${reference.endVerse}`
 			: '';
 		return `jwlibrary:///finder?bible=${baseReference}${rangeReference}`;
@@ -210,12 +239,12 @@ export default class LibraryLinkerPlugin extends Plugin {
 			const bookIndex = parseInt(reference.book) - 1;
 			const bookEntry = bibleBooksDE[bookIndex];
 			const formattedBook = Object.values(bookEntry)[0];
-			
+
 			// Format the verse reference
-			const verseRef = reference.endVerse 
-				? `${parseInt(reference.verse)}-${parseInt(reference.endVerse)}` 
+			const verseRef = reference.endVerse
+				? `${parseInt(reference.verse)}-${parseInt(reference.endVerse)}`
 				: parseInt(reference.verse);
-			
+
 			return `${formattedBook} ${parseInt(reference.chapter)}:${verseRef}`;
 		} catch (error) {
 			return input;
@@ -249,7 +278,7 @@ export default class LibraryLinkerPlugin extends Plugin {
 				if (currentContent !== updatedContent) {
 					editor.setValue(updatedContent);
 				}
-			}
+			},
 		});
 
 		// Add command for Bible links only
@@ -258,11 +287,14 @@ export default class LibraryLinkerPlugin extends Plugin {
 			name: 'Replace Bible verse links',
 			editorCallback: (editor: Editor) => {
 				const currentContent = editor.getValue();
-				const updatedContent = this.convertLinks(currentContent, 'bible');
+				const updatedContent = this.convertLinks(
+					currentContent,
+					'bible',
+				);
 				if (currentContent !== updatedContent) {
 					editor.setValue(updatedContent);
 				}
-			}
+			},
 		});
 
 		// Add command for publication links only
@@ -271,11 +303,14 @@ export default class LibraryLinkerPlugin extends Plugin {
 			name: 'Replace publication links',
 			editorCallback: (editor: Editor) => {
 				const currentContent = editor.getValue();
-				const updatedContent = this.convertLinks(currentContent, 'publication');
+				const updatedContent = this.convertLinks(
+					currentContent,
+					'publication',
+				);
 				if (currentContent !== updatedContent) {
 					editor.setValue(updatedContent);
 				}
-			}
+			},
 		});
 
 		// Add command for Bible text conversion
@@ -285,10 +320,11 @@ export default class LibraryLinkerPlugin extends Plugin {
 			editorCallback: (editor: Editor) => {
 				const selection = editor.getSelection();
 				if (selection) {
-					const convertedLink = this.convertBibleTextToMarkdownLink(selection);
+					const convertedLink =
+						this.convertBibleTextToMarkdownLink(selection);
 					editor.replaceSelection(convertedLink);
 				}
-			}
+			},
 		});
 
 		// Add settings tab
@@ -304,7 +340,11 @@ export default class LibraryLinkerPlugin extends Plugin {
 	}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		this.settings = Object.assign(
+			{},
+			DEFAULT_SETTINGS,
+			await this.loadData(),
+		);
 	}
 
 	async saveSettings() {
@@ -321,7 +361,7 @@ class LinkReplacerSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		const {containerEl} = this;
+		const { containerEl } = this;
 		containerEl.empty();
 
 		// We'll add settings UI elements here when needed
