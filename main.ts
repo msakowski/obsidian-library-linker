@@ -44,9 +44,9 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const line = editor.getLine(cursor.line);
     const subString = line.substring(0, cursor.ch);
 
-    // Modified regex to make space between book and chapter optional
-    const matchLink = subString.match(/\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i);
-    const matchOpen = subString.match(/\/bo\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i);
+    // Modified regex to handle bullet points and other list markers at start of line
+    const matchLink = subString.match(/(?:^|\s)(?:[-*+]\s+)?\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i);
+    const matchOpen = subString.match(/(?:^|\s)(?:[-*+]\s+)?\/bo\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i);
 
     if (!matchLink && !matchOpen) return null;
 
@@ -55,7 +55,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
     return {
       start: {
-        ch: match.index!,
+        ch: match.index! + match[0].indexOf('/'),  // Adjust start position to the actual command
         line: cursor.line,
       },
       end: cursor,
@@ -67,16 +67,15 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const query = context.query;
     // Get the full line to check for /bo
     const line = context.editor.getLine(context.start.line);
-    const isOpenCommand = line.substring(0, context.start.ch + 3) === '/bo';
+    // Changed: Look for /bo at the exact trigger position instead of the start of line
+    const isOpenCommand = line.substring(context.start.ch, context.start.ch + 3) === '/bo';
 
     // Regex that handles both with and without space
     if (query.match(/^[a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?$/i)) {
-      return [
-        {
-          text: query,
-          command: isOpenCommand ? 'open' : 'link',
-        },
-      ];
+        return [{
+            text: query,
+            command: isOpenCommand ? 'open' : 'link',
+        }];
     }
     return [];
   }
