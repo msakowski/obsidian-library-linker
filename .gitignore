@@ -18,9 +18,6 @@ Thumbs.db
 # TypeScript build info
 *.tsbuildinfo
 
-# npm
-package-lock.json
-
 # Environment variables
 .env
 .env.local
