@@ -83,7 +83,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 		
 		// Replace the entire command and reference with the converted link
 		editor.replaceRange(
-			convertedLink,
+			`${convertedLink} `,
 			context.start,
 			context.end
 		);
