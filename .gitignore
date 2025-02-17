@@ -7,7 +7,6 @@ data.json
 .hotreload
 
 # Development
-.vscode/
 .idea/
 *.log
 
