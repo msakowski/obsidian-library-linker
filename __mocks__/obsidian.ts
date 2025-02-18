@@ -7,4 +7,4 @@ export class EditorSuggest {}
 export class MarkdownView {}
 export class TFile {}
 
-// Add any other Obsidian classes/types you need to mock 
+// Add any other Obsidian classes/types you need to mock
