@@ -5,10 +5,8 @@ import {
   EditorSuggest,
   EditorSuggestContext,
   EditorSuggestTriggerInfo,
-  MarkdownView,
   Plugin,
   PluginSettingTab,
-  TFile,
 } from 'obsidian';
 import { bibleBooksDE } from './src/bibleBooks';
 
@@ -23,6 +21,7 @@ const DEFAULT_SETTINGS: LinkReplacerSettings = {
 interface BibleSuggestion {
   text: string;
   command: 'link' | 'open';
+  description: string;
 }
 
 interface BibleReference {
@@ -45,17 +44,15 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const subString = line.substring(0, cursor.ch);
 
     // Modified regex to handle bullet points and other list markers at start of line
-    const matchLink = subString.match(/(?:^|\s)(?:[-*+]\s+)?\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i);
-    const matchOpen = subString.match(/(?:^|\s)(?:[-*+]\s+)?\/bo\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i);
+    const match = subString.match(
+      /(?:^|\s)(?:[-*+]\s+)?\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i,
+    );
 
-    if (!matchLink && !matchOpen) return null;
-
-    const match = matchOpen || matchLink;
     if (!match) return null;
 
     return {
       start: {
-        ch: match.index! + match[0].indexOf('/'),  // Adjust start position to the actual command
+        ch: match.index! + match[0].indexOf('/'), // Adjust start position to the actual command
         line: cursor.line,
       },
       end: cursor,
@@ -65,28 +62,32 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
   getSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
     const query = context.query;
-    // Get the full line to check for /bo
-    const line = context.editor.getLine(context.start.line);
-    // Changed: Look for /bo at the exact trigger position instead of the start of line
-    const isOpenCommand = line.substring(context.start.ch, context.start.ch + 3) === '/bo';
 
     // Regex that handles both with and without space
     if (query.match(/^[a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?$/i)) {
-        return [{
-            text: query,
-            command: isOpenCommand ? 'open' : 'link',
-        }];
+      return [
+        {
+          text: query,
+          command: 'link',
+          description: 'Create JW Library link',
+        },
+        {
+          text: query,
+          command: 'open',
+          description: 'Create JW Library link and open',
+        },
+      ];
     }
     return [];
   }
 
   renderSuggestion(suggestion: BibleSuggestion, el: HTMLElement): void {
-    const action = suggestion.command === 'open' ? 'Convert and open' : 'Convert';
-    el.setText(`${action} "${suggestion.text}" to JW Library link`);
+    el.setText(`${suggestion.description}`);
   }
 
   selectSuggestion(suggestion: BibleSuggestion): void {
     if (!this.context) return;
+
     const { context } = this;
     const editor = context.editor;
 
@@ -94,7 +95,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const convertedLink = this.plugin.convertBibleTextToMarkdownLink(suggestion.text);
 
     // Replace the entire command and reference with the converted link
-    editor.replaceRange(`${convertedLink} `, context.start, context.end);
+    editor.replaceRange(convertedLink, context.start, context.end);
 
     // If this was a /bo command, open the link
     if (suggestion.command === 'open') {
