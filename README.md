@@ -8,8 +8,7 @@ This Obsidian plugin enhances your note-taking experience by providing seamless 
 
 Automatically converts JW Library links to a format that works directly in JW Library:
 
-- Converts Bible verse links from `jwpub://` to `jwlibrary://` format
-- Converts publication links to the proper JW Library format
+- Converts Bible verse and publication links from `jwpub://` to `jwlibrary://` format
 - Maintains the original text of the link while updating the URL
 
 Commands to replace multiple links at once:
