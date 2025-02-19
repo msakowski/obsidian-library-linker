@@ -38,6 +38,7 @@ describe('LibraryLinkerPlugin', () => {
     });
 
     test('handles invalid input', () => {
+      console.error = jest.fn(); // Silence console.error for this test
       expect(plugin.convertBibleTextToLink('invalid')).toBe('invalid');
     });
   });
@@ -129,6 +130,7 @@ describe('LibraryLinkerPlugin', () => {
     });
 
     test('throws on invalid book', () => {
+      console.error = jest.fn(); // Silence console.error for this test
       expect(() => {
         plugin['parseBibleReference']('xyz1:1');
       }).toThrow('Book not found');
