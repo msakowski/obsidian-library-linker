@@ -12,6 +12,7 @@ import {
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { formatBibleText } from '@/utils/formatBibleText';
+import { convertBibleReference } from '@/utils/convertBibleReference';
 import type { BibleSuggestion, LinkReplacerSettings } from '@/types';
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
@@ -96,32 +97,6 @@ export default class LibraryLinkerPlugin extends Plugin {
   settings: LinkReplacerSettings;
   private bibleSuggester: BibleReferenceSuggester;
 
-  private convertBibleReference(url: string): string {
-    // Replace 'jwpub://' with 'jwlibrary://'
-    url = url.replace('jwpub://', 'jwlibrary://');
-    // Extract the Bible reference parts
-    const parts = url.split('/');
-    const bibleRef = parts[parts.length - 1];
-
-    // Extract book, chapter and verse
-    const [startBookChapterVerse, endBookChapterVerse] = bibleRef.split('-');
-    const [bookStart, chapterStart, verseStart] = startBookChapterVerse.split(':');
-    const [bookEnd, chapterEnd, verseEnd] = endBookChapterVerse.split(':');
-
-    // Format the numbers to ensure proper padding
-    const formattedChapterStart = chapterStart.padStart(3, '0');
-    const formattedVerseStart = verseStart.padStart(3, '0');
-    const formattedChapterEnd = chapterEnd.padStart(3, '0');
-    const formattedVerseEnd = verseEnd.padStart(3, '0');
-
-    const formattedReferenceStart = `${bookStart}${formattedChapterStart}${formattedVerseStart}`;
-    const formattedReferenceEnd = `${bookEnd}${formattedChapterEnd}${formattedVerseEnd}`;
-
-    const formattedReference = `${formattedReferenceStart}-${formattedReferenceEnd}`;
-
-    return `jwlibrary:///finder?bible=${formattedReference}`;
-  }
-
   private convertPublicationReference(url: string): string {
     const parts = url.split('/');
     const pubRef = parts[3];
@@ -137,7 +112,7 @@ export default class LibraryLinkerPlugin extends Plugin {
     return content.replace(wikiLinkRegex, (match, text, url) => {
       // Handle Bible references
       if (url.startsWith('jwpub://b/') && (type === 'bible' || type === 'all')) {
-        return `[${text}](${this.convertBibleReference(url)})`;
+        return `[${text}](${convertBibleReference(url)})`;
       }
       // Handle publication references
       if (url.startsWith('jwpub://p/') && (type === 'publication' || type === 'all')) {
