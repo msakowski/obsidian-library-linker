@@ -9,10 +9,11 @@ import {
   PluginSettingTab,
   Setting,
 } from 'obsidian';
-import { parseBibleReference } from '@/utils/parseBibleReference';
-import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
-import { formatBibleText } from '@/utils/formatBibleText';
 import { convertLinks } from '@/utils/convertLinks';
+import {
+  convertBibleTextToLink,
+  convertBibleTextToMarkdownLink,
+} from '@/utils/convertBibleTextToLink';
 import type { BibleSuggestion, LinkReplacerSettings } from '@/types';
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
@@ -80,14 +81,17 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const editor = context.editor;
 
     // Convert the Bible reference to a link
-    const convertedLink = this.plugin.convertBibleTextToMarkdownLink(suggestion.text);
+    const convertedLink = convertBibleTextToMarkdownLink(
+      suggestion.text,
+      this.plugin.settings.useShortNames,
+    );
 
     // Replace the entire command and reference with the converted link
     editor.replaceRange(convertedLink, context.start, context.end);
 
     // If this was a /bo command, open the link
     if (suggestion.command === 'open') {
-      const url = this.plugin.convertBibleTextToLink(suggestion.text);
+      const url = convertBibleTextToLink(suggestion.text);
       window.open(url);
     }
   }
@@ -96,30 +100,6 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 export default class LibraryLinkerPlugin extends Plugin {
   settings: LinkReplacerSettings;
   private bibleSuggester: BibleReferenceSuggester;
-
-  public convertBibleTextToLink(input: string): string {
-    try {
-      const reference = parseBibleReference(input);
-      return formatJWLibraryLink(reference);
-    } catch (error) {
-      console.error('Error converting Bible text:', error.message);
-      return input;
-    }
-  }
-
-  public convertBibleTextToMarkdownLink(input: string): string {
-    try {
-      const url = this.convertBibleTextToLink(input);
-      const formattedText = formatBibleText(input, this.settings.useShortNames);
-      // Only create markdown link if conversion was successful
-      if (url !== input) {
-        return `[${formattedText}](${url})`;
-      }
-      return input;
-    } catch (error) {
-      return input;
-    }
-  }
 
   async onload() {
     await this.loadSettings();
@@ -170,7 +150,10 @@ export default class LibraryLinkerPlugin extends Plugin {
       editorCallback: (editor: Editor) => {
         const selection = editor.getSelection();
         if (selection) {
-          const convertedLink = this.convertBibleTextToMarkdownLink(selection);
+          const convertedLink = convertBibleTextToMarkdownLink(
+            selection,
+            this.settings.useShortNames,
+          );
           editor.replaceSelection(convertedLink);
         }
       },
