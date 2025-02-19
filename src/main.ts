@@ -12,8 +12,7 @@ import {
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { formatBibleText } from '@/utils/formatBibleText';
-import { convertBibleReference } from '@/utils/convertBibleReference';
-import { convertPublicationReference } from '@/utils/convertPublicationReference';
+import { convertLinks } from '@/utils/convertLinks';
 import type { BibleSuggestion, LinkReplacerSettings } from '@/types';
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
@@ -98,22 +97,6 @@ export default class LibraryLinkerPlugin extends Plugin {
   settings: LinkReplacerSettings;
   private bibleSuggester: BibleReferenceSuggester;
 
-  private convertLinks(content: string, type?: 'bible' | 'publication' | 'all'): string {
-    const wikiLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
-
-    return content.replace(wikiLinkRegex, (match, text, url) => {
-      // Handle Bible references
-      if (url.startsWith('jwpub://b/') && (type === 'bible' || type === 'all')) {
-        return `[${text}](${convertBibleReference(url)})`;
-      }
-      // Handle publication references
-      if (url.startsWith('jwpub://p/') && (type === 'publication' || type === 'all')) {
-        return `[${text}](${convertPublicationReference(url)})`;
-      }
-      return match;
-    });
-  }
-
   public convertBibleTextToLink(input: string): string {
     try {
       const reference = parseBibleReference(input);
@@ -147,7 +130,7 @@ export default class LibraryLinkerPlugin extends Plugin {
       name: 'Replace all links',
       editorCallback: (editor: Editor) => {
         const currentContent = editor.getValue();
-        const updatedContent = this.convertLinks(currentContent, 'all');
+        const updatedContent = convertLinks(currentContent, 'all');
         if (currentContent !== updatedContent) {
           editor.setValue(updatedContent);
         }
@@ -160,7 +143,7 @@ export default class LibraryLinkerPlugin extends Plugin {
       name: 'Replace Bible verse links',
       editorCallback: (editor: Editor) => {
         const currentContent = editor.getValue();
-        const updatedContent = this.convertLinks(currentContent, 'bible');
+        const updatedContent = convertLinks(currentContent, 'bible');
         if (currentContent !== updatedContent) {
           editor.setValue(updatedContent);
         }
@@ -173,7 +156,7 @@ export default class LibraryLinkerPlugin extends Plugin {
       name: 'Replace publication links',
       editorCallback: (editor: Editor) => {
         const currentContent = editor.getValue();
-        const updatedContent = this.convertLinks(currentContent, 'publication');
+        const updatedContent = convertLinks(currentContent, 'publication');
         if (currentContent !== updatedContent) {
           editor.setValue(updatedContent);
         }
