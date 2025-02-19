@@ -7,15 +7,16 @@ import {
   EditorSuggestTriggerInfo,
   Plugin,
   PluginSettingTab,
+  Setting,
 } from 'obsidian';
 import { bibleBooksDE } from './src/bibleBooks';
 
 interface LinkReplacerSettings {
-  // We'll add settings later if needed
+  useShortNames: boolean;
 }
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
-  // Default settings will go here
+  useShortNames: false
 };
 
 interface BibleSuggestion {
@@ -194,12 +195,9 @@ export default class LibraryLinkerPlugin extends Plugin {
 
   private findBookIndex(bookQuery: string): number {
     bookQuery = bookQuery.toLowerCase().trim();
-    for (let i = 0; i < bibleBooksDE.length; i++) {
-      const bookEntry = bibleBooksDE[i];
-      // Only match the abbreviation, not the full name
-      const abbreviation = Object.keys(bookEntry)[0].toLowerCase();
-      if (bookQuery === abbreviation) {
-        return i + 1;
+    for (const book of bibleBooksDE) {
+      if (book.aliases.includes(bookQuery)) {
+        return book.id;
       }
     }
     return -1;
@@ -218,14 +216,16 @@ export default class LibraryLinkerPlugin extends Plugin {
       const reference = this.parseBibleReference(input);
       const bookIndex = parseInt(reference.book) - 1;
       const bookEntry = bibleBooksDE[bookIndex];
-      const formattedBook = Object.values(bookEntry)[0];
+      
+      // Use short or long name based on settings
+      const bookName = this.settings.useShortNames ? bookEntry.shortName : bookEntry.longName;
 
       // Format the verse reference
       const verseRef = reference.endVerse
         ? `${parseInt(reference.verse)}-${parseInt(reference.endVerse)}`
         : parseInt(reference.verse);
 
-      return `${formattedBook} ${parseInt(reference.chapter)}:${verseRef}`;
+      return `${bookName} ${parseInt(reference.chapter)}:${verseRef}`;
     } catch (error) {
       return input;
     }
@@ -333,6 +333,14 @@ class LinkReplacerSettingTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    // We'll add settings UI elements here when needed
+    new Setting(containerEl)
+      .setName('Use short names in Bible links')
+      .setDesc('When enabled, Bible references will use abbreviated book names (e.g., "1Pe" instead of "1. Peter")')
+      .addToggle(toggle => toggle
+        .setValue(this.plugin.settings.useShortNames)
+        .onChange(async (value) => {
+          this.plugin.settings.useShortNames = value;
+          await this.plugin.saveSettings();
+        }));
   }
 }
