@@ -8,6 +8,7 @@ data.json
 
 # Development
 .idea/
+.vscode/
 *.log
 
 # OS-specific files
