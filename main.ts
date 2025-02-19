@@ -16,7 +16,7 @@ interface LinkReplacerSettings {
 }
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
-  useShortNames: false
+  useShortNames: false,
 };
 
 interface BibleSuggestion {
@@ -216,7 +216,7 @@ export default class LibraryLinkerPlugin extends Plugin {
       const reference = this.parseBibleReference(input);
       const bookIndex = parseInt(reference.book) - 1;
       const bookEntry = bibleBooksDE[bookIndex];
-      
+
       // Use short or long name based on settings
       const bookName = this.settings.useShortNames ? bookEntry.shortName : bookEntry.longName;
 
@@ -335,12 +335,14 @@ class LinkReplacerSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName('Use short names in Bible links')
-      .setDesc('When enabled, Bible references will use abbreviated book names (e.g., "1Pe" instead of "1. Peter")')
-      .addToggle(toggle => toggle
-        .setValue(this.plugin.settings.useShortNames)
-        .onChange(async (value) => {
+      .setDesc(
+        'When enabled, Bible references will use abbreviated book names (e.g., "1Pe" instead of "1. Peter")',
+      )
+      .addToggle((toggle) =>
+        toggle.setValue(this.plugin.settings.useShortNames).onChange(async (value) => {
           this.plugin.settings.useShortNames = value;
           await this.plugin.saveSettings();
-        }));
+        }),
+      );
   }
 }

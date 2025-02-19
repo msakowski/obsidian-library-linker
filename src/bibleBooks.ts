@@ -3,12 +3,12 @@ export type BibleBooks = readonly BibleBookAbbreviations[];
 
 interface BibleBook {
   id: number;
-  aliases: string[];
+  aliases: readonly string[];
   longName: string;
   shortName: string;
 }
 
-export const bibleBooksDE: BibleBook[] = [
+export const bibleBooksDE: readonly BibleBook[] = [
   {
     id: 1,
     aliases: ['1mo', '1.mo', '1mose', '1.mose'],
@@ -179,7 +179,7 @@ export const bibleBooksDE: BibleBook[] = [
   },
   {
     id: 26,
-    aliases: ['hes', 'hesekiel', 'ez', 'ezechiel'],
+    aliases: ['hes', 'hesekiel'],
     longName: 'Hesekiel',
     shortName: 'Hes',
   },
