@@ -6,6 +6,7 @@ module.exports = [
   eslintPluginPrettierRecommended,
   {
     files: ['**/*.ts', '**/*.tsx'],
+    ignores: ['node_modules/**', 'main.js'],
     languageOptions: {
       parser: tsParser,
       sourceType: 'module',
