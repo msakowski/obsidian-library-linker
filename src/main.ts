@@ -13,6 +13,7 @@ import { parseBibleReference } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { convertBibleReference } from '@/utils/convertBibleReference';
+import { convertPublicationReference } from '@/utils/convertPublicationReference';
 import type { BibleSuggestion, LinkReplacerSettings } from '@/types';
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
@@ -97,15 +98,6 @@ export default class LibraryLinkerPlugin extends Plugin {
   settings: LinkReplacerSettings;
   private bibleSuggester: BibleReferenceSuggester;
 
-  private convertPublicationReference(url: string): string {
-    const parts = url.split('/');
-    const pubRef = parts[3];
-    const [locale, docId] = pubRef.split(':');
-    const paragraph = parts[4];
-
-    return `jwlibrary:///finder?wtlocale=${locale}&docid=${docId}&par=${paragraph}`;
-  }
-
   private convertLinks(content: string, type?: 'bible' | 'publication' | 'all'): string {
     const wikiLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
 
@@ -116,7 +108,7 @@ export default class LibraryLinkerPlugin extends Plugin {
       }
       // Handle publication references
       if (url.startsWith('jwpub://p/') && (type === 'publication' || type === 'all')) {
-        return `[${text}](${this.convertPublicationReference(url)})`;
+        return `[${text}](${convertPublicationReference(url)})`;
       }
       return match;
     });
