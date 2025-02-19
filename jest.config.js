@@ -8,5 +8,9 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   moduleNameMapper: {
     '^obsidian$': '<rootDir>/__mocks__/obsidian.ts',
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
+  transform: {
+    '^.+\\.[jt]sx?$': '@swc/jest',
   },
 };

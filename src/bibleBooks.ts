@@ -1,12 +1,4 @@
-export type BibleBookAbbreviations = readonly string[];
-export type BibleBooks = readonly BibleBookAbbreviations[];
-
-interface BibleBook {
-  id: number;
-  aliases: readonly string[];
-  longName: string;
-  shortName: string;
-}
+import { BibleBook } from '@/types';
 
 export const bibleBooksDE: readonly BibleBook[] = [
   {
@@ -424,6 +416,3 @@ export const bibleBooksDE: readonly BibleBook[] = [
     shortName: 'Off',
   },
 ] as const;
-
-// Type for accessing bible books by ID
-export type BibleBookId = (typeof bibleBooksDE)[number]['id'];
