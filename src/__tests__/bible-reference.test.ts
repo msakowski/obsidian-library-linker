@@ -1,4 +1,6 @@
-import LibraryLinkerPlugin from '../../main';
+import LibraryLinkerPlugin from '@/main';
+import { formatBibleText } from '@/utils/formatBibleText';
+import { parseBibleReference } from '@/utils/parseBibleReference';
 import { App } from 'obsidian';
 
 describe('LibraryLinkerPlugin', () => {
@@ -100,7 +102,7 @@ describe('LibraryLinkerPlugin', () => {
 
   describe('parseBibleReference', () => {
     test('parses simple reference', () => {
-      const result = plugin['parseBibleReference']('joh3:16');
+      const result = parseBibleReference('joh3:16');
       expect(result).toEqual({
         book: '43',
         chapter: '003',
@@ -110,7 +112,7 @@ describe('LibraryLinkerPlugin', () => {
     });
 
     test('parses reference with space', () => {
-      const result = plugin['parseBibleReference']('joh 3:16');
+      const result = parseBibleReference('joh 3:16');
       expect(result).toEqual({
         book: '43',
         chapter: '003',
@@ -120,7 +122,7 @@ describe('LibraryLinkerPlugin', () => {
     });
 
     test('parses verse range', () => {
-      const result = plugin['parseBibleReference']('ps23:1-3');
+      const result = parseBibleReference('ps23:1-3');
       expect(result).toEqual({
         book: '19',
         chapter: '023',
@@ -132,13 +134,13 @@ describe('LibraryLinkerPlugin', () => {
     test('throws on invalid book', () => {
       console.error = jest.fn(); // Silence console.error for this test
       expect(() => {
-        plugin['parseBibleReference']('xyz1:1');
+        parseBibleReference('xyz1:1');
       }).toThrow('Book not found');
     });
 
     test('throws on invalid format', () => {
       expect(() => {
-        plugin['parseBibleReference']('joh:1');
+        parseBibleReference('joh:1');
       }).toThrow('Invalid format');
     });
   });
@@ -168,12 +170,8 @@ describe('LibraryLinkerPlugin', () => {
     ];
 
     describe('with long format', () => {
-      beforeEach(() => {
-        plugin.settings = { ...plugin.settings, useShortNames: false };
-      });
-
       test.each(testCases)('formats "$input" to "$expectedLong"', ({ input, expectedLong }) => {
-        expect(plugin['formatBibleText'](input)).toBe(expectedLong);
+        expect(formatBibleText(input)).toBe(expectedLong);
       });
     });
 
@@ -183,7 +181,7 @@ describe('LibraryLinkerPlugin', () => {
       });
 
       test.each(testCases)('formats "$input" to "$expectedShort"', ({ input, expectedShort }) => {
-        expect(plugin['formatBibleText'](input)).toBe(expectedShort);
+        expect(formatBibleText(input, true)).toBe(expectedShort);
       });
     });
   });

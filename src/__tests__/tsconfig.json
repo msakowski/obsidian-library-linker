@@ -17,5 +17,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts"]
+  "include": [],
+  "maxWorkers": 1
 }

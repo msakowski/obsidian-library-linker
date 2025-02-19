@@ -9,28 +9,14 @@ import {
   PluginSettingTab,
   Setting,
 } from 'obsidian';
-import { bibleBooksDE } from './src/bibleBooks';
-
-interface LinkReplacerSettings {
-  useShortNames: boolean;
-}
+import { parseBibleReference } from '@/utils/parseBibleReference';
+import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
+import { formatBibleText } from '@/utils/formatBibleText';
+import type { BibleSuggestion, LinkReplacerSettings } from '@/types';
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,
 };
-
-interface BibleSuggestion {
-  text: string;
-  command: 'link' | 'open';
-  description: string;
-}
-
-interface BibleReference {
-  book: string;
-  chapter: string;
-  verse: string;
-  endVerse?: string;
-}
 
 class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   plugin: LibraryLinkerPlugin;
@@ -163,70 +149,10 @@ export default class LibraryLinkerPlugin extends Plugin {
 
   public convertBibleTextToLink(input: string): string {
     try {
-      const reference = this.parseBibleReference(input);
-      return this.formatJWLibraryLink(reference);
+      const reference = parseBibleReference(input);
+      return formatJWLibraryLink(reference);
     } catch (error) {
       console.error('Error converting Bible text:', error.message);
-      return input;
-    }
-  }
-
-  private parseBibleReference(input: string): BibleReference {
-    input = input.trim().toLowerCase();
-
-    const match = input.match(/^([a-z0-9äöüß]+?)(?:\s*(\d+)\s*:\s*(\d+)(?:\s*-\s*(\d+))?$)/i);
-    if (!match) {
-      throw new Error('Invalid format');
-    }
-
-    const [, bookName, chapter, verseStart, verseEnd] = match;
-    const bookIndex = this.findBookIndex(bookName.trim());
-    if (bookIndex === -1) {
-      throw new Error('Book not found');
-    }
-
-    return {
-      book: bookIndex < 10 ? `0${bookIndex}` : bookIndex.toString(),
-      chapter: chapter.padStart(3, '0'),
-      verse: verseStart.padStart(3, '0'),
-      endVerse: verseEnd ? verseEnd.padStart(3, '0') : undefined,
-    };
-  }
-
-  private findBookIndex(bookQuery: string): number {
-    bookQuery = bookQuery.toLowerCase().trim();
-    for (const book of bibleBooksDE) {
-      if (book.aliases.includes(bookQuery)) {
-        return book.id;
-      }
-    }
-    return -1;
-  }
-
-  private formatJWLibraryLink(reference: BibleReference): string {
-    const baseReference = `${reference.book}${reference.chapter}${reference.verse}`;
-    const rangeReference = reference.endVerse
-      ? `-${reference.book}${reference.chapter}${reference.endVerse}`
-      : '';
-    return `jwlibrary:///finder?bible=${baseReference}${rangeReference}`;
-  }
-
-  private formatBibleText(input: string): string {
-    try {
-      const reference = this.parseBibleReference(input);
-      const bookIndex = parseInt(reference.book) - 1;
-      const bookEntry = bibleBooksDE[bookIndex];
-
-      // Use short or long name based on settings
-      const bookName = this.settings.useShortNames ? bookEntry.shortName : bookEntry.longName;
-
-      // Format the verse reference
-      const verseRef = reference.endVerse
-        ? `${parseInt(reference.verse)}-${parseInt(reference.endVerse)}`
-        : parseInt(reference.verse);
-
-      return `${bookName} ${parseInt(reference.chapter)}:${verseRef}`;
-    } catch (error) {
       return input;
     }
   }
@@ -234,7 +160,7 @@ export default class LibraryLinkerPlugin extends Plugin {
   public convertBibleTextToMarkdownLink(input: string): string {
     try {
       const url = this.convertBibleTextToLink(input);
-      const formattedText = this.formatBibleText(input);
+      const formattedText = formatBibleText(input, this.settings.useShortNames);
       // Only create markdown link if conversion was successful
       if (url !== input) {
         return `[${formattedText}](${url})`;
