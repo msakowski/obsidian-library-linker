@@ -1,4 +1,4 @@
-name: obsidian-library-linker
+name: Test
 
 on:
   push:
