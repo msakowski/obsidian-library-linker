@@ -11,11 +11,13 @@ export function formatBibleText(input: string, short = false): string {
     const bookName = short ? bookEntry.shortName : bookEntry.longName;
 
     // Format the verse reference
-    const verseRef = reference.endVerse
-      ? `${parseInt(reference.verse)}-${parseInt(reference.endVerse)}`
-      : parseInt(reference.verse);
+    const verseRefs = reference.verseRanges!.map((range) => {
+      const start = parseInt(range.start);
+      const end = parseInt(range.end);
+      return start === end ? start.toString() : `${start}-${end}`;
+    });
 
-    return `${bookName} ${parseInt(reference.chapter)}:${verseRef}`;
+    return `${bookName} ${parseInt(reference.chapter)}:${verseRefs.join(',')}`;
   } catch (error) {
     return input;
   }

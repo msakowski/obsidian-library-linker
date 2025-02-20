@@ -15,6 +15,7 @@ import {
   convertBibleTextToMarkdownLink,
 } from '@/utils/convertBibleTextToLink';
 import type { BibleSuggestion, LinkReplacerSettings } from '@/types';
+import { formatBibleText } from '@/utils/formatBibleText';
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,
@@ -34,7 +35,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
     // Modified regex to handle bullet points and other list markers at start of line
     const match = subString.match(
-      /(?:^|\s)(?:[-*+]\s+)?\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i,
+      /(?:^|\s)(?:[-*+]\s+)?\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:(?:-\d+)|(?:,\s*\d+(?:-\d+)?)*)?)?$/i,
     );
 
     if (!match) return null;
@@ -52,18 +53,19 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   getSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
     const query = context.query;
 
-    // Regex that handles both with and without space
-    if (query.match(/^[a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?$/i)) {
+    // Regex that handles both with and without space, including complex verse references
+    if (query.match(/^[a-z0-9äöüß]+\s*\d+:\d+(?:(?:-\d+)|(?:,\s*\d+(?:-\d+)?)*)?$/i)) {
+      const formattedText = formatBibleText(query, true); // Use short format
       return [
         {
           text: query,
           command: 'link',
-          description: 'Create JW Library link',
+          description: `Create link: ${formattedText}`,
         },
         {
           text: query,
           command: 'open',
-          description: 'Create JW Library link and open',
+          description: `Create and open: ${formattedText}`,
         },
       ];
     }
@@ -92,7 +94,13 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     // If this was a /bo command, open the link
     if (suggestion.command === 'open') {
       const url = convertBibleTextToLink(suggestion.text);
-      window.open(url);
+      if (Array.isArray(url)) {
+        // Open first link in sequence
+        window.open(url[0]);
+        // TODO: maybe add options to command list for each link?
+      } else {
+        window.open(url);
+      }
     }
   }
 }
