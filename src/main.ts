@@ -87,7 +87,6 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
       // If there are multiple links, add individual open options
       if (hasMultipleLinks) {
-        console.log(reference);
         const verseRanges = reference.verseRanges!.map((range) => {
           const start = parseInt(range.start);
           const end = parseInt(range.end);
