@@ -21,6 +21,11 @@ describe('convertBibleTextToLink', () => {
       'jwlibrary:///finder?bible=43001006-43001008',
       'jwlibrary:///finder?bible=43001012-43001014',
     ]);
+    expect(convertBibleTextToLink('1mo3:1-5,7,9')).toEqual([
+      'jwlibrary:///finder?bible=01003001-01003005',
+      'jwlibrary:///finder?bible=01003007',
+      'jwlibrary:///finder?bible=01003009',
+    ]);
   });
 
   test('returns input on invalid reference', () => {
@@ -57,6 +62,11 @@ describe('convertBibleTextToMarkdownLink', () => {
           '[6-8](jwlibrary:///finder?bible=43001006-43001008),' +
           '[12-14](jwlibrary:///finder?bible=43001012-43001014)',
       );
+      expect(convertBibleTextToMarkdownLink('1mo3:1-5,7,9')).toBe(
+        '[1. Mose 3:1-5](jwlibrary:///finder?bible=01003001-01003005),' +
+          '[7](jwlibrary:///finder?bible=01003007),' +
+          '[9](jwlibrary:///finder?bible=01003009)',
+      );
     });
   });
 
@@ -85,6 +95,11 @@ describe('convertBibleTextToMarkdownLink', () => {
           '[4](jwlibrary:///finder?bible=43001004),' +
           '[6-8](jwlibrary:///finder?bible=43001006-43001008),' +
           '[12-14](jwlibrary:///finder?bible=43001012-43001014)',
+      );
+      expect(convertBibleTextToMarkdownLink('1mo3:1-5,7,9', true)).toBe(
+        '[1Mo 3:1-5](jwlibrary:///finder?bible=01003001-01003005),' +
+          '[7](jwlibrary:///finder?bible=01003007),' +
+          '[9](jwlibrary:///finder?bible=01003009)',
       );
     });
   });

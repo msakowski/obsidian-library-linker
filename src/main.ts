@@ -17,6 +17,9 @@ import {
 import type { BibleSuggestion, LinkReplacerSettings } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
 
+export const matchingBibleReferenceRegex =
+  /^(?:[1-5]?[A-Za-zäöü]{1,4}\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*,?\s*)?$/i;
+
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,
 };
@@ -33,20 +36,25 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const line = editor.getLine(cursor.line);
     const subString = line.substring(0, cursor.ch);
 
-    // Modified regex to handle bullet points, list markers, and incomplete references with commas
-    const match = subString.match(
-      /(?:^|\s)(?:[-*+]\s+)?\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:(?:-\d+)|(?:,\s*\d+(?:-\d+)?)*)?(?:,\s*)?)?$/i,
-    );
+    // Find position of /b
+    const commandIndex = subString.lastIndexOf('/b');
+    if (commandIndex === -1) return null;
+
+    // Get the text after /b
+    const afterCommand = subString.slice(commandIndex + 2).trim();
+
+    // Match the Bible reference
+    const match = afterCommand.match(matchingBibleReferenceRegex);
 
     if (!match) return null;
 
     return {
       start: {
-        ch: match.index! + match[0].indexOf('/'), // Adjust start position to the actual command
+        ch: commandIndex, // Start from the /b
         line: cursor.line,
       },
       end: cursor,
-      query: match[1] || '',
+      query: afterCommand,
     };
   }
 
@@ -54,7 +62,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const query = context.query;
 
     // Regex that handles both with and without space, including complex verse references
-    if (query.match(/^[a-z0-9äöüß]+\s*\d+:\d+(?:(?:-\d+)|(?:,\s*\d+(?:-\d+)?)*)?$/i)) {
+    if (query.match(matchingBibleReferenceRegex)) {
       const formattedText = formatBibleText(query, true); // Use short format
       return [
         {
