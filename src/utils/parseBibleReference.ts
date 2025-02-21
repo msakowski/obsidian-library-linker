@@ -14,6 +14,12 @@ function padVerse(verse: number): string {
 }
 
 function parseVerseRanges(versePart: string): VerseRange[] {
+  // Remove any trailing commas
+  versePart = versePart.trim();
+  if (versePart.endsWith(',')) {
+    versePart = versePart.slice(0, -1);
+  }
+
   // Split by comma and clean up whitespace
   const parts = versePart
     .split(',')

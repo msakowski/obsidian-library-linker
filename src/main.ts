@@ -33,9 +33,9 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const line = editor.getLine(cursor.line);
     const subString = line.substring(0, cursor.ch);
 
-    // Modified regex to handle bullet points and other list markers at start of line
+    // Modified regex to handle bullet points, list markers, and incomplete references with commas
     const match = subString.match(
-      /(?:^|\s)(?:[-*+]\s+)?\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:(?:-\d+)|(?:,\s*\d+(?:-\d+)?)*)?)?$/i,
+      /(?:^|\s)(?:[-*+]\s+)?\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:(?:-\d+)|(?:,\s*\d+(?:-\d+)?)*)?(?:,\s*)?)?$/i,
     );
 
     if (!match) return null;
