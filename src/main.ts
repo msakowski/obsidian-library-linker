@@ -14,8 +14,10 @@ import {
   convertBibleTextToLink,
   convertBibleTextToMarkdownLink,
 } from '@/utils/convertBibleTextToLink';
-import type { BibleSuggestion, LinkReplacerSettings } from '@/types';
+import type { BibleReference, BibleSuggestion, LinkReplacerSettings } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
+import { parseBibleReference } from './utils/parseBibleReference';
+import { formatJWLibraryLink } from './utils/formatJWLibraryLink';
 
 export const matchingBibleReferenceRegex =
   /^(?:[1-5]?[A-Za-zäöü]{1,4}\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*,?\s*)?$/i;
@@ -64,18 +66,50 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     // Regex that handles both with and without space, including complex verse references
     if (query.match(matchingBibleReferenceRegex)) {
       const formattedText = formatBibleText(query, true); // Use short format
-      return [
+
+      let reference: BibleReference;
+      try {
+        reference = parseBibleReference(query);
+      } catch {
+        return [];
+      }
+
+      const links = formatJWLibraryLink(reference);
+      const hasMultipleLinks = Array.isArray(links) && links.length > 1;
+
+      const suggestions: BibleSuggestion[] = [
         {
           text: query,
           command: 'link',
-          description: `Create link: ${formattedText}`,
+          description: `Create link${hasMultipleLinks ? 's' : ''}: ${formattedText}`,
         },
-        {
+      ];
+
+      // If there are multiple links, add individual open options
+      if (hasMultipleLinks) {
+        const verseRanges = reference.verseRanges!.map((range) => {
+          const start = parseInt(range.start);
+          const end = parseInt(range.end);
+          return start === end ? start.toString() : `${start}-${end}`;
+        });
+
+        verseRanges.forEach((range, i) => {
+          suggestions.push({
+            text: query,
+            command: 'open',
+            description: `Create and open: ${range}`,
+            linkIndex: i,
+          });
+        });
+      } else {
+        suggestions.push({
           text: query,
           command: 'open',
           description: `Create and open: ${formattedText}`,
-        },
-      ];
+        });
+      }
+
+      return suggestions;
     }
     return [];
   }
@@ -99,13 +133,12 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     // Replace the entire command and reference with the converted link
     editor.replaceRange(convertedLink, context.start, context.end);
 
-    // If this was a /bo command, open the link
+    // Handle opening links
     if (suggestion.command === 'open') {
       const url = convertBibleTextToLink(suggestion.text);
       if (Array.isArray(url)) {
-        // Open first link in sequence
-        window.open(url[0]);
-        // TODO: maybe add options to command list for each link?
+        // For open-specific, open the specified link, otherwise open first
+        window.open(url[suggestion.linkIndex || 0]);
       } else {
         window.open(url);
       }

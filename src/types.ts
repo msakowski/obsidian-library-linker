@@ -31,4 +31,5 @@ export interface BibleSuggestion {
   text: string;
   command: 'link' | 'open';
   description: string;
+  linkIndex?: number;
 }
