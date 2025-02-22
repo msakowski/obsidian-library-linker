@@ -110,8 +110,12 @@ describe('LibraryLinkerPlugin', () => {
       expect(result).toEqual({
         book: '43',
         chapter: '003',
-        verse: '016',
-        endVerse: undefined,
+        verseRanges: [
+          {
+            start: '016',
+            end: '016',
+          },
+        ],
       });
     });
 
@@ -120,8 +124,12 @@ describe('LibraryLinkerPlugin', () => {
       expect(result).toEqual({
         book: '43',
         chapter: '003',
-        verse: '016',
-        endVerse: undefined,
+        verseRanges: [
+          {
+            start: '016',
+            end: '016',
+          },
+        ],
       });
     });
 
@@ -130,9 +138,63 @@ describe('LibraryLinkerPlugin', () => {
       expect(result).toEqual({
         book: '19',
         chapter: '023',
-        verse: '001',
-        endVerse: '003',
+        verseRanges: [
+          {
+            start: '001',
+            end: '003',
+          },
+        ],
       });
+    });
+
+    test('parses complex verse reference with multiple ranges', () => {
+      const result = parseBibleReference('joh1:1,2,4,6,7-8,12-14');
+      expect(result).toEqual({
+        book: '43',
+        chapter: '001',
+        verseRanges: [
+          { start: '001', end: '002' }, // 1,2 becomes a range
+          { start: '004', end: '004' }, // single verse
+          { start: '006', end: '008' }, // 6,7-8 becomes one range
+          { start: '012', end: '014' }, // explicit range
+        ],
+      });
+    });
+
+    test('parses complex verse reference with spaces', () => {
+      const result = parseBibleReference('joh 1:1-2, 4, 6, 7-8, 12-14');
+      expect(result).toEqual({
+        book: '43',
+        chapter: '001',
+        verseRanges: [
+          { start: '001', end: '002' },
+          { start: '004', end: '004' },
+          { start: '006', end: '008' },
+          { start: '012', end: '014' },
+        ],
+      });
+    });
+
+    test('throws on out of order verses in complex reference', () => {
+      expect(() => parseBibleReference('joh1:2,1,6,4,8-7,14-12')).toThrow(
+        'Verses must be in ascending order',
+      );
+      expect(() => parseBibleReference('joh1:1,3,2')).toThrow('Verses must be in ascending order');
+      expect(() => parseBibleReference('joh1:3-1')).toThrow('Verses must be in ascending order');
+      expect(() => parseBibleReference('joh1:7-8,6')).toThrow('Verses must be in ascending order');
+    });
+
+    test('throws on invalid format in complex reference', () => {
+      expect(() => parseBibleReference('joh1:1,,2')).toThrow('Invalid verse number');
+      expect(() => parseBibleReference('joh1:1-2-3')).toThrow('Invalid verse number');
+      expect(() => parseBibleReference('joh1:1,-2')).toThrow('Invalid verse number');
+    });
+
+    test('throws on self-referencing verses', () => {
+      expect(() => parseBibleReference('joh1:1,1')).toThrow('Verses must be in ascending order');
+      expect(() => parseBibleReference('joh1:1-1')).toThrow('Verses must be in ascending order');
+      expect(() => parseBibleReference('joh1:1,2,2')).toThrow('Verses must be in ascending order');
+      expect(() => parseBibleReference('joh1:1,1-2')).toThrow('Verses must be in ascending order');
     });
 
     test('throws on invalid book', () => {

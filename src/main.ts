@@ -15,6 +15,10 @@ import {
   convertBibleTextToMarkdownLink,
 } from '@/utils/convertBibleTextToLink';
 import type { BibleSuggestion, LinkReplacerSettings } from '@/types';
+import { formatBibleText } from '@/utils/formatBibleText';
+
+export const matchingBibleReferenceRegex =
+  /^(?:[1-5]?[A-Za-zäöü]{1,4}\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*,?\s*)?$/i;
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,
@@ -32,38 +36,44 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const line = editor.getLine(cursor.line);
     const subString = line.substring(0, cursor.ch);
 
-    // Modified regex to handle bullet points and other list markers at start of line
-    const match = subString.match(
-      /(?:^|\s)(?:[-*+]\s+)?\/b\s+([a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?)?$/i,
-    );
+    // Find position of /b
+    const commandIndex = subString.lastIndexOf('/b');
+    if (commandIndex === -1) return null;
+
+    // Get the text after /b
+    const afterCommand = subString.slice(commandIndex + 2).trim();
+
+    // Match the Bible reference
+    const match = afterCommand.match(matchingBibleReferenceRegex);
 
     if (!match) return null;
 
     return {
       start: {
-        ch: match.index! + match[0].indexOf('/'), // Adjust start position to the actual command
+        ch: commandIndex, // Start from the /b
         line: cursor.line,
       },
       end: cursor,
-      query: match[1] || '',
+      query: afterCommand,
     };
   }
 
   getSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
     const query = context.query;
 
-    // Regex that handles both with and without space
-    if (query.match(/^[a-z0-9äöüß]+\s*\d+:\d+(?:-\d+)?$/i)) {
+    // Regex that handles both with and without space, including complex verse references
+    if (query.match(matchingBibleReferenceRegex)) {
+      const formattedText = formatBibleText(query, true); // Use short format
       return [
         {
           text: query,
           command: 'link',
-          description: 'Create JW Library link',
+          description: `Create link: ${formattedText}`,
         },
         {
           text: query,
           command: 'open',
-          description: 'Create JW Library link and open',
+          description: `Create and open: ${formattedText}`,
         },
       ];
     }
@@ -92,7 +102,13 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     // If this was a /bo command, open the link
     if (suggestion.command === 'open') {
       const url = convertBibleTextToLink(suggestion.text);
-      window.open(url);
+      if (Array.isArray(url)) {
+        // Open first link in sequence
+        window.open(url[0]);
+        // TODO: maybe add options to command list for each link?
+      } else {
+        window.open(url);
+      }
     }
   }
 }

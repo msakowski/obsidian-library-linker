@@ -16,11 +16,15 @@ export type BibleBooks = readonly BibleBookAbbreviations[];
 
 export type BibleBookId = (typeof bibleBooksDE)[number]['id'];
 
+export interface VerseRange {
+  start: string;
+  end: string;
+}
+
 export interface BibleReference {
   book: string;
   chapter: string;
-  verse: string;
-  endVerse?: string;
+  verseRanges?: VerseRange[]; // For complex verse references with multiple ranges
 }
 
 export interface BibleSuggestion {

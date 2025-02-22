@@ -14,6 +14,20 @@ describe('convertBibleTextToLink', () => {
     expect(convertBibleTextToLink('off21:3-4')).toBe('jwlibrary:///finder?bible=66021003-66021004');
   });
 
+  test('handles complex verse references', () => {
+    expect(convertBibleTextToLink('joh1:1,2,4,6,7-8,12-14')).toEqual([
+      'jwlibrary:///finder?bible=43001001-43001002',
+      'jwlibrary:///finder?bible=43001004',
+      'jwlibrary:///finder?bible=43001006-43001008',
+      'jwlibrary:///finder?bible=43001012-43001014',
+    ]);
+    expect(convertBibleTextToLink('1mo3:1-5,7,9')).toEqual([
+      'jwlibrary:///finder?bible=01003001-01003005',
+      'jwlibrary:///finder?bible=01003007',
+      'jwlibrary:///finder?bible=01003009',
+    ]);
+  });
+
   test('returns input on invalid reference', () => {
     console.error = jest.fn(); // Silence console.error for this test
     expect(convertBibleTextToLink('invalid')).toBe('invalid');
@@ -40,6 +54,20 @@ describe('convertBibleTextToMarkdownLink', () => {
         '[Offenbarung 21:3-4](jwlibrary:///finder?bible=66021003-66021004)',
       );
     });
+
+    test('converts complex verse reference to multiple markdown links', () => {
+      expect(convertBibleTextToMarkdownLink('joh1:1,2,4,6,7-8,12-14')).toBe(
+        '[Johannes 1:1-2](jwlibrary:///finder?bible=43001001-43001002),' +
+          '[4](jwlibrary:///finder?bible=43001004),' +
+          '[6-8](jwlibrary:///finder?bible=43001006-43001008),' +
+          '[12-14](jwlibrary:///finder?bible=43001012-43001014)',
+      );
+      expect(convertBibleTextToMarkdownLink('1mo3:1-5,7,9')).toBe(
+        '[1. Mose 3:1-5](jwlibrary:///finder?bible=01003001-01003005),' +
+          '[7](jwlibrary:///finder?bible=01003007),' +
+          '[9](jwlibrary:///finder?bible=01003009)',
+      );
+    });
   });
 
   describe('with short format', () => {
@@ -58,6 +86,20 @@ describe('convertBibleTextToMarkdownLink', () => {
       );
       expect(convertBibleTextToMarkdownLink('off21:3-4', true)).toBe(
         '[Off 21:3-4](jwlibrary:///finder?bible=66021003-66021004)',
+      );
+    });
+
+    test('converts complex verse reference to multiple markdown links', () => {
+      expect(convertBibleTextToMarkdownLink('joh1:1,2,4,6,7-8,12-14', true)).toBe(
+        '[Joh 1:1-2](jwlibrary:///finder?bible=43001001-43001002),' +
+          '[4](jwlibrary:///finder?bible=43001004),' +
+          '[6-8](jwlibrary:///finder?bible=43001006-43001008),' +
+          '[12-14](jwlibrary:///finder?bible=43001012-43001014)',
+      );
+      expect(convertBibleTextToMarkdownLink('1mo3:1-5,7,9', true)).toBe(
+        '[1Mo 3:1-5](jwlibrary:///finder?bible=01003001-01003005),' +
+          '[7](jwlibrary:///finder?bible=01003007),' +
+          '[9](jwlibrary:///finder?bible=01003009)',
       );
     });
   });

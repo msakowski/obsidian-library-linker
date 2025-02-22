@@ -28,6 +28,12 @@ Quick command for inserting Bible references:
 ```
 /b mat 24:14
 → [Matthäus 24:14](jwlibrary:///finder?bible=40024014)
+
+/b joh1:1,2,4
+→ [Johannes 1:1-2](link),[4](link)
+
+/b joh1:1,2,4,6,7-8,12-14
+→ [Johannes 1:1-2](link),[4](link),[6-8](link),[12-14](link)
 ```
 
 2. Create JW Library link and open
