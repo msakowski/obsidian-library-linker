@@ -16,11 +16,13 @@ import {
 } from '@/utils/convertBibleTextToLink';
 import type { BibleReference, BibleSuggestion, LinkReplacerSettings } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
-import { parseBibleReference } from './utils/parseBibleReference';
-import { formatJWLibraryLink } from './utils/formatJWLibraryLink';
+import { parseBibleReference } from '@/utils/parseBibleReference';
+import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 
 export const matchingBibleReferenceRegex =
-  /^(?:[1-5]?[A-Za-zäöü]{1,4}\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*,?\s*)?$/i;
+  /^(?:[1-5]?[A-Za-zäöü]{2,24}\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*,?\s*)?$/i;
+// 24 random number. Apostelgeschichte is 17 characters long.
+// should be enough for language support.
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,

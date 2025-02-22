@@ -6,6 +6,7 @@ export interface LinkReplacerSettings {
 
 export interface BibleBook {
   id: number;
+  prefix?: string;
   aliases: readonly string[];
   longName: string;
   shortName: string;

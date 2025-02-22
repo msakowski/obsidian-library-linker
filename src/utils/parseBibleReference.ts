@@ -1,4 +1,4 @@
-import { findBookIndex } from '@/utils/findBookIndex';
+import { findBook } from '@/utils/findBook';
 import type { BibleReference, VerseRange } from '@/types';
 
 function parseVerseNumber(verse: string): number {
@@ -104,12 +104,12 @@ export function parseBibleReference(input: string): BibleReference {
   }
 
   const [, bookName, chapter, versesPart] = match;
-  const bookIndex = findBookIndex(bookName.trim());
-  if (bookIndex === -1) {
+  const book = findBook(bookName.trim());
+  if (!book) {
     throw new Error('Book not found');
   }
 
-  const paddedBook = bookIndex < 10 ? `0${bookIndex}` : bookIndex.toString();
+  const paddedBook = book.id < 10 ? `0${book.id}` : book.id.toString();
   const paddedChapter = chapter.padStart(3, '0');
 
   // Simple verse or range pattern
