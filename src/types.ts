@@ -1,7 +1,10 @@
 import { bibleBooksDE } from '@/bibleBooks';
 
+export type Language = 'en' | 'de';
+
 export interface LinkReplacerSettings {
   useShortNames: boolean;
+  language: Language;
 }
 
 export interface BibleBook {

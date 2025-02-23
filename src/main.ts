@@ -16,18 +16,21 @@ import {
 } from '@/utils/convertBibleTextToLink';
 import type { BibleReference, BibleSuggestion, LinkReplacerSettings } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
-import { parseBibleReference } from './utils/parseBibleReference';
-import { formatJWLibraryLink } from './utils/formatJWLibraryLink';
+import { parseBibleReference } from '@/utils/parseBibleReference';
+import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
+import { TranslationService } from '@/services/TranslationService';
 
 export const matchingBibleReferenceRegex =
   /^(?:[1-5]?[A-Za-zäöü]{1,4}\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*,?\s*)?$/i;
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,
+  language: 'en',
 };
 
 class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   plugin: LibraryLinkerPlugin;
+  private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
   constructor(plugin: LibraryLinkerPlugin) {
     super(plugin.app);
@@ -81,7 +84,9 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
         {
           text: query,
           command: 'link',
-          description: `Create link${hasMultipleLinks ? 's' : ''}: ${formattedText}`,
+          description: hasMultipleLinks
+            ? this.t('suggestions.createLinks', { text: formattedText })
+            : this.t('suggestions.createLink', { text: formattedText }),
         },
       ];
 
@@ -97,7 +102,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
           suggestions.push({
             text: query,
             command: 'open',
-            description: `Create and open: ${range}`,
+            description: this.t('suggestions.createAndOpenVerse', { verse: range }),
             linkIndex: i,
           });
         });
@@ -105,7 +110,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
         suggestions.push({
           text: query,
           command: 'open',
-          description: `Create and open: ${formattedText}`,
+          description: this.t('suggestions.createAndOpen', { text: formattedText }),
         });
       }
 
@@ -115,7 +120,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   }
 
   renderSuggestion(suggestion: BibleSuggestion, el: HTMLElement): void {
-    el.setText(`${suggestion.description}`);
+    el.setText(suggestion.description);
   }
 
   selectSuggestion(suggestion: BibleSuggestion): void {
@@ -149,14 +154,16 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 export default class LibraryLinkerPlugin extends Plugin {
   settings: LinkReplacerSettings;
   private bibleSuggester: BibleReferenceSuggester;
+  private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
   async onload() {
     await this.loadSettings();
+    TranslationService.getInstance().setLanguage(this.settings.language);
 
     // Add the command for all link replacement
     this.addCommand({
       id: 'replace-links',
-      name: 'Replace all links',
+      name: this.t('commands.replaceLinks'),
       editorCallback: (editor: Editor) => {
         const currentContent = editor.getValue();
         const updatedContent = convertLinks(currentContent, 'all');
@@ -169,7 +176,7 @@ export default class LibraryLinkerPlugin extends Plugin {
     // Add command for Bible links only
     this.addCommand({
       id: 'replace-bible-links',
-      name: 'Replace Bible verse links',
+      name: this.t('commands.replaceBibleLinks'),
       editorCallback: (editor: Editor) => {
         const currentContent = editor.getValue();
         const updatedContent = convertLinks(currentContent, 'bible');
@@ -182,7 +189,7 @@ export default class LibraryLinkerPlugin extends Plugin {
     // Add command for publication links only
     this.addCommand({
       id: 'replace-publication-links',
-      name: 'Replace publication links',
+      name: this.t('commands.replacePublicationLinks'),
       editorCallback: (editor: Editor) => {
         const currentContent = editor.getValue();
         const updatedContent = convertLinks(currentContent, 'publication');
@@ -195,7 +202,7 @@ export default class LibraryLinkerPlugin extends Plugin {
     // Add command for Bible text conversion
     this.addCommand({
       id: 'convert-bible-text',
-      name: 'Convert Bible reference to Library link',
+      name: this.t('commands.convertBibleReference'),
       editorCallback: (editor: Editor) => {
         const selection = editor.getSelection();
         if (selection) {
@@ -210,8 +217,6 @@ export default class LibraryLinkerPlugin extends Plugin {
 
     // Add settings tab
     this.addSettingTab(new LinkReplacerSettingTab(this.app, this));
-
-    // Register the Bible reference suggester
     this.bibleSuggester = new BibleReferenceSuggester(this);
     this.registerEditorSuggest(this.bibleSuggester);
   }
@@ -231,6 +236,7 @@ export default class LibraryLinkerPlugin extends Plugin {
 
 class LinkReplacerSettingTab extends PluginSettingTab {
   plugin: LibraryLinkerPlugin;
+  private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
   constructor(app: App, plugin: LibraryLinkerPlugin) {
     super(app, plugin);
@@ -242,10 +248,26 @@ class LinkReplacerSettingTab extends PluginSettingTab {
     containerEl.empty();
 
     new Setting(containerEl)
-      .setName('Use short names in Bible links')
-      .setDesc(
-        'When enabled, Bible references will use abbreviated book names (e.g., "1Pe" instead of "1. Peter")',
-      )
+      .setName(this.t('settings.language.name'))
+      .setDesc(this.t('settings.language.description'))
+      .addDropdown((dropdown) =>
+        dropdown
+          .addOptions({
+            en: 'English',
+            de: 'Deutsch',
+          })
+          .setValue(this.plugin.settings.language)
+          .onChange(async (value: 'en' | 'de') => {
+            this.plugin.settings.language = value;
+            TranslationService.getInstance().setLanguage(value);
+            await this.plugin.saveSettings();
+            this.display();
+          }),
+      );
+
+    new Setting(containerEl)
+      .setName(this.t('settings.useShortNames.name'))
+      .setDesc(this.t('settings.useShortNames.description'))
       .addToggle((toggle) =>
         toggle.setValue(this.plugin.settings.useShortNames).onChange(async (value) => {
           this.plugin.settings.useShortNames = value;
