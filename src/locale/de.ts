@@ -2,7 +2,7 @@ export const de = {
   settings: {
     language: {
       name: 'Sprache',
-      description: 'Wähle die Sprache für die Plugin-Oberfläche und Bibelverweise',
+      description: 'Wähle die Sprache für die Bibelverweise',
     },
     useShortNames: {
       name: 'Kurznamen in Bibelverweisen verwenden',

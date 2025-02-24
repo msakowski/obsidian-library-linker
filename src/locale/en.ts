@@ -2,7 +2,7 @@ export const en = {
   settings: {
     language: {
       name: 'Language',
-      description: 'Select the language for the plugin interface and Bible references',
+      description: 'Select the language for Bible references',
     },
     useShortNames: {
       name: 'Use short names in Bible links',
