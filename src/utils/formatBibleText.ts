@@ -1,11 +1,15 @@
-import { bibleBooksDE } from '@/bibleBooks';
+import { getBibleBooks } from '@/bibleBooks';
 import { parseBibleReference } from '@/utils/parseBibleReference';
+import type { Language } from '@/types';
 
-export function formatBibleText(input: string, short = false): string {
+export function formatBibleText(input: string, short = false, language: Language): string {
   try {
-    const reference = parseBibleReference(input);
-    const bookIndex = parseInt(reference.book) - 1;
-    const bookEntry = bibleBooksDE[bookIndex];
+    const reference = parseBibleReference(input, language);
+    const bookEntry = getBibleBooks(language).find((book) => book.id === parseInt(reference.book));
+
+    if (!bookEntry) {
+      return input;
+    }
 
     // Use short or long name based on settings
     const bookName = short ? bookEntry.shortName : bookEntry.longName;

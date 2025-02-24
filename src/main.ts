@@ -14,7 +14,7 @@ import {
   convertBibleTextToLink,
   convertBibleTextToMarkdownLink,
 } from '@/utils/convertBibleTextToLink';
-import type { BibleReference, BibleSuggestion, LinkReplacerSettings } from '@/types';
+import type { BibleReference, BibleSuggestion, Language, LinkReplacerSettings } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
@@ -25,7 +25,7 @@ export const matchingBibleReferenceRegex =
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,
-  language: 'en',
+  language: 'E',
 };
 
 class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
@@ -68,16 +68,16 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
     // Regex that handles both with and without space, including complex verse references
     if (query.match(matchingBibleReferenceRegex)) {
-      const formattedText = formatBibleText(query, true); // Use short format
+      const formattedText = formatBibleText(query, true, this.plugin.settings.language); // Use short format
 
       let reference: BibleReference;
       try {
-        reference = parseBibleReference(query);
+        reference = parseBibleReference(query, this.plugin.settings.language);
       } catch {
         return [];
       }
 
-      const links = formatJWLibraryLink(reference);
+      const links = formatJWLibraryLink(reference, this.plugin.settings.language);
       const hasMultipleLinks = Array.isArray(links) && links.length > 1;
 
       const suggestions: BibleSuggestion[] = [
@@ -133,6 +133,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const convertedLink = convertBibleTextToMarkdownLink(
       suggestion.text,
       this.plugin.settings.useShortNames,
+      this.plugin.settings.language,
     );
 
     // Replace the entire command and reference with the converted link
@@ -140,7 +141,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
     // Handle opening links
     if (suggestion.command === 'open') {
-      const url = convertBibleTextToLink(suggestion.text);
+      const url = convertBibleTextToLink(suggestion.text, this.plugin.settings.language);
       if (Array.isArray(url)) {
         // For open-specific, open the specified link, otherwise open first
         window.open(url[suggestion.linkIndex || 0]);
@@ -158,7 +159,6 @@ export default class LibraryLinkerPlugin extends Plugin {
 
   async onload() {
     await this.loadSettings();
-    TranslationService.getInstance().setLanguage(this.settings.language);
 
     // Add the command for all link replacement
     this.addCommand({
@@ -209,6 +209,7 @@ export default class LibraryLinkerPlugin extends Plugin {
           const convertedLink = convertBibleTextToMarkdownLink(
             selection,
             this.settings.useShortNames,
+            this.settings.language,
           );
           editor.replaceSelection(convertedLink);
         }
@@ -253,13 +254,12 @@ class LinkReplacerSettingTab extends PluginSettingTab {
       .addDropdown((dropdown) =>
         dropdown
           .addOptions({
-            en: 'English',
-            de: 'Deutsch',
+            E: 'English',
+            X: 'Deutsch',
           })
           .setValue(this.plugin.settings.language)
-          .onChange(async (value: 'en' | 'de') => {
+          .onChange(async (value: Language) => {
             this.plugin.settings.language = value;
-            TranslationService.getInstance().setLanguage(value);
             await this.plugin.saveSettings();
             this.display();
           }),

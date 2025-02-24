@@ -1,16 +1,29 @@
 import { en } from '@/locale/en';
 import { de } from '@/locale/de';
-import type { Language } from '@/types';
+import type { Locale } from '@/types';
 
 export class TranslationService {
   private static instance: TranslationService;
-  private currentLanguage: Language = 'en';
-  private translations: Record<Language, typeof en> = {
+  private currentLocale: Locale = 'en';
+  private translations: Record<Locale, typeof en> = {
     en,
     de,
   };
 
-  private constructor() {}
+  private constructor() {
+    try {
+      // Only try to access localStorage in a browser environment
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const obsidianLocale = window.localStorage.getItem('language');
+        if (obsidianLocale === 'en' || obsidianLocale === 'de') {
+          this.currentLocale = obsidianLocale;
+        }
+      }
+    } catch (e) {
+      // Fallback to default 'en' if localStorage is not available
+      console.debug('Could not access localStorage, using default locale');
+    }
+  }
 
   public static getInstance(): TranslationService {
     if (!TranslationService.instance) {
@@ -19,13 +32,17 @@ export class TranslationService {
     return TranslationService.instance;
   }
 
-  public setLanguage(language: Language): void {
-    this.currentLanguage = language;
+  public setLocale(locale: Locale): void {
+    this.currentLocale = locale;
+  }
+
+  public getCurrentLocale(): Locale {
+    return this.currentLocale;
   }
 
   public t(key: string, variables: Record<string, string> = {}): string {
     const keys = key.split('.');
-    let value: any = this.translations[this.currentLanguage];
+    let value: any = this.translations[this.currentLocale];
 
     for (const k of keys) {
       if (value && typeof value === 'object' && k in value) {

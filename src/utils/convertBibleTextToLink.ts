@@ -1,22 +1,27 @@
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { formatBibleText } from '@/utils/formatBibleText';
-import { bibleBooksDE } from '@/bibleBooks';
+import { getBibleBooks } from '@/bibleBooks';
+import type { Language } from '@/types';
 
-export function convertBibleTextToLink(input: string): string | string[] {
+export function convertBibleTextToLink(input: string, language: Language): string | string[] {
   try {
-    const reference = parseBibleReference(input);
-    return formatJWLibraryLink(reference);
+    const reference = parseBibleReference(input, language);
+    return formatJWLibraryLink(reference, language);
   } catch (error) {
     console.error('Error converting Bible text:', error.message);
     return input;
   }
 }
 
-export function convertBibleTextToMarkdownLink(input: string, short = false): string {
+export function convertBibleTextToMarkdownLink(
+  input: string,
+  short = false,
+  language: Language,
+): string {
   try {
-    const reference = parseBibleReference(input);
-    const links = formatJWLibraryLink(reference);
+    const reference = parseBibleReference(input, language);
+    const links = formatJWLibraryLink(reference, language);
 
     // Early return input if there are no valid links
     if (!links || (Array.isArray(links) && !links.length)) {
@@ -25,7 +30,9 @@ export function convertBibleTextToMarkdownLink(input: string, short = false): st
 
     if (Array.isArray(links)) {
       // For complex references, create multiple links
-      const bookEntry = bibleBooksDE.find((book) => book.id === parseInt(reference.book));
+      const bookEntry = getBibleBooks(language).find(
+        (book) => book.id === parseInt(reference.book),
+      );
 
       if (!bookEntry) {
         return input;
@@ -55,7 +62,7 @@ export function convertBibleTextToMarkdownLink(input: string, short = false): st
     }
 
     // For simple references
-    const formattedText = formatBibleText(input, short);
+    const formattedText = formatBibleText(input, short, language);
     return `[${formattedText}](${links})`;
   } catch (error) {
     return input;

@@ -1,5 +1,5 @@
 import { findBookIndex } from '@/utils/findBookIndex';
-import type { BibleReference, VerseRange } from '@/types';
+import type { BibleReference, Language, VerseRange } from '@/types';
 
 function parseVerseNumber(verse: string): number {
   const num = parseInt(verse, 10);
@@ -94,7 +94,7 @@ function parseVerseRanges(versePart: string): VerseRange[] {
   return ranges;
 }
 
-export function parseBibleReference(input: string): BibleReference {
+export function parseBibleReference(input: string, language: Language): BibleReference {
   input = input.trim().toLowerCase();
 
   // Match book, chapter, and verses part
@@ -104,7 +104,7 @@ export function parseBibleReference(input: string): BibleReference {
   }
 
   const [, bookName, chapter, versesPart] = match;
-  const bookIndex = findBookIndex(bookName.trim());
+  const bookIndex = findBookIndex(bookName.trim(), language);
   if (bookIndex === -1) {
     throw new Error('Book not found');
   }
