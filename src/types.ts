@@ -1,7 +1,12 @@
-import { bibleBooksDE } from '@/bibleBooks';
+import { bibleBooksDE } from '@/bibleBooks/de';
+
+export type Locale = 'en' | 'de'; // obsidian language
+
+export type Language = 'E' | 'X'; // plugin language
 
 export interface LinkReplacerSettings {
   useShortNames: boolean;
+  language: Language;
 }
 
 export interface BibleBook {
