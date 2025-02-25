@@ -47,9 +47,9 @@ Quick command for inserting Bible references:
 
 The plugin adds the following commands to Obsidian:
 
-- **Replace all links**: Converts all JW Library links in the current note
-- **Replace Bible verse links**: Only converts Bible verse links
-- **Replace publication links**: Only converts publication links
+- **Convert all links**: Converts all JW Library links in the current note
+- **Convert Bible verse links**: Only converts Bible verse links
+- **Convert publication links**: Only converts publication links
 - **Convert Bible reference to Library link**: Converts selected text to a JW Library link (if it's a valid Bible reference)
 
 ## Usage
@@ -63,5 +63,5 @@ The plugin adds the following commands to Obsidian:
 ### Converting Existing Links
 
 1. Open the command palette (Ctrl/Cmd + P)
-2. Search for "Replace links"
+2. Search for "Convert link"
 3. Choose the desired replacement option
