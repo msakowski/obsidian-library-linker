@@ -1,6 +1,6 @@
 import { BibleBook } from '@/types';
 
-export const bibleBooksDE: BibleBook[] = [
+export const bibleBooksDE: readonly BibleBook[] = [
   {
     id: 1,
     prefix: '1',

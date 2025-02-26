@@ -1,10 +1,14 @@
 import { findBook } from '@/utils/findBook';
 import type { BibleReference, Language, VerseRange } from '@/types';
+import { Notice } from 'obsidian';
+import { TranslationService } from '@/services/TranslationService';
 
 function parseVerseNumber(verse: string): number {
+  const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
   const num = parseInt(verse, 10);
   if (isNaN(num) || num < 1) {
-    throw new Error('Invalid verse number');
+    new Notice(t('errors.invalidVerseNumber'));
+    return 1;
   }
   return num;
 }
@@ -13,7 +17,8 @@ function padVerse(verse: number): string {
   return verse.toString().padStart(3, '0');
 }
 
-function parseVerseRanges(versePart: string): VerseRange[] {
+function parseVerseRanges(versePart: string): VerseRange[] | null {
+  const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
   // Remove any trailing commas
   versePart = versePart.trim();
   if (versePart.endsWith(',')) {
@@ -28,7 +33,8 @@ function parseVerseRanges(versePart: string): VerseRange[] {
 
   // Check for empty parts (consecutive commas)
   if (parts.length !== versePart.split(',').length) {
-    throw new Error('Invalid verse number');
+    new Notice(t('errors.invalidVerseNumber'));
+    return null;
   }
 
   const ranges: VerseRange[] = [];
@@ -38,24 +44,33 @@ function parseVerseRanges(versePart: string): VerseRange[] {
   for (const part of parts) {
     // Check for invalid patterns like "1-2-3" or "1--2"
     if ((part.match(/-/g) || []).length > 1 || part.includes('--')) {
-      throw new Error('Invalid verse number');
+      new Notice(t('errors.invalidVerseNumber'));
+      return null;
     }
 
     // Handle range (e.g., "7-8")
     if (part.includes('-')) {
       const [start, end] = part.split('-').map((v) => {
         if (!v || v.startsWith('-')) {
-          throw new Error('Invalid verse number');
+          new Notice(t('errors.invalidVerseNumber'));
+          return null;
         }
         return parseVerseNumber(v);
       });
 
+      if (start === null || end === null) {
+        return null;
+      }
+
       if (start >= end) {
         // This catches both equal and descending cases
-        throw new Error('Verses must be in ascending order');
+        new Notice(t('errors.versesAscendingOrder'));
+        return null;
       }
+
       if (start <= lastEndVerse) {
-        throw new Error('Verses must be in ascending order');
+        new Notice(t('errors.versesAscendingOrder'));
+        return null;
       }
 
       // If this range starts right after the current range, extend it
@@ -74,7 +89,8 @@ function parseVerseRanges(versePart: string): VerseRange[] {
       const verse = parseVerseNumber(part);
       if (verse <= lastEndVerse) {
         // This catches repeated verses
-        throw new Error('Verses must be in ascending order');
+        new Notice(t('errors.versesAscendingOrder'));
+        return null;
       }
 
       // If this verse is consecutive with the current range, extend it
@@ -94,20 +110,23 @@ function parseVerseRanges(versePart: string): VerseRange[] {
   return ranges;
 }
 
-export function parseBibleReference(input: string, language: Language): BibleReference {
+export function parseBibleReference(input: string, language: Language): BibleReference | null {
+  const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
   input = input.trim().toLowerCase();
 
   // Match book, chapter, and verses part
   const match = input.match(/^([a-z0-9äöüß]+?)\s*(\d+)\s*:\s*(.+)$/i);
   if (!match) {
-    throw new Error('Invalid format');
+    new Notice(t('errors.invalidFormat'));
+    return null;
   }
 
   const [, bookName, chapter, versesPart] = match;
 
   const book = findBook(bookName, language);
   if (!book) {
-    throw new Error('Book not found');
+    new Notice(t('errors.bookNotFound', { book: bookName }));
+    return null;
   }
 
   const paddedBook = book.id < 10 ? `0${book.id}` : book.id.toString();
@@ -118,7 +137,8 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   if (simpleMatch) {
     const [, verse, endVerse] = simpleMatch;
     if (endVerse && parseVerseNumber(verse) >= parseVerseNumber(endVerse)) {
-      throw new Error('Verses must be in ascending order');
+      new Notice(t('errors.versesAscendingOrder'));
+      return null;
     }
     return {
       book: paddedBook,
@@ -135,15 +155,16 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   // Complex verse ranges
   try {
     const verseRanges = parseVerseRanges(versesPart);
+    if (!verseRanges) {
+      return null;
+    }
     return {
       book: paddedBook,
       chapter: paddedChapter,
       verseRanges,
     };
   } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error('Invalid format');
+    new Notice(t('errors.invalidFormat'));
+    return null;
   }
 }

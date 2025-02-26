@@ -14,7 +14,7 @@ import {
   convertBibleTextToLink,
   convertBibleTextToMarkdownLink,
 } from '@/utils/convertBibleTextToLink';
-import type { BibleReference, BibleSuggestion, Language, LinkReplacerSettings } from '@/types';
+import type { BibleSuggestion, Language, LinkReplacerSettings } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
@@ -72,10 +72,8 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     if (query.match(matchingBibleReferenceRegex)) {
       const formattedText = formatBibleText(query, true, this.plugin.settings.language); // Use short format
 
-      let reference: BibleReference;
-      try {
-        reference = parseBibleReference(query, this.plugin.settings.language);
-      } catch {
+      const reference = parseBibleReference(query, this.plugin.settings.language);
+      if (!reference) {
         return [];
       }
 

@@ -1,13 +1,17 @@
 import type { BibleReference, Language } from '@/types';
+import { Notice } from 'obsidian';
+import { TranslationService } from '@/services/TranslationService';
 
 export function formatJWLibraryLink(
   reference: BibleReference,
   language?: Language,
 ): string | string[] {
+  const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
   const { book, chapter, verseRanges } = reference;
 
   if (!verseRanges) {
-    throw new Error('Invalid reference format');
+    new Notice(t('errors.invalidReferenceFormat'));
+    return '';
   }
 
   const link = (range: string) =>

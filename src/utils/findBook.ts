@@ -1,9 +1,9 @@
 import { Notice } from 'obsidian';
 import { getBibleBooks } from '@/bibleBooks';
-import type { Language } from '@/types';
+import type { BibleBook, Language } from '@/types';
 import { TranslationService } from '@/services/TranslationService';
 
-export const findBook = (bookQuery: string, language: Language) => {
+export const findBook = (bookQuery: string, language: Language): BibleBook | null => {
   const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
   bookQuery = bookQuery
@@ -12,6 +12,9 @@ export const findBook = (bookQuery: string, language: Language) => {
     .trim();
 
   const bibleBooks = getBibleBooks(language);
+  if (!bibleBooks) {
+    return null;
+  }
 
   const bookEntries = bibleBooks
     .filter((book) => (!book.prefix ? true : bookQuery.match(/^[1-5]/)))

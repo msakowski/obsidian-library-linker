@@ -3,13 +3,24 @@ import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { getBibleBooks } from '@/bibleBooks';
 import type { Language } from '@/types';
+import { Notice } from 'obsidian';
+import { TranslationService } from '@/services/TranslationService';
 
 export function convertBibleTextToLink(input: string, language: Language): string | string[] {
+  const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
+
   try {
     const reference = parseBibleReference(input, language);
+    if (!reference) {
+      return input;
+    }
     return formatJWLibraryLink(reference, language);
   } catch (error) {
-    console.error('Error converting Bible text:', error.message);
+    new Notice(
+      t('errors.conversionError', {
+        message: error instanceof Error ? error.message : String(error),
+      }),
+    );
     return input;
   }
 }
@@ -19,8 +30,13 @@ export function convertBibleTextToMarkdownLink(
   short = false,
   language: Language,
 ): string {
+  const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
+
   try {
     const reference = parseBibleReference(input, language);
+    if (!reference) {
+      return input;
+    }
     const links = formatJWLibraryLink(reference, language);
 
     // Early return input if there are no valid links
@@ -30,7 +46,7 @@ export function convertBibleTextToMarkdownLink(
 
     if (Array.isArray(links)) {
       // For complex references, create multiple links
-      const bookEntry = getBibleBooks(language).find(
+      const bookEntry = getBibleBooks(language)?.find(
         (book) => book.id === parseInt(reference.book),
       );
 
@@ -65,6 +81,11 @@ export function convertBibleTextToMarkdownLink(
     const formattedText = formatBibleText(input, short, language);
     return `[${formattedText}](${links})`;
   } catch (error) {
+    new Notice(
+      t('errors.conversionError', {
+        message: error instanceof Error ? error.message : String(error),
+      }),
+    );
     return input;
   }
 }

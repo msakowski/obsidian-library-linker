@@ -183,59 +183,32 @@ describe('LibraryLinkerPlugin', () => {
       });
     });
 
-    test('throws on out of order verses in complex reference', () => {
-      expect(() => parseBibleReference('joh1:2,1,6,4,8-7,14-12', plugin.settings.language)).toThrow(
-        'Verses must be in ascending order',
-      );
-      expect(() => parseBibleReference('joh1:1,3,2', plugin.settings.language)).toThrow(
-        'Verses must be in ascending order',
-      );
-      expect(() => parseBibleReference('joh1:3-1', plugin.settings.language)).toThrow(
-        'Verses must be in ascending order',
-      );
-      expect(() => parseBibleReference('joh1:7-8,6', plugin.settings.language)).toThrow(
-        'Verses must be in ascending order',
-      );
+    test('null on out of order verses in complex reference', () => {
+      expect(parseBibleReference('joh1:2,1,6,4,8-7,14-12', plugin.settings.language)).toBeNull();
+      expect(parseBibleReference('joh1:1,3,2', plugin.settings.language)).toBeNull();
+      expect(parseBibleReference('joh1:3-1', plugin.settings.language)).toBeNull();
+      expect(parseBibleReference('joh1:7-8,6', plugin.settings.language)).toBeNull();
     });
 
-    test('throws on invalid format in complex reference', () => {
-      expect(() => parseBibleReference('joh1:1,,2', plugin.settings.language)).toThrow(
-        'Invalid verse number',
-      );
-      expect(() => parseBibleReference('joh1:1-2-3', plugin.settings.language)).toThrow(
-        'Invalid verse number',
-      );
-      expect(() => parseBibleReference('joh1:1,-2', plugin.settings.language)).toThrow(
-        'Invalid verse number',
-      );
+    test('null on invalid format in complex reference', () => {
+      expect(parseBibleReference('joh1:1,,2', plugin.settings.language)).toBeNull();
+      expect(parseBibleReference('joh1:1-2-3', plugin.settings.language)).toBeNull();
+      expect(parseBibleReference('joh1:1,-2', plugin.settings.language)).toBeNull();
     });
 
-    test('throws on self-referencing verses', () => {
-      expect(() => parseBibleReference('joh1:1,1', plugin.settings.language)).toThrow(
-        'Verses must be in ascending order',
-      );
-      expect(() => parseBibleReference('joh1:1-1', plugin.settings.language)).toThrow(
-        'Verses must be in ascending order',
-      );
-      expect(() => parseBibleReference('joh1:1,2,2', plugin.settings.language)).toThrow(
-        'Verses must be in ascending order',
-      );
-      expect(() => parseBibleReference('joh1:1,1-2', plugin.settings.language)).toThrow(
-        'Verses must be in ascending order',
-      );
+    test('null on self-referencing verses', () => {
+      expect(parseBibleReference('joh1:1,1', plugin.settings.language)).toBeNull();
+      expect(parseBibleReference('joh1:1-1', plugin.settings.language)).toBeNull();
+      expect(parseBibleReference('joh1:1,2,2', plugin.settings.language)).toBeNull();
+      expect(parseBibleReference('joh1:1,1-2', plugin.settings.language)).toBeNull();
     });
 
-    test('throws on invalid book', () => {
-      console.error = jest.fn(); // Silence console.error for this test
-      expect(() => {
-        parseBibleReference('xyz1:1', plugin.settings.language);
-      }).toThrow('Book not found');
+    test('null on invalid book', () => {
+      expect(parseBibleReference('xyz1:1', plugin.settings.language)).toBeNull();
     });
 
-    test('throws on invalid format', () => {
-      expect(() => {
-        parseBibleReference('joh:1', plugin.settings.language);
-      }).toThrow('Invalid format');
+    test('null on invalid format', () => {
+      expect(parseBibleReference('joh:1', plugin.settings.language)).toBeNull();
     });
   });
 

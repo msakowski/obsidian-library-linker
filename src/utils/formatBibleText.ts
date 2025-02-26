@@ -5,7 +5,10 @@ import type { Language } from '@/types';
 export function formatBibleText(input: string, short = false, language: Language): string {
   try {
     const reference = parseBibleReference(input, language);
-    const bookEntry = getBibleBooks(language).find((book) => book.id === parseInt(reference.book));
+    if (!reference) {
+      return input;
+    }
+    const bookEntry = getBibleBooks(language)?.find((book) => book.id === parseInt(reference.book));
 
     if (!bookEntry) {
       return input;

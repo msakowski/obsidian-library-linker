@@ -28,5 +28,11 @@ export const en = {
   errors: {
     multipleBooksFound: 'Multiple Bible books found: {{books}}',
     bookNotFound: 'Bible book not found: {{book}}',
+    invalidVerseNumber: 'Invalid verse number',
+    versesAscendingOrder: 'Verses must be in ascending order',
+    invalidFormat: 'Invalid reference format',
+    invalidReferenceFormat: 'Invalid reference format',
+    conversionError: 'Error converting Bible text: {{message}}',
+    unsupportedLanguage: 'Unsupported language: {{language}}',
   },
 };
