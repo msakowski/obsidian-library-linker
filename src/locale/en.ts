@@ -22,8 +22,10 @@ export const en = {
   suggestions: {
     createLink: 'Create link: {{text}}',
     createLinks: 'Create links: {{text}}',
-    createAndOpen: 'Create and open: {{text}}',
-    createAndOpenVerse: 'Create and open: {{verse}}',
+    createAndOpen: 'Create link and open: {{text}}',
+    createAndOpenVerse: 'Create link and open: {{verse}}',
+    typing: 'Enter Bible reference: {{text}}',
+    typingEmpty: 'Enter Bible reference',
   },
   errors: {
     multipleBooksFound: 'Multiple Bible books found: {{books}}',

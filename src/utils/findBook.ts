@@ -1,9 +1,14 @@
-import { Notice } from 'obsidian';
 import { getBibleBooks } from '@/bibleBooks';
 import type { BibleBook, Language } from '@/types';
 import { TranslationService } from '@/services/TranslationService';
 
-export const findBook = (bookQuery: string, language: Language): BibleBook | null => {
+// Define a return type that includes both the book and any notification message
+export interface FindBookResult {
+  book: BibleBook | null;
+  notification?: string;
+}
+
+export const findBook = (bookQuery: string, language: Language): FindBookResult => {
   const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
   bookQuery = bookQuery
@@ -13,7 +18,7 @@ export const findBook = (bookQuery: string, language: Language): BibleBook | nul
 
   const bibleBooks = getBibleBooks(language);
   if (!bibleBooks) {
-    return null;
+    return { book: null };
   }
 
   const bookEntries = bibleBooks
@@ -24,19 +29,20 @@ export const findBook = (bookQuery: string, language: Language): BibleBook | nul
     });
 
   if (bookEntries.length > 1) {
-    new Notice(
-      t('errors.multipleBooksFound', {
+    return {
+      book: null,
+      notification: t('errors.multipleBooksFound', {
         books: bookEntries.map((book) => book.longName).join(', '),
       }),
-    );
-    return null;
+    };
   }
 
   if (bookEntries.length === 1) {
-    return bookEntries[0];
+    return { book: bookEntries[0] };
   }
 
-  new Notice(t('errors.bookNotFound'));
-
-  return null;
+  return {
+    book: null,
+    notification: t('errors.bookNotFound'),
+  };
 };

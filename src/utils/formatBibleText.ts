@@ -4,17 +4,19 @@ import type { Language } from '@/types';
 
 export function formatBibleText(input: string, short = false, language: Language): string {
   try {
-    const reference = parseBibleReference(input, language);
-    if (!reference) {
+    const parseResult = parseBibleReference(input, language);
+    if (!parseResult.reference) {
       return input;
     }
+    const reference = parseResult.reference;
     const bookEntry = getBibleBooks(language)?.find((book) => book.id === parseInt(reference.book));
 
     if (!bookEntry) {
       return input;
     }
 
-    // Use short or long name based on settings
+    // Use short or long name based on the provided parameter
+    // The parameter should come from the user's settings (useShortNames)
     const bookName = short ? bookEntry.shortName : bookEntry.longName;
 
     // Format the verse reference

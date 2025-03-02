@@ -3,24 +3,16 @@ import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { getBibleBooks } from '@/bibleBooks';
 import type { Language } from '@/types';
-import { Notice } from 'obsidian';
 import { TranslationService } from '@/services/TranslationService';
 
 export function convertBibleTextToLink(input: string, language: Language): string | string[] {
-  const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
-
   try {
-    const reference = parseBibleReference(input, language);
-    if (!reference) {
+    const parseResult = parseBibleReference(input, language);
+    if (!parseResult.reference) {
       return input;
     }
-    return formatJWLibraryLink(reference, language);
+    return formatJWLibraryLink(parseResult.reference, language);
   } catch (error) {
-    new Notice(
-      t('errors.conversionError', {
-        message: error instanceof Error ? error.message : String(error),
-      }),
-    );
     return input;
   }
 }
@@ -30,13 +22,12 @@ export function convertBibleTextToMarkdownLink(
   short = false,
   language: Language,
 ): string {
-  const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
-
   try {
-    const reference = parseBibleReference(input, language);
-    if (!reference) {
+    const parseResult = parseBibleReference(input, language);
+    if (!parseResult.reference) {
       return input;
     }
+    const reference = parseResult.reference;
     const links = formatJWLibraryLink(reference, language);
 
     // Early return input if there are no valid links
@@ -54,6 +45,7 @@ export function convertBibleTextToMarkdownLink(
         return input;
       }
 
+      // Use short or long name based on the parameter
       const bookName = short ? bookEntry.shortName : bookEntry.longName;
       const chapter = parseInt(reference.chapter);
 
@@ -81,11 +73,6 @@ export function convertBibleTextToMarkdownLink(
     const formattedText = formatBibleText(input, short, language);
     return `[${formattedText}](${links})`;
   } catch (error) {
-    new Notice(
-      t('errors.conversionError', {
-        message: error instanceof Error ? error.message : String(error),
-      }),
-    );
     return input;
   }
 }

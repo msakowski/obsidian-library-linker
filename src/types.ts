@@ -39,3 +39,8 @@ export interface BibleSuggestion {
   description: string;
   linkIndex?: number;
 }
+
+export interface ParseResult {
+  reference: BibleReference | null;
+  error?: string;
+}

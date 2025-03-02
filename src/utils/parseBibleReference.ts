@@ -1,23 +1,21 @@
 import { findBook } from '@/utils/findBook';
-import type { BibleReference, Language, VerseRange } from '@/types';
-import { Notice } from 'obsidian';
+import type { BibleReference, Language, VerseRange, ParseResult } from '@/types';
 import { TranslationService } from '@/services/TranslationService';
 
-function parseVerseNumber(verse: string): number {
+function parseVerseNumber(verse: string): { value: number; error?: string } {
   const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
   const num = parseInt(verse, 10);
   if (isNaN(num) || num < 1) {
-    new Notice(t('errors.invalidVerseNumber'));
-    return 1;
+    return { value: 1, error: t('errors.invalidVerseNumber') };
   }
-  return num;
+  return { value: num };
 }
 
 function padVerse(verse: number): string {
   return verse.toString().padStart(3, '0');
 }
 
-function parseVerseRanges(versePart: string): VerseRange[] | null {
+function parseVerseRanges(versePart: string): { ranges: VerseRange[] | null; error?: string } {
   const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
   // Remove any trailing commas
   versePart = versePart.trim();
@@ -33,8 +31,7 @@ function parseVerseRanges(versePart: string): VerseRange[] | null {
 
   // Check for empty parts (consecutive commas)
   if (parts.length !== versePart.split(',').length) {
-    new Notice(t('errors.invalidVerseNumber'));
-    return null;
+    return { ranges: null, error: t('errors.invalidVerseNumber') };
   }
 
   const ranges: VerseRange[] = [];
@@ -44,33 +41,27 @@ function parseVerseRanges(versePart: string): VerseRange[] | null {
   for (const part of parts) {
     // Check for invalid patterns like "1-2-3" or "1--2"
     if ((part.match(/-/g) || []).length > 1 || part.includes('--')) {
-      new Notice(t('errors.invalidVerseNumber'));
-      return null;
+      return { ranges: null, error: t('errors.invalidVerseNumber') };
     }
 
     // Handle range (e.g., "7-8")
     if (part.includes('-')) {
-      const [start, end] = part.split('-').map((v) => {
-        if (!v || v.startsWith('-')) {
-          new Notice(t('errors.invalidVerseNumber'));
-          return null;
-        }
-        return parseVerseNumber(v);
-      });
-
-      if (start === null || end === null) {
-        return null;
-      }
+      const startResult = parseVerseNumber(part.split('-')[0]);
+      const endResult = parseVerseNumber(part.split('-')[1]);
+      
+      if (startResult.error) return { ranges: null, error: startResult.error };
+      if (endResult.error) return { ranges: null, error: endResult.error };
+      
+      const start = startResult.value;
+      const end = endResult.value;
 
       if (start >= end) {
         // This catches both equal and descending cases
-        new Notice(t('errors.versesAscendingOrder'));
-        return null;
+        return { ranges: null, error: t('errors.versesAscendingOrder') };
       }
 
       if (start <= lastEndVerse) {
-        new Notice(t('errors.versesAscendingOrder'));
-        return null;
+        return { ranges: null, error: t('errors.versesAscendingOrder') };
       }
 
       // If this range starts right after the current range, extend it
@@ -86,11 +77,13 @@ function parseVerseRanges(versePart: string): VerseRange[] | null {
       lastEndVerse = end;
     } else {
       // Handle single verse
-      const verse = parseVerseNumber(part);
+      const verseResult = parseVerseNumber(part);
+      if (verseResult.error) return { ranges: null, error: verseResult.error };
+      
+      const verse = verseResult.value;
       if (verse <= lastEndVerse) {
         // This catches repeated verses
-        new Notice(t('errors.versesAscendingOrder'));
-        return null;
+        return { ranges: null, error: t('errors.versesAscendingOrder') };
       }
 
       // If this verse is consecutive with the current range, extend it
@@ -107,28 +100,27 @@ function parseVerseRanges(versePart: string): VerseRange[] | null {
     }
   }
 
-  return ranges;
+  return { ranges };
 }
 
-export function parseBibleReference(input: string, language: Language): BibleReference | null {
+export function parseBibleReference(input: string, language: Language): ParseResult {
   const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
   input = input.trim().toLowerCase();
 
   // Match book, chapter, and verses part
   const match = input.match(/^([a-z0-9äöüß]+?)\s*(\d+)\s*:\s*(.+)$/i);
   if (!match) {
-    new Notice(t('errors.invalidFormat'));
-    return null;
+    return { reference: null, error: t('errors.invalidFormat') };
   }
 
   const [, bookName, chapter, versesPart] = match;
 
-  const book = findBook(bookName, language);
-  if (!book) {
-    new Notice(t('errors.bookNotFound', { book: bookName }));
-    return null;
+  const bookResult = findBook(bookName, language);
+  if (!bookResult.book) {
+    return { reference: null, error: bookResult.notification || t('errors.bookNotFound', { book: bookName }) };
   }
 
+  const book = bookResult.book;
   const paddedBook = book.id < 10 ? `0${book.id}` : book.id.toString();
   const paddedChapter = chapter.padStart(3, '0');
 
@@ -136,35 +128,65 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   const simpleMatch = versesPart.match(/^(\d+)(?:-(\d+))?$/);
   if (simpleMatch) {
     const [, verse, endVerse] = simpleMatch;
-    if (endVerse && parseVerseNumber(verse) >= parseVerseNumber(endVerse)) {
-      new Notice(t('errors.versesAscendingOrder'));
-      return null;
+    const startVerseResult = parseVerseNumber(verse);
+    
+    if (startVerseResult.error) {
+      return { reference: null, error: startVerseResult.error };
     }
+    
+    if (endVerse) {
+      const endVerseResult = parseVerseNumber(endVerse);
+      if (endVerseResult.error) {
+        return { reference: null, error: endVerseResult.error };
+      }
+      
+      if (startVerseResult.value >= endVerseResult.value) {
+        return { reference: null, error: t('errors.versesAscendingOrder') };
+      }
+      
+      return {
+        reference: {
+          book: paddedBook,
+          chapter: paddedChapter,
+          verseRanges: [
+            {
+              start: padVerse(startVerseResult.value),
+              end: padVerse(endVerseResult.value),
+            },
+          ],
+        }
+      };
+    }
+    
     return {
-      book: paddedBook,
-      chapter: paddedChapter,
-      verseRanges: [
-        {
-          start: padVerse(parseVerseNumber(verse)),
-          end: endVerse ? padVerse(parseVerseNumber(endVerse)) : padVerse(parseVerseNumber(verse)),
-        },
-      ],
+      reference: {
+        book: paddedBook,
+        chapter: paddedChapter,
+        verseRanges: [
+          {
+            start: padVerse(startVerseResult.value),
+            end: padVerse(startVerseResult.value),
+          },
+        ],
+      }
     };
   }
 
   // Complex verse ranges
   try {
-    const verseRanges = parseVerseRanges(versesPart);
-    if (!verseRanges) {
-      return null;
+    const result = parseVerseRanges(versesPart);
+    if (result.error || !result.ranges) {
+      return { reference: null, error: result.error };
     }
+    
     return {
-      book: paddedBook,
-      chapter: paddedChapter,
-      verseRanges,
+      reference: {
+        book: paddedBook,
+        chapter: paddedChapter,
+        verseRanges: result.ranges,
+      }
     };
   } catch (error) {
-    new Notice(t('errors.invalidFormat'));
-    return null;
+    return { reference: null, error: t('errors.invalidFormat') };
   }
 }
