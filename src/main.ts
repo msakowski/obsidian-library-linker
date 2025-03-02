@@ -49,7 +49,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
     // Get the text after /b
     const afterCommand = subString.slice(commandIndex + 2);
-    
+
     // Show suggestions immediately after "/b " or if there's any text after "/b"
     if (afterCommand.startsWith(' ') || afterCommand.length > 0) {
       return {
@@ -67,36 +67,44 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
   getSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
     const query = context.query;
-    
+
     // Check if the query has the minimum structure needed for parsing
     // This regex checks for book, chapter, and at least one verse
     const completeReferenceRegex = /^([a-z0-9äöüß]+?)\s*(\d+)\s*:\s*(\d+)/i;
-    
+
     // If query is empty (just typed "/b "), show a simple typing message without the {text} placeholder
     if (query.length === 0) {
-      return [{
-        text: query,
-        command: 'link',
-        description: this.t('suggestions.typingEmpty')
-      }];
+      return [
+        {
+          text: query,
+          command: 'link',
+          description: this.t('suggestions.typingEmpty'),
+        },
+      ];
     }
-    
+
     // Format text for display (if possible)
-    const formattedText = formatBibleText(query, this.plugin.settings.useShortNames, this.plugin.settings.language);
-    
+    const formattedText = formatBibleText(
+      query,
+      this.plugin.settings.useShortNames,
+      this.plugin.settings.language,
+    );
+
     // If it's a complete reference, parse and show detailed suggestions
     if (query.match(completeReferenceRegex)) {
       const parseResult = parseBibleReference(query, this.plugin.settings.language);
-      
+
       // If there's an error, show it as a suggestion
       if (parseResult.error) {
-        return [{
-          text: query,
-          command: 'link',
-          description: parseResult.error
-        }];
+        return [
+          {
+            text: query,
+            command: 'link',
+            description: parseResult.error,
+          },
+        ];
       }
-      
+
       const reference = parseResult.reference;
       if (!reference) {
         return [];
@@ -140,14 +148,16 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       }
 
       return suggestions;
-    } 
+    }
     // For any other text after /b, show a typing suggestion with the text
     else {
-      return [{
-        text: query,
-        command: 'link',
-        description: this.t('suggestions.typing', { text: formattedText || query })
-      }];
+      return [
+        {
+          text: query,
+          command: 'link',
+          description: this.t('suggestions.typing', { text: formattedText || query }),
+        },
+      ];
     }
   }
 

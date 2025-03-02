@@ -170,7 +170,10 @@ describe('LibraryLinkerPlugin', () => {
     });
 
     test('parses complex verse reference with spaces', () => {
-      const parseResult = parseBibleReference('joh 1:1-2, 4, 6, 7-8, 12-14', plugin.settings.language);
+      const parseResult = parseBibleReference(
+        'joh 1:1-2, 4, 6, 7-8, 12-14',
+        plugin.settings.language,
+      );
       expect(parseResult.reference).toEqual({
         book: '43',
         chapter: '001',
@@ -184,7 +187,9 @@ describe('LibraryLinkerPlugin', () => {
     });
 
     test('error on out of order verses in complex reference', () => {
-      expect(parseBibleReference('joh1:2,1,6,4,8-7,14-12', plugin.settings.language).reference).toBeNull();
+      expect(
+        parseBibleReference('joh1:2,1,6,4,8-7,14-12', plugin.settings.language).reference,
+      ).toBeNull();
       expect(parseBibleReference('joh1:1,3,2', plugin.settings.language).reference).toBeNull();
       expect(parseBibleReference('joh1:3-1', plugin.settings.language).reference).toBeNull();
       expect(parseBibleReference('joh1:7-8,6', plugin.settings.language).reference).toBeNull();

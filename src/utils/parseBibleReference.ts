@@ -1,5 +1,5 @@
 import { findBook } from '@/utils/findBook';
-import type { BibleReference, Language, VerseRange, ParseResult } from '@/types';
+import type { Language, VerseRange, ParseResult } from '@/types';
 import { TranslationService } from '@/services/TranslationService';
 
 function parseVerseNumber(verse: string): { value: number; error?: string } {
@@ -48,10 +48,10 @@ function parseVerseRanges(versePart: string): { ranges: VerseRange[] | null; err
     if (part.includes('-')) {
       const startResult = parseVerseNumber(part.split('-')[0]);
       const endResult = parseVerseNumber(part.split('-')[1]);
-      
+
       if (startResult.error) return { ranges: null, error: startResult.error };
       if (endResult.error) return { ranges: null, error: endResult.error };
-      
+
       const start = startResult.value;
       const end = endResult.value;
 
@@ -79,7 +79,7 @@ function parseVerseRanges(versePart: string): { ranges: VerseRange[] | null; err
       // Handle single verse
       const verseResult = parseVerseNumber(part);
       if (verseResult.error) return { ranges: null, error: verseResult.error };
-      
+
       const verse = verseResult.value;
       if (verse <= lastEndVerse) {
         // This catches repeated verses
@@ -117,7 +117,10 @@ export function parseBibleReference(input: string, language: Language): ParseRes
 
   const bookResult = findBook(bookName, language);
   if (!bookResult.book) {
-    return { reference: null, error: bookResult.notification || t('errors.bookNotFound', { book: bookName }) };
+    return {
+      reference: null,
+      error: bookResult.notification || t('errors.bookNotFound', { book: bookName }),
+    };
   }
 
   const book = bookResult.book;
@@ -129,21 +132,21 @@ export function parseBibleReference(input: string, language: Language): ParseRes
   if (simpleMatch) {
     const [, verse, endVerse] = simpleMatch;
     const startVerseResult = parseVerseNumber(verse);
-    
+
     if (startVerseResult.error) {
       return { reference: null, error: startVerseResult.error };
     }
-    
+
     if (endVerse) {
       const endVerseResult = parseVerseNumber(endVerse);
       if (endVerseResult.error) {
         return { reference: null, error: endVerseResult.error };
       }
-      
+
       if (startVerseResult.value >= endVerseResult.value) {
         return { reference: null, error: t('errors.versesAscendingOrder') };
       }
-      
+
       return {
         reference: {
           book: paddedBook,
@@ -154,10 +157,10 @@ export function parseBibleReference(input: string, language: Language): ParseRes
               end: padVerse(endVerseResult.value),
             },
           ],
-        }
+        },
       };
     }
-    
+
     return {
       reference: {
         book: paddedBook,
@@ -168,7 +171,7 @@ export function parseBibleReference(input: string, language: Language): ParseRes
             end: padVerse(startVerseResult.value),
           },
         ],
-      }
+      },
     };
   }
 
@@ -178,13 +181,13 @@ export function parseBibleReference(input: string, language: Language): ParseRes
     if (result.error || !result.ranges) {
       return { reference: null, error: result.error };
     }
-    
+
     return {
       reference: {
         book: paddedBook,
         chapter: paddedChapter,
         verseRanges: result.ranges,
-      }
+      },
     };
   } catch (error) {
     return { reference: null, error: t('errors.invalidFormat') };

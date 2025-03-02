@@ -3,7 +3,6 @@ import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { getBibleBooks } from '@/bibleBooks';
 import type { Language } from '@/types';
-import { TranslationService } from '@/services/TranslationService';
 
 export function convertBibleTextToLink(input: string, language: Language): string | string[] {
   try {
