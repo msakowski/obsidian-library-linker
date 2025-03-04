@@ -7,10 +7,10 @@ import type { Language } from '@/types';
 export function convertBibleTextToLink(input: string, language: Language): string | string[] {
   try {
     const parseResult = parseBibleReference(input, language);
-    if (!parseResult.reference) {
+    if (!parseResult) {
       return input;
     }
-    return formatJWLibraryLink(parseResult.reference, language);
+    return formatJWLibraryLink(parseResult, language);
   } catch (error) {
     return input;
   }
@@ -23,10 +23,10 @@ export function convertBibleTextToMarkdownLink(
 ): string {
   try {
     const parseResult = parseBibleReference(input, language);
-    if (!parseResult.reference) {
+    if (!parseResult) {
       return input;
     }
-    const reference = parseResult.reference;
+    const reference = parseResult;
     const links = formatJWLibraryLink(reference, language);
 
     // Early return input if there are no valid links
@@ -72,6 +72,7 @@ export function convertBibleTextToMarkdownLink(
     const formattedText = formatBibleText(input, short, language);
     return `[${formattedText}](${links})`;
   } catch (error) {
+    console.error(error);
     return input;
   }
 }

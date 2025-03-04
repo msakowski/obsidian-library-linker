@@ -35,12 +35,7 @@ export interface BibleReference {
 
 export interface BibleSuggestion {
   text: string;
-  command: 'link' | 'open';
+  command: 'formatBook' | 'link' | 'open' | 'typing';
   description: string;
   linkIndex?: number;
-}
-
-export interface ParseResult {
-  reference: BibleReference | null;
-  error?: string;
 }

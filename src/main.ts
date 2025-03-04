@@ -14,7 +14,7 @@ import {
   convertBibleTextToLink,
   convertBibleTextToMarkdownLink,
 } from '@/utils/convertBibleTextToLink';
-import type { BibleSuggestion, Language, LinkReplacerSettings } from '@/types';
+import type { BibleReference, BibleSuggestion, Language, LinkReplacerSettings } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
@@ -31,10 +31,10 @@ const DEFAULT_SETTINGS: LinkReplacerSettings = {
 };
 
 class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
-  plugin: LibraryLinkerPlugin;
+  plugin: JWLibraryLinkerPlugin;
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
-  constructor(plugin: LibraryLinkerPlugin) {
+  constructor(plugin: JWLibraryLinkerPlugin) {
     super(plugin.app);
     this.plugin = plugin;
   }
@@ -83,32 +83,31 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       ];
     }
 
-    // Format text for display (if possible)
-    const formattedText = formatBibleText(
-      query,
-      this.plugin.settings.useShortNames,
-      this.plugin.settings.language,
-    );
-
     // If it's a complete reference, parse and show detailed suggestions
     if (query.match(completeReferenceRegex)) {
-      const parseResult = parseBibleReference(query, this.plugin.settings.language);
+      let reference: BibleReference | null = null;
 
-      // If there's an error, show it as a suggestion
-      if (parseResult.error) {
+      try {
+        reference = parseBibleReference(query, this.plugin.settings.language);
+      } catch (error) {
         return [
           {
             text: query,
-            command: 'link',
-            description: parseResult.error,
+            command: 'typing',
+            description: this.t('suggestions.typing', { text: query }),
           },
         ];
       }
 
-      const reference = parseResult.reference;
       if (!reference) {
         return [];
       }
+
+      const formattedText = formatBibleText(
+        query,
+        this.plugin.settings.useShortNames,
+        this.plugin.settings.language,
+      );
 
       const links = formatJWLibraryLink(reference, this.plugin.settings.language);
       const hasMultipleLinks = Array.isArray(links) && links.length > 1;
@@ -154,8 +153,8 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       return [
         {
           text: query,
-          command: 'link',
-          description: this.t('suggestions.typing', { text: formattedText || query }),
+          command: 'typing',
+          description: this.t('suggestions.typing', { text: query }),
         },
       ];
     }
@@ -178,6 +177,10 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       this.plugin.settings.language,
     );
 
+    if (suggestion.command === 'typing') {
+      return;
+    }
+
     // Replace the entire command and reference with the converted link
     editor.replaceRange(convertedLink, context.start, context.end);
 
@@ -194,13 +197,16 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   }
 }
 
-export default class LibraryLinkerPlugin extends Plugin {
+export default class JWLibraryLinkerPlugin extends Plugin {
   settings: LinkReplacerSettings;
   private bibleSuggester: BibleReferenceSuggester;
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
   async onload() {
     await this.loadSettings();
+
+    // Add settings tab
+    this.addSettingTab(new JWLibraryLinkerSettings(this.app, this));
 
     // Add the command for all link replacement
     this.addCommand({
@@ -258,8 +264,6 @@ export default class LibraryLinkerPlugin extends Plugin {
       },
     });
 
-    // Add settings tab
-    this.addSettingTab(new LinkReplacerSettingTab(this.app, this));
     this.bibleSuggester = new BibleReferenceSuggester(this);
     this.registerEditorSuggest(this.bibleSuggester);
   }
@@ -277,11 +281,11 @@ export default class LibraryLinkerPlugin extends Plugin {
   }
 }
 
-class LinkReplacerSettingTab extends PluginSettingTab {
-  plugin: LibraryLinkerPlugin;
+class JWLibraryLinkerSettings extends PluginSettingTab {
+  plugin: JWLibraryLinkerPlugin;
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
-  constructor(app: App, plugin: LibraryLinkerPlugin) {
+  constructor(app: App, plugin: JWLibraryLinkerPlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }

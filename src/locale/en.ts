@@ -32,7 +32,7 @@ export const en = {
     bookNotFound: 'Bible book not found: {{book}}',
     invalidVerseNumber: 'Invalid verse number',
     versesAscendingOrder: 'Verses must be in ascending order',
-    invalidFormat: 'Invalid reference format',
+    invalidVerseFormat: 'Invalid verse format',
     invalidReferenceFormat: 'Invalid reference format',
     conversionError: 'Error converting Bible text: {{message}}',
     unsupportedLanguage: 'Unsupported language: {{language}}',
