@@ -22,7 +22,19 @@ export const en = {
   suggestions: {
     createLink: 'Create link: {{text}}',
     createLinks: 'Create links: {{text}}',
-    createAndOpen: 'Create and open: {{text}}',
-    createAndOpenVerse: 'Create and open: {{verse}}',
+    createAndOpen: 'Create link and open: {{text}}',
+    createAndOpenVerse: 'Create link and open: {{verse}}',
+    typing: 'Enter Bible reference: {{text}}',
+    typingEmpty: 'Enter Bible reference',
+  },
+  errors: {
+    multipleBooksFound: 'Multiple Bible books found: {{books}}',
+    bookNotFound: 'Bible book not found: {{book}}',
+    invalidVerseNumber: 'Invalid verse number',
+    versesAscendingOrder: 'Verses must be in ascending order',
+    invalidVerseFormat: 'Invalid verse format',
+    invalidReferenceFormat: 'Invalid reference format',
+    conversionError: 'Error converting Bible text: {{message}}',
+    unsupportedLanguage: 'Unsupported language: {{language}}',
   },
 };

@@ -14,7 +14,7 @@ export const de = {
     replaceLinks: 'Alle Links umwandeln',
     replaceBibleLinks: 'Bibelvers-Links umwandeln',
     replacePublicationLinks: 'Publikations-Links umwandeln',
-    convertBibleReference: 'Bibelstelle in JW Library-Link umwandeln',
+    convertBibleReference: 'Bibelverweis in JW Library-Link umwandeln',
   },
   notices: {
     multipleBooksFound: 'Mehrere Bibelbücher gefunden: {{books}}',
@@ -22,7 +22,19 @@ export const de = {
   suggestions: {
     createLink: 'Link erstellen: {{text}}',
     createLinks: 'Links erstellen: {{text}}',
-    createAndOpen: 'Erstellen und öffnen: {{text}}',
-    createAndOpenVerse: 'Erstellen und öffnen: {{verse}}',
+    createAndOpen: 'Link erstellen und öffnen: {{text}}',
+    createAndOpenVerse: 'Link erstellen und öffnen: {{verse}}',
+    typing: 'Bibelverweis eingeben: {{text}}',
+    typingEmpty: 'Bibelverweis eingeben',
+  },
+  errors: {
+    multipleBooksFound: 'Mehrere Bibelbücher gefunden: {{books}}',
+    bookNotFound: 'Bibelbuch nicht gefunden: {{book}}',
+    invalidVerseNumber: 'Ungültige Versnummer',
+    versesAscendingOrder: 'Verse müssen in aufsteigender Reihenfolge sein',
+    invalidVerseFormat: 'Ungültiges Versformat',
+    invalidReferenceFormat: 'Ungültiges Referenzformat',
+    conversionError: 'Fehler beim Konvertieren des Bibeltextes: {{message}}',
+    unsupportedLanguage: 'Nicht unterstützte Sprache: {{language}}',
   },
 };

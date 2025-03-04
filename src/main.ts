@@ -21,7 +21,9 @@ import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { TranslationService } from '@/services/TranslationService';
 
 export const matchingBibleReferenceRegex =
-  /^(?:[1-5]?[A-Za-zäöü]{1,4}\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*,?\s*)?$/i;
+  /^(?:[1-5]?[A-Za-zäöü]{2,24}\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*,?\s*)?$/i;
+// 24 random number. Apostelgeschichte is 17 characters long.
+// should be enough for language support.
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,
@@ -29,10 +31,10 @@ const DEFAULT_SETTINGS: LinkReplacerSettings = {
 };
 
 class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
-  plugin: LibraryLinkerPlugin;
+  plugin: JWLibraryLinkerPlugin;
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
-  constructor(plugin: LibraryLinkerPlugin) {
+  constructor(plugin: JWLibraryLinkerPlugin) {
     super(plugin.app);
     this.plugin = plugin;
   }
@@ -46,36 +48,66 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     if (commandIndex === -1) return null;
 
     // Get the text after /b
-    const afterCommand = subString.slice(commandIndex + 2).trim();
+    const afterCommand = subString.slice(commandIndex + 2);
 
-    // Match the Bible reference
-    const match = afterCommand.match(matchingBibleReferenceRegex);
+    // Show suggestions immediately after "/b " or if there's any text after "/b"
+    if (afterCommand.startsWith(' ') || afterCommand.length > 0) {
+      return {
+        start: {
+          ch: commandIndex, // Start from the /b
+          line: cursor.line,
+        },
+        end: cursor,
+        query: afterCommand.trim(), // Trim to handle the space case
+      };
+    }
 
-    if (!match) return null;
-
-    return {
-      start: {
-        ch: commandIndex, // Start from the /b
-        line: cursor.line,
-      },
-      end: cursor,
-      query: afterCommand,
-    };
+    return null;
   }
 
   getSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
     const query = context.query;
 
-    // Regex that handles both with and without space, including complex verse references
-    if (query.match(matchingBibleReferenceRegex)) {
-      const formattedText = formatBibleText(query, true, this.plugin.settings.language); // Use short format
+    // Check if the query has the minimum structure needed for parsing
+    // This regex checks for book, chapter, and at least one verse
+    const completeReferenceRegex = /^([a-z0-9äöüß]+?)\s*(\d+)\s*:\s*(\d+)/i;
 
-      let reference: BibleReference;
+    // If query is empty (just typed "/b "), show a simple typing message without the {text} placeholder
+    if (query.length === 0) {
+      return [
+        {
+          text: query,
+          command: 'link',
+          description: this.t('suggestions.typingEmpty'),
+        },
+      ];
+    }
+
+    // If it's a complete reference, parse and show detailed suggestions
+    if (query.match(completeReferenceRegex)) {
+      let reference: BibleReference | null = null;
+
       try {
         reference = parseBibleReference(query, this.plugin.settings.language);
-      } catch {
+      } catch (error) {
+        return [
+          {
+            text: query,
+            command: 'typing',
+            description: this.t('suggestions.typing', { text: query }),
+          },
+        ];
+      }
+
+      if (!reference) {
         return [];
       }
+
+      const formattedText = formatBibleText(
+        query,
+        this.plugin.settings.useShortNames,
+        this.plugin.settings.language,
+      );
 
       const links = formatJWLibraryLink(reference, this.plugin.settings.language);
       const hasMultipleLinks = Array.isArray(links) && links.length > 1;
@@ -116,7 +148,16 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
       return suggestions;
     }
-    return [];
+    // For any other text after /b, show a typing suggestion with the text
+    else {
+      return [
+        {
+          text: query,
+          command: 'typing',
+          description: this.t('suggestions.typing', { text: query }),
+        },
+      ];
+    }
   }
 
   renderSuggestion(suggestion: BibleSuggestion, el: HTMLElement): void {
@@ -136,6 +177,10 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       this.plugin.settings.language,
     );
 
+    if (suggestion.command === 'typing') {
+      return;
+    }
+
     // Replace the entire command and reference with the converted link
     editor.replaceRange(convertedLink, context.start, context.end);
 
@@ -152,13 +197,16 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   }
 }
 
-export default class LibraryLinkerPlugin extends Plugin {
+export default class JWLibraryLinkerPlugin extends Plugin {
   settings: LinkReplacerSettings;
   private bibleSuggester: BibleReferenceSuggester;
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
   async onload() {
     await this.loadSettings();
+
+    // Add settings tab
+    this.addSettingTab(new JWLibraryLinkerSettings(this.app, this));
 
     // Add the command for all link replacement
     this.addCommand({
@@ -216,8 +264,6 @@ export default class LibraryLinkerPlugin extends Plugin {
       },
     });
 
-    // Add settings tab
-    this.addSettingTab(new LinkReplacerSettingTab(this.app, this));
     this.bibleSuggester = new BibleReferenceSuggester(this);
     this.registerEditorSuggest(this.bibleSuggester);
   }
@@ -235,11 +281,11 @@ export default class LibraryLinkerPlugin extends Plugin {
   }
 }
 
-class LinkReplacerSettingTab extends PluginSettingTab {
-  plugin: LibraryLinkerPlugin;
+class JWLibraryLinkerSettings extends PluginSettingTab {
+  plugin: JWLibraryLinkerPlugin;
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
-  constructor(app: App, plugin: LibraryLinkerPlugin) {
+  constructor(app: App, plugin: JWLibraryLinkerPlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }

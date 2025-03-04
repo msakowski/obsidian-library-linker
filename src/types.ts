@@ -11,6 +11,7 @@ export interface LinkReplacerSettings {
 
 export interface BibleBook {
   id: number;
+  prefix?: string;
   aliases: readonly string[];
   longName: string;
   shortName: string;
@@ -34,7 +35,7 @@ export interface BibleReference {
 
 export interface BibleSuggestion {
   text: string;
-  command: 'link' | 'open';
+  command: 'formatBook' | 'link' | 'open' | 'typing';
   description: string;
   linkIndex?: number;
 }

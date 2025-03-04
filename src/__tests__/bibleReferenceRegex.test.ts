@@ -8,6 +8,8 @@ describe('Bible Reference Regex Pattern', () => {
     'ps23:1',
     'Joh 3:16',
     'Psal 23:1',
+    'offb21:4',
+    'Offenbarung 21:4',
 
     // References with ranges
     'ps23:1-3',

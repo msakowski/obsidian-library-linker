@@ -6,10 +6,12 @@ import type { Language } from '@/types';
 
 export function convertBibleTextToLink(input: string, language: Language): string | string[] {
   try {
-    const reference = parseBibleReference(input, language);
-    return formatJWLibraryLink(reference, language);
+    const parseResult = parseBibleReference(input, language);
+    if (!parseResult) {
+      return input;
+    }
+    return formatJWLibraryLink(parseResult, language);
   } catch (error) {
-    console.error('Error converting Bible text:', error.message);
     return input;
   }
 }
@@ -20,7 +22,11 @@ export function convertBibleTextToMarkdownLink(
   language: Language,
 ): string {
   try {
-    const reference = parseBibleReference(input, language);
+    const parseResult = parseBibleReference(input, language);
+    if (!parseResult) {
+      return input;
+    }
+    const reference = parseResult;
     const links = formatJWLibraryLink(reference, language);
 
     // Early return input if there are no valid links
@@ -30,7 +36,7 @@ export function convertBibleTextToMarkdownLink(
 
     if (Array.isArray(links)) {
       // For complex references, create multiple links
-      const bookEntry = getBibleBooks(language).find(
+      const bookEntry = getBibleBooks(language)?.find(
         (book) => book.id === parseInt(reference.book),
       );
 
@@ -38,6 +44,7 @@ export function convertBibleTextToMarkdownLink(
         return input;
       }
 
+      // Use short or long name based on the parameter
       const bookName = short ? bookEntry.shortName : bookEntry.longName;
       const chapter = parseInt(reference.chapter);
 
@@ -65,6 +72,7 @@ export function convertBibleTextToMarkdownLink(
     const formattedText = formatBibleText(input, short, language);
     return `[${formattedText}](${links})`;
   } catch (error) {
+    console.error(error);
     return input;
   }
 }

@@ -37,8 +37,8 @@ describe('formatBibleText', () => {
     });
   });
 
-  test('returns input on invalid reference', () => {
-    expect(formatBibleText('invalid', false, 'X')).toBe('invalid');
-    expect(formatBibleText('xyz1:1', true, 'X')).toBe('xyz1:1');
+  test('throw error on invalid reference', () => {
+    expect(() => formatBibleText('invalid', false, 'X')).toThrow();
+    expect(() => formatBibleText('xyz1:1', true, 'X')).toThrow();
   });
 });

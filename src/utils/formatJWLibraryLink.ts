@@ -7,7 +7,7 @@ export function formatJWLibraryLink(
   const { book, chapter, verseRanges } = reference;
 
   if (!verseRanges) {
-    throw new Error('Invalid reference format');
+    throw new Error('errors.invalidReferenceFormat');
   }
 
   const link = (range: string) =>
