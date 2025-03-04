@@ -13,7 +13,7 @@ function padVerse(verse: number): string {
   return verse.toString().padStart(3, '0');
 }
 
-function parseVerseRanges(versePart: string): { ranges: VerseRange[] | null; error?: string } {
+function parseVerseRanges(versePart: string): VerseRange[] {
   // Remove any trailing commas
   versePart = versePart.trim();
   if (versePart.endsWith(',')) {
@@ -32,7 +32,7 @@ function parseVerseRanges(versePart: string): { ranges: VerseRange[] | null; err
   }
 
   const ranges: VerseRange[] = [];
-  let lastEnd = 0;
+  let lastEndVerse = 0;
   let currentRange: VerseRange | null = null;
 
   for (const part of parts) {
@@ -51,12 +51,12 @@ function parseVerseRanges(versePart: string): { ranges: VerseRange[] | null; err
         throw new Error('errors.versesAscendingOrder');
       }
 
-      if (start <= lastEnd) {
+      if (start <= lastEndVerse) {
         throw new Error('errors.versesAscendingOrder');
       }
 
       // If this range starts right after the current range, extend it
-      if (currentRange && start === lastEnd + 1) {
+      if (currentRange && start === lastEndVerse + 1) {
         currentRange.end = padVerse(end);
       } else {
         currentRange = {
@@ -65,18 +65,18 @@ function parseVerseRanges(versePart: string): { ranges: VerseRange[] | null; err
         };
         ranges.push(currentRange);
       }
-      lastEnd = end;
+      lastEndVerse = end;
     } else {
       // Handle single verse
       const verse = parseVerseNumber(part);
 
-      if (verse <= lastEnd) {
+      if (verse <= lastEndVerse) {
         // This catches repeated verses
         throw new Error('errors.versesAscendingOrder');
       }
 
       // If this verse is consecutive with the current range, extend it
-      if (currentRange && verse === lastEnd + 1) {
+      if (currentRange && verse === lastEndVerse + 1) {
         currentRange.end = padVerse(verse);
       } else {
         currentRange = {
@@ -85,11 +85,11 @@ function parseVerseRanges(versePart: string): { ranges: VerseRange[] | null; err
         };
         ranges.push(currentRange);
       }
-      lastEnd = verse;
+      lastEndVerse = verse;
     }
   }
 
-  return { ranges };
+  return ranges;
 }
 
 export function parseBibleReference(input: string, language: Language): BibleReference {
@@ -151,13 +151,10 @@ export function parseBibleReference(input: string, language: Language): BibleRef
 
   // Complex verse ranges
   const result = parseVerseRanges(versesPart);
-  if (result.error || !result.ranges) {
-    throw new Error(result.error);
-  }
 
   return {
     book: paddedBook,
     chapter: paddedChapter,
-    verseRanges: result.ranges,
+    verseRanges: result,
   };
 }
