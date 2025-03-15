@@ -6,5 +6,6 @@ export class EditorPosition {}
 export class EditorSuggest {}
 export class MarkdownView {}
 export class TFile {}
+export class Notice {}
 
 // Add any other Obsidian classes/types you need to mock
