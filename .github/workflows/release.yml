@@ -1,56 +1,40 @@
-name: Release Obsidian Plugin
-
-env:
-  PLUGIN_NAME: obsidian-library-linker # Change this to match the id of your plugin.
+name: Release
 
 on:
-  workflow_dispatch:
   push:
-    tags:
-      - '*' # Push events to matching any tag format, i.e. 1.0, 20.15.10
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  build:
-   runs-on: ubuntu-latest
+  release:
+    name: Release PR or Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
 
-   steps:
-     - uses: actions/checkout@v4
-       with:
-         fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
-     - name: Use Node.js
-       uses: actions/setup-node@v4
-       with:
-         node-version: "18.x" # You might need to adjust this value to your own version.
+      - name: Install dependencies
+        run: npm i -D @changesets/cli
 
-     # Get the version number and put it in an environment file
-     - name: Get Version
-       id: version
-       run: |
-         echo "tag=$(git describe --tags $(git rev-list --tags --max-count=1))" >> $GITHUB_ENV
+      - name: Create changesets PR or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          title: 🚀 Release new version
+          publish: npx @changesets/cli tag
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
-     # Build the plugin
-     - name: Build
-       id: build
-       run: |
-         npm install obsidian
-         npm install
-         npm ci
-         npm run build
-
-     # Package the required files into a zip
-     - name: Package
-       run: |
-         mkdir ${{ env.PLUGIN_NAME }}
-         cp main.js manifest.json styles.css README.md ${{ env.PLUGIN_NAME }}
-         zip -r ${{ env.PLUGIN_NAME }}-${{ env.tag }}.zip ${{ env.PLUGIN_NAME }}
-
-     - name: Release
-       uses: softprops/action-gh-release@v2
-       with:
-         generate_release_notes: true
-         draft: true
-         files: |
-           main.js
-           manifest.json
-           styles.css
-           ${{ env.PLUGIN_NAME }}-${{ env.tag }}.zip
+      - name: Upload Release Asset
+        if: steps.changesets.outputs.published == 'true'  
+        run: |
+          set -e
+          LATEST_TAG=$(gh release list --limit 1 --json tagName -q '.[0].tagName')
+          ASSET="${{ github.event.repository.name }}-${LATEST_TAG}.zip"
+          zip -r "$ASSET" main.js manifest.json README.md
+          gh release upload "$LATEST_TAG" "$ASSET" main.js manifest.json README.md --clobber
+          echo "✅ Uploaded $ASSET to the release $LATEST_TAG"
+        env:
+          GH_TOKEN: ${{ github.token }}
