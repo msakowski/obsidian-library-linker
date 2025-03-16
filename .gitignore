@@ -5,6 +5,7 @@ node_modules/
 *.js.map
 data.json
 .hotreload
+main.js
 
 # Development
 .idea/

@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Release PR or Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Install changesets cli
+        run: npm i -D @changesets/cli
+
+      - name: Create changesets PR or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          title: 🚀 Release new version
+          publish: npx @changesets/cli tag
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Install dependencies
+        if: steps.changesets.outputs.published == 'true'  
+        run: |
+          npm ci --legacy-peer-deps
+
+      - name: Build
+        if: steps.changesets.outputs.published == 'true'  
+        run: npm run build
+
+      - name: Upload Release Asset
+        if: steps.changesets.outputs.published == 'true'  
+        run: |
+          set -e
+          LATEST_TAG=$(gh release list --limit 1 --json tagName -q '.[0].tagName')
+          ASSET="${{ github.event.repository.name }}-${LATEST_TAG}.zip"
+          zip -r "$ASSET" main.js manifest.json README.md
+          gh release upload "$LATEST_TAG" "$ASSET" main.js manifest.json README.md --clobber
+          echo "✅ Uploaded $ASSET to the release $LATEST_TAG"
+        env:
+          GH_TOKEN: ${{ github.token }}
