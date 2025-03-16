@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Install dependencies
+      - name: Install changesets cli
         run: npm i -D @changesets/cli
 
       - name: Create changesets PR or Publish
@@ -26,6 +26,15 @@ jobs:
           publish: npx @changesets/cli tag
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Install dependencies
+        if: steps.changesets.outputs.published == 'true'  
+        run: |
+          npm ci --legacy-peer-deps
+
+      - name: Build
+        if: steps.changesets.outputs.published == 'true'  
+        run: npm run build
 
       - name: Upload Release Asset
         if: steps.changesets.outputs.published == 'true'  
