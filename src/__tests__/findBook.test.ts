@@ -13,6 +13,17 @@ describe('findBook', () => {
     expect(findBook('ps', 'X').book?.id).toBe(19);
     expect(findBook('rev', 'E').book?.id).toBe(66);
     expect(findBook('ps', 'E').book?.id).toBe(19);
+    expect(findBook('hes', 'X').book?.id).toBe(26);
+    expect(findBook('phili', 'X').book?.id).toBe(50);
+    expect(findBook('eph', 'X').book?.id).toBe(49);
+    expect(findBook('ru', 'X').book?.id).toBe(8);
+    expect(findBook('ne', 'X').book?.id).toBe(16);
+    expect(findBook('hi', 'X').book?.id).toBe(18);
+    expect(findBook('pr', 'X').book?.id).toBe(21);
+    expect(findBook('klg', 'X').book?.id).toBe(25);
+    expect(findBook('da', 'X').book?.id).toBe(27);
+    expect(findBook('ob', 'X').book?.id).toBe(31);
+    expect(findBook('mi', 'X').book?.id).toBe(33);
   });
 
   test('finds book with number prefix', () => {

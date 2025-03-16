@@ -25,7 +25,7 @@ export const findBook = (bookQuery: string, language: Language): FindBookResult 
     .filter((book) => (!book.prefix ? true : bookQuery.match(/^[1-5]/)))
     .filter((book) => {
       const alias = book.aliases.map((alias) => (book.prefix ? `${book.prefix}${alias}` : alias));
-      return alias.some((alias) => alias.includes(bookQuery));
+      return alias.some((alias) => alias.startsWith(bookQuery));
     });
 
   if (bookEntries.length > 1) {
