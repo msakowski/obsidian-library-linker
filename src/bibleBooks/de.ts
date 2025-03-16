@@ -158,7 +158,7 @@ export const bibleBooksDE: readonly BibleBook[] = [
   },
   {
     id: 25,
-    aliases: ['klagelieder'],
+    aliases: ['klagelieder', 'klg'],
     longName: 'Klagelieder',
     shortName: 'Klg',
   },
