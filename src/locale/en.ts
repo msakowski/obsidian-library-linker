@@ -1,5 +1,3 @@
-import { convertWebLink } from '@/utils/convertLinks';
-
 export const en = {
   settings: {
     language: {
@@ -20,9 +18,9 @@ export const en = {
     replaceLinks: 'Convert all links',
     replaceBibleLinks: 'Convert Bible verse links',
     replacePublicationLinks: 'Convert publication links',
-    replaceWebLinks: 'Convert jw.org links to library links',
+    replaceWebLinks: 'Convert all jw.org links to library links',
+    convertWebLink: 'Convert selected jw.org link to Library link',
     convertBibleReference: 'Convert Bible reference to Library link',
-    convertWebLink: 'Convert jw.org link to Library link',
   },
   notices: {
     multipleBooksFound: 'Multiple Bible books found: {{books}}',
