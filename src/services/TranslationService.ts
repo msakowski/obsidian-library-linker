@@ -19,9 +19,9 @@ export class TranslationService {
           this.currentLocale = obsidianLocale;
         }
       }
-    } catch (e) {
+    } catch (error) {
       // Fallback to default 'en' if localStorage is not available
-      console.debug('Could not access localStorage, using default locale');
+      console.debug('Could not access localStorage, using default locale', error);
     }
   }
 
