@@ -1,5 +1,4 @@
 import { findBook } from '@/utils/findBook';
-import exp from 'constants';
 
 describe('findBook', () => {
   test('finds book by exact match', () => {
@@ -8,8 +7,8 @@ describe('findBook', () => {
     expect(findBook('revelation', 'E')).toEqual(expect.objectContaining({ id: 66 }));
     expect(findBook('romans', 'E')).toEqual(expect.objectContaining({ id: 45 }));
     expect(findBook('Joosua', 'FI')).toEqual(expect.objectContaining({ id: 6 }));
-    expect(findBook('Ilmestys', "FI")).toEqual(expect.objectContaining({ id: 66 }));
-    expect(findBook('Psalmit', "FI")).toEqual(expect.objectContaining({ id: 19 }));
+    expect(findBook('Ilmestys', 'FI')).toEqual(expect.objectContaining({ id: 66 }));
+    expect(findBook('Psalmit', 'FI')).toEqual(expect.objectContaining({ id: 19 }));
   });
 
   test('finds book by abbreviation', () => {
