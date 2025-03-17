@@ -110,6 +110,12 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     throw new Error('errors.multipleBooksFound');
   }
 
+  if (
+    parseInt(chapter, 10) < 1 ||
+    (book.chapters !== undefined && parseInt(chapter, 10) > book.chapters)
+  ) {
+    throw new Error('errors.invalidChapter');
+  }
   const versesPartMatch = versesPart.match(/^(\d+)(?:-(\d*))?$/);
 
   if (versesPartMatch) {

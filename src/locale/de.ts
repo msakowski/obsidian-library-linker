@@ -36,5 +36,6 @@ export const de = {
     invalidReferenceFormat: 'Ungültiges Referenzformat',
     conversionError: 'Fehler beim Konvertieren des Bibeltextes: {{message}}',
     unsupportedLanguage: 'Nicht unterstützte Sprache: {{language}}',
+    invalidChapter: 'Kapitel {{chapter}} existiert nicht in {{book}}',
   },
 };

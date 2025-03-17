@@ -143,4 +143,10 @@ describe('parseBibleReference', () => {
   test.each(formatErrorCases)('$description', ({ input, errorMessage }) => {
     expect(() => parseBibleReference(input, language)).toThrow(errorMessage);
   });
+
+  test('throws error on out-of-range chapter', () => {
+    expect(() => parseBibleReference('joh0:1', 'E')).toThrow('errors.invalidChapter');
+    expect(() => parseBibleReference('joh100:1', 'E')).toThrow('errors.invalidChapter');
+    expect(() => parseBibleReference('ps 200:1', 'FI')).toThrow('errors.invalidChapter');
+  });
 });
