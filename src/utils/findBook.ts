@@ -1,48 +1,37 @@
 import { getBibleBooks } from '@/bibleBooks';
 import type { BibleBook, Language } from '@/types';
-import { TranslationService } from '@/services/TranslationService';
 
-// Define a return type that includes both the book and any notification message
-export interface FindBookResult {
-  book: BibleBook | null;
-  notification?: string;
-}
-
-export const findBook = (bookQuery: string, language: Language): FindBookResult => {
-  const t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
-
-  bookQuery = bookQuery
+export const findBook = (bookQuery: string, language: Language): BibleBook | BibleBook[] => {
+  const trimmedQuerry = bookQuery
     .toLowerCase()
     .replace(/[/.\s]/g, '')
     .trim();
 
+  if (!trimmedQuerry) {
+    throw new Error('errors.bookNotFound');
+  }
+
   const bibleBooks = getBibleBooks(language);
+
   if (!bibleBooks) {
-    return { book: null };
+    throw new Error('errors.bookNotFound');
   }
 
   const bookEntries = bibleBooks
-    .filter((book) => (!book.prefix ? true : bookQuery.match(/^[1-5]/)))
+    .filter((book) => (!book.prefix ? true : trimmedQuerry.match(/^[1-5]/)))
     .filter((book) => {
       const alias = book.aliases.map((alias) => (book.prefix ? `${book.prefix}${alias}` : alias));
-      return alias.some((alias) => alias.startsWith(bookQuery));
-    });
+      return alias.some((alias) => alias.startsWith(trimmedQuerry));
+    })
+    .map((book) => ({ ...book, idPadded: book.id.toString().padStart(2, '0') }));
 
   if (bookEntries.length > 1) {
-    return {
-      book: null,
-      notification: t('errors.multipleBooksFound', {
-        books: bookEntries.map((book) => book.longName).join(', '),
-      }),
-    };
+    return bookEntries;
   }
 
   if (bookEntries.length === 1) {
-    return { book: bookEntries[0] };
+    return bookEntries[0];
   }
 
-  return {
-    book: null,
-    notification: t('errors.bookNotFound'),
-  };
+  throw new Error('errors.bookNotFound');
 };

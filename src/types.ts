@@ -23,13 +23,13 @@ export type BibleBooks = readonly BibleBookAbbreviations[];
 export type BibleBookId = (typeof bibleBooksDE)[number]['id'];
 
 export interface VerseRange {
-  start: string;
-  end: string;
+  start: number;
+  end: number;
 }
 
 export interface BibleReference {
-  book: string;
-  chapter: string;
+  book: BibleBookId;
+  chapter: number;
   verseRanges?: VerseRange[]; // For complex verse references with multiple ranges
 }
 

@@ -1,4 +1,4 @@
-import { BibleBook } from '@/types';
+import type { BibleBook } from '@/types';
 
 export const bibleBooksEN: readonly BibleBook[] = [
   {
