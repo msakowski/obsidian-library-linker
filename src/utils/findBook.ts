@@ -1,7 +1,7 @@
 import { getBibleBooks } from '@/bibleBooks';
 import type { BibleBook, Language } from '@/types';
 
-export const findBook = (bookQuery: string, language: Language): BibleBook | BibleBook[] => {
+export const findBook = (bookQuery: string, language: Language, customAliases: { bookId: number; alias: string }[] = []): BibleBook | BibleBook[] => {
   const trimmedQuerry = bookQuery
     .toLowerCase()
     .replace(/[/.\s]/g, '')
@@ -17,7 +17,18 @@ export const findBook = (bookQuery: string, language: Language): BibleBook | Bib
     throw new Error('errors.bookNotFound');
   }
 
-  const bookEntries = bibleBooks
+  const mergedBooks = bibleBooks.map((book) => {
+    const customAlias = customAliases.find((alias) => alias.bookId === book.id);
+    if (customAlias) {
+      return {
+        ...book,
+        aliases: [...book.aliases, customAlias.alias],
+      };
+    }
+    return book;
+  });
+
+  const bookEntries = mergedBooks
     .filter((book) => (!book.prefix ? true : trimmedQuerry.match(/^[1-5]/)))
     .filter((book) => {
       const alias = book.aliases.map((alias) => (book.prefix ? `${book.prefix}${alias}` : alias));

@@ -14,7 +14,7 @@ import {
   convertBibleTextToLink,
   convertBibleTextToMarkdownLink,
 } from '@/utils/convertBibleTextToLink';
-import type { BibleReference, BibleSuggestion, Language, LinkReplacerSettings } from '@/types';
+import type { BibleReference, BibleSuggestion, Language, LinkReplacerSettings, CustomAlias } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
@@ -28,6 +28,7 @@ export const matchingBibleReferenceRegex =
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,
   language: 'E',
+  customAliases: [],
 };
 
 class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
@@ -283,6 +284,17 @@ export default class JWLibraryLinkerPlugin extends Plugin {
   async saveSettings() {
     await this.saveData(this.settings);
   }
+
+  addCustomAlias(bookId: number, alias: string) {
+    const existingAlias = this.settings.customAliases.find(
+      (customAlias) => customAlias.bookId === bookId && customAlias.alias === alias,
+    );
+
+    if (!existingAlias) {
+      this.settings.customAliases.push({ bookId, alias });
+      this.saveSettings();
+    }
+  }
 }
 
 class JWLibraryLinkerSettings extends PluginSettingTab {
@@ -325,5 +337,70 @@ class JWLibraryLinkerSettings extends PluginSettingTab {
           await this.plugin.saveSettings();
         }),
       );
+
+    new Setting(containerEl)
+      .setName('Custom Aliases')
+      .setDesc('Add, edit, or delete custom aliases for books')
+      .addButton((button) =>
+        button
+          .setButtonText('Manage Custom Aliases')
+          .onClick(() => {
+            new CustomAliasModal(this.app, this.plugin).open();
+          }),
+      );
+  }
+}
+
+class CustomAliasModal extends Modal {
+  plugin: JWLibraryLinkerPlugin;
+
+  constructor(app: App, plugin: JWLibraryLinkerPlugin) {
+    super(app);
+    this.plugin = plugin;
+  }
+
+  onOpen() {
+    const { contentEl } = this;
+    contentEl.empty();
+
+    const bookDropdown = new DropdownComponent(contentEl);
+    bookDropdown.addOptions(
+      this.plugin.settings.language === 'E'
+        ? {
+            1: 'Genesis',
+            2: 'Exodus',
+            // Add other books here
+          }
+        : this.plugin.settings.language === 'X'
+        ? {
+            1: '1. Mose',
+            2: '2. Mose',
+            // Add other books here
+          }
+        : {
+            1: '1. Mooseksen kirja',
+            2: '2. Mooseksen kirja',
+            // Add other books here
+          },
+    );
+
+    const aliasInput = new TextComponent(contentEl);
+    aliasInput.setPlaceholder('Enter custom alias');
+
+    const addButton = new ButtonComponent(contentEl);
+    addButton.setButtonText('Add Alias').onClick(() => {
+      const bookId = parseInt(bookDropdown.getValue(), 10);
+      const alias = aliasInput.getValue().trim();
+
+      if (bookId && alias) {
+        this.plugin.addCustomAlias(bookId, alias);
+        this.close();
+      }
+    });
+  }
+
+  onClose() {
+    const { contentEl } = this;
+    contentEl.empty();
   }
 }

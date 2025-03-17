@@ -68,4 +68,16 @@ describe('findBook', () => {
     expect(findBook(' gen ', 'E')).toEqual(expect.objectContaining({ id: 1 }));
     expect(findBook(' 1 moo ', 'FI')).toEqual(expect.objectContaining({ id: 1 }));
   });
+
+  test('considers user-defined custom aliases', () => {
+    const customAliases = [{ bookId: 66, alias: 'rev' }];
+    expect(findBook('rev', 'X', customAliases)).toEqual(expect.objectContaining({ id: 66 }));
+  });
+
+  test('merges user-defined custom aliases with predefined aliases', () => {
+    const customAliases = [{ bookId: 66, alias: 'rev' }];
+    const book = findBook('rev', 'X', customAliases);
+    expect(book).toEqual(expect.objectContaining({ id: 66 }));
+    expect(book.aliases).toContain('rev');
+  });
 });

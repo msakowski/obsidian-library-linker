@@ -7,6 +7,7 @@ export type Language = 'E' | 'X' | 'FI'; // plugin language
 export interface LinkReplacerSettings {
   useShortNames: boolean;
   language: Language;
+  customAliases: CustomAlias[];
 }
 
 export interface BibleBook {
@@ -39,4 +40,9 @@ export interface BibleSuggestion {
   command: 'formatBook' | 'link' | 'open' | 'typing';
   description: string;
   linkIndex?: number;
+}
+
+export interface CustomAlias {
+  bookId: number;
+  alias: string;
 }
