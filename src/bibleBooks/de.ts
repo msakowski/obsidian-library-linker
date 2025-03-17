@@ -1,6 +1,6 @@
 import type { BibleBook } from '@/types';
 
-export const bibleBooksDE: readonly  Omit<BibleBook, 'chapters'>[] = [
+export const bibleBooksDE: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 1,
     prefix: '1',
