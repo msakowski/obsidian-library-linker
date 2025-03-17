@@ -4,8 +4,10 @@ import { bibleBooksFI } from '@/bibleBooks/fi';
 import { chapterCounts } from '@/bibleBooks/chapterCounts';
 import type { BibleBook, Language } from '@/types';
 
+type BibleBookWithoutChapters = Omit<BibleBook, 'chapters'>;
+
 export const getBibleBooks = (language: Language): readonly BibleBook[] => {
-  let books;
+  let books: readonly BibleBookWithoutChapters[];
   switch (language) {
     case 'E':
       books = bibleBooksEN;
