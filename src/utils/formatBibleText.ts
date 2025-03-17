@@ -8,8 +8,6 @@ export function formatBibleText(
 ): string {
   const bookEntry = getBibleBookById(reference.book, language);
 
-  console.log(bookEntry);
-
   if (!bookEntry) {
     throw new Error('errors.bookNotFound');
   }
