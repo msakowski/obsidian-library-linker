@@ -104,7 +104,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       }
 
       const formattedText = formatBibleText(
-        query,
+        reference,
         this.plugin.settings.useShortNames,
         this.plugin.settings.language,
       );
@@ -124,11 +124,9 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
       // If there are multiple links, add individual open options
       if (hasMultipleLinks) {
-        const verseRanges = reference.verseRanges!.map((range) => {
-          const start = parseInt(range.start);
-          const end = parseInt(range.end);
-          return start === end ? start.toString() : `${start}-${end}`;
-        });
+        const verseRanges = reference.verseRanges!.map(({ start, end }) =>
+          start === end ? start.toString() : `${start}-${end}`,
+        );
 
         verseRanges.forEach((range, i) => {
           suggestions.push({
@@ -170,14 +168,16 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const { context } = this;
     const editor = context.editor;
 
+    const reference = parseBibleReference(suggestion.text, this.plugin.settings.language);
+
     // Convert the Bible reference to a link
     const convertedLink = convertBibleTextToMarkdownLink(
-      suggestion.text,
+      reference,
       this.plugin.settings.useShortNames,
       this.plugin.settings.language,
     );
 
-    if (suggestion.command === 'typing') {
+    if (suggestion.command === 'typing' || !convertedLink) {
       return;
     }
 
@@ -186,7 +186,7 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
     // Handle opening links
     if (suggestion.command === 'open') {
-      const url = convertBibleTextToLink(suggestion.text, this.plugin.settings.language);
+      const url = convertBibleTextToLink(reference, this.plugin.settings.language);
       if (Array.isArray(url)) {
         // For open-specific, open the specified link, otherwise open first
         window.open(url[suggestion.linkIndex || 0]);
@@ -254,12 +254,15 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       editorCallback: (editor: Editor) => {
         const selection = editor.getSelection();
         if (selection) {
+          const reference = parseBibleReference(selection, this.settings.language);
           const convertedLink = convertBibleTextToMarkdownLink(
-            selection,
+            reference,
             this.settings.useShortNames,
             this.settings.language,
           );
-          editor.replaceSelection(convertedLink);
+          if (convertedLink) {
+            editor.replaceSelection(convertedLink);
+          }
         }
       },
     });

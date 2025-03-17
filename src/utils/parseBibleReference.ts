@@ -9,13 +9,10 @@ function parseVerseNumber(verse: string): number {
   return num;
 }
 
-function padVerse(verse: number): string {
-  return verse.toString().padStart(3, '0');
-}
-
 function parseVerseRanges(versePart: string): VerseRange[] {
   // Remove any trailing commas
   versePart = versePart.trim();
+
   if (versePart.endsWith(',')) {
     versePart = versePart.slice(0, -1);
   }
@@ -57,11 +54,11 @@ function parseVerseRanges(versePart: string): VerseRange[] {
 
       // If this range starts right after the current range, extend it
       if (currentRange && start === lastEndVerse + 1) {
-        currentRange.end = padVerse(end);
+        currentRange.end = end;
       } else {
         currentRange = {
-          start: padVerse(start),
-          end: padVerse(end),
+          start,
+          end,
         };
         ranges.push(currentRange);
       }
@@ -77,11 +74,11 @@ function parseVerseRanges(versePart: string): VerseRange[] {
 
       // If this verse is consecutive with the current range, extend it
       if (currentRange && verse === lastEndVerse + 1) {
-        currentRange.end = padVerse(verse);
+        currentRange.end = verse;
       } else {
         currentRange = {
-          start: padVerse(verse),
-          end: padVerse(verse),
+          start: verse,
+          end: verse,
         };
         ranges.push(currentRange);
       }
@@ -103,14 +100,15 @@ export function parseBibleReference(input: string, language: Language): BibleRef
 
   const [, bookName, chapter, versesPart] = match;
 
-  const bookResult = findBook(bookName, language);
-  if (!bookResult.book) {
+  const book = findBook(bookName, language);
+
+  if (!book) {
     throw new Error('errors.bookNotFound');
   }
 
-  const book = bookResult.book;
-  const paddedBook = book.id < 10 ? `0${book.id}` : book.id.toString();
-  const paddedChapter = chapter.padStart(3, '0');
+  if (Array.isArray(book)) {
+    throw new Error('errors.multipleBooksFound');
+  }
 
   const versesPartMatch = versesPart.match(/^(\d+)(?:-(\d*))?$/);
 
@@ -126,35 +124,37 @@ export function parseBibleReference(input: string, language: Language): BibleRef
       }
 
       return {
-        book: paddedBook,
-        chapter: paddedChapter,
+        book: book.id,
+        chapter: parseInt(chapter, 10),
         verseRanges: [
           {
-            start: padVerse(startVerseNumber),
-            end: padVerse(endVerseNumber),
+            start: startVerseNumber,
+            end: endVerseNumber,
           },
         ],
       };
     }
 
     return {
-      book: paddedBook,
-      chapter: paddedChapter,
+      book: book.id,
+      chapter: parseInt(chapter, 10),
       verseRanges: [
         {
-          start: padVerse(startVerseNumber),
-          end: padVerse(startVerseNumber),
+          start: startVerseNumber,
+          end: startVerseNumber,
         },
       ],
     };
   }
 
+  // TODO: move parseVerseRanges to own file and include simple verse parsing
+
   // Complex verse ranges
   const result = parseVerseRanges(versesPart);
 
   return {
-    book: paddedBook,
-    chapter: paddedChapter,
+    book: book.id,
+    chapter: parseInt(chapter, 10),
     verseRanges: result,
   };
 }
