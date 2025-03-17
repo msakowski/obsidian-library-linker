@@ -20,7 +20,7 @@ export const de = {
     replacePublicationLinks: 'Publikations-Links umwandeln',
     convertBibleReference: 'Bibelverweis in JW Library-Link umwandeln',
     convertWebLink: 'jw.org-Link in Library-Link umwandeln',
-    replaceWebLinks: 'jw.org-Link in Library-Links umwandeln',
+    replaceWebLinks: 'jw.org-Links in Library-Links umwandeln',
   },
   notices: {
     multipleBooksFound: 'Mehrere Bibelbücher gefunden: {{books}}',
