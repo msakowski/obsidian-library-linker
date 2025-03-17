@@ -16,7 +16,7 @@ export interface BibleBook {
   aliases: readonly string[];
   longName: string;
   shortName: string;
-  chapters?: number;
+  chapters: number;
 }
 
 export type BibleBookAbbreviations = readonly string[];
