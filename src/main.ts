@@ -1,24 +1,22 @@
 import {
-  App,
   Editor,
   EditorPosition,
   EditorSuggest,
   EditorSuggestContext,
   EditorSuggestTriggerInfo,
   Plugin,
-  PluginSettingTab,
-  Setting,
 } from 'obsidian';
-import { convertLinks } from '@/utils/convertLinks';
+import { convertLinks, convertWebLink } from '@/utils/convertLinks';
 import {
   convertBibleTextToLink,
   convertBibleTextToMarkdownLink,
 } from '@/utils/convertBibleTextToLink';
-import type { BibleReference, BibleSuggestion, Language, LinkReplacerSettings } from '@/types';
+import type { BibleReference, BibleSuggestion, LinkReplacerSettings } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { TranslationService } from '@/services/TranslationService';
+import { JWLibraryLinkerSettings } from './JWLibraryLinkerSettings';
 
 export const matchingBibleReferenceRegex =
   /^(?:[1-5]?[A-Za-zäöü]{2,24}\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*,?\s*)?$/i;
@@ -28,6 +26,7 @@ export const matchingBibleReferenceRegex =
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,
   language: 'E',
+  openAutomatically: false,
 };
 
 class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
@@ -143,6 +142,10 @@ class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
           description: this.t('suggestions.createAndOpen', { text: formattedText }),
         });
       }
+      if (this.plugin.settings.openAutomatically) {
+        //Move the create and open suggestion to the top
+        suggestions.unshift(suggestions.pop()!);
+      }
 
       return suggestions;
     }
@@ -226,8 +229,20 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       id: 'replace-bible-links',
       name: this.t('commands.replaceBibleLinks'),
       editorCallback: (editor: Editor) => {
-        const currentContent = editor.getValue();
+        const currentContent = editor.getSelection();
         const updatedContent = convertLinks(currentContent, 'bible');
+        if (currentContent !== updatedContent) {
+          editor.setValue(updatedContent);
+        }
+      },
+    });
+
+    this.addCommand({
+      id: 'replace-web-links',
+      name: this.t('commands.replaceWebLinks'),
+      editorCallback: (editor: Editor) => {
+        const currentContent = editor.getValue();
+        const updatedContent = convertLinks(currentContent, 'web');
         if (currentContent !== updatedContent) {
           editor.setValue(updatedContent);
         }
@@ -267,6 +282,19 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       },
     });
 
+    // Add command for converting jw.org links to jwlibrary:// links
+    this.addCommand({
+      id: 'convert-web-link',
+      name: this.t('commands.convertWebLink'),
+      editorCallback: (editor: Editor) => {
+        const currentContent = editor.getSelection();
+        const updatedContent = convertWebLink(currentContent);
+        if (currentContent !== updatedContent) {
+          editor.replaceSelection(updatedContent);
+        }
+      },
+    });
+
     this.bibleSuggester = new BibleReferenceSuggester(this);
     this.registerEditorSuggest(this.bibleSuggester);
   }
@@ -281,48 +309,5 @@ export default class JWLibraryLinkerPlugin extends Plugin {
 
   async saveSettings() {
     await this.saveData(this.settings);
-  }
-}
-
-class JWLibraryLinkerSettings extends PluginSettingTab {
-  plugin: JWLibraryLinkerPlugin;
-  private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
-
-  constructor(app: App, plugin: JWLibraryLinkerPlugin) {
-    super(app, plugin);
-    this.plugin = plugin;
-  }
-
-  display(): void {
-    const { containerEl } = this;
-    containerEl.empty();
-
-    new Setting(containerEl)
-      .setName(this.t('settings.language.name'))
-      .setDesc(this.t('settings.language.description'))
-      .addDropdown((dropdown) =>
-        dropdown
-          .addOptions({
-            E: 'English',
-            X: 'Deutsch',
-            FI: 'Suomi',
-          })
-          .setValue(this.plugin.settings.language)
-          .onChange(async (value: Language) => {
-            this.plugin.settings.language = value;
-            await this.plugin.saveSettings();
-            this.display();
-          }),
-      );
-
-    new Setting(containerEl)
-      .setName(this.t('settings.useShortNames.name'))
-      .setDesc(this.t('settings.useShortNames.description'))
-      .addToggle((toggle) =>
-        toggle.setValue(this.plugin.settings.useShortNames).onChange(async (value) => {
-          this.plugin.settings.useShortNames = value;
-          await this.plugin.saveSettings();
-        }),
-      );
   }
 }

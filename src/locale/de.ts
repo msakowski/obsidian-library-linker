@@ -9,12 +9,18 @@ export const de = {
       description:
         'Wenn aktiviert, werden Bibelverweise mit abgekürzten Buchnamen angezeigt (z.B. "1Pe" statt "1. Petrus")',
     },
+    openAutomatically: {
+      name: 'Links automatisch öffnen',
+      description: 'Verschiebt den Befehl "Link und öffnen" an den Anfang der Liste',
+    },
   },
   commands: {
     replaceLinks: 'Alle Links umwandeln',
     replaceBibleLinks: 'Bibelvers-Links umwandeln',
     replacePublicationLinks: 'Publikations-Links umwandeln',
     convertBibleReference: 'Bibelverweis in JW Library-Link umwandeln',
+    convertWebLink: 'jw.org-Link in Library-Link umwandeln',
+    replaceWebLinks: 'jw.org-Link in Library-Links umwandeln',
   },
   notices: {
     multipleBooksFound: 'Mehrere Bibelbücher gefunden: {{books}}',

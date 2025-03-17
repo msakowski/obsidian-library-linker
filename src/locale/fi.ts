@@ -9,12 +9,17 @@ export const fi = {
       description:
         'Kun tämä on käytössä, raamatunviitteissä käytetään lyhennettyjä kirjannimiä (esim. "1Pi" sijasta "1. Pietari")',
     },
+    openAutomatically: {
+      name: 'Avaa linkit automaattisesti',
+      description: 'Siirtää "Linkitä ja avaa" -komennon listan kärkeen',
+    },
   },
   commands: {
     replaceLinks: 'Muunna kaikki linkit',
     replaceBibleLinks: 'Muunna raamatunjaelinkit',
     replacePublicationLinks: 'Muunna julkaisulinkit',
     convertBibleReference: 'Muunna raamatunviite kirjastolinkiksi',
+    convertWebLink: 'Muunna jw.org-linkki kirjastolinkiksi',
   },
   notices: {
     multipleBooksFound: 'Useita raamatunkirjoja löytyi: {{books}}',
