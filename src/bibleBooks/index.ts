@@ -1,5 +1,6 @@
 import { bibleBooksDE } from '@/bibleBooks/de';
 import { bibleBooksEN } from '@/bibleBooks/en';
+import { bibleBooksFI } from '@/bibleBooks/fi';
 import type { BibleBook, Language } from '@/types';
 
 export const getBibleBooks = (language: Language): readonly BibleBook[] => {
@@ -8,6 +9,8 @@ export const getBibleBooks = (language: Language): readonly BibleBook[] => {
       return bibleBooksEN;
     case 'X':
       return bibleBooksDE;
+    case 'FI':
+      return bibleBooksFI;
     default:
       throw new Error('errors.unsupportedLanguage');
   }

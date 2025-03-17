@@ -303,8 +303,9 @@ class JWLibraryLinkerSettings extends PluginSettingTab {
       .addDropdown((dropdown) =>
         dropdown
           .addOptions({
-            E: 'English',
-            X: 'Deutsch',
+            "E": 'English',
+            "X": 'Deutsch',
+            "FI": 'Suomi',
           })
           .setValue(this.plugin.settings.language)
           .onChange(async (value: Language) => {
@@ -312,7 +313,7 @@ class JWLibraryLinkerSettings extends PluginSettingTab {
             await this.plugin.saveSettings();
             this.display();
           }),
-      );
+      );    
 
     new Setting(containerEl)
       .setName(this.t('settings.useShortNames.name'))
