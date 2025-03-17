@@ -36,5 +36,6 @@ export const fi = {
     invalidReferenceFormat: 'Virheellinen viiteformaatti',
     conversionError: 'Virhe raamatuntekstin muuntamisessa: {{message}}',
     unsupportedLanguage: 'Ei tuettu kieli: {{language}}',
+    invalidChapter: 'Lukua {{chapter}} ei ole kirjassa {{book}}',
   },
 };
