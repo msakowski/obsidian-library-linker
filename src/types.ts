@@ -7,6 +7,7 @@ export type Language = 'E' | 'X' | 'FI'; // plugin language
 export interface LinkReplacerSettings {
   useShortNames: boolean;
   language: Language;
+  openAutomatically: boolean;
 }
 
 export interface BibleBook {
