@@ -20,9 +20,13 @@ export const fi = {
     replacePublicationLinks: 'Muunna julkaisulinkit',
     convertBibleReference: 'Muunna raamatunviite kirjastolinkiksi',
     convertWebLink: 'Muunna jw.org-linkki kirjastolinkiksi',
+    replaceWebLinks: 'Muunna kaikki jw.org-linkit kirjastolinkeiksi',
+    linkUnlinkedBibleReferences: 'Linkitä linkittömät raamatunviitteet',
   },
   notices: {
     multipleBooksFound: 'Useita raamatunkirjoja löytyi: {{books}}',
+    noBibleReferencesFound: 'Dokumentista ei löytynyt raamatunviitteitä',
+    convertedBibleReferences: 'Muunnettu {{count}} raamatunviitettä',
   },
   suggestions: {
     createLink: 'Luo linkki: {{text}}',

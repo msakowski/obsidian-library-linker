@@ -21,9 +21,12 @@ export const de = {
     convertBibleReference: 'Bibelverweis in JW Library-Link umwandeln',
     convertWebLink: 'jw.org-Link in Library-Link umwandeln',
     replaceWebLinks: 'jw.org-Links in Library-Links umwandeln',
+    linkUnlinkedBibleReferences: 'Unverlinkte Bibeltexte verlinken',
   },
   notices: {
     multipleBooksFound: 'Mehrere Bibelbücher gefunden: {{books}}',
+    noBibleReferencesFound: 'Keine Bibeltexte im Dokument gefunden',
+    convertedBibleReferences: '{{count}} Bibeltexte umgewandelt',
   },
   suggestions: {
     createLink: 'Link erstellen: {{text}}',

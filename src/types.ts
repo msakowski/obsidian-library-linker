@@ -1,6 +1,6 @@
 import { bibleBooksDE } from '@/bibleBooks/de';
 
-export type Locale = 'en' | 'de'; // obsidian language
+export type Locale = 'en' | 'de' | 'fi'; // obsidian language
 
 export type Language = 'E' | 'X' | 'FI'; // plugin language
 

@@ -63,13 +63,17 @@ describe('Bible Reference Regex Pattern', () => {
 
   test('matches valid Bible references', () => {
     validReferences.forEach((reference) => {
-      expect(reference).toMatch(matchingBibleReferenceRegex);
+      // Create a new regex without g flag for exact matching
+      const testRegex = new RegExp(`^${matchingBibleReferenceRegex.source}$`, 'i');
+      expect(testRegex.test(reference)).toBe(true);
     });
   });
 
   test('does not match invalid Bible references', () => {
     invalidReferences.forEach((reference) => {
-      expect(reference).not.toMatch(matchingBibleReferenceRegex);
+      // Create a new regex without g flag for exact matching
+      const testRegex = new RegExp(`^${matchingBibleReferenceRegex.source}$`, 'i');
+      expect(testRegex.test(reference)).toBe(false);
     });
   });
 });
