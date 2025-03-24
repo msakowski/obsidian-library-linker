@@ -1,5 +1,15 @@
 # obsidian-library-linker
 
+## 0.1.1
+
+### Patch Changes
+
+- [#46](https://github.com/msakowski/obsidian-library-linker/pull/46) [`93eca45`](https://github.com/msakowski/obsidian-library-linker/commit/93eca459ac8a19434cfc97196ff8c6fea797d638) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Sync manifest and versions with release version
+
+- [#42](https://github.com/msakowski/obsidian-library-linker/pull/42) [`ce131e6`](https://github.com/msakowski/obsidian-library-linker/commit/ce131e6d3881f0d23ec720e844da5c261ae95798) Thanks [@msakowski](https://github.com/msakowski)! - Add dependabot to poject
+
+- [#54](https://github.com/msakowski/obsidian-library-linker/pull/54) [`3a95a8b`](https://github.com/msakowski/obsidian-library-linker/commit/3a95a8b4f66e0c3e3c5210704ec6b20be49830ab) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add alias to philipper
+
 ## 0.1.0
 
 ### Minor Changes
