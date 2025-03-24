@@ -25,8 +25,8 @@ jobs:
         uses: changesets/action@v1
         with:
           title: 🚀 Release new version
-          version: npx @changeset/cli version && npm run version
-          publish: npx @changeset/cli tag
+          version: npx @changesets/cli version && npm run version
+          publish: npx @changesets/cli tag
         env:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
 
