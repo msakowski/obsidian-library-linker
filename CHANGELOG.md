@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.1.2
+
+### Patch Changes
+
+- [#58](https://github.com/msakowski/obsidian-library-linker/pull/58) [`28b9a55`](https://github.com/msakowski/obsidian-library-linker/commit/28b9a55cfd3aa6bccd37644a989f2f4cbe068928) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Fix pipeline again ..
+
 ## 0.1.1
 
 ### Patch Changes
