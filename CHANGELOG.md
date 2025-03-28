@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.1.3
+
+### Patch Changes
+
+- [#66](https://github.com/msakowski/obsidian-library-linker/pull/66) [`d117bb8`](https://github.com/msakowski/obsidian-library-linker/commit/d117bb8b04a4ffe40a5adaa5f5f7a7cb5955ed5e) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Use v in manifest
+
 ## 0.1.2
 
 ### Patch Changes
