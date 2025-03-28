@@ -1,5 +1,6 @@
 import { en } from '@/locale/en';
 import { de } from '@/locale/de';
+import { fi } from '@/locale/fi';
 import type { Locale } from '@/types';
 
 export class TranslationService {
@@ -8,6 +9,7 @@ export class TranslationService {
   private translations: Record<Locale, typeof en> = {
     en,
     de,
+    fi,
   };
 
   private constructor() {
@@ -15,7 +17,7 @@ export class TranslationService {
       // Only try to access localStorage in a browser environment
       if (typeof window !== 'undefined' && window.localStorage) {
         const obsidianLocale = window.localStorage.getItem('language');
-        if (obsidianLocale === 'en' || obsidianLocale === 'de') {
+        if (obsidianLocale === 'en' || obsidianLocale === 'de' || obsidianLocale === 'fi') {
           this.currentLocale = obsidianLocale;
         }
       }
