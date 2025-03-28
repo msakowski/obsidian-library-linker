@@ -310,7 +310,7 @@ export const bibleBooksFI: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 50,
-    aliases: ['filippiläisille'],
+    aliases: ['filippiläisille', 'php'],
     longName: 'Filippiläisille',
     shortName: 'Fil',
   },
