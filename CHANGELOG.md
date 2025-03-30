@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.1.4
+
+### Patch Changes
+
+- [#70](https://github.com/msakowski/obsidian-library-linker/pull/70) [`64d3e84`](https://github.com/msakowski/obsidian-library-linker/commit/64d3e84e55086a2a5e80f914a2b1a2ef77434e77) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Use own release workflow
+
 ## 0.1.3
 
 ### Patch Changes
