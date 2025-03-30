@@ -7,6 +7,10 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  contents: write   # Required for tagging the release
+  pull-requests: write  # Required for creating release PRs
+
 jobs:
   draft-release:
     name: Draft Release PR

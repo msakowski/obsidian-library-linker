@@ -6,6 +6,9 @@ on:
     tags:
       - "*" # Push events to matching any tag format, i.e. 1.0, 20.15.10
 
+permissions:
+  contents: write  # This is required for creating releases and uploading assets
+
 env:
   PLUGIN_NAME: jw-library-linker
 
