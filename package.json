@@ -1,5 +1,5 @@
 {
-  "name": "obsidian-library-linker",
+  "name": "jw-library-linker",
   "version": "0.1.3",
   "description": "An Obsidian plugin that helps creating JW Library links",
   "main": "main.js",
@@ -7,7 +7,7 @@
     "dev": "node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "version": "changeset version && node version-bump.mjs",
-    "publish": "changeset tag",
+    "release": "VERSION=$(jq -r '.version' manifest.json) && git tag -a $VERSION -m \"Release $VERSION\" && git push origin $VERSION",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "test": "jest",
@@ -15,7 +15,10 @@
     "changeset": "npx changeset"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Martin Sakowski",
+    "url": "https://msakowski.com"
+  },
   "license": "MIT",
   "devDependencies": {
     "@swc/core": "^1.11.13",
