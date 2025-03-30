@@ -7,7 +7,7 @@
     "dev": "node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "version": "changeset version && node version-bump.mjs",
-    "publish": "changeset tag",
+    "release": "VERSION=$(jq -r '.version' manifest.json) && git tag -a $VERSION -m \"Release $VERSION\" && git push origin $VERSION",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "test": "jest",

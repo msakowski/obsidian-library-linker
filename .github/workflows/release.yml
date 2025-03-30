@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write  # This is required for creating releases and uploading assets
+  pull-requests: read  # This is required for fetching PR information
 
 env:
   PLUGIN_NAME: jw-library-linker
@@ -31,64 +32,91 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
+      - name: Extract Release Notes
+        id: extract_notes
+        env:
+          GH_TOKEN: ${{ secrets.USER_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          # Find latest merged Changesets PR - expanded query with better error handling
+          echo "Looking for merged Changesets PRs..."
+
+          # Debug: List recent PRs to see what's available
+          echo "Recent PRs:"
+          gh pr list --state merged --limit 5 | cat
+
+          # Try to find the PR with both approaches
+          echo "Trying to find PR with head ref 'changeset-release/main'..."
+          PR_INFO=$(gh api repos/$GITHUB_REPOSITORY/pulls?state=closed --jq '.[] | select(.merged_at != null and .head.ref == "changeset-release/main") | {number: .number, body: .body, title: .title}' | head -n1)
+
+          if [ -z "$PR_INFO" ]; then
+            echo "No merged Changesets PR found with head ref"
+            echo "Trying alternative approach with PR title..."
+            PR_INFO=$(gh api repos/$GITHUB_REPOSITORY/pulls?state=closed --jq '.[] | select(.merged_at != null and .title | contains("Release")) | {number: .number, body: .body, title: .title}' | head -n1)
+          fi
+
+          if [ -z "$PR_INFO" ]; then
+            echo "Still no merged Changesets PR found"
+            # Get tag name directly from github.ref since we're running on a tag push
+
+            # Try to extract release notes from CHANGELOG.md
+            if [ -f "CHANGELOG.md" ]; then
+              CHANGELOG_ENTRY=$(awk -v tag="## $TAG_NAME" 'BEGIN{flag=0} $0 ~ tag {flag=1; next} flag && /^## / {flag=0} flag {print}' CHANGELOG.md)
+              if [ ! -z "$CHANGELOG_ENTRY" ]; then
+                echo "Using CHANGELOG.md entry as release notes"
+                RELEASE_NOTES="$CHANGELOG_ENTRY"
+              else
+                echo "No changelog entry found for $TAG_NAME"
+                RELEASE_NOTES="Release $TAG_NAME"
+              fi
+            else
+              RELEASE_NOTES="Release $TAG_NAME"
+            fi
+          else
+            # Extract PR info for debugging
+            echo "Found PR information:"
+            echo "$PR_INFO" | jq '.'
+
+            # Extract PR body
+            PR_BODY=$(echo "$PR_INFO" | jq -r '.body')
+            PR_TITLE=$(echo "$PR_INFO" | jq -r '.title')
+
+            echo "PR Title: $PR_TITLE"
+            echo "PR Body preview: ${PR_BODY:0:100}..."
+
+            # Extract content after the "## " heading - this gets everything after the version heading
+            RELEASE_NOTES=$(echo "$PR_BODY" | awk '/^## /{flag=1;next} flag')
+
+            # If there's no content, use a default message
+            if [ -z "$RELEASE_NOTES" ]; then
+              echo "No detailed release notes found in PR body"
+              RELEASE_NOTES="$PR_TITLE"
+            fi
+          fi
+
+          # Save to output with proper escaping for GitHub Actions
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$RELEASE_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      # Build the zip file with plugin contents
       - name: Build
-        id: build
         run: |
           npm run build
           mkdir ${{ env.PLUGIN_NAME }}
           cp main.js manifest.json ${{ env.PLUGIN_NAME }}
-          zip -r ${{ env.PLUGIN_NAME }}.zip ${{ env.PLUGIN_NAME }}
+          zip -r ${{ env.PLUGIN_NAME }}-${{ github.ref_name }}.zip ${{ env.PLUGIN_NAME }}
           ls
-          echo "::set-output name=tag_name::$(git tag --sort version:refname | tail -n 1)"
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      # Use the softprops/action-gh-release action to create the release and upload all assets
+      - name: Create Release and Upload Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          body: ${{ env.RELEASE_NOTES }}
+          files: |
+            ${{ env.PLUGIN_NAME }}-${{ github.ref_name }}.zip
+            main.js
+            manifest.json
         env:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
-          VERSION: ${{ github.ref }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: false
-          prerelease: false
-      - name: Upload zip file
-        id: upload-zip
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ env.PLUGIN_NAME }}.zip
-          asset_name: ${{ env.PLUGIN_NAME }}-${{ steps.build.outputs.tag_name }}.zip
-          asset_content_type: application/zip
-      - name: Upload main.js
-        id: upload-main
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./main.js
-          asset_name: main.js
-          asset_content_type: text/javascript
-      - name: Upload manifest.json
-        id: upload-manifest
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./manifest.json
-          asset_name: manifest.json
-          asset_content_type: application/json
-    # - name: Upload styles.css
-    #   id: upload-css
-    #   uses: actions/upload-release-asset@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
-    #   with:
-    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-    #     asset_path: ./styles.css
-    #     asset_name: styles.css
-    #     asset_content_type: text/css

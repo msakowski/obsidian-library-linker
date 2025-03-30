@@ -30,9 +30,6 @@ jobs:
         with:
           title: 🚀 Release new version
           version: npm run version
-          publish: |
-            VERSION=$(npm pkg get version)
-            git tag -a $VERSION -m "Release $VERSION"
-            git push origin $VERSION
+          publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
