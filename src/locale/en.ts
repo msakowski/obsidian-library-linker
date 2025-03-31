@@ -13,6 +13,11 @@ export const en = {
       name: 'Open links automatically',
       description: 'Moves the "Link and open" command to the top of the list',
     },
+    noLanguageParameter: {
+      name: 'Create link language independent',
+      description:
+        'When enabled, no language parameters is added to the link. Links will open in the language of the JW Library',
+    },
   },
   commands: {
     replaceLinks: 'Convert all links',

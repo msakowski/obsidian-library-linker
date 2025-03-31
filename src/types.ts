@@ -8,6 +8,7 @@ export interface LinkReplacerSettings {
   useShortNames: boolean;
   language: Language;
   openAutomatically: boolean;
+  noLanguageParameter: boolean;
 }
 
 export interface BibleBook {

@@ -11,6 +11,7 @@ const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,
   language: 'E',
   openAutomatically: false,
+  noLanguageParameter: false,
 };
 
 export default class JWLibraryLinkerPlugin extends Plugin {
@@ -87,6 +88,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
             reference,
             this.settings.useShortNames,
             this.settings.language,
+            this.settings.noLanguageParameter ? undefined : this.settings.language
           );
           if (convertedLink) {
             editor.replaceSelection(convertedLink);
