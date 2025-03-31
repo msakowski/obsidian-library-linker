@@ -16,7 +16,7 @@ export const en = {
     noLanguageParameter: {
       name: 'Create link language independent',
       description:
-        'When enabled, no language parameters is added to the link. Links will open in the language of the JW Library',
+        'When enabled, no language parameter is added to the link. Links will open in the language of the JW Library',
     },
   },
   commands: {

@@ -88,7 +88,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
             reference,
             this.settings.useShortNames,
             this.settings.language,
-            this.settings.noLanguageParameter ? undefined : this.settings.language
+            this.settings.noLanguageParameter ? undefined : this.settings.language,
           );
           if (convertedLink) {
             editor.replaceSelection(convertedLink);
