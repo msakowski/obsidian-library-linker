@@ -1,5 +1,13 @@
 # obsidian-library-linker
 
+## 0.1.5
+
+### Patch Changes
+
+- [#73](https://github.com/msakowski/obsidian-library-linker/pull/73) [`5a48c5d`](https://github.com/msakowski/obsidian-library-linker/commit/5a48c5d4e872d31460e4fa7ddf03916fa925839c) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add example preview to the settings page
+
+- [#72](https://github.com/msakowski/obsidian-library-linker/pull/72) [`cdbf7f3`](https://github.com/msakowski/obsidian-library-linker/commit/cdbf7f336cd5130adcbfb21587bf919095d4a870) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Move BibleReferenceSuggester to own file
+
 ## 0.1.4
 
 ### Patch Changes
