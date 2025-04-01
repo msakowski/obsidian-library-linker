@@ -1,4 +1,4 @@
-import { matchingBibleReferenceRegex } from '@/main';
+import { bibleReferenceRegex } from '@/utils/bibleReferenceRegex';
 
 describe('Bible Reference Regex Pattern', () => {
   // The regex pattern we want to test (without the /b part)
@@ -10,6 +10,10 @@ describe('Bible Reference Regex Pattern', () => {
     'Psal 23:1',
     'offb21:4',
     'Offenbarung 21:4',
+    'Matt. 6:33',
+    '2 Cor. 5:15',
+    '2 Corinthians 6:1',
+    '1. Kor. 15:1',
 
     // References with ranges
     'ps23:1-3',
@@ -64,7 +68,7 @@ describe('Bible Reference Regex Pattern', () => {
   test('matches valid Bible references', () => {
     validReferences.forEach((reference) => {
       // Create a new regex without g flag for exact matching
-      const testRegex = new RegExp(`^${matchingBibleReferenceRegex.source}$`, 'i');
+      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'i');
       expect(testRegex.test(reference)).toBe(true);
     });
   });
@@ -72,7 +76,7 @@ describe('Bible Reference Regex Pattern', () => {
   test('does not match invalid Bible references', () => {
     invalidReferences.forEach((reference) => {
       // Create a new regex without g flag for exact matching
-      const testRegex = new RegExp(`^${matchingBibleReferenceRegex.source}$`, 'i');
+      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'i');
       expect(testRegex.test(reference)).toBe(false);
     });
   });

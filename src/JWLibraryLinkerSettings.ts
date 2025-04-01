@@ -1,8 +1,8 @@
 import { PluginSettingTab, App, Setting, MarkdownRenderer } from 'obsidian';
-import JWLibraryLinkerPlugin from './main';
-import { TranslationService } from './services/TranslationService';
-import type { Language, BibleReference } from './types';
-import { convertBibleTextToMarkdownLink } from './utils/convertBibleTextToLink';
+import JWLibraryLinkerPlugin from '@/main';
+import { TranslationService } from '@/services/TranslationService';
+import type { Language, BibleReference } from '@/types';
+import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 
 export class JWLibraryLinkerSettings extends PluginSettingTab {
   plugin: JWLibraryLinkerPlugin;
@@ -82,6 +82,22 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         }),
       );
 
+    new Setting(containerEl)
+      .setName(this.t('settings.updatedLinkStrukture.name'))
+      .setDesc(this.t('settings.updatedLinkStrukture.description'))
+      .addDropdown((dropdown) =>
+        dropdown
+          .addOptions({
+            keepCurrentStructure: 'Keep current structure',
+            usePluginSettings: 'Use plugin settings',
+          })
+          .setValue(this.plugin.settings.updatedLinkStrukture)
+          .onChange(async (value: 'keepCurrentStructure' | 'usePluginSettings') => {
+            this.plugin.settings.updatedLinkStrukture = value;
+            await this.plugin.saveSettings();
+          }),
+      );
+
     const previewContainer = containerEl.createDiv({
       cls: 'setting-item jw-library-linker-preview',
     });
@@ -128,11 +144,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     try {
       // Generate markdown links for all references first
       const markdownLinks = this.previewReferences.map((reference) =>
-        convertBibleTextToMarkdownLink(
-          reference,
-          this.plugin.settings.useShortNames,
-          this.plugin.settings.language,
-        ),
+        convertBibleTextToMarkdownLink(reference, this.plugin.settings),
       );
 
       if (!markdownLinks.every(Boolean)) {

@@ -1,21 +1,18 @@
 import { Editor, Notice, Plugin } from 'obsidian';
 import { convertLinks, convertWebLink } from '@/utils/convertLinks';
-import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToLink';
-import type { BibleReference, LinkReplacerSettings } from '@/types';
+import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
+import type { LinkReplacerSettings } from '@/types';
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { TranslationService } from '@/services/TranslationService';
-import { JWLibraryLinkerSettings } from './JWLibraryLinkerSettings';
+import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
-
-export const matchingBibleReferenceRegex =
-  /(?:[1-5]?[A-Za-zäöü]{2,24}\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*,?\s*)/gi;
-// 24 random number. Apostelgeschichte is 17 characters long.
-// should be enough for language support.
+import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,
   language: 'E',
   openAutomatically: false,
+  updatedLinkStrukture: 'keepCurrentStructure',
 };
 
 export default class JWLibraryLinkerPlugin extends Plugin {
@@ -85,73 +82,21 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       id: 'link-unlinked-bible-references',
       name: this.t('commands.linkUnlinkedBibleReferences'),
       editorCallback: (editor: Editor) => {
-        const currentContent = editor.getValue();
-        const lines = currentContent.split('\n');
+        linkUnlinkedBibleReferences(editor.getValue(), this.settings, ({ changes, error }) => {
+          if (changes.length > 0) {
+            editor.transaction({
+              changes,
+            });
 
-        let foundReferences: {
-          line: number;
-          index: number;
-          text: string;
-          reference: BibleReference;
-        }[] = [];
-
-        // Scan each line for Bible references using the findBibleReferenceRegex
-        lines.forEach((line, lineIndex) => {
-          let match;
-          while ((match = matchingBibleReferenceRegex.exec(line)) !== null) {
-            try {
-              const reference = parseBibleReference(match[0], this.settings.language);
-              if (reference) {
-                foundReferences.push({
-                  line: lineIndex,
-                  index: match.index,
-                  text: match[0],
-                  reference: reference,
-                });
-              }
-            } catch {
-              // Skip invalid references
-              continue;
-            }
+            new Notice(
+              this.t('notices.convertedBibleReferences', {
+                count: changes.length,
+              }),
+            );
+          } else {
+            new Notice(this.t(error || 'notices.noBibleReferencesFound'));
           }
         });
-
-        if (foundReferences.length === 0) {
-          new Notice(this.t('notices.noBibleReferencesFound'));
-          return;
-        }
-
-        // Sort references by position (line ascending, then index within line ascending)
-        // This ensures we process them in document order
-        const sortedRefs = [...foundReferences].sort((a, b) =>
-          a.line === b.line ? a.index - b.index : a.line - b.line,
-        );
-
-        // Batch all changes in a single transaction
-        editor.transaction({
-          changes: sortedRefs
-            .map((ref) => {
-              const convertedLink = convertBibleTextToMarkdownLink(
-                ref.reference,
-                this.settings.useShortNames,
-                this.settings.language,
-              );
-
-              if (convertedLink) {
-                return {
-                  from: { line: ref.line, ch: ref.index },
-                  to: { line: ref.line, ch: ref.index + ref.text.length },
-                  text: convertedLink,
-                };
-              }
-              return null;
-            })
-            .filter((change) => change !== null),
-        });
-
-        new Notice(
-          this.t('notices.convertedBibleReferences', { count: sortedRefs.length.toString() }),
-        );
       },
     });
 
@@ -163,11 +108,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
         const selection = editor.getSelection();
         if (selection) {
           const reference = parseBibleReference(selection, this.settings.language);
-          const convertedLink = convertBibleTextToMarkdownLink(
-            reference,
-            this.settings.useShortNames,
-            this.settings.language,
-          );
+          const convertedLink = convertBibleTextToMarkdownLink(reference, this.settings);
           if (convertedLink) {
             editor.replaceSelection(convertedLink);
           }
