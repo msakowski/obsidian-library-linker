@@ -1,6 +1,6 @@
 // create test for linkUnlinkedBibleReferences
 
-import { linkUnlinkedBibleReferences } from '@/commands/linkUnlinkedBibleReferences';
+import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
 import type { LinkReplacerSettings } from '@/types';
 
 describe('linkUnlinkedBibleReferences', () => {
@@ -15,6 +15,7 @@ describe('linkUnlinkedBibleReferences', () => {
       language: 'E',
       openAutomatically: false,
       updatedLinkStrukture: 'keepCurrentStructure',
+      noLanguageParameter: false,
     };
 
     callbackMock = jest.fn();
