@@ -142,6 +142,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           reference,
           this.plugin.settings.useShortNames,
           this.plugin.settings.language,
+          this.plugin.settings.noLanguageParameter ? undefined : this.plugin.settings.language,
         ),
       );
 

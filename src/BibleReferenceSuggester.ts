@@ -165,14 +165,16 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const editor = context.editor;
 
     const reference = parseBibleReference(suggestion.text, this.plugin.settings.language);
-    const linkLanguage = this.plugin.settings.noLanguageParameter ? undefined : this.plugin.settings.language;
+    const linkLanguage = this.plugin.settings.noLanguageParameter
+      ? undefined
+      : this.plugin.settings.language;
 
     // Convert the Bible reference to a link
     const convertedLink = convertBibleTextToMarkdownLink(
       reference,
       this.plugin.settings.useShortNames,
       this.plugin.settings.language,
-      linkLanguage
+      linkLanguage,
     );
 
     if (suggestion.command === 'typing' || !convertedLink) {
