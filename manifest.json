@@ -1,11 +1,11 @@
 {
-	"id": "jw-library-linker",
-	"name": "JW Library Linker",
-	"version": "v0.1.3",
-	"minAppVersion": "0.15.0",
-	"description": "Converts JW Library references to actual links in JW Library.",
-	"author": "Martin Sakowski",
-	"authorUrl": "https://msakowski.com",
-	"fundingUrl": "https://msakowski.com",
-	"isDesktopOnly": false
+  "id": "jw-library-linker",
+  "name": "JW Library Linker",
+  "version": "0.1.5",
+  "minAppVersion": "0.15.0",
+  "description": "Converts JW Library references to actual links in JW Library.",
+  "author": "Martin Sakowski",
+  "authorUrl": "https://msakowski.com",
+  "fundingUrl": "https://msakowski.com",
+  "isDesktopOnly": false
 }
