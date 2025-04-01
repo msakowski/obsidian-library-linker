@@ -28,25 +28,21 @@ export const de = {
     replaceWebLinks: 'jw.org-Links in Library-Links umwandeln',
   },
   notices: {
-    multipleBooksFound: 'Mehrere Bibelbücher gefunden: {{books}}',
+    //
   },
   suggestions: {
     createLink: 'Link erstellen: {{text}}',
     createLinks: 'Links erstellen: {{text}}',
     createAndOpen: 'Link erstellen und öffnen: {{text}}',
-    createAndOpenVerse: 'Link erstellen und öffnen: {{verse}}',
+    createMultipleAndOpenFirst: 'Links erstellen und ersten öffnen: {{text}}',
     typing: 'Bibelverweis eingeben: {{text}}',
     typingEmpty: 'Bibelverweis eingeben',
   },
   errors: {
-    multipleBooksFound: 'Mehrere Bibelbücher gefunden: {{books}}',
-    bookNotFound: 'Bibelbuch nicht gefunden: {{book}}',
     invalidVerseNumber: 'Ungültige Versnummer',
     versesAscendingOrder: 'Verse müssen in aufsteigender Reihenfolge sein',
     invalidVerseFormat: 'Ungültiges Versformat',
     invalidReferenceFormat: 'Ungültiges Referenzformat',
-    conversionError: 'Fehler beim Konvertieren des Bibeltextes: {{message}}',
-    unsupportedLanguage: 'Nicht unterstützte Sprache: {{language}}',
-    invalidChapter: 'Kapitel {{chapter}} existiert nicht in {{book}}',
+    unsupportedLanguage: 'Nicht unterstützte Sprache',
   },
 };

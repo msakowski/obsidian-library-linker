@@ -28,25 +28,21 @@ export const en = {
     convertBibleReference: 'Convert Bible reference to Library link',
   },
   notices: {
-    multipleBooksFound: 'Multiple Bible books found: {{books}}',
+    //
   },
   suggestions: {
     createLink: 'Create link: {{text}}',
     createLinks: 'Create links: {{text}}',
     createAndOpen: 'Create link and open: {{text}}',
-    createAndOpenVerse: 'Create link and open: {{verse}}',
+    createMultipleAndOpenFirst: 'Create links and open first: {{text}}',
     typing: 'Enter Bible reference: {{text}}',
     typingEmpty: 'Enter Bible reference',
   },
   errors: {
-    multipleBooksFound: 'Multiple Bible books found: {{books}}',
-    bookNotFound: 'Bible book not found: {{book}}',
     invalidVerseNumber: 'Invalid verse number',
     versesAscendingOrder: 'Verses must be in ascending order',
     invalidVerseFormat: 'Invalid verse format',
     invalidReferenceFormat: 'Invalid reference format',
-    conversionError: 'Error converting Bible text: {{message}}',
-    unsupportedLanguage: 'Unsupported language: {{language}}',
-    invalidChapter: 'Chapter does not exist {{chapter}} in {{book}}',
+    unsupportedLanguage: 'Unsupported language',
   },
 };
