@@ -14,7 +14,7 @@ export const en = {
       description: 'Moves the "Link and open" command to the top of the list',
     },
     noLanguageParameter: {
-      name: 'Create link language independent',
+      name: 'Create links language independent',
       description:
         'When enabled, no language parameter is added to the link. Links will open in the language of the JW Library',
     },
