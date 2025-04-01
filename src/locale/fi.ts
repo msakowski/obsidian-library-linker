@@ -25,6 +25,42 @@ export const fi = {
       description:
         'Kun tämä on käytössä, linkkiin ei lisätä kieliparametria. Linkit avautuvat JW-kirjaston kielellä',
     },
+    linkStyling: {
+      name: 'Linkin tyyli',
+      description:
+        'Valitse merkit tai emoji, jotka lisätään linkin eteen, perään tai sisälle; valitse fonttityyli',
+      reset: 'Palauta oletusasetukset: "{{default}}"',
+      prefixOutsideLink: {
+        name: 'Etuliite linkin ulkopuolella',
+        description: 'Teksti, joka lisätään ennen linkkiä',
+      },
+      prefixInsideLink: {
+        name: 'Etuliite linkin sisällä',
+        description: 'Teksti, joka lisätään linkkitekstin alkuun',
+      },
+      suffixInsideLink: {
+        name: 'Jälkiliite linkin sisällä',
+        description: 'Teksti, joka lisätään linkkitekstin loppuun',
+      },
+      suffixOutsideLink: {
+        name: 'Jälkiliite linkin ulkopuolella',
+        description: 'Teksti, joka lisätään linkin jälkeen',
+      },
+      presets: {
+        name: 'Linkin tyyli',
+        description: 'Valitse linkin tyyli',
+      },
+      fontStyle: {
+        name: 'Fonttityyli',
+        description: 'Valitse fonttityyli linkkitekstille',
+        normal: 'Normaali',
+        italic: 'Kursiivi',
+        bold: 'Lihavoitu',
+      },
+      preview: {
+        name: 'Esikatselu',
+      },
+    },
   },
   commands: {
     replaceLinks: 'Muunna kaikki linkit',

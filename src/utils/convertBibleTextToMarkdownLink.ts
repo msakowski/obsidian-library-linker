@@ -3,6 +3,21 @@ import { formatBibleText } from '@/utils/formatBibleText';
 import { getBibleBooks } from '@/bibleBooks';
 import type { BibleReference, LinkReplacerSettings } from '@/types';
 
+/**
+ * Apply styling to the link text based on font style setting
+ */
+function applyFontStyle(text: string, fontStyle: LinkReplacerSettings['fontStyle']): string {
+  switch (fontStyle) {
+    case 'bold':
+      return `**${text}**`;
+    case 'italic':
+      return `*${text}*`;
+    case 'normal':
+    default:
+      return text;
+  }
+}
+
 export function convertBibleTextToMarkdownLink(
   reference: BibleReference,
   settings: Omit<LinkReplacerSettings, 'updatedLinkStrukture' | 'openAutomatically'> & {
@@ -33,6 +48,13 @@ export function convertBibleTextToMarkdownLink(
     bookName = originalText.replace(/\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*$/, '');
   }
 
+  // Get styling options with default empty strings for backward compatibility
+  const prefixOutside = settings.prefixOutsideLink || '';
+  const prefixInside = settings.prefixInsideLink || '';
+  const suffixInside = settings.suffixInsideLink || '';
+  const suffixOutside = settings.suffixOutsideLink || '';
+  const fontStyle = settings.fontStyle || 'normal';
+
   if (Array.isArray(links)) {
     // Format verse ranges without leading zeros
     const verseRanges = reference.verseRanges!.map(({ start, end }) =>
@@ -40,23 +62,37 @@ export function convertBibleTextToMarkdownLink(
     );
 
     // Create array of markdown links
-    return verseRanges
+    const styledLinks = verseRanges
       .map((range, i) => {
+        let linkText;
         if (i === 0) {
           // First link includes book name and chapter
-          return `[${bookName} ${reference.chapter}:${range}](${links[i]})`;
+          linkText = `${prefixInside}${bookName} ${reference.chapter}:${range}`;
+        } else if (i === verseRanges.length - 1) {
+          // Last link includes verse numbers and suffix
+          linkText = `${range}${suffixInside}`;
+        } else {
+          // Subsequent links only include verse numbers
+          linkText = `${range}`;
         }
-        // Subsequent links only include verse numbers
-        return `[${range}](${links[i]})`;
+
+        // Apply font styling
+        linkText = applyFontStyle(linkText, fontStyle);
+
+        return `[${linkText}](${links[i]})`;
       })
       .join(',');
+
+    return `${prefixOutside}${styledLinks}${suffixOutside}`;
   }
 
   if (settings.updatedLinkStrukture === 'keepCurrentStructure' && originalText) {
-    return `[${originalText}](${links})`;
+    const linkText = applyFontStyle(`${prefixInside}${originalText}${suffixInside}`, fontStyle);
+    return `${prefixOutside}[${linkText}](${links})${suffixOutside}`;
   }
 
   // For simple references
   const formattedText = formatBibleText(reference, settings.useShortNames, settings.language);
-  return `[${formattedText}](${links})`;
+  const linkText = applyFontStyle(`${prefixInside}${formattedText}${suffixInside}`, fontStyle);
+  return `${prefixOutside}[${linkText}](${links})${suffixOutside}`;
 }

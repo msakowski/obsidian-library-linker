@@ -4,7 +4,15 @@ export type Locale = 'en' | 'de' | 'fi'; // obsidian language
 
 export type Language = 'E' | 'X' | 'FI'; // plugin language
 
-export interface LinkReplacerSettings {
+export interface LinkStyles {
+  prefixOutsideLink: string;
+  prefixInsideLink: string;
+  suffixInsideLink: string;
+  suffixOutsideLink: string;
+  fontStyle: 'normal' | 'italic' | 'bold';
+}
+
+export interface LinkReplacerSettings extends LinkStyles {
   useShortNames: boolean;
   language: Language;
   openAutomatically: boolean;

@@ -24,6 +24,42 @@ export const en = {
       description:
         'When enabled, no language parameter is added to the link. Links will open in the language of the JW Library',
     },
+    linkStyling: {
+      name: 'Link Styling',
+      description:
+        'Choose characters or emoji to add before, after or inside the link, Choose font style',
+      reset: 'Reset to default: "{{default}}"',
+      prefixOutsideLink: {
+        name: 'Prefix Outside Link',
+        description: 'Text to add before the link',
+      },
+      prefixInsideLink: {
+        name: 'Prefix Inside Link',
+        description: 'Text to add at the beginning of the link text',
+      },
+      suffixInsideLink: {
+        name: 'Suffix Inside Link',
+        description: 'Text to add at the end of the link text',
+      },
+      suffixOutsideLink: {
+        name: 'Suffix Outside Link',
+        description: 'Text to add after the link',
+      },
+      presets: {
+        name: 'Style Presets',
+        description: 'Choose a preset style for the link',
+      },
+      fontStyle: {
+        name: 'Font Style',
+        description: 'Choose the font style for the link text',
+        normal: 'Normal',
+        italic: 'Italic',
+        bold: 'Bold',
+      },
+      preview: {
+        name: 'Preview',
+      },
+    },
   },
   commands: {
     replaceLinks: 'Convert all links',
