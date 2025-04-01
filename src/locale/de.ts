@@ -14,7 +14,7 @@ export const de = {
       description: 'Verschiebt den Befehl "Link und öffnen" an den Anfang der Liste',
     },
     noLanguageParameter: {
-      name: 'Links sprachunabhängig erstellen/öffnen',
+      name: 'Links sprachunabhängig erstellen',
       description:
         'Wenn aktiviert, werden am Ende eines Links keine Sprachparameter hinzugefügt. Links werden in der jeweiligen Sprache der JW Library geöffnet',
     },
