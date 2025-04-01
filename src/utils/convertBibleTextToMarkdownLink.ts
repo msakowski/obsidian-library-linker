@@ -10,7 +10,10 @@ export function convertBibleTextToMarkdownLink(
   },
   originalText?: string,
 ): string | undefined {
-  const links = formatJWLibraryLink(reference, settings.language);
+  const links = formatJWLibraryLink(
+    reference,
+    settings.noLanguageParameter ? undefined : settings.language,
+  );
 
   // Early return input if there are no valid links
   if (!links || (Array.isArray(links) && !links.length)) {

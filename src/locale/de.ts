@@ -13,6 +13,16 @@ export const de = {
       name: 'Links automatisch öffnen',
       description: 'Verschiebt den Befehl "Link und öffnen" an den Anfang der Liste',
     },
+    updatedLinkStrukture: {
+      name: 'Linktext beibehalten',
+      description:
+        'Wenn aktiviert, wird der aktuelle Linktext beim Umwandeln von Bibeltexten beibehalten',
+    },
+    noLanguageParameter: {
+      name: 'Links sprachunabhängig erstellen',
+      description:
+        'Wenn aktiviert, werden am Ende eines Links keine Sprachparameter hinzugefügt. Links werden in der jeweiligen Sprache der JW Library geöffnet',
+    },
   },
   commands: {
     replaceLinks: 'Alle Links umwandeln',

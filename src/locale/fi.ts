@@ -13,6 +13,16 @@ export const fi = {
       name: 'Avaa linkit automaattisesti',
       description: 'Siirtää "Linkitä ja avaa" -komennon listan kärkeen',
     },
+    updatedLinkStrukture: {
+      name: 'Säilytä nykyinen linkkiteksti',
+      description:
+        'Kun tämä on käytössä, nykyinen linkkiteksti säilytetään, kun Raamatun tekstiä muunnetaan',
+    },
+    noLanguageParameter: {
+      name: 'Luo linkit kielestä riippumattomiksi',
+      description:
+        'Kun tämä on käytössä, linkkiin ei lisätä kieliparametria. Linkit avautuvat JW-kirjaston kielellä',
+    },
   },
   commands: {
     replaceLinks: 'Muunna kaikki linkit',

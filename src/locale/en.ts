@@ -13,6 +13,15 @@ export const en = {
       name: 'Open links automatically',
       description: 'Moves the "Link and open" command to the top of the list',
     },
+    updatedLinkStrukture: {
+      name: 'Keep current link text',
+      description: 'When enabled, the current link text will be kept when converting Bible text',
+    },
+    noLanguageParameter: {
+      name: 'Create links language independent',
+      description:
+        'When enabled, no language parameter is added to the link. Links will open in the language of the JW Library',
+    },
   },
   commands: {
     replaceLinks: 'Convert all links',

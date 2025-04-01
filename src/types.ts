@@ -9,6 +9,7 @@ export interface LinkReplacerSettings {
   language: Language;
   openAutomatically: boolean;
   updatedLinkStrukture: 'keepCurrentStructure' | 'usePluginSettings';
+  noLanguageParameter: boolean;
 }
 
 export interface BibleBook {

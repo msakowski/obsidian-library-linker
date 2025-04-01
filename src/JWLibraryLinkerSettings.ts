@@ -98,6 +98,17 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           }),
       );
 
+    new Setting(containerEl)
+      .setName(this.t('settings.noLanguageParameter.name'))
+      .setDesc(this.t('settings.noLanguageParameter.description'))
+      .addToggle((toggle) =>
+        toggle.setValue(this.plugin.settings.noLanguageParameter).onChange(async (value) => {
+          this.plugin.settings.noLanguageParameter = value;
+          await this.plugin.saveSettings();
+          this.updatePreview();
+        }),
+      );
+
     const previewContainer = containerEl.createDiv({
       cls: 'setting-item jw-library-linker-preview',
     });

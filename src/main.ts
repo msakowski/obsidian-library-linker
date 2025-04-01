@@ -13,6 +13,7 @@ const DEFAULT_SETTINGS: LinkReplacerSettings = {
   language: 'E',
   openAutomatically: false,
   updatedLinkStrukture: 'keepCurrentStructure',
+  noLanguageParameter: false,
 };
 
 export default class JWLibraryLinkerPlugin extends Plugin {

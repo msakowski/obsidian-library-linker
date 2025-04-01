@@ -154,6 +154,9 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const editor = context.editor;
 
     const reference = parseBibleReference(suggestion.text, this.plugin.settings.language);
+    const linkLanguage = this.plugin.settings.noLanguageParameter
+      ? undefined
+      : this.plugin.settings.language;
 
     // Convert the Bible reference to a link
     const convertedLink = convertBibleTextToMarkdownLink(reference, this.plugin.settings);
@@ -167,7 +170,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
     // Handle opening links
     if (suggestion.command === 'open') {
-      const url = formatJWLibraryLink(reference, this.plugin.settings.language);
+      const url = formatJWLibraryLink(reference, linkLanguage);
       if (Array.isArray(url)) {
         // For open-specific, open the specified link, otherwise open first
         window.open(url[suggestion.linkIndex || 0]);
