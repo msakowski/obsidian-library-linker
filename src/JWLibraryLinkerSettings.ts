@@ -89,6 +89,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         toggle.setValue(this.plugin.settings.noLanguageParameter).onChange(async (value) => {
           this.plugin.settings.noLanguageParameter = value;
           await this.plugin.saveSettings();
+          this.updatePreview();
         }),
       );
 
