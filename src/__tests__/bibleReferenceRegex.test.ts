@@ -1,4 +1,4 @@
-import { matchingBibleReferenceRegex } from '@/main';
+import { matchingBibleReferenceRegex } from '@/BibleReferenceSuggester';
 
 describe('Bible Reference Regex Pattern', () => {
   // The regex pattern we want to test (without the /b part)

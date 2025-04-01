@@ -1,52 +1,122 @@
-name: Release
+name: Create GitHub Release from Changesets PR
 
 on:
   push:
-    branches:
-      - main
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - "*" # Push events to matching any tag format, i.e. 1.0, 20.15.10
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+permissions:
+  contents: write  # This is required for creating releases and uploading assets
+  pull-requests: read  # This is required for fetching PR information
+
+env:
+  PLUGIN_NAME: jw-library-linker
 
 jobs:
   release:
-    name: Release PR or Release
+    name: Create GitHub Release
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.USER_TOKEN }}
 
-      - name: Install changesets cli
-        run: npm i -D @changesets/cli @changesets/changelog-github
-
-      - name: Create changesets PR or Publish
-        id: changesets
-        uses: changesets/action@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          title: 🚀 Release new version
-          version: npm run version
-          publish: npm run publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
+          node-version-file: '.nvmrc'
 
       - name: Install dependencies
-        if: steps.changesets.outputs.published == 'true'  
-        run: |
-          npm ci --legacy-peer-deps
+        run: npm ci --legacy-peer-deps
 
-      - name: Build
-        if: steps.changesets.outputs.published == 'true'  
-        run: npm run build
-
-      - name: Upload Release Asset
-        if: steps.changesets.outputs.published == 'true'  
-        run: |
-          set -e
-          LATEST_TAG=$(gh release list --limit 1 --json tagName -q '.[0].tagName')
-          ASSET="${{ github.event.repository.name }}-${LATEST_TAG}.zip"
-          zip -r "$ASSET" main.js manifest.json README.md
-          gh release upload "$LATEST_TAG" "$ASSET" main.js manifest.json README.md --clobber
-          echo "✅ Uploaded $ASSET to the release $LATEST_TAG"
+      - name: Extract Release Notes
+        id: extract_notes
         env:
           GH_TOKEN: ${{ secrets.USER_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          # Find latest merged Changesets PR - expanded query with better error handling
+          echo "Looking for merged Changesets PRs..."
+
+          # Debug: List recent PRs to see what's available
+          echo "Recent PRs:"
+          gh pr list --state merged --limit 5 | cat
+
+          # Try to find the PR with both approaches
+          echo "Trying to find PR with head ref 'changeset-release/main'..."
+          PR_INFO=$(gh api repos/$GITHUB_REPOSITORY/pulls?state=closed --jq '.[] | select(.merged_at != null and .head.ref == "changeset-release/main") | {number: .number, body: .body, title: .title}' | head -n1)
+
+          if [ -z "$PR_INFO" ]; then
+            echo "No merged Changesets PR found with head ref"
+            echo "Trying alternative approach with PR title..."
+            PR_INFO=$(gh api repos/$GITHUB_REPOSITORY/pulls?state=closed --jq '.[] | select(.merged_at != null and .title | contains("Release")) | {number: .number, body: .body, title: .title}' | head -n1)
+          fi
+
+          if [ -z "$PR_INFO" ]; then
+            echo "Still no merged Changesets PR found"
+            # Get tag name directly from github.ref since we're running on a tag push
+
+            # Try to extract release notes from CHANGELOG.md
+            if [ -f "CHANGELOG.md" ]; then
+              CHANGELOG_ENTRY=$(awk -v tag="## $TAG_NAME" 'BEGIN{flag=0} $0 ~ tag {flag=1; next} flag && /^## / {flag=0} flag {print}' CHANGELOG.md)
+              if [ ! -z "$CHANGELOG_ENTRY" ]; then
+                echo "Using CHANGELOG.md entry as release notes"
+                RELEASE_NOTES="$CHANGELOG_ENTRY"
+              else
+                echo "No changelog entry found for $TAG_NAME"
+                RELEASE_NOTES="Release $TAG_NAME"
+              fi
+            else
+              RELEASE_NOTES="Release $TAG_NAME"
+            fi
+          else
+            # Extract PR info for debugging
+            echo "Found PR information:"
+            echo "$PR_INFO" | jq '.'
+
+            # Extract PR body
+            PR_BODY=$(echo "$PR_INFO" | jq -r '.body')
+            PR_TITLE=$(echo "$PR_INFO" | jq -r '.title')
+
+            echo "PR Title: $PR_TITLE"
+            echo "PR Body preview: ${PR_BODY:0:100}..."
+
+            # Extract content after the "## " heading - this gets everything after the version heading
+            RELEASE_NOTES=$(echo "$PR_BODY" | awk '/^## /{flag=1;next} flag')
+
+            # If there's no content, use a default message
+            if [ -z "$RELEASE_NOTES" ]; then
+              echo "No detailed release notes found in PR body"
+              RELEASE_NOTES="$PR_TITLE"
+            fi
+          fi
+
+          # Save to output with proper escaping for GitHub Actions
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$RELEASE_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      # Build the zip file with plugin contents
+      - name: Build
+        run: |
+          npm run build
+          mkdir ${{ env.PLUGIN_NAME }}
+          cp main.js manifest.json ${{ env.PLUGIN_NAME }}
+          zip -r ${{ env.PLUGIN_NAME }}-${{ github.ref_name }}.zip ${{ env.PLUGIN_NAME }}
+          ls
+
+      # Use the softprops/action-gh-release action to create the release and upload all assets
+      - name: Create Release and Upload Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          body: ${{ env.RELEASE_NOTES }}
+          files: |
+            ${{ env.PLUGIN_NAME }}-${{ github.ref_name }}.zip
+            main.js
+            manifest.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}

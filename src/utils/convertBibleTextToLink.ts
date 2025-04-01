@@ -6,7 +6,7 @@ import type { BibleReference, Language } from '@/types';
 // TODO: can be removed
 export function convertBibleTextToLink(
   reference: BibleReference,
-  language: Language,
+  language?: Language,
 ): string | string[] {
   return formatJWLibraryLink(reference, language);
 }
@@ -15,8 +15,9 @@ export function convertBibleTextToMarkdownLink(
   reference: BibleReference,
   short = false,
   language: Language,
+  linkLanguage?: Language,
 ): string | undefined {
-  const links = formatJWLibraryLink(reference, language);
+  const links = formatJWLibraryLink(reference, linkLanguage);
 
   // Early return input if there are no valid links
   if (!links || (Array.isArray(links) && !links.length)) {
