@@ -14,8 +14,10 @@ export const en = {
       description: 'Moves the "Link and open" command to the top of the list',
     },
     updatedLinkStrukture: {
-      name: 'Keep current link text',
+      name: 'Keep link text',
       description: 'When enabled, the current link text will be kept when converting Bible text',
+      keepCurrentStructure: 'Keep current structure',
+      usePluginSettings: 'Use plugin settings',
     },
     noLanguageParameter: {
       name: 'Create links language independent',

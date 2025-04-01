@@ -14,9 +14,11 @@ export const fi = {
       description: 'Siirtää "Linkitä ja avaa" -komennon listan kärkeen',
     },
     updatedLinkStrukture: {
-      name: 'Säilytä nykyinen linkkiteksti',
+      name: 'Säilytä linkkiteksti',
       description:
         'Kun tämä on käytössä, nykyinen linkkiteksti säilytetään, kun Raamatun tekstiä muunnetaan',
+      keepCurrentStructure: 'Säilytä nykyinen linkkiteksti',
+      usePluginSettings: 'Käytä plugin-asetuksia',
     },
     noLanguageParameter: {
       name: 'Luo linkit kielestä riippumattomiksi',

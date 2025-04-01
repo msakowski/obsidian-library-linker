@@ -88,8 +88,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       .addDropdown((dropdown) =>
         dropdown
           .addOptions({
-            keepCurrentStructure: 'Keep current structure',
-            usePluginSettings: 'Use plugin settings',
+            keepCurrentStructure: this.t('settings.updatedLinkStrukture.keepCurrentStructure'),
+            usePluginSettings: this.t('settings.updatedLinkStrukture.usePluginSettings'),
           })
           .setValue(this.plugin.settings.updatedLinkStrukture)
           .onChange(async (value: 'keepCurrentStructure' | 'usePluginSettings') => {

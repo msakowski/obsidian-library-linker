@@ -17,6 +17,8 @@ export const de = {
       name: 'Linktext beibehalten',
       description:
         'Wenn aktiviert, wird der aktuelle Linktext beim Umwandeln von Bibeltexten beibehalten',
+      keepCurrentStructure: 'Aktuellen Linktext beibehalten',
+      usePluginSettings: 'Plugin-Einstellungen verwenden',
     },
     noLanguageParameter: {
       name: 'Links sprachunabhängig erstellen',
