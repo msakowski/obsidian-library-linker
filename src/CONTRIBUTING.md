@@ -17,10 +17,12 @@ Our development approach is driven by the following core principles:
 
 ## Contribution Process
 
-To contribute effectively, please follow these steps:
+To ensure a smooth contribution, please follow these steps:
 
-1. Review our contribution guidelines.
-2. Engage with the maintainers to discuss your ideas.
-3. Submit a pull request (PR) with your proposed changes.
+1. **Review Guidelines**: Familiarize yourself with our contribution guidelines before starting.
+2. **Bug Fixes**: Feel free to submit pull requests (PRs) directly for bug fixes.
+3. **New Ideas**: For feature requests, enhancements, or ideas, please engage in the [discussions section](https://github.com/msakowski/obsidian-library-linker/discussions) first. You can join existing topics or create new ones.
+4. **Pre-PR Discussion**: We strive to keep the plugin lightweight. Discussing your ideas before coding helps ensure alignment with our vision and saves you time and effort on work that might not be merged.
+5. **Submit Your Work**: Once there’s agreement on the approach, submit your pull request with the proposed changes. Every contribution is valuable!
 
 We appreciate your support in making this project better!
