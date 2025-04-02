@@ -1,7 +1,7 @@
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { getBibleBooks } from '@/bibleBooks';
-import type { BibleReference, LinkReplacerSettings } from '@/types';
+import type { BibleReference, LinkReplacerSettings, LinkStyles } from '@/types';
 
 /**
  * Apply styling to the link text based on font style setting
@@ -22,7 +22,7 @@ export function convertBibleTextToMarkdownLink(
   reference: BibleReference,
   settings: Omit<LinkReplacerSettings, 'updatedLinkStrukture' | 'openAutomatically'> & {
     updatedLinkStrukture?: LinkReplacerSettings['updatedLinkStrukture'];
-  },
+  } & Partial<LinkStyles>,
   originalText?: string,
 ): string | undefined {
   const links = formatJWLibraryLink(
@@ -49,11 +49,11 @@ export function convertBibleTextToMarkdownLink(
   }
 
   // Get styling options with default empty strings for backward compatibility
-  const prefixOutside = settings.prefixOutsideLink || '';
-  const prefixInside = settings.prefixInsideLink || '';
-  const suffixInside = settings.suffixInsideLink || '';
-  const suffixOutside = settings.suffixOutsideLink || '';
-  const fontStyle = settings.fontStyle || 'normal';
+  const prefixOutside = settings.prefixOutsideLink && '';
+  const prefixInside = settings.prefixInsideLink && '';
+  const suffixInside = settings.suffixInsideLink && '';
+  const suffixOutside = settings.suffixOutsideLink && '';
+  const fontStyle = settings.fontStyle && 'normal';
 
   if (Array.isArray(links)) {
     // Format verse ranges without leading zeros
