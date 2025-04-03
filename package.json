@@ -8,10 +8,11 @@
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "version": "changeset version && node version-bump.mjs",
     "release": "VERSION=$(jq -r '.version' manifest.json) && git tag -a $VERSION -m \"Release $VERSION\" && git push origin $VERSION",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix",
+    "lint:ts": "eslint",
+    "lint:ts-fix": "eslint --fix",
     "test": "jest",
     "test:watch": "jest --watch",
+    "lint": "npm run build && npm run lint:ts",
     "changeset": "npx changeset"
   },
   "keywords": [],

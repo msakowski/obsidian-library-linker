@@ -4,7 +4,10 @@ export type Locale = 'en' | 'de' | 'fi'; // obsidian language
 
 export type Language = 'E' | 'X' | 'FI'; // plugin language
 
+export type BookLength = 'short' | 'medium' | 'long';
+
 export interface LinkStyles {
+  bookLength: BookLength;
   prefixOutsideLink: string;
   prefixInsideLink: string;
   suffixInsideLink: string;
@@ -13,7 +16,6 @@ export interface LinkStyles {
 }
 
 export interface LinkReplacerSettings extends LinkStyles {
-  useShortNames: boolean;
   language: Language;
   openAutomatically: boolean;
   updatedLinkStrukture: 'keepCurrentStructure' | 'usePluginSettings';
@@ -24,8 +26,7 @@ export interface BibleBook {
   id: number;
   prefix?: string;
   aliases: readonly string[];
-  longName: string;
-  shortName: string;
+  name: Record<BookLength, string>;
   chapters: number;
 }
 

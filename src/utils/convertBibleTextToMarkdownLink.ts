@@ -41,7 +41,9 @@ export function convertBibleTextToMarkdownLink(
     throw new Error('errors.bookNotFound');
   }
 
-  let bookName = settings.useShortNames ? bookEntry.shortName : bookEntry.longName;
+  let bookName = bookEntry.name[settings.bookLength];
+
+  console.log({ bookName });
 
   if (settings.updatedLinkStrukture === 'keepCurrentStructure' && originalText) {
     // remove chapter and verses from original text
@@ -49,11 +51,11 @@ export function convertBibleTextToMarkdownLink(
   }
 
   // Get styling options with default empty strings for backward compatibility
-  const prefixOutside = settings.prefixOutsideLink && '';
-  const prefixInside = settings.prefixInsideLink && '';
-  const suffixInside = settings.suffixInsideLink && '';
-  const suffixOutside = settings.suffixOutsideLink && '';
-  const fontStyle = settings.fontStyle && 'normal';
+  const prefixOutside = settings.prefixOutsideLink || '';
+  const prefixInside = settings.prefixInsideLink || '';
+  const suffixInside = settings.suffixInsideLink || '';
+  const suffixOutside = settings.suffixOutsideLink || '';
+  const fontStyle = settings.fontStyle || 'normal';
 
   if (Array.isArray(links)) {
     // Format verse ranges without leading zeros
@@ -92,7 +94,7 @@ export function convertBibleTextToMarkdownLink(
   }
 
   // For simple references
-  const formattedText = formatBibleText(reference, settings.useShortNames, settings.language);
+  const formattedText = formatBibleText(reference, settings.bookLength, settings.language);
   const linkText = applyFontStyle(`${prefixInside}${formattedText}${suffixInside}`, fontStyle);
   return `${prefixOutside}[${linkText}](${links})${suffixOutside}`;
 }

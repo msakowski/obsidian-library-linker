@@ -9,6 +9,7 @@ import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
 import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
 
 export const DEFAULT_STYLES: LinkStyles = {
+  bookLength: 'medium',
   prefixOutsideLink: '',
   prefixInsideLink: '',
   suffixInsideLink: '',
@@ -17,7 +18,6 @@ export const DEFAULT_STYLES: LinkStyles = {
 };
 
 export const DEFAULT_SETTINGS: LinkReplacerSettings = {
-  useShortNames: false,
   language: 'E',
   openAutomatically: false,
   updatedLinkStrukture: 'keepCurrentStructure',

@@ -1,3 +1,4 @@
+import { TEST_DEFAULT_SETTINGS } from '@/__tests__/mocks';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 
 describe('convertBibleTextToMarkdownLink', () => {
@@ -11,9 +12,8 @@ describe('convertBibleTextToMarkdownLink', () => {
             verseRanges: [{ start: 16, end: 16 }],
           },
           {
-            useShortNames: false,
-            language: 'E',
-            noLanguageParameter: false,
+            ...TEST_DEFAULT_SETTINGS,
+            bookLength: 'long',
           },
         ),
       ).toBe('[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)');
@@ -25,9 +25,9 @@ describe('convertBibleTextToMarkdownLink', () => {
             verseRanges: [{ start: 1, end: 1 }],
           },
           {
-            useShortNames: false,
+            ...TEST_DEFAULT_SETTINGS,
+            bookLength: 'long',
             language: 'X',
-            noLanguageParameter: false,
           },
         ),
       ).toBe('[Psalm 23:1](jwlibrary:///finder?bible=19023001&wtlocale=X)');
@@ -39,7 +39,8 @@ describe('convertBibleTextToMarkdownLink', () => {
             verseRanges: [{ start: 1, end: 1 }],
           },
           {
-            useShortNames: false,
+            ...TEST_DEFAULT_SETTINGS,
+            bookLength: 'long',
             language: 'X',
             noLanguageParameter: true,
           },
@@ -56,9 +57,9 @@ describe('convertBibleTextToMarkdownLink', () => {
             verseRanges: [{ start: 1, end: 3 }],
           },
           {
-            useShortNames: false,
+            ...TEST_DEFAULT_SETTINGS,
+            bookLength: 'long',
             language: 'X',
-            noLanguageParameter: false,
           },
         ),
       ).toBe('[Psalm 23:1-3](jwlibrary:///finder?bible=19023001-19023003&wtlocale=X)');
@@ -70,9 +71,9 @@ describe('convertBibleTextToMarkdownLink', () => {
             verseRanges: [{ start: 3, end: 4 }],
           },
           {
-            useShortNames: false,
+            ...TEST_DEFAULT_SETTINGS,
+            bookLength: 'long',
             language: 'X',
-            noLanguageParameter: false,
           },
         ),
       ).toBe('[Offenbarung 21:3-4](jwlibrary:///finder?bible=66021003-66021004&wtlocale=X)');
@@ -92,9 +93,8 @@ describe('convertBibleTextToMarkdownLink', () => {
             ],
           },
           {
-            useShortNames: false,
-            language: 'E',
-            noLanguageParameter: false,
+            ...TEST_DEFAULT_SETTINGS,
+            bookLength: 'long',
           },
         ),
       ).toBe(
@@ -115,9 +115,9 @@ describe('convertBibleTextToMarkdownLink', () => {
             ],
           },
           {
-            useShortNames: false,
+            ...TEST_DEFAULT_SETTINGS,
+            bookLength: 'long',
             language: 'X',
-            noLanguageParameter: false,
           },
         ),
       ).toBe(
@@ -137,11 +137,7 @@ describe('convertBibleTextToMarkdownLink', () => {
             chapter: 3,
             verseRanges: [{ start: 16, end: 16 }],
           },
-          {
-            useShortNames: true,
-            language: 'E',
-            noLanguageParameter: false,
-          },
+          TEST_DEFAULT_SETTINGS,
         ),
       ).toBe('[Joh 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)');
       expect(
@@ -152,9 +148,8 @@ describe('convertBibleTextToMarkdownLink', () => {
             verseRanges: [{ start: 1, end: 1 }],
           },
           {
-            useShortNames: true,
+            ...TEST_DEFAULT_SETTINGS,
             language: 'X',
-            noLanguageParameter: false,
           },
         ),
       ).toBe('[Ps 23:1](jwlibrary:///finder?bible=19023001&wtlocale=X)');
@@ -169,9 +164,8 @@ describe('convertBibleTextToMarkdownLink', () => {
             verseRanges: [{ start: 1, end: 3 }],
           },
           {
-            useShortNames: true,
+            ...TEST_DEFAULT_SETTINGS,
             language: 'X',
-            noLanguageParameter: false,
           },
         ),
       ).toBe('[Ps 23:1-3](jwlibrary:///finder?bible=19023001-19023003&wtlocale=X)');
@@ -183,9 +177,8 @@ describe('convertBibleTextToMarkdownLink', () => {
             verseRanges: [{ start: 3, end: 4 }],
           },
           {
-            useShortNames: true,
+            ...TEST_DEFAULT_SETTINGS,
             language: 'X',
-            noLanguageParameter: false,
           },
         ),
       ).toBe('[Off 21:3-4](jwlibrary:///finder?bible=66021003-66021004&wtlocale=X)');
@@ -204,11 +197,7 @@ describe('convertBibleTextToMarkdownLink', () => {
               { start: 12, end: 14 },
             ],
           },
-          {
-            useShortNames: true,
-            language: 'E',
-            noLanguageParameter: false,
-          },
+          TEST_DEFAULT_SETTINGS,
         ),
       ).toBe(
         '[Joh 1:1-2](jwlibrary:///finder?bible=43001001-43001002&wtlocale=E),' +
@@ -228,9 +217,8 @@ describe('convertBibleTextToMarkdownLink', () => {
             ],
           },
           {
-            useShortNames: true,
+            ...TEST_DEFAULT_SETTINGS,
             language: 'X',
-            noLanguageParameter: false,
           },
         ),
       ).toBe(
@@ -249,11 +237,7 @@ describe('convertBibleTextToMarkdownLink', () => {
           chapter: 200,
           verseRanges: [{ start: 1, end: 1 }],
         },
-        {
-          useShortNames: true,
-          language: 'E',
-          noLanguageParameter: false,
-        },
+        TEST_DEFAULT_SETTINGS,
       ),
     ).toThrow('errors.bookNotFound');
   });

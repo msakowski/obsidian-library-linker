@@ -4,11 +4,6 @@ export const fi = {
       name: 'Kieli',
       description: 'Valitse kieli raamatunviitteille',
     },
-    useShortNames: {
-      name: 'Käytä lyhyitä nimiä raamatunviitteissä',
-      description:
-        'Kun tämä on käytössä, raamatunviitteissä käytetään lyhennettyjä kirjannimiä (esim. "1Pi" sijasta "1. Pietari")',
-    },
     openAutomatically: {
       name: 'Avaa linkit automaattisesti',
       description: 'Siirtää "Linkitä ja avaa" -komennon listan kärkeen',
@@ -24,6 +19,13 @@ export const fi = {
       name: 'Luo linkit kielestä riippumattomiksi',
       description:
         'Kun tämä on käytössä, linkkiin ei lisätä kieliparametria. Linkit avautuvat JW-kirjaston kielellä',
+    },
+    bookLength: {
+      name: 'Linkin tekstin pituus',
+      description: 'Valitse linkin tekstin pituus',
+      short: 'Lyhyt',
+      medium: 'Keskipitkä',
+      long: 'Pitkä',
     },
     linkStyling: {
       name: 'Linkin tyyli',

@@ -4,11 +4,6 @@ export const en = {
       name: 'Language',
       description: 'Select the language for Bible references',
     },
-    useShortNames: {
-      name: 'Use short names in Bible links',
-      description:
-        'When enabled, Bible references will use abbreviated book names (e.g., "1Pe" instead of "1. Peter")',
-    },
     openAutomatically: {
       name: 'Open links automatically',
       description: 'Moves the "Link and open" command to the top of the list',
@@ -23,6 +18,13 @@ export const en = {
       name: 'Create links language independent',
       description:
         'When enabled, no language parameter is added to the link. Links will open in the language of the JW Library',
+    },
+    bookLength: {
+      name: 'Link text length',
+      description: 'Choose the length of the link text',
+      short: 'Short',
+      medium: 'Medium',
+      long: 'Long',
     },
     linkStyling: {
       name: 'Link Styling',

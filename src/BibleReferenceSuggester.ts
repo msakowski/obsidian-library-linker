@@ -86,7 +86,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
       const formattedText = formatBibleText(
         reference,
-        this.plugin.settings.useShortNames,
+        this.plugin.settings.bookLength,
         this.plugin.settings.language,
       );
 

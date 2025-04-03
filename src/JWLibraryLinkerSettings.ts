@@ -110,17 +110,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName(this.t('settings.useShortNames.name'))
-      .setDesc(this.t('settings.useShortNames.description'))
-      .addToggle((toggle) =>
-        toggle.setValue(this.plugin.settings.useShortNames).onChange(async (value) => {
-          this.plugin.settings.useShortNames = value;
-          await this.plugin.saveSettings();
-          this.updatePreview();
-        }),
-      );
-
-    new Setting(containerEl)
       .setName(this.t('settings.openAutomatically.name'))
       .setDesc(this.t('settings.openAutomatically.description'))
       .addToggle((toggle) =>
@@ -172,6 +161,24 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       text: this.t('settings.linkStyling.description'),
       cls: 'setting-item-description',
     });
+
+    new Setting(containerEl)
+      .setName(this.t('settings.bookLength.name'))
+      .setDesc(this.t('settings.bookLength.description'))
+      .addDropdown((dropdown) =>
+        dropdown
+          .addOptions({
+            short: this.t('settings.bookLength.short'),
+            medium: this.t('settings.bookLength.medium'),
+            long: this.t('settings.bookLength.long'),
+          })
+          .setValue(this.plugin.settings.bookLength)
+          .onChange(async (value: LinkStyles['bookLength']) => {
+            this.plugin.settings.bookLength = value;
+            await this.plugin.saveSettings();
+            this.updatePreview();
+          }),
+      );
 
     // Prefix outside link
     new Setting(containerEl)
@@ -285,6 +292,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           });
       });
 
+    console.log('hellooo');
+
     // Presets row
     const presetContainer = containerEl.createDiv({
       cls: 'setting-item setting-item--presets',
@@ -356,7 +365,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             bold: this.t('settings.linkStyling.fontStyle.bold'),
           })
           .setValue(this.plugin.settings.fontStyle)
-          .onChange(async (value: 'normal' | 'italic' | 'bold') => {
+          .onChange(async (value: LinkStyles['fontStyle']) => {
             this.plugin.settings.fontStyle = value;
             await this.plugin.saveSettings();
             this.updatePreview();
@@ -467,6 +476,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       const markdownLinks = this.previewReferences.map((reference) =>
         convertBibleTextToMarkdownLink(reference, this.plugin.settings),
       );
+
+      console.log(markdownLinks, this.plugin.settings);
 
       if (!markdownLinks.every(Boolean)) {
         throw new Error('Failed to generate one or more markdown links');

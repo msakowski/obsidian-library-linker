@@ -4,11 +4,6 @@ export const de = {
       name: 'Sprache',
       description: 'Wähle die Sprache für die Bibelverweise',
     },
-    useShortNames: {
-      name: 'Kurznamen in Bibelverweisen verwenden',
-      description:
-        'Wenn aktiviert, werden Bibelverweise mit abgekürzten Buchnamen angezeigt (z.B. "1Pe" statt "1. Petrus")',
-    },
     openAutomatically: {
       name: 'Links automatisch öffnen',
       description: 'Verschiebt den Befehl "Link und öffnen" an den Anfang der Liste',
@@ -24,6 +19,13 @@ export const de = {
       name: 'Links sprachunabhängig erstellen',
       description:
         'Wenn aktiviert, werden am Ende eines Links keine Sprachparameter hinzugefügt. Links werden in der jeweiligen Sprache der JW Library geöffnet',
+    },
+    bookLength: {
+      name: 'Linktext-Länge',
+      description: 'Wähle die Länge des Linktextes',
+      short: 'Kurz',
+      medium: 'Mittel',
+      long: 'Lang',
     },
     linkStyling: {
       name: 'Link-Styling',
