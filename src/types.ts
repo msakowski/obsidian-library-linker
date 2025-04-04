@@ -1,13 +1,26 @@
 import { bibleBooksDE } from '@/bibleBooks/de';
 
-export type Locale = 'en' | 'de'; // obsidian language
+export type Locale = 'en' | 'de' | 'fi'; // obsidian language
 
 export type Language = 'E' | 'X' | 'FI'; // plugin language
 
-export interface LinkReplacerSettings {
-  useShortNames: boolean;
+export type BookLength = 'short' | 'medium' | 'long';
+
+export interface LinkStyles {
+  bookLength: BookLength;
+  prefixOutsideLink: string;
+  prefixInsideLink: string;
+  suffixInsideLink: string;
+  suffixOutsideLink: string;
+  fontStyle: 'normal' | 'italic' | 'bold';
+}
+
+export type UpdatedLinkStrukture = 'keepCurrentStructure' | 'usePluginSettings';
+
+export interface LinkReplacerSettings extends LinkStyles {
   language: Language;
   openAutomatically: boolean;
+  updatedLinkStrukture: UpdatedLinkStrukture;
   noLanguageParameter: boolean;
 }
 
@@ -15,8 +28,7 @@ export interface BibleBook {
   id: number;
   prefix?: string;
   aliases: readonly string[];
-  longName: string;
-  shortName: string;
+  name: Record<BookLength, string>;
   chapters: number;
 }
 

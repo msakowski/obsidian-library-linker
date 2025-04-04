@@ -20,14 +20,14 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: npm install
+      - name: install dependencies
         run: npm ci
 
       - name: lint
-        run: npm run lint
+        run: npm run test:lint
 
-      - name: test
-        run: npm run test
+      - name: unit-test
+        run: npm run test:jest
 
-      - name: build
-        run: npm run build
+      - name: typecheck
+        run: npm run test:types

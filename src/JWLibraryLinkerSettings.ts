@@ -1,12 +1,70 @@
 import { PluginSettingTab, App, Setting, MarkdownRenderer } from 'obsidian';
-import JWLibraryLinkerPlugin from './main';
-import { TranslationService } from './services/TranslationService';
-import type { Language, BibleReference } from './types';
-import { convertBibleTextToMarkdownLink } from './utils/convertBibleTextToLink';
+import JWLibraryLinkerPlugin, { DEFAULT_SETTINGS, DEFAULT_STYLES } from '@/main';
+import { TranslationService } from '@/services/TranslationService';
+import type {
+  Language,
+  BibleReference,
+  LinkStyles,
+  UpdatedLinkStrukture,
+  BookLength,
+} from '@/types';
+import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 
 export class JWLibraryLinkerSettings extends PluginSettingTab {
   plugin: JWLibraryLinkerPlugin;
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
+
+  private markdownRenderer = async (containerId: string, markdown: string) => {
+    const container = document.getElementById(containerId);
+    if (container) {
+      // Clear previous content
+      container.empty();
+
+      // Render markdown to HTML
+      await MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
+    }
+  };
+
+  private presetButton = (
+    container: HTMLElement,
+    reference: BibleReference,
+    styles: LinkStyles,
+    name: string,
+  ) => {
+    const text = convertBibleTextToMarkdownLink(reference, {
+      ...this.plugin.settings,
+      ...styles,
+    });
+    const linkEl = container.createEl('a', {
+      text,
+      cls: 'preset-button',
+      attr: { id: `button-${name}-preset` },
+    });
+    void this.markdownRenderer(`button-${name}-preset`, text || '');
+
+    // Add event listener to prevent default action of inner links
+    const internalLinks = linkEl.querySelectorAll('a');
+    internalLinks.forEach((link) => {
+      link.href = '#';
+      link.setAttribute(
+        'aria-label',
+        `Sets: "${styles.prefixOutsideLink}", "${styles.prefixInsideLink}", "${styles.suffixInsideLink}", "${styles.suffixOutsideLink}"`,
+      );
+      link.addEventListener('click', (e) => {
+        e.preventDefault(); // Prevent default link action
+      });
+    });
+
+    linkEl.addEventListener('click', () => {
+      this.plugin.settings.prefixOutsideLink = styles.prefixOutsideLink;
+      this.plugin.settings.prefixInsideLink = styles.prefixInsideLink;
+      this.plugin.settings.suffixInsideLink = styles.suffixInsideLink;
+      this.plugin.settings.suffixOutsideLink = styles.suffixOutsideLink;
+      void this.plugin.saveSettings();
+      this.display();
+      this.updatePreview();
+    });
+  };
 
   // Sample Bible references for preview
   private previewReferences: BibleReference[] = [
@@ -26,11 +84,11 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         { start: 7, end: 9 },
       ],
     },
-    // Book with number prefix (2 Peter 2:9)
+    // Book with number prefix (1 Chronicles 29:11)
     {
-      book: 61,
-      chapter: 2,
-      verseRanges: [{ start: 9, end: 9 }],
+      book: 13,
+      chapter: 29,
+      verseRanges: [{ start: 11, end: 11 }],
     },
   ];
 
@@ -54,22 +112,11 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             FI: 'Suomi',
           })
           .setValue(this.plugin.settings.language)
-          .onChange(async (value: Language) => {
-            this.plugin.settings.language = value;
+          .onChange(async (value) => {
+            this.plugin.settings.language = value as Language;
             await this.plugin.saveSettings();
             this.display();
           }),
-      );
-
-    new Setting(containerEl)
-      .setName(this.t('settings.useShortNames.name'))
-      .setDesc(this.t('settings.useShortNames.description'))
-      .addToggle((toggle) =>
-        toggle.setValue(this.plugin.settings.useShortNames).onChange(async (value) => {
-          this.plugin.settings.useShortNames = value;
-          await this.plugin.saveSettings();
-          this.updatePreview();
-        }),
       );
 
     new Setting(containerEl)
@@ -83,6 +130,22 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       );
 
     new Setting(containerEl)
+      .setName(this.t('settings.updatedLinkStrukture.name'))
+      .setDesc(this.t('settings.updatedLinkStrukture.description'))
+      .addDropdown((dropdown) =>
+        dropdown
+          .addOptions({
+            keepCurrentStructure: this.t('settings.updatedLinkStrukture.keepCurrentStructure'),
+            usePluginSettings: this.t('settings.updatedLinkStrukture.usePluginSettings'),
+          })
+          .setValue(this.plugin.settings.updatedLinkStrukture)
+          .onChange(async (value) => {
+            this.plugin.settings.updatedLinkStrukture = value as UpdatedLinkStrukture;
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
       .setName(this.t('settings.noLanguageParameter.name'))
       .setDesc(this.t('settings.noLanguageParameter.description'))
       .addToggle((toggle) =>
@@ -93,14 +156,238 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         }),
       );
 
+    // Add Link Styling section
+
+    const linkStylingContainer = containerEl.createDiv({
+      cls: 'setting-item setting-item--linkStyling',
+    });
+
+    linkStylingContainer.createDiv({
+      text: this.t('settings.linkStyling.name'),
+      cls: 'setting-item-heading',
+    });
+
+    linkStylingContainer.createDiv({
+      text: this.t('settings.linkStyling.description'),
+      cls: 'setting-item-description',
+    });
+
+    new Setting(containerEl)
+      .setName(this.t('settings.bookLength.name'))
+      .setDesc(this.t('settings.bookLength.description'))
+      .addDropdown((dropdown) =>
+        dropdown
+          .addOptions({
+            short: this.t('settings.bookLength.short'),
+            medium: this.t('settings.bookLength.medium'),
+            long: this.t('settings.bookLength.long'),
+          })
+          .setValue(this.plugin.settings.bookLength)
+          .onChange(async (value) => {
+            this.plugin.settings.bookLength = value as BookLength;
+            await this.plugin.saveSettings();
+            this.updatePreview();
+          }),
+      );
+
+    // Prefix outside link
+    new Setting(containerEl)
+      .setClass('setting-item--input')
+      .setName(this.t('settings.linkStyling.prefixOutsideLink.name'))
+      .setDesc(this.t('settings.linkStyling.prefixOutsideLink.description'))
+      .addText((text) =>
+        text.setValue(this.plugin.settings.prefixOutsideLink).onChange(async (value) => {
+          this.plugin.settings.prefixOutsideLink = value;
+          await this.plugin.saveSettings();
+          this.updatePreview();
+        }),
+      )
+      .addExtraButton((button) => {
+        button
+          .setIcon('reset')
+          .setTooltip(
+            `${this.t('settings.linkStyling.reset', {
+              default: DEFAULT_SETTINGS.prefixOutsideLink || '​',
+            })}`,
+          )
+          .onClick(async () => {
+            this.plugin.settings.prefixOutsideLink = DEFAULT_SETTINGS.prefixOutsideLink;
+            await this.plugin.saveSettings();
+            this.display();
+            this.updatePreview();
+          });
+      });
+
+    // Prefix inside link
+    new Setting(containerEl)
+      .setClass('setting-item--input')
+      .setName(this.t('settings.linkStyling.prefixInsideLink.name'))
+      .setDesc(this.t('settings.linkStyling.prefixInsideLink.description'))
+      .addText((text) =>
+        text.setValue(this.plugin.settings.prefixInsideLink).onChange(async (value) => {
+          this.plugin.settings.prefixInsideLink = value;
+          await this.plugin.saveSettings();
+          this.updatePreview();
+        }),
+      )
+      .addExtraButton((button) => {
+        button
+          .setIcon('reset')
+          .setTooltip(
+            `${this.t('settings.linkStyling.reset', {
+              default: DEFAULT_SETTINGS.prefixInsideLink || '​',
+            })}`,
+          )
+          .onClick(async () => {
+            this.plugin.settings.prefixInsideLink = DEFAULT_SETTINGS.prefixInsideLink;
+            await this.plugin.saveSettings();
+            this.display();
+            this.updatePreview();
+          });
+      });
+
+    // Suffix inside link
+    new Setting(containerEl)
+      .setClass('setting-item--input')
+      .setName(this.t('settings.linkStyling.suffixInsideLink.name'))
+      .setDesc(this.t('settings.linkStyling.suffixInsideLink.description'))
+      .addText((text) =>
+        text.setValue(this.plugin.settings.suffixInsideLink).onChange(async (value) => {
+          this.plugin.settings.suffixInsideLink = value;
+          await this.plugin.saveSettings();
+          this.updatePreview();
+        }),
+      )
+      .addExtraButton((button) => {
+        button
+          .setIcon('reset')
+          .setTooltip(
+            `${this.t('settings.linkStyling.reset', {
+              default: DEFAULT_SETTINGS.suffixInsideLink || '​',
+            })}`,
+          )
+          .onClick(async () => {
+            this.plugin.settings.suffixInsideLink = DEFAULT_SETTINGS.suffixInsideLink;
+            await this.plugin.saveSettings();
+            this.display();
+            this.updatePreview();
+          });
+      });
+
+    // Suffix outside link
+    new Setting(containerEl)
+      .setClass('setting-item--input')
+      .setName(this.t('settings.linkStyling.suffixOutsideLink.name'))
+      .setDesc(this.t('settings.linkStyling.suffixOutsideLink.description'))
+      .addText((text) =>
+        text.setValue(this.plugin.settings.suffixOutsideLink).onChange(async (value) => {
+          this.plugin.settings.suffixOutsideLink = value;
+          await this.plugin.saveSettings();
+          this.updatePreview();
+        }),
+      )
+      .addExtraButton((button) => {
+        button
+          .setIcon('reset')
+          .setTooltip(
+            `${this.t('settings.linkStyling.reset', {
+              default: DEFAULT_SETTINGS.suffixOutsideLink || '​',
+            })}`,
+          )
+          .onClick(async () => {
+            this.plugin.settings.suffixOutsideLink = DEFAULT_SETTINGS.suffixOutsideLink;
+            await this.plugin.saveSettings();
+            this.display();
+            this.updatePreview();
+          });
+      });
+
+    // Presets row
+    const presetContainer = containerEl.createDiv({
+      cls: 'setting-item setting-item--presets',
+    });
+
+    const presetText = presetContainer.createDiv({
+      cls: 'setting-item-info',
+    });
+
+    presetText.createDiv({
+      text: this.t('settings.linkStyling.presets.name'),
+      cls: 'setting-item-heading',
+    });
+
+    presetText.createDiv({
+      text: this.t('settings.linkStyling.presets.description'),
+      cls: 'setting-item-description',
+    });
+
+    const presetButtonsContainer = presetContainer.createDiv({
+      cls: 'preset-buttons-container',
+    });
+
+    void this.presetButton(
+      presetButtonsContainer,
+      this.previewReferences[2],
+      {
+        ...DEFAULT_STYLES,
+        fontStyle: this.plugin.settings.fontStyle,
+      },
+      'default',
+    );
+
+    void this.presetButton(
+      presetButtonsContainer,
+      this.previewReferences[2],
+      {
+        ...this.plugin.settings,
+        prefixOutsideLink: '(',
+        prefixInsideLink: '',
+        suffixInsideLink: '',
+        suffixOutsideLink: ')',
+      },
+      'parentheses',
+    );
+
+    void this.presetButton(
+      presetButtonsContainer,
+      this.previewReferences[2],
+      {
+        ...this.plugin.settings,
+        prefixOutsideLink: '📖 ',
+        prefixInsideLink: '',
+        suffixInsideLink: '',
+        suffixOutsideLink: '',
+      },
+      'bookEmoji',
+    );
+
+    // Font style
+    new Setting(containerEl)
+      .setName(this.t('settings.linkStyling.fontStyle.name'))
+      .setDesc(this.t('settings.linkStyling.fontStyle.description'))
+      .addDropdown((dropdown) =>
+        dropdown
+          .addOptions({
+            normal: this.t('settings.linkStyling.fontStyle.normal'),
+            italic: this.t('settings.linkStyling.fontStyle.italic'),
+            bold: this.t('settings.linkStyling.fontStyle.bold'),
+          })
+          .setValue(this.plugin.settings.fontStyle)
+          .onChange(async (value) => {
+            this.plugin.settings.fontStyle = value as LinkStyles['fontStyle'];
+            await this.plugin.saveSettings();
+            this.updatePreview();
+          }),
+      );
+
     const previewContainer = containerEl.createDiv({
-      cls: 'setting-item jw-library-linker-preview',
+      cls: 'setting-item setting-item--preview',
     });
 
     // Add preview section
-    previewContainer.createEl('h2', {
-      text: 'Preview',
-      cls: 'jw-library-linker-preview-heading',
+    previewContainer.createDiv({
+      text: this.t('settings.linkStyling.preview.name'),
+      cls: 'setting-item-heading',
     });
 
     // Create container for preview content
@@ -109,7 +396,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     // Create three divs for our markdown content
     for (let i = 0; i < 3; i++) {
       previewItemsContainer.createDiv({
-        cls: 'jw-library-linker-markdown-container',
         attr: { id: `preview-container-${i}` },
       });
     }
@@ -117,13 +403,70 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     // Add some CSS for the preview section
     const style = document.createElement('style');
     style.textContent = `
-      .jw-library-linker-preview {
+      b, strong {
+        font-weight: bolder;
+      }
+
+      .setting-item--input input {
+        width: 8ch;
+      }
+
+      .setting-item--preview,
+      .setting-item--presets,
+      .setting-item--linkStyling {
         display: block;
+      }
+
+      .setting-item--preview {
         padding-top: 32px;
       }
 
-      .jw-library-linker-preview-heading {
-        margin: 0;
+      .setting-item--presets {
+        justify-content: space-between;
+
+        .setting-item-heading {
+          white-space: nowrap;
+          margin-top: 0 !important;
+        }
+      }
+
+      .preset-buttons-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 12px;
+      }
+
+      .preset-button {
+        --text-color: var(--text-normal);
+        -webkit-app-region: no-drag;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--font-ui-small);
+        border-radius: var(--button-radius);
+        border: 0;
+        padding: var(--size-4-1) var(--size-4-3);
+        height: var(--input-height);
+        font-family: var(--font-interface);
+        font-weight: var(--input-font-weight);
+        cursor: var(--cursor);
+        outline: none;
+        user-select: none;
+        white-space: nowrap;
+        color: var(--text-color);
+        background-color: var(--interactive-normal);
+        box-shadow: var(--input-shadow);
+
+        &:hover {
+          color: inherit;
+          cursor: pointer;
+          text-decoration: none;
+        }
+
+        p {
+          margin: 0;
+        }
       }
     `;
     document.head.appendChild(style);
@@ -139,12 +482,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     try {
       // Generate markdown links for all references first
       const markdownLinks = this.previewReferences.map((reference) =>
-        convertBibleTextToMarkdownLink(
-          reference,
-          this.plugin.settings.useShortNames,
-          this.plugin.settings.language,
-          this.plugin.settings.noLanguageParameter ? undefined : this.plugin.settings.language,
-        ),
+        convertBibleTextToMarkdownLink(reference, this.plugin.settings),
       );
 
       if (!markdownLinks.every(Boolean)) {
@@ -171,7 +509,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           container.empty();
 
           // Render markdown to HTML
-          MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
+          void MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
         }
       });
     } catch (error) {
