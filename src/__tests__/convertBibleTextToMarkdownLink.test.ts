@@ -1,4 +1,4 @@
-import { TEST_DEFAULT_SETTINGS } from '@/__tests__/mocks';
+import { TEST_DEFAULT_SETTINGS } from 'mocks/plugin';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 
 describe('convertBibleTextToMarkdownLink', () => {

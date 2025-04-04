@@ -1,21 +1,27 @@
 import { PluginSettingTab, App, Setting, MarkdownRenderer } from 'obsidian';
 import JWLibraryLinkerPlugin, { DEFAULT_SETTINGS, DEFAULT_STYLES } from '@/main';
 import { TranslationService } from '@/services/TranslationService';
-import type { Language, BibleReference, LinkStyles } from '@/types';
+import type {
+  Language,
+  BibleReference,
+  LinkStyles,
+  UpdatedLinkStrukture,
+  BookLength,
+} from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 
 export class JWLibraryLinkerSettings extends PluginSettingTab {
   plugin: JWLibraryLinkerPlugin;
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
-  private markdownRenderer = (containerId: string, markdown: string) => {
+  private markdownRenderer = async (containerId: string, markdown: string) => {
     const container = document.getElementById(containerId);
     if (container) {
       // Clear previous content
       container.empty();
 
       // Render markdown to HTML
-      MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
+      await MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
     }
   };
 
@@ -34,23 +40,27 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       cls: 'preset-button',
       attr: { id: `button-${name}-preset` },
     });
-    this.markdownRenderer(`button-${name}-preset`, text || '');
+    void this.markdownRenderer(`button-${name}-preset`, text || '');
 
     // Add event listener to prevent default action of inner links
     const internalLinks = linkEl.querySelectorAll('a');
     internalLinks.forEach((link) => {
+      link.href = '#';
+      link.setAttribute(
+        'aria-label',
+        `Sets: "${styles.prefixOutsideLink}", "${styles.prefixInsideLink}", "${styles.suffixInsideLink}", "${styles.suffixOutsideLink}"`,
+      );
       link.addEventListener('click', (e) => {
         e.preventDefault(); // Prevent default link action
-        // Don't stop propagation - allow the event to bubble up
       });
     });
 
-    linkEl.addEventListener('click', async () => {
+    linkEl.addEventListener('click', () => {
       this.plugin.settings.prefixOutsideLink = styles.prefixOutsideLink;
       this.plugin.settings.prefixInsideLink = styles.prefixInsideLink;
       this.plugin.settings.suffixInsideLink = styles.suffixInsideLink;
       this.plugin.settings.suffixOutsideLink = styles.suffixOutsideLink;
-      await this.plugin.saveSettings();
+      void this.plugin.saveSettings();
       this.display();
       this.updatePreview();
     });
@@ -74,11 +84,11 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         { start: 7, end: 9 },
       ],
     },
-    // Book with number prefix (2 Peter 2:9)
+    // Book with number prefix (1 Chronicles 29:11)
     {
-      book: 61,
-      chapter: 2,
-      verseRanges: [{ start: 9, end: 9 }],
+      book: 13,
+      chapter: 29,
+      verseRanges: [{ start: 11, end: 11 }],
     },
   ];
 
@@ -102,8 +112,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             FI: 'Suomi',
           })
           .setValue(this.plugin.settings.language)
-          .onChange(async (value: Language) => {
-            this.plugin.settings.language = value;
+          .onChange(async (value) => {
+            this.plugin.settings.language = value as Language;
             await this.plugin.saveSettings();
             this.display();
           }),
@@ -129,8 +139,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             usePluginSettings: this.t('settings.updatedLinkStrukture.usePluginSettings'),
           })
           .setValue(this.plugin.settings.updatedLinkStrukture)
-          .onChange(async (value: 'keepCurrentStructure' | 'usePluginSettings') => {
-            this.plugin.settings.updatedLinkStrukture = value;
+          .onChange(async (value) => {
+            this.plugin.settings.updatedLinkStrukture = value as UpdatedLinkStrukture;
             await this.plugin.saveSettings();
           }),
       );
@@ -173,8 +183,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             long: this.t('settings.bookLength.long'),
           })
           .setValue(this.plugin.settings.bookLength)
-          .onChange(async (value: LinkStyles['bookLength']) => {
-            this.plugin.settings.bookLength = value;
+          .onChange(async (value) => {
+            this.plugin.settings.bookLength = value as BookLength;
             await this.plugin.saveSettings();
             this.updatePreview();
           }),
@@ -315,7 +325,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       cls: 'preset-buttons-container',
     });
 
-    this.presetButton(
+    void this.presetButton(
       presetButtonsContainer,
       this.previewReferences[2],
       {
@@ -325,7 +335,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       'default',
     );
 
-    this.presetButton(
+    void this.presetButton(
       presetButtonsContainer,
       this.previewReferences[2],
       {
@@ -338,7 +348,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       'parentheses',
     );
 
-    this.presetButton(
+    void this.presetButton(
       presetButtonsContainer,
       this.previewReferences[2],
       {
@@ -363,8 +373,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             bold: this.t('settings.linkStyling.fontStyle.bold'),
           })
           .setValue(this.plugin.settings.fontStyle)
-          .onChange(async (value: LinkStyles['fontStyle']) => {
-            this.plugin.settings.fontStyle = value;
+          .onChange(async (value) => {
+            this.plugin.settings.fontStyle = value as LinkStyles['fontStyle'];
             await this.plugin.saveSettings();
             this.updatePreview();
           }),
@@ -493,7 +503,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
       // Render each markdown paragraph in its container
       markdownParagraphs.forEach((markdown, index) => {
-        this.markdownRenderer(`preview-container-${index}`, markdown);
+        void this.markdownRenderer(`preview-container-${index}`, markdown);
       });
     } catch (error) {
       console.debug(error);
