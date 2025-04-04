@@ -2,4 +2,4 @@
 'jw-library-linker': patch
 ---
 
-Add contributing guidelines
+Let tests run on all the branches
