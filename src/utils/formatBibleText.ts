@@ -1,9 +1,9 @@
 import { getBibleBookById } from '@/bibleBooks';
-import type { BibleReference, Language } from '@/types';
+import type { BibleReference, Language, BookLength } from '@/types';
 
 export function formatBibleText(
   reference: BibleReference,
-  short = false,
+  bookLength: BookLength,
   language: Language,
 ): string {
   const bookEntry = getBibleBookById(reference.book, language);
@@ -12,7 +12,7 @@ export function formatBibleText(
     throw new Error('errors.bookNotFound');
   }
 
-  const bookName = short ? bookEntry.shortName : bookEntry.longName;
+  const bookName = bookEntry.name[bookLength];
 
   // Format the verse reference
   const verseRefs = reference.verseRanges!.map(({ start, end }) =>

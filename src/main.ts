@@ -1,19 +1,28 @@
 import { Editor, Notice, Plugin } from 'obsidian';
 import { convertLinks, convertWebLink } from '@/utils/convertLinks';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
-import type { LinkReplacerSettings } from '@/types';
+import type { LinkReplacerSettings, LinkStyles } from '@/types';
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { TranslationService } from '@/services/TranslationService';
 import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
 import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
 
-const DEFAULT_SETTINGS: LinkReplacerSettings = {
-  useShortNames: false,
+export const DEFAULT_STYLES: LinkStyles = {
+  bookLength: 'medium',
+  prefixOutsideLink: '',
+  prefixInsideLink: '',
+  suffixInsideLink: '',
+  suffixOutsideLink: ' ',
+  fontStyle: 'normal',
+};
+
+export const DEFAULT_SETTINGS: LinkReplacerSettings = {
   language: 'E',
   openAutomatically: false,
   updatedLinkStrukture: 'keepCurrentStructure',
   noLanguageParameter: false,
+  ...DEFAULT_STYLES,
 };
 
 export default class JWLibraryLinkerPlugin extends Plugin {

@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 // create test for linkUnlinkedBibleReferences
 
 import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
 import type { LinkReplacerSettings } from '@/types';
+import { TEST_DEFAULT_SETTINGS } from 'mocks/plugin';
 
 interface CallbackArgs {
   changes: Array<{
@@ -17,15 +20,8 @@ describe('linkUnlinkedBibleReferences', () => {
   let callbackMock: jest.Mock<void, [CallbackArgs]>;
 
   const testText = `How can we respond appreciatively to Jehovah for having provided the ransom? By giving his work priority in our life. (Matt. 6:33) After all, Jesus died "so that those who live should live no longer for themselves, but for him who died for them and was raised up." (2 Cor. 5:15) We certainly do not want to miss the purpose of Jehovah's undeserved kindness.​—Read 2 Corinthians 6:1-3, 6-12.`;
-
   beforeEach(() => {
-    settings = {
-      useShortNames: false,
-      language: 'E',
-      openAutomatically: false,
-      updatedLinkStrukture: 'keepCurrentStructure',
-      noLanguageParameter: false,
-    };
+    settings = TEST_DEFAULT_SETTINGS;
 
     callbackMock = jest.fn<void, [CallbackArgs]>();
   });

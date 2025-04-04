@@ -4,11 +4,6 @@ export const de = {
       name: 'Sprache',
       description: 'Wähle die Sprache für die Bibelverweise',
     },
-    useShortNames: {
-      name: 'Kurznamen in Bibelverweisen verwenden',
-      description:
-        'Wenn aktiviert, werden Bibelverweise mit abgekürzten Buchnamen angezeigt (z.B. "1Pe" statt "1. Petrus")',
-    },
     openAutomatically: {
       name: 'Links automatisch öffnen',
       description: 'Verschiebt den Befehl "Link und öffnen" an den Anfang der Liste',
@@ -24,6 +19,49 @@ export const de = {
       name: 'Links sprachunabhängig erstellen',
       description:
         'Wenn aktiviert, werden am Ende eines Links keine Sprachparameter hinzugefügt. Links werden in der jeweiligen Sprache der JW Library geöffnet',
+    },
+    bookLength: {
+      name: 'Linktext-Länge',
+      description: 'Wähle die Länge des Linktextes',
+      short: 'Kurz',
+      medium: 'Mittel',
+      long: 'Lang',
+    },
+    linkStyling: {
+      name: 'Link-Styling',
+      description:
+        'Wähle Zeichen oder Emojis, die nach oder innerhalb des Links eingefügt werden; wähle Schriftstil',
+      reset: 'Zurücksetzen auf Standard: "{{default}}"',
+      prefixOutsideLink: {
+        name: 'Präfix außerhalb des Links',
+        description: 'Text, der vor dem Link hinzugefügt wird',
+      },
+      prefixInsideLink: {
+        name: 'Präfix innerhalb des Links',
+        description: 'Text, der am Anfang des Linktextes hinzugefügt wird',
+      },
+      suffixInsideLink: {
+        name: 'Suffix innerhalb des Links',
+        description: 'Text, der am Ende des Linktextes hinzugefügt wird',
+      },
+      suffixOutsideLink: {
+        name: 'Suffix außerhalb des Links',
+        description: 'Text, der nach dem Link hinzugefügt wird',
+      },
+      presets: {
+        name: 'Stilvorlagen',
+        description: 'Wähle eine Stilvorlage für den Link',
+      },
+      fontStyle: {
+        name: 'Schriftstil',
+        description: 'Wähle den Schriftstil für den Linktext',
+        normal: 'Normal',
+        italic: 'Kursiv',
+        bold: 'Fett',
+      },
+      preview: {
+        name: 'Vorschau',
+      },
     },
   },
   commands: {

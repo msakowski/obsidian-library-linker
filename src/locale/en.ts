@@ -4,11 +4,6 @@ export const en = {
       name: 'Language',
       description: 'Select the language for Bible references',
     },
-    useShortNames: {
-      name: 'Use short names in Bible links',
-      description:
-        'When enabled, Bible references will use abbreviated book names (e.g., "1Pe" instead of "1. Peter")',
-    },
     openAutomatically: {
       name: 'Open links automatically',
       description: 'Moves the "Link and open" command to the top of the list',
@@ -23,6 +18,49 @@ export const en = {
       name: 'Create links language independent',
       description:
         'When enabled, no language parameter is added to the link. Links will open in the language of the JW Library',
+    },
+    bookLength: {
+      name: 'Link text length',
+      description: 'Choose the length of the link text',
+      short: 'Short',
+      medium: 'Medium',
+      long: 'Long',
+    },
+    linkStyling: {
+      name: 'Link Styling',
+      description:
+        'Choose characters or emoji to add before, after or inside the link, Choose font style',
+      reset: 'Reset to default: "{{default}}"',
+      prefixOutsideLink: {
+        name: 'Prefix Outside Link',
+        description: 'Text to add before the link',
+      },
+      prefixInsideLink: {
+        name: 'Prefix Inside Link',
+        description: 'Text to add at the beginning of the link text',
+      },
+      suffixInsideLink: {
+        name: 'Suffix Inside Link',
+        description: 'Text to add at the end of the link text',
+      },
+      suffixOutsideLink: {
+        name: 'Suffix Outside Link',
+        description: 'Text to add after the link',
+      },
+      presets: {
+        name: 'Style Presets',
+        description: 'Choose a preset style for the link',
+      },
+      fontStyle: {
+        name: 'Font Style',
+        description: 'Choose the font style for the link text',
+        normal: 'Normal',
+        italic: 'Italic',
+        bold: 'Bold',
+      },
+      preview: {
+        name: 'Preview',
+      },
     },
   },
   commands: {
