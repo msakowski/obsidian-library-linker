@@ -3,6 +3,15 @@
 import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
 import type { LinkReplacerSettings } from '@/types';
 
+interface CallbackArgs {
+  changes: Array<{
+    from: { line: number; ch: number };
+    to: { line: number; ch: number };
+    text: string;
+  }>;
+  error: string | undefined;
+}
+
 describe('linkUnlinkedBibleReferences', () => {
   let settings: LinkReplacerSettings;
   let callbackMock: jest.Mock;
@@ -26,10 +35,9 @@ describe('linkUnlinkedBibleReferences', () => {
     linkUnlinkedBibleReferences(testText, settings, callbackMock);
 
     // Assert
-    // Check that the callback was called with the changes
     expect(callbackMock).toHaveBeenCalled();
 
-    const callbackArgs = callbackMock.mock.calls[0][0];
+    const callbackArgs = callbackMock.mock.calls[0][0] as CallbackArgs;
     expect(callbackArgs.error).toBeUndefined();
 
     // Should have 3 changes (one for each Bible reference)
@@ -58,7 +66,7 @@ describe('linkUnlinkedBibleReferences', () => {
     linkUnlinkedBibleReferences(textWithExistingLinks, settings, callbackMock);
 
     // Assert
-    const callbackArgs = callbackMock.mock.calls[0][0];
+    const callbackArgs = callbackMock.mock.calls[0][0] as CallbackArgs;
     expect(callbackArgs.error).toBeUndefined();
 
     // Should have found and linked 2 references, not 3
