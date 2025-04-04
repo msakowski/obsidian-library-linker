@@ -17,8 +17,8 @@ const DEFAULT_SETTINGS: LinkReplacerSettings = {
 };
 
 export default class JWLibraryLinkerPlugin extends Plugin {
-  settings: LinkReplacerSettings;
-  private bibleSuggester: BibleReferenceSuggester;
+  settings: LinkReplacerSettings = DEFAULT_SETTINGS;
+  private bibleSuggester: BibleReferenceSuggester = new BibleReferenceSuggester(this);
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
 
   async onload() {
@@ -91,7 +91,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
 
             new Notice(
               this.t('notices.convertedBibleReferences', {
-                count: changes.length,
+                count: String(changes.length),
               }),
             );
           } else {
@@ -139,7 +139,10 @@ export default class JWLibraryLinkerPlugin extends Plugin {
   }
 
   async loadSettings() {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    this.settings = {
+      ...DEFAULT_SETTINGS,
+      ...((await this.loadData()) as LinkReplacerSettings),
+    };
   }
 
   async saveSettings() {

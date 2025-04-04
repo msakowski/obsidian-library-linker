@@ -54,8 +54,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             FI: 'Suomi',
           })
           .setValue(this.plugin.settings.language)
-          .onChange(async (value: Language) => {
-            this.plugin.settings.language = value;
+          .onChange(async (value) => {
+            this.plugin.settings.language = value as Language;
             await this.plugin.saveSettings();
             this.display();
           }),
@@ -92,8 +92,10 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             usePluginSettings: this.t('settings.updatedLinkStrukture.usePluginSettings'),
           })
           .setValue(this.plugin.settings.updatedLinkStrukture)
-          .onChange(async (value: 'keepCurrentStructure' | 'usePluginSettings') => {
-            this.plugin.settings.updatedLinkStrukture = value;
+          .onChange(async (value) => {
+            this.plugin.settings.updatedLinkStrukture = value as
+              | 'keepCurrentStructure'
+              | 'usePluginSettings';
             await this.plugin.saveSettings();
           }),
       );
@@ -182,7 +184,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           container.empty();
 
           // Render markdown to HTML
-          MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
+          void MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
         }
       });
     } catch (error) {
