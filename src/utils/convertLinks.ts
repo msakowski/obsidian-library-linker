@@ -6,7 +6,7 @@ export type ConversionType = 'bible' | 'publication' | 'all' | 'web';
 export function convertLinks(content: string, type: ConversionType = 'all'): string {
   const wikiLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
 
-  return content.replace(wikiLinkRegex, (match, text, url) => {
+  return content.replace(wikiLinkRegex, (match, text: string, url: string) => {
     // Handle Bible references
     if (url.startsWith('jwpub://b/') && (type === 'bible' || type === 'all')) {
       return `[${text}](${convertBibleReference(url)})`;

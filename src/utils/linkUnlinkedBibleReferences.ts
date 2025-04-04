@@ -16,7 +16,7 @@ export function linkUnlinkedBibleReferences(
 ): void {
   const lines = currentContent.split('\n');
 
-  let foundReferences: {
+  const foundReferences: {
     line: number;
     index: number;
     text: string;

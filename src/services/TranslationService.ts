@@ -3,10 +3,12 @@ import { de } from '@/locale/de';
 import { fi } from '@/locale/fi';
 import type { Locale } from '@/types';
 
+type Translation = typeof en;
+
 export class TranslationService {
   private static instance: TranslationService;
   private currentLocale: Locale = 'en';
-  private translations: Record<Locale, typeof en> = {
+  private translations: Record<Locale, Translation> = {
     en,
     de,
     fi,
@@ -44,16 +46,15 @@ export class TranslationService {
 
   public t(key: string, variables: Record<string, string> = {}): string {
     const keys = key.split('.');
-    let value: any = this.translations[this.currentLocale];
+    const translations: Translation = this.translations[this.currentLocale];
 
-    for (const k of keys) {
-      if (value && typeof value === 'object' && k in value) {
-        value = value[k];
-      } else {
-        console.warn(`Translation key not found: ${key}`);
-        return key;
+    // check if key is in translations. key is a dot separated path to the value like 'general.settings.title'
+    const value = keys.reduce((acc: object | string, k) => {
+      if (acc && typeof acc === 'object' && k in acc) {
+        return acc[k as keyof typeof acc];
       }
-    }
+      return acc;
+    }, translations);
 
     if (typeof value === 'string') {
       return this.replaceVariables(value, variables);
@@ -63,7 +64,7 @@ export class TranslationService {
   }
 
   private replaceVariables(text: string, variables: Record<string, string>): string {
-    return text.replace(/\{\{(\w+)\}\}/g, (match, key) => {
+    return text.replace(/\{\{(\w+)\}\}/g, (match, key: string) => {
       return variables[key] || match;
     });
   }

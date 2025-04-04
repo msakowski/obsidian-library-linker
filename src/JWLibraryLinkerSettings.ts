@@ -503,7 +503,14 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
       // Render each markdown paragraph in its container
       markdownParagraphs.forEach((markdown, index) => {
-        void this.markdownRenderer(`preview-container-${index}`, markdown);
+        const container = document.getElementById(`preview-container-${index}`);
+        if (container) {
+          // Clear previous content
+          container.empty();
+
+          // Render markdown to HTML
+          void MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
+        }
       });
     } catch (error) {
       console.debug(error);

@@ -100,7 +100,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
 
             new Notice(
               this.t('notices.convertedBibleReferences', {
-                count: changes.length.toString(),
+                count: String(changes.length),
               }),
             );
           } else {

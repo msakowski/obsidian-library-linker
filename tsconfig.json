@@ -11,6 +11,7 @@
     "importHelpers": true,
     "isolatedModules": true,
     "strictNullChecks": true,
+    "strict": true,
     "lib": ["DOM", "ES5", "ES6", "ES7"],
     "esModuleInterop": true,
     "paths": {
@@ -18,5 +19,6 @@
       "mocks/*": ["./__mocks__/*"]
     }
   },
-  "include": ["src/**/*.ts"]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules/**", "*.js", "*.mjs"]
 }
