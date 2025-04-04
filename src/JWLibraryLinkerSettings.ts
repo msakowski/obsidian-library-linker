@@ -92,8 +92,10 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             usePluginSettings: this.t('settings.updatedLinkStrukture.usePluginSettings'),
           })
           .setValue(this.plugin.settings.updatedLinkStrukture)
-          .onChange(async (value: 'keepCurrentStructure' | 'usePluginSettings') => {
-            this.plugin.settings.updatedLinkStrukture = value;
+          .onChange(async (value) => {
+            this.plugin.settings.updatedLinkStrukture = value as
+              | 'keepCurrentStructure'
+              | 'usePluginSettings';
             await this.plugin.saveSettings();
           }),
       );
