@@ -54,8 +54,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             FI: 'Suomi',
           })
           .setValue(this.plugin.settings.language)
-          .onChange(async (value: Language) => {
-            this.plugin.settings.language = value;
+          .onChange(async (value) => {
+            this.plugin.settings.language = value as Language;
             await this.plugin.saveSettings();
             this.display();
           }),
@@ -171,7 +171,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           container.empty();
 
           // Render markdown to HTML
-          MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
+          void MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
         }
       });
     } catch (error) {
