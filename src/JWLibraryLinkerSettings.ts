@@ -292,8 +292,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           });
       });
 
-    console.log('hellooo');
-
     // Presets row
     const presetContainer = containerEl.createDiv({
       cls: 'setting-item setting-item--presets',
@@ -476,8 +474,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       const markdownLinks = this.previewReferences.map((reference) =>
         convertBibleTextToMarkdownLink(reference, this.plugin.settings),
       );
-
-      console.log(markdownLinks, this.plugin.settings);
 
       if (!markdownLinks.every(Boolean)) {
         throw new Error('Failed to generate one or more markdown links');

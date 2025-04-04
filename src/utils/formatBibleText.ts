@@ -1,9 +1,9 @@
 import { getBibleBookById } from '@/bibleBooks';
-import type { BibleReference, Language, LinkLength } from '@/types';
+import type { BibleReference, Language, BookLength } from '@/types';
 
 export function formatBibleText(
   reference: BibleReference,
-  bookLength: LinkLength,
+  bookLength: BookLength,
   language: Language,
 ): string {
   const bookEntry = getBibleBookById(reference.book, language);

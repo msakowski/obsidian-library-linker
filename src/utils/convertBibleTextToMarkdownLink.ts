@@ -43,8 +43,6 @@ export function convertBibleTextToMarkdownLink(
 
   let bookName = bookEntry.name[settings.bookLength];
 
-  console.log({ bookName });
-
   if (settings.updatedLinkStrukture === 'keepCurrentStructure' && originalText) {
     // remove chapter and verses from original text
     bookName = originalText.replace(/\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*$/, '');
