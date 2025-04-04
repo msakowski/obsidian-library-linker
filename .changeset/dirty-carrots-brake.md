@@ -1,5 +1,5 @@
 ---
-'obsidian-library-linker': patch
+'jw-library-linker': patch
 ---
 
 Add contributing guidelines

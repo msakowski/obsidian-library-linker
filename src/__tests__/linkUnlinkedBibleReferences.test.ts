@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-// create test for linkUnlinkedBibleReferences
-
 import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
 import type { LinkReplacerSettings } from '@/types';
 import { TEST_DEFAULT_SETTINGS } from 'mocks/plugin';
