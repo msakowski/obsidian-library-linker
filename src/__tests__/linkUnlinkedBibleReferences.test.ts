@@ -14,7 +14,7 @@ interface CallbackArgs {
 
 describe('linkUnlinkedBibleReferences', () => {
   let settings: LinkReplacerSettings;
-  let callbackMock: jest.Mock;
+  let callbackMock: jest.Mock<void, [CallbackArgs]>;
 
   const testText = `How can we respond appreciatively to Jehovah for having provided the ransom? By giving his work priority in our life. (Matt. 6:33) After all, Jesus died "so that those who live should live no longer for themselves, but for him who died for them and was raised up." (2 Cor. 5:15) We certainly do not want to miss the purpose of Jehovah's undeserved kindness.​—Read 2 Corinthians 6:1-3, 6-12.`;
 
@@ -27,7 +27,7 @@ describe('linkUnlinkedBibleReferences', () => {
       noLanguageParameter: false,
     };
 
-    callbackMock = jest.fn();
+    callbackMock = jest.fn<void, [CallbackArgs]>();
   });
 
   test('should find and create links for Bible references', () => {
@@ -37,7 +37,7 @@ describe('linkUnlinkedBibleReferences', () => {
     // Assert
     expect(callbackMock).toHaveBeenCalled();
 
-    const callbackArgs = callbackMock.mock.calls[0][0] as CallbackArgs;
+    const callbackArgs = callbackMock.mock.calls[0][0];
     expect(callbackArgs.error).toBeUndefined();
 
     // Should have 3 changes (one for each Bible reference)
@@ -66,7 +66,7 @@ describe('linkUnlinkedBibleReferences', () => {
     linkUnlinkedBibleReferences(textWithExistingLinks, settings, callbackMock);
 
     // Assert
-    const callbackArgs = callbackMock.mock.calls[0][0] as CallbackArgs;
+    const callbackArgs = callbackMock.mock.calls[0][0];
     expect(callbackArgs.error).toBeUndefined();
 
     // Should have found and linked 2 references, not 3
