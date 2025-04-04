@@ -13,6 +13,13 @@ export const de = {
       name: 'Links automatisch öffnen',
       description: 'Verschiebt den Befehl "Link und öffnen" an den Anfang der Liste',
     },
+    updatedLinkStrukture: {
+      name: 'Linktext beibehalten',
+      description:
+        'Wenn aktiviert, wird der aktuelle Linktext beim Umwandeln von Bibeltexten beibehalten',
+      keepCurrentStructure: 'Aktuellen Linktext beibehalten',
+      usePluginSettings: 'Plugin-Einstellungen verwenden',
+    },
     noLanguageParameter: {
       name: 'Links sprachunabhängig erstellen',
       description:
@@ -26,9 +33,12 @@ export const de = {
     convertBibleReference: 'Bibelverweis in JW Library-Link umwandeln',
     convertWebLink: 'jw.org-Link in Library-Link umwandeln',
     replaceWebLinks: 'jw.org-Links in Library-Links umwandeln',
+    linkUnlinkedBibleReferences: 'Unverlinkte Bibeltexte verlinken',
   },
   notices: {
     multipleBooksFound: 'Mehrere Bibelbücher gefunden: {{books}}',
+    noBibleReferencesFound: 'Keine Bibeltexte im Dokument gefunden',
+    convertedBibleReferences: '{{count}} Bibeltexte umgewandelt',
   },
   suggestions: {
     createLink: 'Link erstellen: {{text}}',
