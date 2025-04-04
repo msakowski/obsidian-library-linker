@@ -14,7 +14,8 @@
     "lib": ["DOM", "ES5", "ES6", "ES7"],
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "mocks/*": ["./__mocks__/*"]
     }
   },
   "include": ["src/**/*.ts"]
