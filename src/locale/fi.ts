@@ -13,6 +13,18 @@ export const fi = {
       name: 'Avaa linkit automaattisesti',
       description: 'Siirtää "Linkitä ja avaa" -komennon listan kärkeen',
     },
+    updatedLinkStrukture: {
+      name: 'Säilytä linkkiteksti',
+      description:
+        'Kun tämä on käytössä, nykyinen linkkiteksti säilytetään, kun Raamatun tekstiä muunnetaan',
+      keepCurrentStructure: 'Säilytä nykyinen linkkiteksti',
+      usePluginSettings: 'Käytä plugin-asetuksia',
+    },
+    noLanguageParameter: {
+      name: 'Luo linkit kielestä riippumattomiksi',
+      description:
+        'Kun tämä on käytössä, linkkiin ei lisätä kieliparametria. Linkit avautuvat JW-kirjaston kielellä',
+    },
   },
   commands: {
     replaceLinks: 'Muunna kaikki linkit',
@@ -20,9 +32,13 @@ export const fi = {
     replacePublicationLinks: 'Muunna julkaisulinkit',
     convertBibleReference: 'Muunna raamatunviite kirjastolinkiksi',
     convertWebLink: 'Muunna jw.org-linkki kirjastolinkiksi',
+    replaceWebLinks: 'Muunna kaikki jw.org-linkit kirjastolinkeiksi',
+    linkUnlinkedBibleReferences: 'Linkitä linkittömät raamatunviitteet',
   },
   notices: {
     multipleBooksFound: 'Useita raamatunkirjoja löytyi: {{books}}',
+    noBibleReferencesFound: 'Dokumentista ei löytynyt raamatunviitteitä',
+    convertedBibleReferences: 'Muunnettu {{count}} raamatunviitettä',
   },
   suggestions: {
     createLink: 'Luo linkki: {{text}}',

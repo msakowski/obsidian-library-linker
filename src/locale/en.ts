@@ -13,6 +13,12 @@ export const en = {
       name: 'Open links automatically',
       description: 'Moves the "Link and open" command to the top of the list',
     },
+    updatedLinkStrukture: {
+      name: 'Keep link text',
+      description: 'When enabled, the current link text will be kept when converting Bible text',
+      keepCurrentStructure: 'Keep current structure',
+      usePluginSettings: 'Use plugin settings',
+    },
     noLanguageParameter: {
       name: 'Create links language independent',
       description:
@@ -26,9 +32,12 @@ export const en = {
     replaceWebLinks: 'Convert all jw.org links to library links',
     convertWebLink: 'Convert selected jw.org link to Library link',
     convertBibleReference: 'Convert Bible reference to Library link',
+    linkUnlinkedBibleReferences: 'Link unlinked Bible references',
   },
   notices: {
     multipleBooksFound: 'Multiple Bible books found: {{books}}',
+    noBibleReferencesFound: 'No Bible references found in the document',
+    convertedBibleReferences: 'Converted {{count}} Bible references',
   },
   suggestions: {
     createLink: 'Create link: {{text}}',
