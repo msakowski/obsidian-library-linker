@@ -105,17 +105,10 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
       // If there are multiple links, add individual open options
       if (hasMultipleLinks) {
-        const verseRanges = reference.verseRanges!.map(({ start, end }) =>
-          start === end ? start.toString() : `${start}-${end}`,
-        );
-
-        verseRanges.forEach((range, i) => {
-          suggestions.push({
-            text: query,
-            command: 'open',
-            description: this.t('suggestions.createAndOpenVerse', { verse: range }),
-            linkIndex: i,
-          });
+        suggestions.push({
+          text: query,
+          command: 'open',
+          description: this.t('suggestions.createMultipleAndOpenFirst', { text: formattedText }),
         });
       } else {
         suggestions.push({
