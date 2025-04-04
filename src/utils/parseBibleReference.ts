@@ -90,7 +90,10 @@ function parseVerseRanges(versePart: string): VerseRange[] {
 }
 
 export function parseBibleReference(input: string, language: Language): BibleReference {
-  input = input.trim().toLowerCase();
+  input = input
+    .trim()
+    .toLowerCase()
+    .replace(/[\.\s]/g, '');
 
   // Match book, chapter, and verses part
   const match = input.match(/^([a-z0-9äöüß]+?)\s*(\d+)\s*:\s*(.+)$/i);

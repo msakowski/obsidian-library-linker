@@ -10,16 +10,9 @@ import { formatBibleText } from '@/utils/formatBibleText';
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { TranslationService } from '@/services/TranslationService';
-import {
-  convertBibleTextToLink,
-  convertBibleTextToMarkdownLink,
-} from '@/utils/convertBibleTextToLink';
+import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type JWLibraryLinkerPlugin from '@/main';
-
-export const matchingBibleReferenceRegex =
-  /^(?:[1-5]?[A-Za-zäöü]{2,24}\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*,?\s*)?$/i;
-// 24 random number. Apostelgeschichte is 17 characters long.
-// should be enough for language support.
+import { bibleReferenceRegex } from '@/utils/bibleReferenceRegex';
 
 export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   plugin: JWLibraryLinkerPlugin;
@@ -59,10 +52,6 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   getSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
     const query = context.query;
 
-    // Check if the query has the minimum structure needed for parsing
-    // This regex checks for book, chapter, and at least one verse
-    const completeReferenceRegex = /^([a-z0-9äöüß]+?)\s*(\d+)\s*:\s*(\d+)/i;
-
     // If query is empty (just typed "/b "), show a simple typing message without the {text} placeholder
     if (query.length === 0) {
       return [
@@ -75,7 +64,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     }
 
     // If it's a complete reference, parse and show detailed suggestions
-    if (query.match(completeReferenceRegex)) {
+    if (query.match(bibleReferenceRegex)) {
       let reference: BibleReference | null = null;
 
       try {
@@ -170,12 +159,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       : this.plugin.settings.language;
 
     // Convert the Bible reference to a link
-    const convertedLink = convertBibleTextToMarkdownLink(
-      reference,
-      this.plugin.settings.useShortNames,
-      this.plugin.settings.language,
-      linkLanguage,
-    );
+    const convertedLink = convertBibleTextToMarkdownLink(reference, this.plugin.settings);
 
     if (suggestion.command === 'typing' || !convertedLink) {
       return;
@@ -186,7 +170,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
     // Handle opening links
     if (suggestion.command === 'open') {
-      const url = convertBibleTextToLink(reference, linkLanguage);
+      const url = formatJWLibraryLink(reference, linkLanguage);
       if (Array.isArray(url)) {
         // For open-specific, open the specified link, otherwise open first
         window.open(url[suggestion.linkIndex || 0]);

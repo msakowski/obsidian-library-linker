@@ -1,8 +1,8 @@
 import { PluginSettingTab, App, Setting, MarkdownRenderer } from 'obsidian';
-import JWLibraryLinkerPlugin from './main';
-import { TranslationService } from './services/TranslationService';
-import type { Language, BibleReference } from './types';
-import { convertBibleTextToMarkdownLink } from './utils/convertBibleTextToLink';
+import JWLibraryLinkerPlugin from '@/main';
+import { TranslationService } from '@/services/TranslationService';
+import type { Language, BibleReference } from '@/types';
+import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 
 export class JWLibraryLinkerSettings extends PluginSettingTab {
   plugin: JWLibraryLinkerPlugin;
@@ -83,6 +83,22 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       );
 
     new Setting(containerEl)
+      .setName(this.t('settings.updatedLinkStrukture.name'))
+      .setDesc(this.t('settings.updatedLinkStrukture.description'))
+      .addDropdown((dropdown) =>
+        dropdown
+          .addOptions({
+            keepCurrentStructure: this.t('settings.updatedLinkStrukture.keepCurrentStructure'),
+            usePluginSettings: this.t('settings.updatedLinkStrukture.usePluginSettings'),
+          })
+          .setValue(this.plugin.settings.updatedLinkStrukture)
+          .onChange(async (value: 'keepCurrentStructure' | 'usePluginSettings') => {
+            this.plugin.settings.updatedLinkStrukture = value;
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(containerEl)
       .setName(this.t('settings.noLanguageParameter.name'))
       .setDesc(this.t('settings.noLanguageParameter.description'))
       .addToggle((toggle) =>
@@ -139,12 +155,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     try {
       // Generate markdown links for all references first
       const markdownLinks = this.previewReferences.map((reference) =>
-        convertBibleTextToMarkdownLink(
-          reference,
-          this.plugin.settings.useShortNames,
-          this.plugin.settings.language,
-          this.plugin.settings.noLanguageParameter ? undefined : this.plugin.settings.language,
-        ),
+        convertBibleTextToMarkdownLink(reference, this.plugin.settings),
       );
 
       if (!markdownLinks.every(Boolean)) {

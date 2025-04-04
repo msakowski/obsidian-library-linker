@@ -1,16 +1,18 @@
-import { Editor, Plugin } from 'obsidian';
+import { Editor, Notice, Plugin } from 'obsidian';
 import { convertLinks, convertWebLink } from '@/utils/convertLinks';
-import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToLink';
+import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type { LinkReplacerSettings } from '@/types';
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { TranslationService } from '@/services/TranslationService';
-import { JWLibraryLinkerSettings } from './JWLibraryLinkerSettings';
+import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
+import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
 
 const DEFAULT_SETTINGS: LinkReplacerSettings = {
   useShortNames: false,
   language: 'E',
   openAutomatically: false,
+  updatedLinkStrukture: 'keepCurrentStructure',
   noLanguageParameter: false,
 };
 
@@ -76,6 +78,29 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       },
     });
 
+    // Add command to link unlinked Bible references
+    this.addCommand({
+      id: 'link-unlinked-bible-references',
+      name: this.t('commands.linkUnlinkedBibleReferences'),
+      editorCallback: (editor: Editor) => {
+        linkUnlinkedBibleReferences(editor.getValue(), this.settings, ({ changes, error }) => {
+          if (changes.length > 0) {
+            editor.transaction({
+              changes,
+            });
+
+            new Notice(
+              this.t('notices.convertedBibleReferences', {
+                count: changes.length,
+              }),
+            );
+          } else {
+            new Notice(this.t(error || 'notices.noBibleReferencesFound'));
+          }
+        });
+      },
+    });
+
     // Add command for Bible text conversion
     this.addCommand({
       id: 'convert-bible-text',
@@ -84,12 +109,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
         const selection = editor.getSelection();
         if (selection) {
           const reference = parseBibleReference(selection, this.settings.language);
-          const convertedLink = convertBibleTextToMarkdownLink(
-            reference,
-            this.settings.useShortNames,
-            this.settings.language,
-            this.settings.noLanguageParameter ? undefined : this.settings.language,
-          );
+          const convertedLink = convertBibleTextToMarkdownLink(reference, this.settings);
           if (convertedLink) {
             editor.replaceSelection(convertedLink);
           }
