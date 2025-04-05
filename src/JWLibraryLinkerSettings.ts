@@ -7,10 +7,10 @@ import type {
   LinkStyles,
   updatedLinkStructure,
   BookLength,
+  UpdatedLinkStructure,
+  LinkReplacerSettings,
 } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
-
-type UpdatedLinkStructure = 'keepCurrentStructure' | 'usePluginSettings';
 
 export class JWLibraryLinkerSettings extends PluginSettingTab {
   plugin: JWLibraryLinkerPlugin;
@@ -141,8 +141,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             usePluginSettings: this.t('settings.updatedLinkStructure.usePluginSettings'),
           })
           .setValue(this.plugin.settings.updatedLinkStructure)
-          .onChange(async (value: UpdatedLinkStructure) => {
-            this.plugin.settings.updatedLinkStructure = value;
+          .onChange(async (value) => {
+            this.plugin.settings.updatedLinkStructure = value as UpdatedLinkStructure;
             await this.plugin.saveSettings();
           }),
       );
