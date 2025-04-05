@@ -8,7 +8,7 @@ export const en = {
       name: 'Open links automatically',
       description: 'Moves the "Link and open" command to the top of the list',
     },
-    updatedLinkStrukture: {
+    updatedLinkStructure: {
       name: 'Keep link text',
       description: 'When enabled, the current link text will be kept when converting Bible text',
       keepCurrentStructure: 'Keep current structure',

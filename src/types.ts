@@ -15,12 +15,12 @@ export interface LinkStyles {
   fontStyle: 'normal' | 'italic' | 'bold';
 }
 
-export type UpdatedLinkStrukture = 'keepCurrentStructure' | 'usePluginSettings';
+export type UpdatedLinkStructure = 'keepCurrentStructure' | 'usePluginSettings';
 
 export interface LinkReplacerSettings extends LinkStyles {
   language: Language;
   openAutomatically: boolean;
-  updatedLinkStrukture: UpdatedLinkStrukture;
+  updatedLinkStructure: UpdatedLinkStructure;
   noLanguageParameter: boolean;
 }
 

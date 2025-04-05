@@ -8,7 +8,7 @@ export const de = {
       name: 'Links automatisch öffnen',
       description: 'Verschiebt den Befehl "Link und öffnen" an den Anfang der Liste',
     },
-    updatedLinkStrukture: {
+    updatedLinkStructure: {
       name: 'Linktext beibehalten',
       description:
         'Wenn aktiviert, wird der aktuelle Linktext beim Umwandeln von Bibeltexten beibehalten',

@@ -20,7 +20,7 @@ export const DEFAULT_STYLES: LinkStyles = {
 export const DEFAULT_SETTINGS: LinkReplacerSettings = {
   language: 'E',
   openAutomatically: false,
-  updatedLinkStrukture: 'keepCurrentStructure',
+  updatedLinkStructure: 'keepCurrentStructure',
   noLanguageParameter: false,
   ...DEFAULT_STYLES,
 };

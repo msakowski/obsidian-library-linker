@@ -8,7 +8,7 @@ export const fi = {
       name: 'Avaa linkit automaattisesti',
       description: 'Siirtää "Linkitä ja avaa" -komennon listan kärkeen',
     },
-    updatedLinkStrukture: {
+    updatedLinkStructure: {
       name: 'Säilytä linkkiteksti',
       description:
         'Kun tämä on käytössä, nykyinen linkkiteksti säilytetään, kun Raamatun tekstiä muunnetaan',
