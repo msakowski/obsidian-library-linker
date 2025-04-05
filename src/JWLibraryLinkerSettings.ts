@@ -5,7 +5,6 @@ import type {
   Language,
   BibleReference,
   LinkStyles,
-  updatedLinkStructure,
   BookLength,
   UpdatedLinkStructure,
   LinkReplacerSettings,
