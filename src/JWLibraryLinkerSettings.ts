@@ -512,13 +512,10 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           void MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
         }
       });
-    } catch (error: unknown) {
-      // Properly type the error
-      if (error instanceof Error) {
-        console.debug(error.message);
-      } else {
-        console.debug('An unknown error occurred');
-      }
+    } catch (err: unknown) {
+      // Safe error logging
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      console.debug(errorMessage);
     }
   }
 }
