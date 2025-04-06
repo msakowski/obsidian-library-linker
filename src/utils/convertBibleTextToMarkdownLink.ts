@@ -20,8 +20,8 @@ function applyFontStyle(text: string, fontStyle: LinkReplacerSettings['fontStyle
 
 export function convertBibleTextToMarkdownLink(
   reference: BibleReference,
-  settings: Omit<LinkReplacerSettings, 'updatedLinkStrukture' | 'openAutomatically'> & {
-    updatedLinkStrukture?: LinkReplacerSettings['updatedLinkStrukture'];
+  settings: Omit<LinkReplacerSettings, 'updatedLinkStructure' | 'openAutomatically'> & {
+    updatedLinkStructure?: LinkReplacerSettings['updatedLinkStructure'];
   } & Partial<LinkStyles>,
   originalText?: string,
 ): string | undefined {
@@ -43,7 +43,7 @@ export function convertBibleTextToMarkdownLink(
 
   let bookName = bookEntry.name[settings.bookLength];
 
-  if (settings.updatedLinkStrukture === 'keepCurrentStructure' && originalText) {
+  if (settings.updatedLinkStructure === 'keepCurrentStructure' && originalText) {
     // remove chapter and verses from original text
     bookName = originalText.replace(/\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*$/, '');
   }
@@ -86,7 +86,7 @@ export function convertBibleTextToMarkdownLink(
     return `${prefixOutside}${styledLinks}${suffixOutside}`;
   }
 
-  if (settings.updatedLinkStrukture === 'keepCurrentStructure' && originalText) {
+  if (settings.updatedLinkStructure === 'keepCurrentStructure' && originalText) {
     const linkText = applyFontStyle(`${prefixInside}${originalText}${suffixInside}`, fontStyle);
     return `${prefixOutside}[${linkText}](${links})${suffixOutside}`;
   }
