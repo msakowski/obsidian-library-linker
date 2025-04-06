@@ -1,4 +1,4 @@
-name: Create GitHub Release from Changesets PR
+name: Release
 
 on:
   push:
