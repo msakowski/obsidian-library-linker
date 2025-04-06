@@ -7,7 +7,6 @@ import type {
   LinkStyles,
   BookLength,
   UpdatedLinkStructure,
-  LinkReplacerSettings,
 } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 
