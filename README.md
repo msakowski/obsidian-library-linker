@@ -65,3 +65,11 @@ The plugin adds the following commands to Obsidian:
 1. Open the command palette (Ctrl/Cmd + P)
 2. Search for "Convert link"
 3. Choose the desired replacement option
+
+## Contributing
+
+If you have ideas or want to help improve this plugin take a look at our [contribution guidelines](https://github.com/msakowski/obsidian-library-linker/blob/main/CONTRIBUTING.md)
+
+## Known Issues
+
+- https://github.com/tadashi-aikawa/obsidian-various-complements-plugin
