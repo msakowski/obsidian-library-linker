@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.2.1
+
+### Patch Changes
+
+- [#85](https://github.com/msakowski/obsidian-library-linker/pull/85) [`e947567`](https://github.com/msakowski/obsidian-library-linker/commit/e9475670991275f26510cbc79e850842d6b9152b) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Link contributing guidelines in readme
+
 ## 0.2.0
 
 ### Minor Changes
