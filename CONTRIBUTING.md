@@ -12,7 +12,7 @@ Our development approach is driven by the following core principles:
 - We strive to keep the plugin lightweight and free from unnecessary complexity.
 - Our design philosophy is opinionated—favoring a minimalist, keyboard-centric experience—while remaining open to thoughtful enhancements.
 - Writing should be a distraction-free experience.
-- We aim to be compatible with other well-established plugins and avoid interference. Please report issues if found.
+- We aim to be compatible with other well-established plugins and avoid interference. Please report issues if found. [Known issues](https://github.com/msakowski/obsidian-library-linker/#known-issues)
 - We respect copyright laws and do not expose or reveal copyrighted content from JW Library.
 
 ## Contribution Process

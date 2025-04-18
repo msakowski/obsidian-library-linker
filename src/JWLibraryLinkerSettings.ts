@@ -5,8 +5,8 @@ import type {
   Language,
   BibleReference,
   LinkStyles,
-  UpdatedLinkStrukture,
   BookLength,
+  UpdatedLinkStructure,
 } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 
@@ -142,17 +142,17 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName(this.t('settings.updatedLinkStrukture.name'))
-      .setDesc(this.t('settings.updatedLinkStrukture.description'))
+      .setName(this.t('settings.updatedLinkStructure.name'))
+      .setDesc(this.t('settings.updatedLinkStructure.description'))
       .addDropdown((dropdown) =>
         dropdown
           .addOptions({
-            keepCurrentStructure: this.t('settings.updatedLinkStrukture.keepCurrentStructure'),
-            usePluginSettings: this.t('settings.updatedLinkStrukture.usePluginSettings'),
+            keepCurrentStructure: this.t('settings.updatedLinkStructure.keepCurrentStructure'),
+            usePluginSettings: this.t('settings.updatedLinkStructure.usePluginSettings'),
           })
-          .setValue(this.plugin.settings.updatedLinkStrukture)
+          .setValue(this.plugin.settings.updatedLinkStructure)
           .onChange(async (value) => {
-            this.plugin.settings.updatedLinkStrukture = value as UpdatedLinkStrukture;
+            this.plugin.settings.updatedLinkStructure = value as UpdatedLinkStructure;
             await this.plugin.saveSettings();
           }),
       );
@@ -459,8 +459,10 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           this.plugin.addChild(component);
         }
       });
-    } catch (error) {
-      console.debug(error);
+    } catch (err: unknown) {
+      // Safe error logging
+      const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+      console.debug(errorMessage);
     }
   }
 }

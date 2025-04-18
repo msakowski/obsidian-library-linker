@@ -1,5 +1,33 @@
 # obsidian-library-linker
 
+## 0.2.1
+
+### Patch Changes
+
+- [#85](https://github.com/msakowski/obsidian-library-linker/pull/85) [`e947567`](https://github.com/msakowski/obsidian-library-linker/commit/e9475670991275f26510cbc79e850842d6b9152b) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Link contributing guidelines in readme
+
+## 0.2.0
+
+### Minor Changes
+
+- [#79](https://github.com/msakowski/obsidian-library-linker/pull/79) [`7cd8eef`](https://github.com/msakowski/obsidian-library-linker/commit/7cd8eefddddb1d18f55899fce1e84f03c63be804) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add options to style links
+
+- [#74](https://github.com/msakowski/obsidian-library-linker/pull/74) [`789950c`](https://github.com/msakowski/obsidian-library-linker/commit/789950c29ec954bc212f945e368637f854142472) Thanks [@dkottis](https://github.com/dkottis)! - Create bible links without language parameter
+
+- [#44](https://github.com/msakowski/obsidian-library-linker/pull/44) [`79e6235`](https://github.com/msakowski/obsidian-library-linker/commit/79e62350a3c2530778e7be9d8f146afdffe743b9) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add new command to link unlinked bible texts
+
+### Patch Changes
+
+- [#78](https://github.com/msakowski/obsidian-library-linker/pull/78) [`4eaaebe`](https://github.com/msakowski/obsidian-library-linker/commit/4eaaebe5c216b035469184574382f473f5b407a8) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Remove unused translations
+
+- [#62](https://github.com/msakowski/obsidian-library-linker/pull/62) [`eabdcbb`](https://github.com/msakowski/obsidian-library-linker/commit/eabdcbbe32d54ed213716f1e138c0e16cc6cfe0c) Thanks [@msakowski](https://github.com/msakowski)! - Add contributing guidelines
+
+- [#80](https://github.com/msakowski/obsidian-library-linker/pull/80) [`609c022`](https://github.com/msakowski/obsidian-library-linker/commit/609c022e497d4aaee0cc1403b9b5177ef21c3e15) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Update linting
+
+- [#81](https://github.com/msakowski/obsidian-library-linker/pull/81) [`eef8566`](https://github.com/msakowski/obsidian-library-linker/commit/eef85663cc74186222b98edc127e16e5c9eeb89a) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Let tests run on all the branches
+
+- [#78](https://github.com/msakowski/obsidian-library-linker/pull/78) [`4eaaebe`](https://github.com/msakowski/obsidian-library-linker/commit/4eaaebe5c216b035469184574382f473f5b407a8) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Fix multiple ranges suggestion
+
 ## 0.1.5
 
 ### Patch Changes
