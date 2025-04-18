@@ -27,32 +27,32 @@ export const en = {
       long: 'Long',
     },
     linkStyling: {
-      name: 'Link Styling',
+      name: 'Link styling',
       description:
         'Choose characters or emoji to add before, after or inside the link, Choose font style',
       reset: 'Reset to default: "{{default}}"',
       prefixOutsideLink: {
-        name: 'Prefix Outside Link',
+        name: 'Prefix outside link',
         description: 'Text to add before the link',
       },
       prefixInsideLink: {
-        name: 'Prefix Inside Link',
+        name: 'Prefix inside link',
         description: 'Text to add at the beginning of the link text',
       },
       suffixInsideLink: {
-        name: 'Suffix Inside Link',
+        name: 'Suffix inside link',
         description: 'Text to add at the end of the link text',
       },
       suffixOutsideLink: {
-        name: 'Suffix Outside Link',
+        name: 'Suffix outside link',
         description: 'Text to add after the link',
       },
       presets: {
-        name: 'Style Presets',
+        name: 'Style presets',
         description: 'Choose a preset style for the link',
       },
       fontStyle: {
-        name: 'Font Style',
+        name: 'Font style',
         description: 'Choose the font style for the link text',
         normal: 'Normal',
         italic: 'Italic',
