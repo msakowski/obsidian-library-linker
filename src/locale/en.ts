@@ -68,8 +68,8 @@ export const en = {
     replaceBibleLinks: 'Convert Bible verse links',
     replacePublicationLinks: 'Convert publication links',
     replaceWebLinks: 'Convert all jw.org links to library links',
-    convertWebLink: 'Convert selected jw.org link to Library link',
-    convertBibleReference: 'Convert Bible reference to Library link',
+    convertWebLink: 'Convert selected jw.org link to library link',
+    convertBibleReference: 'Convert Bible reference to library link',
     linkUnlinkedBibleReferences: 'Link unlinked Bible references',
   },
   notices: {
