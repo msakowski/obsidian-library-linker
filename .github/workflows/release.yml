@@ -104,7 +104,7 @@ jobs:
         run: |
           npm run build
           mkdir ${{ env.PLUGIN_NAME }}
-          cp main.js manifest.json ${{ env.PLUGIN_NAME }}
+          cp main.js styles.css manifest.json ${{ env.PLUGIN_NAME }}
           zip -r ${{ env.PLUGIN_NAME }}-${{ github.ref_name }}.zip ${{ env.PLUGIN_NAME }}
           ls
 
@@ -117,6 +117,7 @@ jobs:
           files: |
             ${{ env.PLUGIN_NAME }}-${{ github.ref_name }}.zip
             main.js
+            styles.css
             manifest.json
         env:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
