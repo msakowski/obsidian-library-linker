@@ -1,4 +1,4 @@
-import { PluginSettingTab, App, Setting, MarkdownRenderer } from 'obsidian';
+import { PluginSettingTab, App, Setting, MarkdownRenderer, Component } from 'obsidian';
 import JWLibraryLinkerPlugin, { DEFAULT_SETTINGS, DEFAULT_STYLES } from '@/main';
 import { TranslationService } from '@/services/TranslationService';
 import type {
@@ -10,6 +10,12 @@ import type {
 } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 
+class MarkdownComponent extends Component {
+  constructor() {
+    super();
+  }
+}
+
 export class JWLibraryLinkerSettings extends PluginSettingTab {
   plugin: JWLibraryLinkerPlugin;
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
@@ -20,8 +26,14 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       // Clear previous content
       container.empty();
 
+      // Create a new component instance for this render
+      const component = new MarkdownComponent();
+
       // Render markdown to HTML
-      await MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
+      await MarkdownRenderer.render(this.app, markdown, container, '.', component);
+
+      // Register the component to ensure proper cleanup
+      this.plugin.addChild(component);
     }
   };
 
@@ -98,7 +110,11 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
   }
 
   display(): void {
-    const { containerEl } = this;
+    const { containerEl: container } = this;
+    const containerEl = container.createDiv({
+      cls: 'jw-library-linker',
+    });
+
     containerEl.empty();
 
     new Setting(containerEl)
@@ -400,77 +416,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       });
     }
 
-    // Add some CSS for the preview section
-    const style = document.createElement('style');
-    style.textContent = `
-      b, strong {
-        font-weight: bolder;
-      }
-
-      .setting-item--input input {
-        width: 8ch;
-      }
-
-      .setting-item--preview,
-      .setting-item--presets,
-      .setting-item--linkStyling {
-        display: block;
-      }
-
-      .setting-item--preview {
-        padding-top: 32px;
-      }
-
-      .setting-item--presets {
-        justify-content: space-between;
-
-        .setting-item-heading {
-          white-space: nowrap;
-          margin-top: 0 !important;
-        }
-      }
-
-      .preset-buttons-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 12px;
-      }
-
-      .preset-button {
-        --text-color: var(--text-normal);
-        -webkit-app-region: no-drag;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: var(--font-ui-small);
-        border-radius: var(--button-radius);
-        border: 0;
-        padding: var(--size-4-1) var(--size-4-3);
-        height: var(--input-height);
-        font-family: var(--font-interface);
-        font-weight: var(--input-font-weight);
-        cursor: var(--cursor);
-        outline: none;
-        user-select: none;
-        white-space: nowrap;
-        color: var(--text-color);
-        background-color: var(--interactive-normal);
-        box-shadow: var(--input-shadow);
-
-        &:hover {
-          color: inherit;
-          cursor: pointer;
-          text-decoration: none;
-        }
-
-        p {
-          margin: 0;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-
     // Initialize preview
     this.updatePreview();
   }
@@ -508,8 +453,14 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           // Clear previous content
           container.empty();
 
+          // Create a new component instance for this render
+          const component = new MarkdownComponent();
+
           // Render markdown to HTML
-          void MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
+          void MarkdownRenderer.render(this.app, markdown, container, '.', component);
+
+          // Register the component to ensure proper cleanup
+          this.plugin.addChild(component);
         }
       });
     } catch (err: unknown) {
