@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.3.1
+
+### Patch Changes
+
+- [#92](https://github.com/msakowski/obsidian-library-linker/pull/92) [`768ae57`](https://github.com/msakowski/obsidian-library-linker/commit/768ae572a2fd33a2eaaa0760bf4641c7d10e3ed0) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add styles.css to release
+
 ## 0.3.0
 
 ### Minor Changes
