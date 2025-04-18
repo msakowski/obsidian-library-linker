@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.3.0
+
+### Minor Changes
+
+- [#89](https://github.com/msakowski/obsidian-library-linker/pull/89) [`fda4a39`](https://github.com/msakowski/obsidian-library-linker/commit/fda4a39def8d69481fff32d9ab45c07732e42303) Thanks [@msakowski](https://github.com/msakowski)! - Move styling to styles.css, fix captilization, add MarkdownComponent
+
 ## 0.2.1
 
 ### Patch Changes
