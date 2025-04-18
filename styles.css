@@ -1,98 +1,99 @@
-/* Preview section styles */
-.setting-item--linkStyling {
-  margin-top: 1em;
-  padding-top: 1em;
-  border-top: 1px solid var(--background-modifier-border);
-}
+.jw-library-linker {
+  .setting-item--linkStyling {
+    margin-top: 1em;
+    padding-top: 1em;
+    border-top: 1px solid var(--background-modifier-border);
+  }
 
-.setting-item-heading {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: 0.5em;
-}
+  .setting-item-heading {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
 
-.setting-item-description {
-  color: var(--text-muted);
-  margin-bottom: 1em;
-}
+  .setting-item-description {
+    color: var(--text-muted);
+    margin-bottom: 1em;
+  }
 
-/* Input and preview styles */
-.setting-item--input input {
-  width: 8ch;
-}
+  /* Input and preview styles */
+  .setting-item--input input {
+    width: 8ch;
+  }
 
-.setting-item--preview,
-.setting-item--presets,
-.setting-item--linkStyling {
-  display: block;
-}
+  .setting-item--preview,
+  .setting-item--presets,
+  .setting-item--linkStyling {
+    display: block;
+  }
 
-.setting-item--preview {
-  padding-top: 32px;
-}
+  .setting-item--preview {
+    padding-top: 32px;
+  }
 
-/* Presets section styles */
-.setting-item--presets {
-  justify-content: space-between;
-}
+  /* Presets section styles */
+  .setting-item--presets {
+    justify-content: space-between;
+  }
 
-.setting-item--presets .setting-item-heading {
-  white-space: nowrap;
-  margin-top: 0 !important;
-}
+  .setting-item--presets .setting-item-heading {
+    white-space: nowrap;
+    margin-top: 0 !important;
+  }
 
-.preset-buttons-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 12px;
-}
+  .preset-buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+  }
 
-/* Preset button styles */
-.preset-button {
-  --text-color: var(--text-normal);
-  -webkit-app-region: no-drag;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--font-ui-small);
-  border-radius: var(--button-radius);
-  border: 0;
-  padding: var(--size-4-1) var(--size-4-3);
-  height: var(--input-height);
-  font-family: var(--font-interface);
-  font-weight: var(--input-font-weight);
-  cursor: var(--cursor);
-  outline: none;
-  user-select: none;
-  white-space: nowrap;
-  color: var(--text-color);
-  background-color: var(--interactive-normal);
-  box-shadow: var(--input-shadow);
-  transition: background-color 0.2s ease;
-}
+  /* Preset button styles */
+  .preset-button {
+    --text-color: var(--text-normal);
+    -webkit-app-region: no-drag;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-ui-small);
+    border-radius: var(--button-radius);
+    border: 0;
+    padding: var(--size-4-1) var(--size-4-3);
+    height: var(--input-height);
+    font-family: var(--font-interface);
+    font-weight: var(--input-font-weight);
+    cursor: var(--cursor);
+    outline: none;
+    user-select: none;
+    white-space: nowrap;
+    color: var(--text-color);
+    background-color: var(--interactive-normal);
+    box-shadow: var(--input-shadow);
+    transition: background-color 0.2s ease;
+  }
 
-.preset-button:hover {
-  color: inherit;
-  cursor: pointer;
-  text-decoration: none;
-  background-color: var(--background-modifier-hover);
-}
+  .preset-button:hover {
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    background-color: var(--background-modifier-hover);
+  }
 
-.preset-button p {
-  margin: 0;
-}
+  .preset-button p {
+    margin: 0;
+  }
 
-/* Text formatting */
-b,
-strong {
-  font-weight: bolder;
-}
+  /* Text formatting */
+  b,
+  strong {
+    font-weight: bolder;
+  }
 
-.preview-container {
-  margin-top: 1em;
-  padding: 1em;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: 4px;
-  background-color: var(--background-primary);
+  .preview-container {
+    margin-top: 1em;
+    padding: 1em;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 4px;
+    background-color: var(--background-primary);
+  }
 }

@@ -110,7 +110,11 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
   }
 
   display(): void {
-    const { containerEl } = this;
+    const { containerEl: container } = this;
+    const containerEl = container.createDiv({
+      cls: 'jw-library-linker',
+    });
+
     containerEl.empty();
 
     new Setting(containerEl)
