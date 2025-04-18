@@ -84,9 +84,11 @@
 }
 
 /* Text formatting */
-b,
-strong {
-  font-weight: bolder;
+.jw-library-linker {
+  b,
+  strong {
+    font-weight: bolder;
+  }
 }
 
 .preview-container {
