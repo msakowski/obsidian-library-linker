@@ -1,4 +1,4 @@
-import { PluginSettingTab, App, Setting, MarkdownRenderer } from 'obsidian';
+import { PluginSettingTab, App, Setting, MarkdownRenderer, Component } from 'obsidian';
 import JWLibraryLinkerPlugin, { DEFAULT_SETTINGS, DEFAULT_STYLES } from '@/main';
 import { TranslationService } from '@/services/TranslationService';
 import type {
@@ -10,6 +10,12 @@ import type {
 } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 
+class MarkdownComponent extends Component {
+  constructor() {
+    super();
+  }
+}
+
 export class JWLibraryLinkerSettings extends PluginSettingTab {
   plugin: JWLibraryLinkerPlugin;
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
@@ -20,8 +26,14 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       // Clear previous content
       container.empty();
 
+      // Create a new component instance for this render
+      const component = new MarkdownComponent();
+
       // Render markdown to HTML
-      await MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
+      await MarkdownRenderer.render(this.app, markdown, container, '.', component);
+
+      // Register the component to ensure proper cleanup
+      this.plugin.addChild(component);
     }
   };
 
@@ -508,8 +520,14 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           // Clear previous content
           container.empty();
 
+          // Create a new component instance for this render
+          const component = new MarkdownComponent();
+
           // Render markdown to HTML
-          void MarkdownRenderer.render(this.app, markdown, container, '.', this.plugin);
+          void MarkdownRenderer.render(this.app, markdown, container, '.', component);
+
+          // Register the component to ensure proper cleanup
+          this.plugin.addChild(component);
         }
       });
     } catch (error) {
