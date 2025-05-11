@@ -21,7 +21,12 @@ export class TranslationService {
       // Only try to access localStorage in a browser environment
       if (typeof window !== 'undefined' && window.localStorage) {
         const obsidianLocale = window.localStorage.getItem('language');
-        if (obsidianLocale === 'en' || obsidianLocale === 'de' || obsidianLocale === 'fi' || obsidianLocale === 'es') {
+        if (
+          obsidianLocale === 'en' ||
+          obsidianLocale === 'de' ||
+          obsidianLocale === 'fi' ||
+          obsidianLocale === 'es'
+        ) {
           this.currentLocale = obsidianLocale;
         }
       }
