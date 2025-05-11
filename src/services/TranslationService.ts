@@ -1,6 +1,7 @@
 import { en } from '@/locale/en';
 import { de } from '@/locale/de';
 import { fi } from '@/locale/fi';
+import { es } from '@/locale/es';
 import type { Locale } from '@/types';
 
 type Translation = typeof en;
@@ -12,6 +13,7 @@ export class TranslationService {
     en,
     de,
     fi,
+    es,
   };
 
   private constructor() {
@@ -19,7 +21,7 @@ export class TranslationService {
       // Only try to access localStorage in a browser environment
       if (typeof window !== 'undefined' && window.localStorage) {
         const obsidianLocale = window.localStorage.getItem('language');
-        if (obsidianLocale === 'en' || obsidianLocale === 'de' || obsidianLocale === 'fi') {
+        if (obsidianLocale === 'en' || obsidianLocale === 'de' || obsidianLocale === 'fi' || obsidianLocale === 'es') {
           this.currentLocale = obsidianLocale;
         }
       }
