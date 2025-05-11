@@ -21,6 +21,7 @@ export const getBibleBooks = (language: Language): readonly BibleBook[] => {
       break;
     case 'S':
       books = bibleBooksES;
+      break;
     default:
       throw new Error('errors.unsupportedLanguage');
   }
