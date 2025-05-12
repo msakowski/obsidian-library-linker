@@ -60,7 +60,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['jueces'],
     name: {
       long: 'Jueces',
-      medium: 'Jue.',
+      medium: 'Juec.',
       short: 'Jue',
     },
   },
@@ -99,7 +99,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['reyes'],
     name: {
       long: '1 Reyes',
-      medium: '1 Re.',
+      medium: '1 Rey.',
       short: '1Re',
     },
   },
@@ -109,7 +109,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['reyes'],
     name: {
       long: '2 Reyes',
-      medium: '2 Re.',
+      medium: '2 Rey.',
       short: '2Re',
     },
   },
@@ -119,7 +119,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['cronicas'],
     name: {
       long: '1 Crónicas',
-      medium: '1 Cró.',
+      medium: '1 Crón.',
       short: '1Cr',
     },
   },
@@ -129,7 +129,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['cronicas'],
     name: {
       long: '2 Crónicas',
-      medium: '2 Cró.',
+      medium: '2 Crón.',
       short: '2Cr',
     },
   },
@@ -148,7 +148,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Nehemías',
       medium: 'Neh.',
-      short: 'Neh',
+      short: 'Ne',
     },
   },
   {
@@ -175,7 +175,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Salmos',
       medium: 'Sal.',
-      short: 'Sal',
+      short: 'Sl',
     },
   },
   {
@@ -188,7 +188,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     },
   },
   {
-    id: 21,
+    id: 21, 
     aliases: ['eclesiastes'],
     name: {
       long: 'Eclesiastés',
@@ -200,9 +200,9 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     id: 22,
     aliases: ['cantares'],
     name: {
-      long: 'Cantares',
+      long: 'El Cantar de los Cantares',
       medium: 'Cant.',
-      short: 'Ca',
+      short: 'Can',
     },
   },
   {
@@ -220,7 +220,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Jeremías',
       medium: 'Jer.',
-      short: 'Je',
+      short: 'Jer',
     },
   },
   {
@@ -229,7 +229,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Lamentaciones',
       medium: 'Lam.',
-      short: 'La',
+      short: 'Lam',
     },
   },
   {
@@ -237,7 +237,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['ezequiel'],
     name: {
       long: 'Ezequiel',
-      medium: 'Ez.',
+      medium: 'Ezeq.',
       short: 'Ez',
     },
   },
@@ -265,7 +265,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Joel',
       medium: 'Joel',
-      short: 'Joel',
+      short: 'Joe',
     },
   },
   {
@@ -273,7 +273,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['amos'],
     name: {
       long: 'Amós',
-      medium: 'Am.',
+      medium: 'Amós',
       short: 'Am',
     },
   },
@@ -301,7 +301,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Miqueas',
       medium: 'Miq.',
-      short: 'Mi',
+      short: 'Miq',
     },
   },
   {
@@ -336,7 +336,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['ageo'],
     name: {
       long: 'Ageo',
-      medium: 'Ag.',
+      medium: 'Ageo',
       short: 'Ag',
     },
   },
@@ -346,7 +346,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Zacarías',
       medium: 'Zac.',
-      short: 'Za',
+      short: 'Zac',
     },
   },
   {
@@ -373,7 +373,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Marcos',
       medium: 'Mar.',
-      short: 'Mc',
+      short: 'Mr',
     },
   },
   {
@@ -382,7 +382,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Lucas',
       medium: 'Luc.',
-      short: 'Lc',
+      short: 'Lu',
     },
   },
   {
@@ -399,7 +399,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['hechos'],
     name: {
       long: 'Hechos',
-      medium: 'Hch.',
+      medium: 'Hech.',
       short: 'Hch',
     },
   },
@@ -438,7 +438,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Gálatas',
       medium: 'Gál.',
-      short: 'Gá',
+      short: 'Gál',
     },
   },
   {
@@ -446,7 +446,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['efesios'],
     name: {
       long: 'Efesios',
-      medium: 'Ef.',
+      medium: 'Efes.',
       short: 'Ef',
     },
   },
@@ -455,8 +455,8 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['filipenses'],
     name: {
       long: 'Filipenses',
-      medium: 'Fil.',
-      short: 'Fil',
+      medium: 'Filip.',
+      short: 'Flp',
     },
   },
   {
@@ -475,7 +475,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: '1 Tesalonicenses',
       medium: '1 Tes.',
-      short: '1Ts',
+      short: '1Te',
     },
   },
   {
@@ -485,7 +485,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: '2 Tesalonicenses',
       medium: '2 Tes.',
-      short: '2Ts',
+      short: '2Te',
     },
   },
   {
@@ -513,7 +513,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['tito'],
     name: {
       long: 'Tito',
-      medium: 'Tit.',
+      medium: 'Tito',
       short: 'Tit',
     },
   },
@@ -522,7 +522,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['filemon'],
     name: {
       long: 'Filemón',
-      medium: 'File.',
+      medium: 'Filem.',
       short: 'Flm',
     },
   },
@@ -532,7 +532,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Hebreos',
       medium: 'Heb.',
-      short: 'He',
+      short: 'Heb',
     },
   },
   {
@@ -541,7 +541,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Santiago',
       medium: 'Sant.',
-      short: 'Sant',
+      short: 'Snt',
     },
   },
   {
@@ -550,7 +550,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['pedro'],
     name: {
       long: '1 Pedro',
-      medium: '1 Pe.',
+      medium: '1 Ped.',
       short: '1Pe',
     },
   },
@@ -560,7 +560,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['pedro'],
     name: {
       long: '2 Pedro',
-      medium: '2 Pe.',
+      medium: '2 Ped.',
       short: '2Pe',
     },
   },
@@ -570,7 +570,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['juan'],
     name: {
       long: '1 Juan',
-      medium: '1 Jn.',
+      medium: '1 Juan',
       short: '1Jn',
     },
   },
@@ -580,7 +580,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['juan'],
     name: {
       long: '2 Juan',
-      medium: '2 Jn.',
+      medium: '2 Juan',
       short: '2Jn',
     },
   },
@@ -590,7 +590,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     aliases: ['juan'],
     name: {
       long: '3 Juan',
-      medium: '3 Jn.',
+      medium: '3 Juan',
       short: '3Jn',
     },
   },
@@ -605,7 +605,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 66,
-    aliases: ['apocalipsis', 'revelacion', 'revelación'],
+    aliases: ['apocalipsis'],
     name: {
       long: 'Apocalipsis',
       medium: 'Apoc.',
