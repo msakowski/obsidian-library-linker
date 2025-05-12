@@ -95,6 +95,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 11,
+    prefix: '1',
     aliases: ['reyes'],
     name: {
       long: '1 Reyes',
@@ -114,6 +115,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 13,
+    prefix: '1',
     aliases: ['cronicas'],
     name: {
       long: '1 Crónicas',
@@ -241,11 +243,11 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 27,
-    aliases: ['daniél'],
+    aliases: ['daniel'],
     name: {
       long: 'Daniel',
-      medium: 'Dn.',
-      short: 'Dn',
+      medium: 'Dan.',
+      short: 'Da',
     },
   },
   {
@@ -412,6 +414,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 46,
+    prefix: '1',
     aliases: ['corintios'],
     name: {
       long: '1 Corintios',
@@ -467,6 +470,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 52,
+    prefix: '1',
     aliases: ['tesalonicenses'],
     name: {
       long: '1 Tesalonicenses',
@@ -486,6 +490,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 54,
+    prefix: '1',
     aliases: ['timoteo'],
     name: {
       long: '1 Timoteo',
@@ -541,6 +546,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 60,
+    prefix: '1',
     aliases: ['pedro'],
     name: {
       long: '1 Pedro',
@@ -560,6 +566,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 62,
+    prefix: '1',
     aliases: ['juan'],
     name: {
       long: '1 Juan',
@@ -579,6 +586,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 64,
+    prefix: '3',
     aliases: ['juan'],
     name: {
       long: '3 Juan',
@@ -601,7 +609,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Apocalipsis',
       medium: 'Apoc.',
-      short: 'Apoc',
+      short: 'Ap',
     },
   },
 ];
