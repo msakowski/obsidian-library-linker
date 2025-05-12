@@ -34,7 +34,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Números',
       medium: 'Núm.',
-      short: 'Nu',
+      short: 'Nú',
     },
   },
   {
@@ -188,7 +188,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     },
   },
   {
-    id: 21, 
+    id: 21,
     aliases: ['eclesiastes'],
     name: {
       long: 'Eclesiastés',
@@ -238,7 +238,7 @@ export const bibleBooksES: readonly Omit<BibleBook, 'chapters'>[] = [
     name: {
       long: 'Ezequiel',
       medium: 'Ezeq.',
-      short: 'Ez',
+      short: 'Eze',
     },
   },
   {
