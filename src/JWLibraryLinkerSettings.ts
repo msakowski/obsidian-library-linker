@@ -110,14 +110,15 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
   }
 
   display(): void {
-    const { containerEl: container } = this;
-    const containerEl = container.createDiv({
+    const { containerEl } = this;
+    // Clear the parent container first
+    containerEl.empty();
+
+    const settingsContainer = containerEl.createDiv({
       cls: 'jw-library-linker',
     });
 
-    containerEl.empty();
-
-    new Setting(containerEl)
+    new Setting(settingsContainer)
       .setName(this.t('settings.language.name'))
       .setDesc(this.t('settings.language.description'))
       .addDropdown((dropdown) =>
@@ -135,7 +136,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           }),
       );
 
-    new Setting(containerEl)
+    new Setting(settingsContainer)
       .setName(this.t('settings.openAutomatically.name'))
       .setDesc(this.t('settings.openAutomatically.description'))
       .addToggle((toggle) =>
@@ -145,7 +146,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         }),
       );
 
-    new Setting(containerEl)
+    new Setting(settingsContainer)
       .setName(this.t('settings.updatedLinkStructure.name'))
       .setDesc(this.t('settings.updatedLinkStructure.description'))
       .addDropdown((dropdown) =>
@@ -161,7 +162,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           }),
       );
 
-    new Setting(containerEl)
+    new Setting(settingsContainer)
       .setName(this.t('settings.noLanguageParameter.name'))
       .setDesc(this.t('settings.noLanguageParameter.description'))
       .addToggle((toggle) =>
@@ -174,7 +175,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
     // Add Link Styling section
 
-    const linkStylingContainer = containerEl.createDiv({
+    const linkStylingContainer = settingsContainer.createDiv({
       cls: 'setting-item setting-item--linkStyling',
     });
 
@@ -188,7 +189,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       cls: 'setting-item-description',
     });
 
-    new Setting(containerEl)
+    new Setting(settingsContainer)
       .setName(this.t('settings.bookLength.name'))
       .setDesc(this.t('settings.bookLength.description'))
       .addDropdown((dropdown) =>
@@ -207,7 +208,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       );
 
     // Prefix outside link
-    new Setting(containerEl)
+    new Setting(settingsContainer)
       .setClass('setting-item--input')
       .setName(this.t('settings.linkStyling.prefixOutsideLink.name'))
       .setDesc(this.t('settings.linkStyling.prefixOutsideLink.description'))
@@ -235,7 +236,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       });
 
     // Prefix inside link
-    new Setting(containerEl)
+    new Setting(settingsContainer)
       .setClass('setting-item--input')
       .setName(this.t('settings.linkStyling.prefixInsideLink.name'))
       .setDesc(this.t('settings.linkStyling.prefixInsideLink.description'))
@@ -263,7 +264,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       });
 
     // Suffix inside link
-    new Setting(containerEl)
+    new Setting(settingsContainer)
       .setClass('setting-item--input')
       .setName(this.t('settings.linkStyling.suffixInsideLink.name'))
       .setDesc(this.t('settings.linkStyling.suffixInsideLink.description'))
@@ -291,7 +292,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       });
 
     // Suffix outside link
-    new Setting(containerEl)
+    new Setting(settingsContainer)
       .setClass('setting-item--input')
       .setName(this.t('settings.linkStyling.suffixOutsideLink.name'))
       .setDesc(this.t('settings.linkStyling.suffixOutsideLink.description'))
@@ -319,7 +320,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       });
 
     // Presets row
-    const presetContainer = containerEl.createDiv({
+    const presetContainer = settingsContainer.createDiv({
       cls: 'setting-item setting-item--presets',
     });
 
@@ -378,7 +379,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     );
 
     // Font style
-    new Setting(containerEl)
+    new Setting(settingsContainer)
       .setName(this.t('settings.linkStyling.fontStyle.name'))
       .setDesc(this.t('settings.linkStyling.fontStyle.description'))
       .addDropdown((dropdown) =>
@@ -396,7 +397,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           }),
       );
 
-    const previewContainer = containerEl.createDiv({
+    const previewContainer = settingsContainer.createDiv({
       cls: 'setting-item setting-item--preview',
     });
 
