@@ -1,5 +1,15 @@
 # obsidian-library-linker
 
+## 0.4.0
+
+### Minor Changes
+
+- [#97](https://github.com/msakowski/obsidian-library-linker/pull/97) [`fb2363b`](https://github.com/msakowski/obsidian-library-linker/commit/fb2363bf6104ebe57574395a67c2b33e7ea7ecbd) Thanks [@dkottis](https://github.com/dkottis)! - Add Spanish language support
+
+### Patch Changes
+
+- [#99](https://github.com/msakowski/obsidian-library-linker/pull/99) [`790f7fd`](https://github.com/msakowski/obsidian-library-linker/commit/790f7fdeaced9c6dedff90fdb81430b03407dd26) Thanks [@msakowski](https://github.com/msakowski)! - Fix settings duplication issue
+
 ## 0.3.1
 
 ### Patch Changes
