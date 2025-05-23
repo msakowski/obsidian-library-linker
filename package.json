@@ -23,10 +23,10 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@swc/core": "^1.11.24",
+    "@swc/core": "^1.11.29",
     "@swc/jest": "^0.2.38",
     "@types/jest": "^29.5.0",
-    "@types/node": "^22.15.18",
+    "@types/node": "^22.15.21",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "builtin-modules": "^5.0.0",
