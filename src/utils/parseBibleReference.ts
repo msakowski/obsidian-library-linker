@@ -110,6 +110,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   }
 
   if (Array.isArray(book)) {
+    console.log('multiple books found', book, bookName, chapter, versesPart);
     throw new Error('errors.multipleBooksFound');
   }
 
@@ -167,3 +168,31 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     verseRanges: result,
   };
 }
+
+export const parseBibleReferenceFromUrl = (url: string, language: Language): BibleReference => {
+  // Replace 'jwpub://' with 'jwlibrary://'
+  url = url.replace('jwpub://', 'jwlibrary://');
+  // Extract the Bible reference parts
+  const parts = url.split('/');
+  const bibleRef = parts[parts.length - 1];
+
+  // Extract book, chapter and verse
+  const [startBookChapterVerse, endBookChapterVerse] = bibleRef.split('-');
+  const [bookStart, chapterStart, verseStart] = startBookChapterVerse.split(':');
+  const [, chapterEnd, verseEnd] = endBookChapterVerse.split(':');
+
+  if (chapterStart !== chapterEnd) {
+    console.log('links with multiple chapters are not supported (yet)');
+  }
+
+  return {
+    book: parseInt(bookStart, 10),
+    chapter: parseInt(chapterStart, 10),
+    verseRanges: [
+      {
+        start: parseInt(verseStart, 10),
+        end: parseInt(verseEnd, 10),
+      },
+    ],
+  };
+};

@@ -1,15 +1,26 @@
-import { convertBibleReference } from '@/utils/convertBibleReference';
 import { convertPublicationReference } from '@/utils/convertPublicationReference';
+import { parseBibleReferenceFromUrl } from '@/utils/parseBibleReference';
+import { LinkReplacerSettings } from '@/types';
+import { convertBibleTextToMarkdownLink } from './convertBibleTextToMarkdownLink';
 
 export type ConversionType = 'bible' | 'publication' | 'all' | 'web';
 
-export function convertLinks(content: string, type: ConversionType = 'all'): string {
+export function convertLinks(
+  content: string,
+  type: ConversionType = 'all',
+  settings: LinkReplacerSettings,
+): string {
   const wikiLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
 
   return content.replace(wikiLinkRegex, (match, text: string, url: string) => {
     // Handle Bible references
     if (url.startsWith('jwpub://b/') && (type === 'bible' || type === 'all')) {
-      return `[${text}](${convertBibleReference(url)})`;
+      const reference = parseBibleReferenceFromUrl(url, settings.language);
+      const convertedLink = convertBibleTextToMarkdownLink(reference, settings, text);
+      if (convertedLink) {
+        return convertedLink;
+      }
+      return match;
     }
     // Handle publication references
     if (url.startsWith('jwpub://p/') && (type === 'publication' || type === 'all')) {

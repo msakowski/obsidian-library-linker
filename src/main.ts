@@ -1,12 +1,11 @@
 import { Editor, Notice, Plugin } from 'obsidian';
-import { convertLinks, convertWebLink } from '@/utils/convertLinks';
-import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
+import { ConversionType, convertLinks } from '@/utils/convertLinks';
 import type { LinkReplacerSettings, LinkStyles } from '@/types';
-import { parseBibleReference } from '@/utils/parseBibleReference';
 import { TranslationService } from '@/services/TranslationService';
 import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
 import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
+import { ConvertSuggester } from './ConvertSuggester';
 
 export const DEFAULT_STYLES: LinkStyles = {
   bookLength: 'medium',
@@ -36,66 +35,36 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     // Add settings tab
     this.addSettingTab(new JWLibraryLinkerSettings(this.app, this));
 
-    // Add the command for all link replacement
-    this.addCommand({
-      id: 'replace-links',
-      name: this.t('commands.replaceLinks'),
-      editorCallback: (editor: Editor) => {
-        const currentContent = editor.getValue();
-        const updatedContent = convertLinks(currentContent, 'all');
-        if (currentContent !== updatedContent) {
-          editor.setValue(updatedContent);
-        }
-      },
-    });
-
-    // Add command for Bible links only
-    this.addCommand({
-      id: 'replace-bible-links',
-      name: this.t('commands.replaceBibleLinks'),
-      editorCallback: (editor: Editor) => {
-        const currentContent = editor.getSelection();
-        const updatedContent = convertLinks(currentContent, 'bible');
-        if (currentContent !== updatedContent) {
-          editor.setValue(updatedContent);
-        }
-      },
-    });
-
-    this.addCommand({
-      id: 'replace-web-links',
-      name: this.t('commands.replaceWebLinks'),
-      editorCallback: (editor: Editor) => {
-        const currentContent = editor.getValue();
-        const updatedContent = convertLinks(currentContent, 'web');
-        if (currentContent !== updatedContent) {
-          editor.setValue(updatedContent);
-        }
-      },
-    });
-
-    // Add command for publication links only
-    this.addCommand({
-      id: 'replace-publication-links',
-      name: this.t('commands.replacePublicationLinks'),
-      editorCallback: (editor: Editor) => {
-        const currentContent = editor.getValue();
-        const updatedContent = convertLinks(currentContent, 'publication');
-        if (currentContent !== updatedContent) {
-          editor.setValue(updatedContent);
-        }
-      },
-    });
-
     // Add command to link unlinked Bible references
     this.addCommand({
       id: 'link-unlinked-bible-references',
       name: this.t('commands.linkUnlinkedBibleReferences'),
       editorCallback: (editor: Editor) => {
-        linkUnlinkedBibleReferences(editor.getValue(), this.settings, ({ changes, error }) => {
+        const selection = {
+          text: editor.getSelection(),
+          from: editor.getCursor('from'),
+          to: editor.getCursor('to'),
+        };
+
+        if (!selection) {
+          new Notice(this.t('notices.pleaseSelectText'));
+          return;
+        }
+
+        linkUnlinkedBibleReferences(selection.text, this.settings, ({ changes, error }) => {
           if (changes.length > 0) {
             editor.transaction({
-              changes,
+              changes: changes.map((change) => ({
+                ...change,
+                from: {
+                  line: change.from.line + selection.from.line,
+                  ch: change.from.ch + selection.from.ch,
+                },
+                to: {
+                  line: change.to.line + selection.from.line,
+                  ch: change.to.ch + selection.from.ch,
+                },
+              })),
             });
 
             new Notice(
@@ -110,32 +79,22 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       },
     });
 
-    // Add command for Bible text conversion
     this.addCommand({
-      id: 'convert-bible-text',
-      name: this.t('commands.convertBibleReference'),
+      id: 'convert-jw-links',
+      name: this.t('commands.convertToJWLibraryLinks'),
       editorCallback: (editor: Editor) => {
         const selection = editor.getSelection();
-        if (selection) {
-          const reference = parseBibleReference(selection, this.settings.language);
-          const convertedLink = convertBibleTextToMarkdownLink(reference, this.settings);
-          if (convertedLink) {
-            editor.replaceSelection(convertedLink);
-          }
+        if (!selection) {
+          new Notice(this.t('notices.pleaseSelectText'));
+          return;
         }
-      },
-    });
 
-    // Add command for converting jw.org links to jwlibrary:// links
-    this.addCommand({
-      id: 'convert-web-link',
-      name: this.t('commands.convertWebLink'),
-      editorCallback: (editor: Editor) => {
-        const currentContent = editor.getSelection();
-        const updatedContent = convertWebLink(currentContent);
-        if (currentContent !== updatedContent) {
-          editor.replaceSelection(updatedContent);
-        }
+        new ConvertSuggester(this.app, (selectedType: ConversionType) => {
+          const convertedLinks = convertLinks(selection, selectedType, this.settings);
+          if (selection !== convertedLinks) {
+            editor.replaceSelection(convertedLinks);
+          }
+        }).open();
       },
     });
 

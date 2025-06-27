@@ -65,16 +65,21 @@ export const es = {
     },
   },
   commands: {
-    replaceLinks: 'Convertir todos los enlaces',
-    replaceBibleLinks: 'Convertir enlaces de versículos bíblicos',
-    replacePublicationLinks: 'Convertir enlaces de publicaciones',
-    replaceWebLinks: 'Convertir todos los enlaces de jw.org a enlaces de la biblioteca',
-    convertWebLink: 'Convertir enlace seleccionado de jw.org a enlace de la biblioteca',
-    convertBibleReference: 'Convertir referencia bíblica a enlace de la biblioteca',
     linkUnlinkedBibleReferences: 'Enlazar referencias bíblicas no enlazadas',
+    convertToJWLibraryLinks: 'Convertir los enlaces de la selección en enlaces de la Biblioteca JW',
+  },
+  convertSuggester: {
+    emptyStateText: 'Selecciona un tipo de conversión',
+    options: {
+      all: 'Todo',
+      bible: 'Biblia',
+      publication: 'Publicación',
+      web: 'Web',
+    },
   },
   notices: {
     convertedBibleReferences: '{{count}} referencias bíblicas convertidas',
+    pleaseSelectText: 'Por favor selecciona texto para convertir',
   },
   suggestions: {
     createLink: 'Crear enlace: {{text}}',

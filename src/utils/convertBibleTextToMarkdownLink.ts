@@ -43,7 +43,9 @@ export function convertBibleTextToMarkdownLink(
 
   let bookName = bookEntry.name[settings.bookLength];
 
-  if (settings.updatedLinkStructure === 'keepCurrentStructure' && originalText) {
+  const keepStrukture = settings.updatedLinkStructure === 'keepCurrentStructure';
+
+  if (keepStrukture && originalText) {
     // remove chapter and verses from original text
     bookName = originalText.replace(/\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*$/, '');
   }
@@ -64,6 +66,10 @@ export function convertBibleTextToMarkdownLink(
     // Create array of markdown links
     const styledLinks = verseRanges
       .map((range, i) => {
+        if (keepStrukture) {
+          return `[${range}](${links[i]})`;
+        }
+
         let linkText;
         if (i === 0) {
           // First link includes book name and chapter
@@ -83,12 +89,15 @@ export function convertBibleTextToMarkdownLink(
       })
       .join(',');
 
+    if (keepStrukture) {
+      return styledLinks;
+    }
+
     return `${prefixOutside}${styledLinks}${suffixOutside}`;
   }
 
-  if (settings.updatedLinkStructure === 'keepCurrentStructure' && originalText) {
-    const linkText = applyFontStyle(`${prefixInside}${originalText}${suffixInside}`, fontStyle);
-    return `${prefixOutside}[${linkText}](${links})${suffixOutside}`;
+  if (keepStrukture && originalText) {
+    return `[${originalText}](${links})`;
   }
 
   // For simple references

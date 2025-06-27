@@ -64,16 +64,21 @@ export const en = {
     },
   },
   commands: {
-    replaceLinks: 'Convert all links',
-    replaceBibleLinks: 'Convert Bible verse links',
-    replacePublicationLinks: 'Convert publication links',
-    replaceWebLinks: 'Convert all jw.org links to library links',
-    convertWebLink: 'Convert selected jw.org link to library link',
-    convertBibleReference: 'Convert Bible reference to library link',
     linkUnlinkedBibleReferences: 'Link unlinked Bible references',
+    convertToJWLibraryLinks: 'Convert links in selection to JW Library links',
+  },
+  convertSuggester: {
+    emptyStateText: 'Select a conversion type',
+    options: {
+      all: 'All',
+      bible: 'Bible',
+      publication: 'Publication',
+      web: 'Web',
+    },
   },
   notices: {
     convertedBibleReferences: 'Converted {{count}} Bible references',
+    pleaseSelectText: 'Please select text to convert',
   },
   suggestions: {
     createLink: 'Create link: {{text}}',
