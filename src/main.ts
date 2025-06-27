@@ -46,7 +46,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
           to: editor.getCursor('to'),
         };
 
-        if (!selection) {
+        if (!selection.text) {
           new Notice(this.t('notices.pleaseSelectText'));
           return;
         }
