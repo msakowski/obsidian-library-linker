@@ -65,16 +65,21 @@ export const nl = {
     },
   },
   commands: {
-    replaceLinks: 'Alle links converteren',
-    replaceBibleLinks: 'Bijbelvers-links converteren',
-    replacePublicationLinks: 'Publicatie-links converteren',
-    convertBibleReference: 'Bijbelverwijzing naar JW Library-link converteren',
-    convertWebLink: 'jw.org-link naar JW Library-link converteren',
-    replaceWebLinks: 'jw.org-links naar JW Library-links converteren',
-    linkUnlinkedBibleReferences: 'Niet-gelinkte bijbelteksten linken',
+    linkUnlinkedBibleReferences: 'Link niet gelinkte Bijbeltekst verwijzingen',
+    convertToJWLibraryLinks: 'Converteer geselecteerde links naar JW Library links',
+  },
+  convertSuggester: {
+    emptyStateText: 'Selecteer een conderteer type',
+    options: {
+      all: 'Alle',
+      bible: 'Bijbel verwijzingen',
+      publication: 'Publicaties',
+      // web: 'Web',
+    },
   },
   notices: {
     convertedBibleReferences: '{{count}} bijbelteksten geconverteerd',
+    pleaseSelectText: 'Selecteer text om te converteren',
   },
   suggestions: {
     createLink: 'Link maken: {{text}}',
