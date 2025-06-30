@@ -72,9 +72,9 @@ export const fi = {
     emptyStateText: 'Valitse muunnostyyppi',
     options: {
       all: 'Kaikki',
-      bible: 'Raamattu',
-      publication: 'Julkaisu',
-      web: 'Verkko',
+      bible: 'Raamatunviitteet',
+      publication: 'Julkaisut',
+      // web: 'Verkko',
     },
   },
   notices: {

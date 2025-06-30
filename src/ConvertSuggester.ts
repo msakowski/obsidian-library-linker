@@ -5,7 +5,7 @@ import { ConversionType } from './utils/convertLinks';
 export class ConvertSuggester extends FuzzySuggestModal<string> {
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
   private onChoose: (type: ConversionType) => void;
-  private convertTypes: ConversionType[] = ['all', 'bible', 'publication', 'web'];
+  private convertTypes: ConversionType[] = ['all', 'bible', 'publication'];
 
   emptyStateText: string;
 

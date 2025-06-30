@@ -72,9 +72,9 @@ export const es = {
     emptyStateText: 'Selecciona un tipo de conversión',
     options: {
       all: 'Todo',
-      bible: 'Biblia',
-      publication: 'Publicación',
-      web: 'Web',
+      bible: 'Referencias bíblicas',
+      publication: 'Publicaciones',
+      // web: 'Web',
     },
   },
   notices: {

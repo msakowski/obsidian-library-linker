@@ -71,9 +71,9 @@ export const en = {
     emptyStateText: 'Select a conversion type',
     options: {
       all: 'All',
-      bible: 'Bible',
-      publication: 'Publication',
-      web: 'Web',
+      bible: 'Bible references',
+      publication: 'Publications',
+      // web: 'Web',
     },
   },
   notices: {

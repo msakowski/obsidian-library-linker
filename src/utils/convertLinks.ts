@@ -3,7 +3,7 @@ import { parseBibleReferenceFromUrl } from '@/utils/parseBibleReference';
 import { LinkReplacerSettings } from '@/types';
 import { convertBibleTextToMarkdownLink } from './convertBibleTextToMarkdownLink';
 
-export type ConversionType = 'bible' | 'publication' | 'all' | 'web';
+export type ConversionType = 'bible' | 'publication' | 'all';
 
 export function convertLinks(
   content: string,

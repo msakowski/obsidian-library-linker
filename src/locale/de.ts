@@ -72,9 +72,9 @@ export const de = {
     emptyStateText: 'Wähle einen Konvertierungstyp',
     options: {
       all: 'Alle',
-      bible: 'Bibeltexte',
+      bible: 'Bibelverweise',
       publication: 'Publikationen',
-      web: 'jw.org-Links',
+      // web: 'jw.org-Links',
     },
   },
   notices: {
