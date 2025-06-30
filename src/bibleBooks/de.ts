@@ -101,7 +101,7 @@ export const bibleBooksDE: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 11,
     prefix: '1',
-    aliases: ['könige', 'koenige'],
+    aliases: ['könige', 'koenige', 'konige'],
     name: {
       long: '1. Könige',
       medium: '1. Kö.',
@@ -111,7 +111,7 @@ export const bibleBooksDE: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 12,
     prefix: '2',
-    aliases: ['könige', 'koenige'],
+    aliases: ['könige', 'koenige', 'konige'],
     name: {
       long: '2. Könige',
       medium: '2. Kö.',
@@ -185,7 +185,7 @@ export const bibleBooksDE: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 20,
-    aliases: ['sprüche', 'sprueche'],
+    aliases: ['sprüche', 'sprueche', 'spruche'],
     name: {
       long: 'Sprüche',
       medium: 'Spr.',
@@ -365,7 +365,7 @@ export const bibleBooksDE: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 40,
-    aliases: ['matthäus', 'matthaeus', 'mtt'],
+    aliases: ['matthäus', 'matthaeus', 'matthaus', 'mtt'],
     name: {
       long: 'Matthäus',
       medium: 'Mat.',
@@ -410,7 +410,7 @@ export const bibleBooksDE: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 45,
-    aliases: ['römer', 'roemer'],
+    aliases: ['römer', 'roemer', 'romer'],
     name: {
       long: 'Römer',
       medium: 'Röm.',
@@ -533,7 +533,7 @@ export const bibleBooksDE: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 58,
-    aliases: ['hebräer', 'hebraeer'],
+    aliases: ['hebräer', 'hebraeer', 'hebraer'],
     name: {
       long: 'Hebräer',
       medium: 'Heb.',
