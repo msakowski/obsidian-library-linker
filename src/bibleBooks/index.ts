@@ -10,6 +10,10 @@ type BibleBookWithoutChapters = Omit<BibleBook, 'chapters'>;
 
 export const getBibleBooks = (language: Language): readonly BibleBook[] => {
   let books: readonly BibleBookWithoutChapters[];
+
+  // TODO: seperate bible book names from bible book ids and attributes
+  // So language can be removed here
+
   switch (language) {
     case 'E':
       books = bibleBooksEN;

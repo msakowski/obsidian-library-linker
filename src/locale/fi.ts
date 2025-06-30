@@ -65,16 +65,21 @@ export const fi = {
     },
   },
   commands: {
-    replaceLinks: 'Muunna kaikki linkit',
-    replaceBibleLinks: 'Muunna raamatunjaelinkit',
-    replacePublicationLinks: 'Muunna julkaisulinkit',
-    convertBibleReference: 'Muunna raamatunviite kirjastolinkiksi',
-    convertWebLink: 'Muunna jw.org-linkki kirjastolinkiksi',
-    replaceWebLinks: 'Muunna kaikki jw.org-linkit kirjastolinkeiksi',
     linkUnlinkedBibleReferences: 'Linkitä linkittömät raamatunviitteet',
+    convertToJWLibraryLinks: 'Muunna valitun tekstin linkit JW-kirjastolinkkiksi',
+  },
+  convertSuggester: {
+    emptyStateText: 'Valitse muunnostyyppi',
+    options: {
+      all: 'Kaikki',
+      bible: 'Raamatunviitteet',
+      publication: 'Julkaisut',
+      // web: 'Verkko',
+    },
   },
   notices: {
     convertedBibleReferences: 'Muunnettu {{count}} raamatunviitettä',
+    pleaseSelectText: 'Valitse teksti muunnettavaksi',
   },
   suggestions: {
     createLink: 'Luo linkki: {{text}}',
