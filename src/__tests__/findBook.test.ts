@@ -9,6 +9,9 @@ describe('findBook', () => {
     expect(findBook('Joosua', 'FI')).toEqual(expect.objectContaining({ id: 6 }));
     expect(findBook('Ilmestys', 'FI')).toEqual(expect.objectContaining({ id: 66 }));
     expect(findBook('Psalmit', 'FI')).toEqual(expect.objectContaining({ id: 19 }));
+    expect(findBook('Jozua', 'O')).toEqual(expect.objectContaining({ id: 6 }));
+    expect(findBook('Openbaring', 'O')).toEqual(expect.objectContaining({ id: 66 }));
+    expect(findBook('psalm', 'O')).toEqual(expect.objectContaining({ id: 19 }));
   });
 
   test('finds book by abbreviation', () => {
@@ -29,6 +32,8 @@ describe('findBook', () => {
     expect(findBook('mi', 'X')).toEqual(expect.objectContaining({ id: 33 }));
     expect(findBook('san', 'FI')).toEqual(expect.objectContaining({ id: 20 }));
     expect(findBook('laul', 'FI')).toEqual(expect.objectContaining({ id: 22 }));
+    expect(findBook('ju', 'O')).toEqual(expect.objectContaining({ id: 65 }));
+    expect(findBook('ps', 'O')).toEqual(expect.objectContaining({ id: 19 }));
   });
 
   test('finds book with number prefix', () => {
@@ -36,6 +41,7 @@ describe('findBook', () => {
     expect(findBook('2mo', 'X')).toEqual(expect.objectContaining({ id: 2 }));
     expect(findBook('1pe', 'X')).toEqual(expect.objectContaining({ id: 60 }));
     expect(findBook('1kor', 'FI')).toEqual(expect.objectContaining({ id: 46 }));
+    expect(findBook('1Kor', 'O')).toEqual(expect.objectContaining({ id: 46 }));
   });
 
   test('is case insensitive', () => {
