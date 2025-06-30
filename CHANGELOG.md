@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.5.1
+
+### Patch Changes
+
+- [#110](https://github.com/msakowski/obsidian-library-linker/pull/110) [`7deeff8`](https://github.com/msakowski/obsidian-library-linker/commit/7deeff8fd110cd3ab7ef00a9880ad6a644c4658e) Thanks [@naftalivanderloon](https://github.com/naftalivanderloon)! - Add Dutch language support
+
 ## 0.5.0
 
 ### Minor Changes
