@@ -66,17 +66,21 @@ export function convertBibleTextToMarkdownLink(
     // Create array of markdown links
     const styledLinks = verseRanges
       .map((range, i) => {
-        if (keepStrukture) {
-          return `[${range}](${links[i]})`;
-        }
-
         let linkText;
         if (i === 0) {
           // First link includes book name and chapter
-          linkText = `${prefixInside}${bookName} ${reference.chapter}:${range}`;
+          if (keepStrukture) {
+            linkText = `${bookName} ${reference.chapter}:${range}`;
+          } else {
+            linkText = `${prefixInside}${bookName} ${reference.chapter}:${range}`;
+          }
         } else if (i === verseRanges.length - 1) {
           // Last link includes verse numbers and suffix
-          linkText = `${range}${suffixInside}`;
+          if (keepStrukture) {
+            linkText = range;
+          } else {
+            linkText = `${range}${suffixInside}`;
+          }
         } else {
           // Subsequent links only include verse numbers
           linkText = `${range}`;

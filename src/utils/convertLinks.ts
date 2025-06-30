@@ -26,17 +26,17 @@ export function convertLinks(
     if (url.startsWith('jwpub://p/') && (type === 'publication' || type === 'all')) {
       return `[${text}](${convertPublicationReference(url)})`;
     }
-    if (url.startsWith('https://www.jw.org/') && type === 'web') {
-      return `[${text}](${convertWebLink(url)})`;
-    }
+    // if (url.startsWith('https://www.jw.org/') && type === 'web') {
+    //   return `[${text}](${convertWebLink(url)})`;
+    // }
     return match;
   });
 }
 
-export function convertWebLink(url: string): string {
-  // Replaces jw.org links with jwlibrary:// links, removing the srcid parameter which is not needed.
-  if (url.includes('srcid=')) {
-    url = url.replace(/&?srcid=[^&]+/, '');
-  }
-  return url.replace('https://www.jw.org/', 'jwlibrary:///');
-}
+// export function convertWebLink(url: string): string {
+//   // Replaces jw.org links with jwlibrary:// links, removing the srcid parameter which is not needed.
+//   if (url.includes('srcid=')) {
+//     url = url.replace(/&?srcid=[^&]+/, '');
+//   }
+//   return url.replace('https://www.jw.org/', 'jwlibrary:///');
+// }

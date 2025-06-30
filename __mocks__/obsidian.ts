@@ -18,6 +18,20 @@ export class MarkdownView {}
 export class TFile {}
 export class Notice {}
 
+export class FuzzySuggestModal<T> {
+  constructor() {}
+  open() {}
+  close() {}
+  onChooseItem(item: T, evt: MouseEvent | KeyboardEvent) {}
+  getItems(): T[] {
+    return [];
+  }
+  getItemText(item: T): string {
+    return String(item);
+  }
+  onChooseSuggestion(value: T, evt: MouseEvent | KeyboardEvent) {}
+}
+
 export class Component {
   constructor() {}
   addChild(component: Component) {}
