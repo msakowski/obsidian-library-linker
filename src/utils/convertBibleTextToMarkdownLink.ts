@@ -43,7 +43,9 @@ export function convertBibleTextToMarkdownLink(
 
   let bookName = bookEntry.name[settings.bookLength];
 
-  if (settings.updatedLinkStructure === 'keepCurrentStructure' && originalText) {
+  const keepStrukture = settings.updatedLinkStructure === 'keepCurrentStructure';
+
+  if (keepStrukture && originalText) {
     // remove chapter and verses from original text
     bookName = originalText.replace(/\s*\d+:\d+(?:-\d+)?(?:\s*,\s*\d+(?:-\d+)?)*\s*$/, '');
   }
@@ -67,10 +69,18 @@ export function convertBibleTextToMarkdownLink(
         let linkText;
         if (i === 0) {
           // First link includes book name and chapter
-          linkText = `${prefixInside}${bookName} ${reference.chapter}:${range}`;
+          if (keepStrukture) {
+            linkText = `${bookName} ${reference.chapter}:${range}`;
+          } else {
+            linkText = `${prefixInside}${bookName} ${reference.chapter}:${range}`;
+          }
         } else if (i === verseRanges.length - 1) {
           // Last link includes verse numbers and suffix
-          linkText = `${range}${suffixInside}`;
+          if (keepStrukture) {
+            linkText = range;
+          } else {
+            linkText = `${range}${suffixInside}`;
+          }
         } else {
           // Subsequent links only include verse numbers
           linkText = `${range}`;
@@ -83,12 +93,15 @@ export function convertBibleTextToMarkdownLink(
       })
       .join(',');
 
+    if (keepStrukture) {
+      return styledLinks;
+    }
+
     return `${prefixOutside}${styledLinks}${suffixOutside}`;
   }
 
-  if (settings.updatedLinkStructure === 'keepCurrentStructure' && originalText) {
-    const linkText = applyFontStyle(`${prefixInside}${originalText}${suffixInside}`, fontStyle);
-    return `${prefixOutside}[${linkText}](${links})${suffixOutside}`;
+  if (keepStrukture && originalText) {
+    return `[${originalText}](${links})`;
   }
 
   // For simple references
