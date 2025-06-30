@@ -34,7 +34,6 @@ describe('findBook', () => {
     expect(findBook('laul', 'FI')).toEqual(expect.objectContaining({ id: 22 }));
     expect(findBook('ju', 'O')).toEqual(expect.objectContaining({ id: 65 }));
     expect(findBook('ps', 'O')).toEqual(expect.objectContaining({ id: 19 }));
-
   });
 
   test('finds book with number prefix', () => {
