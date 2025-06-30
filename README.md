@@ -4,26 +4,30 @@ This Obsidian plugin enhances your note-taking experience by providing seamless 
 
 ## Features
 
-### 1. Bulk Link Conversion
+### 1. Bible Reference Linking
 
-Automatically converts JW Library links to a format that works directly in JW Library:
+**Quick Reference Creation**: `/b` command for inserting new Bible references
+
+**Plain Text Conversion**: Automatically detects and converts Bible references in selected text to JW Library links
+
+### 2. Bulk Link Conversion
+
+Converts JW Library links and web links to formats that work directly in JW Library:
 
 - Converts Bible verse and publication links from `jwpub://` to `jwlibrary://` format
-- Maintains the original text of the link while updating the URL
+- Converts jw.org web links to `jwlibrary://` format
+- Option to maintain the original text of the link while updating the URL
+- Command with suggester interface to choose conversion type (all links, Bible verses only, publications only, or web links only)
 
-Commands to replace multiple links at once:
+## Usage
 
-- Replace all JW Library links
-- Replace only Bible verse links
-- Replace only publication links
+### Creating Bible References to JW Library
 
-### 2. Bible Reference Command
+1. Type `/b` followed by a space
+2. Enter the Bible reference (e.g., "matthäus 24:14" or "joh 3:16" or "offb21:3")
+3. Select the desired option from the suggestions to either create a link or create and open the link
 
-Quick command for inserting Bible references:
-
-`/b` - Creates a wiki link to a Bible verse with two options:
-
-1. Create JW Library link
+**Examples:**
 
 ```
 /b mat 24:14
@@ -36,35 +40,31 @@ Quick command for inserting Bible references:
 → [Johannes 1:1-2](link),[4](link),[6-8](link),[12-14](link)
 ```
 
-2. Create JW Library link and open
-
-```
-/b joh3:16
-→ [Johannes 3:16](jwlibrary:///finder?bible=43003016) + opens it in JW Library
-```
-
-## Commands
-
-The plugin adds the following commands to Obsidian:
-
-- **Convert all links**: Converts all JW Library links in the current note
-- **Convert Bible verse links**: Only converts Bible verse links
-- **Convert publication links**: Only converts publication links
-- **Convert Bible reference to Library link**: Converts selected text to a JW Library link (if it's a valid Bible reference)
-
-## Usage
-
-### Converting Bible References
-
-1. Type `/b` followed by a space
-2. Enter the Bible reference (e.g., "matthäus 24:14" or "joh 3:16" or "offb21:3")
-3. Select the desired option from the suggestions to either create a link or create and open the link
-
 ### Converting Existing Links
 
-1. Open the command palette (Ctrl/Cmd + P)
-2. Search for "Convert link"
-3. Choose the desired replacement option
+**Command: Convert to JW Library links**
+
+Opens a suggester to choose which type of links to convert (all links, Bible verse links only, publication links only, or web links only) in the selected text
+
+1. Select the text containing the links you want to convert
+2. Open the command palette (Ctrl/Cmd + P)
+3. Search for "Convert to JW Library links"
+4. Choose the type of conversion you want:
+   - **All**: Converts all JW Library links (Bible verses, publications, and web links)
+   - **Bible**: Only converts Bible verse links
+   - **Publication**: Only converts publication links
+   - **Web**: Only converts jw.org web links
+
+### Converting Plain Text Bible References
+
+**Command: "Link unlinked Bible references"**
+
+Converts plain text Bible references in selected text to JW Library links
+
+1. Select text containing Bible references (e.g., "John 3:16" or "Romans 8:28")
+2. Open the command palette (Ctrl/Cmd + P)
+3. Search for "Link unlinked Bible references"
+4. The plugin will automatically detect and convert valid Bible references to JW Library links
 
 ## Contributing
 
@@ -72,4 +72,7 @@ If you have ideas or want to help improve this plugin take a look at our [contri
 
 ## Known Issues
 
-- https://github.com/tadashi-aikawa/obsidian-various-complements-plugin
+| Plugin                                                                                            | Issue                             | Fix                                   |
+| ------------------------------------------------------------------------------------------------- | --------------------------------- | ------------------------------------- |
+| [Iconize](obsidian://show-plugin?id=obsidian-icon-folder)                                         | Clock emoji shows when typing `:` | Edit Iconize trigger from `:` to `::` |
+| [Various Complements](https://tadashi-aikawa.github.io/docs-obsidian-various-complements-plugin/) | Suggestions get overwritten       | 🤷‍♂️                                    |
