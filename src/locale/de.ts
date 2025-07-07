@@ -80,6 +80,7 @@ export const de = {
   notices: {
     convertedBibleReferences: '{{count}} Bibeltexte umgewandelt',
     pleaseSelectText: 'Bitte wähle Text zum Konvertieren aus',
+    noBibleReferencesFound: 'Keine Bibelverweise gefunden',
   },
   suggestions: {
     createLink: 'Link erstellen: {{text}}',

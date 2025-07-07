@@ -78,4 +78,41 @@ describe('linkUnlinkedBibleReferences', () => {
       error: 'notices.noBibleReferencesFound',
     });
   });
+
+  test('should preserve spaces around Bible references when converting to links', () => {
+    // Arrange
+    const textWithSpaces = `Some text before John 3:16 and some text after.`;
+
+    // Act
+    linkUnlinkedBibleReferences(textWithSpaces, settings, callbackMock);
+
+    // Assert
+    expect(callbackMock).toHaveBeenCalled();
+
+    const callbackArgs = callbackMock.mock.calls[0][0];
+    expect(callbackArgs.error).toBeUndefined();
+    expect(callbackArgs.changes.length).toBe(1);
+
+    const change = callbackArgs.changes[0];
+
+    // The change should only replace the Bible reference itself, not the surrounding spaces
+    // "Some text before John 3:16 and some text after."
+    //                   ^         ^
+    //                   17        25 (John 3:16 is 8 characters)
+    expect(change.from.ch).toBe(17); // Position after "Some text before "
+    expect(change.to.ch).toBe(26); // Position before " and some text after"
+
+    // The replacement text should be the markdown link
+    expect(change.text).toBe('[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)');
+
+    // Verify the final text would preserve spaces by reconstructing what the result would be
+    const originalLine = textWithSpaces;
+    const beforeReference = originalLine.substring(0, change.from.ch);
+    const afterReference = originalLine.substring(change.to.ch);
+    const resultText = beforeReference + change.text + afterReference;
+
+    expect(resultText).toBe(
+      'Some text before [John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E) and some text after.',
+    );
+  });
 });

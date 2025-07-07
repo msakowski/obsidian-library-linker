@@ -80,6 +80,7 @@ export const nl = {
   notices: {
     convertedBibleReferences: '{{count}} bijbelteksten geconverteerd',
     pleaseSelectText: 'Selecteer text om te converteren',
+    noBibleReferencesFound: 'Geen bijbelverwijzingen gevonden',
   },
   suggestions: {
     createLink: 'Link maken: {{text}}',
