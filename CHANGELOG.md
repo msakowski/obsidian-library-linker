@@ -1,5 +1,15 @@
 # obsidian-library-linker
 
+## 0.6.0
+
+### Minor Changes
+
+- [#115](https://github.com/msakowski/obsidian-library-linker/pull/115) [`7775e18`](https://github.com/msakowski/obsidian-library-linker/commit/7775e18d8ca5f265bc843c86ca06b15fff7f7bd7) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Added silent mode
+
+### Patch Changes
+
+- [#115](https://github.com/msakowski/obsidian-library-linker/pull/115) [`7775e18`](https://github.com/msakowski/obsidian-library-linker/commit/7775e18d8ca5f265bc843c86ca06b15fff7f7bd7) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Fix missing whitespace after linking unlinked bible references
+
 ## 0.5.1
 
 ### Patch Changes
