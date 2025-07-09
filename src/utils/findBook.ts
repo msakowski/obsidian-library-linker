@@ -8,12 +8,14 @@ export const findBook = (bookQuery: string, language: Language): BibleBook | Bib
     .trim();
 
   if (!trimmedQuerry) {
+    console.error('Book query is empty', { bookQuery, trimmedQuerry });
     throw new Error('errors.bookNotFound');
   }
 
   const bibleBooks = getBibleBooks(language);
 
   if (!bibleBooks) {
+    console.error('No bible books found', { bookQuery, trimmedQuerry });
     throw new Error('errors.bookNotFound');
   }
 

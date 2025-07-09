@@ -23,11 +23,22 @@ Converts JW Library links and web links to formats that work directly in JW Libr
 
 ### Creating Bible References to JW Library
 
+There are two types of methods to use:
+
+**Command mode**
+
 1. Type `/b` followed by a space
-2. Enter the Bible reference (e.g., "matthäus 24:14" or "joh 3:16" or "offb21:3")
+2. Enter the Bible reference (e.g., `matthäus 24:14` or `joh 3:16` or `off21:3`)  
+   (better suggestions while typing are in the doing)
 3. Select the desired option from the suggestions to either create a link or create and open the link
 
-**Examples:**
+**Silent mode**
+
+1. Enter the Bible reference (e.g., `matthäus 24:14` or `joh 3:16` or `off21:3`).  
+   Once there is a valid reference possible the suggestion opens.
+2. Select the desired option from the suggestions to either create a link or create and open the link
+
+**Example conversions:**
 
 ```
 /b mat 24:14

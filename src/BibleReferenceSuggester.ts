@@ -25,14 +25,38 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
   onTrigger(cursor: EditorPosition, editor: Editor): EditorSuggestTriggerInfo | null {
     const line = editor.getLine(cursor.line);
-    const subString = line.substring(0, cursor.ch);
+
+    /**
+     * Silent mode: If there is a complete reference, show it as a suggestion
+     */
+    const match = line.match(bibleReferenceRegex);
+
+    if (match?.[0]) {
+      if (!line.includes('/b') && !line.includes(`[${match[0]}]`)) {
+        return {
+          start: {
+            ch: line.indexOf(match[0]),
+            line: cursor.line,
+          },
+          end: {
+            ch: line.indexOf(match[0]) + match[0].length,
+            line: cursor.line,
+          },
+          query: match[0],
+        };
+      }
+    }
+
+    /**
+     * Command mode: If there is a /b, show detailed suggestions
+     */
 
     // Find position of /b
-    const commandIndex = subString.lastIndexOf('/b');
+    const commandIndex = line.lastIndexOf('/b');
     if (commandIndex === -1) return null;
 
     // Get the text after /b
-    const afterCommand = subString.slice(commandIndex + 2);
+    const afterCommand = line.slice(commandIndex + 2);
 
     // Show suggestions immediately after "/b " or if there's any text after "/b"
     if (afterCommand.startsWith(' ') || afterCommand.length > 0) {
@@ -41,7 +65,10 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
           ch: commandIndex, // Start from the /b
           line: cursor.line,
         },
-        end: cursor,
+        end: {
+          ch: line.length,
+          line: cursor.line,
+        },
         query: afterCommand.trim(), // Trim to handle the space case
       };
     }

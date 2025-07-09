@@ -43,6 +43,7 @@ export function linkUnlinkedBibleReferences(
           });
         }
       } catch {
+        console.error('Invalid reference', { line, match, lineIndex });
         // Skip invalid references
         continue;
       }

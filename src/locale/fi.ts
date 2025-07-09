@@ -80,6 +80,7 @@ export const fi = {
   notices: {
     convertedBibleReferences: 'Muunnettu {{count}} raamatunviitettä',
     pleaseSelectText: 'Valitse teksti muunnettavaksi',
+    noBibleReferencesFound: 'Ei raamatunviitteitä löytynyt',
   },
   suggestions: {
     createLink: 'Luo linkki: {{text}}',

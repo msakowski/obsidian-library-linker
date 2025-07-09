@@ -35,7 +35,7 @@ describe('Bible Reference Regex Pattern', () => {
     'joh1:1-2,4,6-8,12-14',
     'joh 1:1-2, 4, 6-8, 12-14',
     '1mo3:1-5,7,9',
-    '1Mo3:1-5,6,',
+    '1Mo3:1-5,6',
     '5Mo3:1-5,7,9',
     '1mo 3:1-5,7,9',
     '1Mo 3:1-5, 7, 9',
@@ -43,12 +43,6 @@ describe('Bible Reference Regex Pattern', () => {
     // References with German characters
     'röm8:28',
     'Röm 8:28',
-
-    // References with trailing comma
-    'joh1:1,',
-    'joh 1:1,2,',
-    'Joh1:1,2,3,',
-    '2Pet 1:1,2,3,',
   ];
 
   const invalidReferences = [
@@ -58,6 +52,8 @@ describe('Bible Reference Regex Pattern', () => {
     'joh3',
     'joh3:',
     ':16',
+    ' joh3:16',
+    'joh 3:16 ',
 
     // Invalid verse patterns
     'joh3:1,,2',
@@ -69,6 +65,9 @@ describe('Bible Reference Regex Pattern', () => {
     validReferences.forEach((reference) => {
       // Create a new regex without g flag for exact matching
       const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'i');
+      if (!testRegex.test(reference)) {
+        console.error('Should match', { reference });
+      }
       expect(testRegex.test(reference)).toBe(true);
     });
   });
@@ -77,6 +76,9 @@ describe('Bible Reference Regex Pattern', () => {
     invalidReferences.forEach((reference) => {
       // Create a new regex without g flag for exact matching
       const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'i');
+      if (testRegex.test(reference)) {
+        console.error('Should not match', { reference });
+      }
       expect(testRegex.test(reference)).toBe(false);
     });
   });

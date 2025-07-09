@@ -79,6 +79,7 @@ export const en = {
   notices: {
     convertedBibleReferences: 'Converted {{count}} Bible references',
     pleaseSelectText: 'Please select text to convert',
+    noBibleReferencesFound: 'No Bible references found',
   },
   suggestions: {
     createLink: 'Create link: {{text}}',
