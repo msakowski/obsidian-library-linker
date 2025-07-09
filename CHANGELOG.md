@@ -1,5 +1,21 @@
 # obsidian-library-linker
 
+## 0.5.1
+
+### Patch Changes
+
+- [#110](https://github.com/msakowski/obsidian-library-linker/pull/110) [`7deeff8`](https://github.com/msakowski/obsidian-library-linker/commit/7deeff8fd110cd3ab7ef00a9880ad6a644c4658e) Thanks [@naftalivanderloon](https://github.com/naftalivanderloon)! - Add Dutch language support
+
+## 0.5.0
+
+### Minor Changes
+
+- [#108](https://github.com/msakowski/obsidian-library-linker/pull/108) [`fa177aa`](https://github.com/msakowski/obsidian-library-linker/commit/fa177aaf7937ad0fa6f87ba2c5647289f8e891b8) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Combine multiple converting commands
+
+### Patch Changes
+
+- [#107](https://github.com/msakowski/obsidian-library-linker/pull/107) [`5c1b2d1`](https://github.com/msakowski/obsidian-library-linker/commit/5c1b2d10b9fb97a02bfa13651305e36192e6309d) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Added german books with o for matching oe
+
 ## 0.4.0
 
 ### Minor Changes

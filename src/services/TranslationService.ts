@@ -2,6 +2,7 @@ import { en } from '@/locale/en';
 import { de } from '@/locale/de';
 import { fi } from '@/locale/fi';
 import { es } from '@/locale/es';
+import { nl } from '@/locale/nl';
 import type { Locale } from '@/types';
 
 type Translation = typeof en;
@@ -14,6 +15,7 @@ export class TranslationService {
     de,
     fi,
     es,
+    nl,
   };
 
   private constructor() {
@@ -25,7 +27,8 @@ export class TranslationService {
           obsidianLocale === 'en' ||
           obsidianLocale === 'de' ||
           obsidianLocale === 'fi' ||
-          obsidianLocale === 'es'
+          obsidianLocale === 'es' ||
+          obsidianLocale === 'nl'
         ) {
           this.currentLocale = obsidianLocale;
         }
