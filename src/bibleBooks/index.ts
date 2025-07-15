@@ -5,6 +5,7 @@ import { bibleBooksES } from '@/bibleBooks/es';
 import { bibleBooksNL } from '@/bibleBooks/nl';
 import { chapterCounts } from '@/bibleBooks/chapterCounts';
 import type { BibleBook, Language } from '@/types';
+import { bibleBooksKO } from '@/bibleBooks/ko';
 
 type BibleBookWithoutChapters = Omit<BibleBook, 'chapters'>;
 
@@ -29,6 +30,9 @@ export const getBibleBooks = (language: Language): readonly BibleBook[] => {
       break;
     case 'O':
       books = bibleBooksNL;
+      break;
+    case 'KO':
+      books = bibleBooksKO;
       break;
     default:
       throw new Error('errors.unsupportedLanguage');

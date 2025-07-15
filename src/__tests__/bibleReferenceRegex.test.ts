@@ -43,6 +43,11 @@ describe('Bible Reference Regex Pattern', () => {
     // References with German characters
     'röm8:28',
     'Röm 8:28',
+
+    // Korean references
+    '신1:1',
+    '신1:1-3',
+    '수1:1-3,5,7',
   ];
 
   const invalidReferences = [
