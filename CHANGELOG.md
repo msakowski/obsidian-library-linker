@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.6.1
+
+### Patch Changes
+
+- [#120](https://github.com/msakowski/obsidian-library-linker/pull/120) [`a93ada9`](https://github.com/msakowski/obsidian-library-linker/commit/a93ada97192a620b14c839fbf7103ef2a9690839) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add korean language support
+
 ## 0.6.0
 
 ### Minor Changes
