@@ -12,10 +12,14 @@ describe('convertLinks', () => {
   });
 
   test('converts publication references', () => {
-    const input = '[Study Article](jwpub://p/X:102021001/15)';
-    expect(convertLinks(input, 'publication', settings)).toBe(
-      '[Study Article](jwlibrary:///finder?wtlocale=X&docid=102021001&par=15)',
-    );
+    const input = `
+      [Study Article](jwpub://p/X:102021001/15)
+      [Study Article](jwpub://p/X:102021001)
+    `;
+    expect(convertLinks(input, 'publication', settings)).toBe(`
+      [Study Article](jwlibrary:///finder?wtlocale=X&docid=102021001&par=15)
+      [Study Article](jwlibrary:///finder?wtlocale=X&docid=102021001)
+    `);
   });
 
   test('converts both types when type is "all"', () => {
