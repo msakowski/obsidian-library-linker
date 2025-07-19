@@ -1,6 +1,6 @@
 {
   "name": "jw-library-linker",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "An Obsidian plugin that helps creating JW Library links",
   "main": "main.js",
   "scripts": {
