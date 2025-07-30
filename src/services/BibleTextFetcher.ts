@@ -1,6 +1,7 @@
 import type { BibleReference, Language } from '@/types';
 import { padBook, padBookForVerseId, padChapter, padVerse } from '@/utils/padNumber';
 import { requestUrl } from 'obsidian';
+import sanitizeHtml from 'sanitize-html';
 
 export interface BibleTextResult {
   text: string;
@@ -199,21 +200,15 @@ export class BibleTextFetcher {
   }
 
   private static cleanHtmlText(html: string): string {
-    return (
-      html
-        .replace(/<[^>]*>/g, '') // Remove HTML tags
-        .replace(/&nbsp;/g, ' ') // Replace non-breaking spaces
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
-        // Remove &lt; and &gt; entities instead of decoding them to prevent HTML injection
-        .replace(/&lt;/g, '')
-        .replace(/&gt;/g, '')
-        .replace(/&amp;/g, '&') // Replace HTML entities (ampersand last)
-        .replace(/\+/g, '') // Remove footnote markers
-        .replace(/\*/g, '') // Remove asterisk markers
-        .replace(/\s+/g, ' ') // Normalize whitespace
-        .trim()
-    );
+    // Use sanitize-html to remove all HTML tags and decode entities safely
+    return sanitizeHtml(html, {
+      allowedTags: [], // Remove all tags
+      allowedAttributes: {}, // Remove all attributes
+      textFilter: function(text) {
+        // Optionally, remove footnote markers and normalize whitespace
+        return text.replace(/\+/g, '').replace(/\*/g, '').replace(/\s+/g, ' ');
+      }
+    }).trim();
   }
 
   private static generateCitation(reference: BibleReference): string {
