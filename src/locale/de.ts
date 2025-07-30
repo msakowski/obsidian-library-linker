@@ -63,10 +63,30 @@ export const de = {
         name: 'Vorschau',
       },
     },
+    bibleQuote: {
+      name: 'Bibelzitat-Formatierung',
+      description: 'Konfiguriere die Formatierung von eingefügten Bibelzitaten',
+      format: {
+        name: 'Zitat-Format',
+        description: 'Wähle das Format für eingefügte Bibelzitate',
+        short: 'Kurz (einfaches Zitat)',
+        longFoldable: 'Lang (einklappbarer Callout)',
+        longExpanded: 'Lang (ausgeklappter Callout)',
+      },
+      calloutType: {
+        name: 'Callout-Typ',
+        description: 'Typ des Callouts für lange Formate (z.B. quote, note, info)',
+      },
+      preview: {
+        name: 'Bibelzitat-Vorschau',
+      },
+    },
   },
   commands: {
     linkUnlinkedBibleReferences: 'Unverlinkte Bibeltexte verlinken',
     convertToJWLibraryLinks: 'Links in Auswahl in JW Library-Links umwandeln',
+    insertBibleQuotes: 'Bibelzitate für JW Library-Links einfügen',
+    insertBibleQuoteAtCursor: 'Bibelzitat an Cursor einfügen',
   },
   convertSuggester: {
     emptyStateText: 'Wähle einen Konvertierungstyp',
@@ -77,10 +97,20 @@ export const de = {
       // web: 'jw.org-Links',
     },
   },
+  contextMenu: {
+    insertBibleQuote: 'Bibelzitat einfügen',
+  },
   notices: {
     convertedBibleReferences: '{{count}} Bibeltexte umgewandelt',
     pleaseSelectText: 'Bitte wähle Text zum Konvertieren aus',
     noBibleReferencesFound: 'Keine Bibelverweise gefunden',
+    bibleQuotesInserted: 'Bibelzitate erfolgreich eingefügt',
+    bibleQuotesInsertedSelection: 'Bibelzitate für Auswahl eingefügt',
+    bibleQuoteInsertedAtCursor: 'Bibelzitat an Cursor eingefügt',
+    noBibleLinksFound: 'Keine JW Library-Links gefunden',
+    noBibleLinkAtCursor: 'Kein JW Library-Link an Cursor gefunden',
+    bibleQuoteAlreadyExists: 'Bibelzitat existiert bereits',
+    errorInsertingQuotes: 'Fehler beim Einfügen der Bibelzitate',
   },
   suggestions: {
     createLink: 'Link erstellen: {{text}}',

@@ -6,6 +6,10 @@ export function padBook(number: number): string {
   return padNumber(number, 2);
 }
 
+export function padBookForVerseId(number: number): string {
+  return number.toString();
+}
+
 export function padChapter(number: number): string {
   return padNumber(number, 3);
 }

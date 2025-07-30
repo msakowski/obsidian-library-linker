@@ -17,11 +17,19 @@ export interface LinkStyles {
 
 export type UpdatedLinkStructure = 'keepCurrentStructure' | 'usePluginSettings';
 
+export type BibleQuoteFormat = 'short' | 'long-foldable' | 'long-expanded';
+
+export interface BibleQuoteSettings {
+  format: BibleQuoteFormat;
+  calloutType: string; // e.g., 'quote', 'note', 'info'
+}
+
 export interface LinkReplacerSettings extends LinkStyles {
   language: Language;
   openAutomatically: boolean;
   updatedLinkStructure: UpdatedLinkStructure;
   noLanguageParameter: boolean;
+  bibleQuote: BibleQuoteSettings;
 }
 
 export interface BibleBook {

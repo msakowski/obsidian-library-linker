@@ -63,10 +63,30 @@ export const nl = {
         name: 'Voorbeeld',
       },
     },
+    bibleQuote: {
+      name: 'Bijbelcitaat Formattering',
+      description: 'Configureer hoe bijbelcitaten worden geformatteerd wanneer ze worden ingevoegd',
+      format: {
+        name: 'Citaat formaat',
+        description: 'Kies het formaat voor ingevoegde bijbelcitaten',
+        short: 'Kort (eenvoudig citaat)',
+        longFoldable: 'Lang (inklapbaar callout)',
+        longExpanded: 'Lang (uitgeklapt callout)',
+      },
+      calloutType: {
+        name: 'Callout type',
+        description: 'Type callout voor lange formaten (bijv. quote, note, info)',
+      },
+      preview: {
+        name: 'Bijbelcitaat Voorbeeld',
+      },
+    },
   },
   commands: {
     linkUnlinkedBibleReferences: 'Link niet gelinkte Bijbeltekst verwijzingen',
     convertToJWLibraryLinks: 'Converteer geselecteerde links naar JW Library links',
+    insertBibleQuotes: 'Voeg bijbelcitaten toe voor JW Library links',
+    insertBibleQuoteAtCursor: 'Voeg bijbelcitaat toe bij cursor',
   },
   convertSuggester: {
     emptyStateText: 'Selecteer een conderteer type',
@@ -77,10 +97,20 @@ export const nl = {
       // web: 'Web',
     },
   },
+  contextMenu: {
+    insertBibleQuote: 'Voeg bijbelcitaat toe',
+  },
   notices: {
     convertedBibleReferences: '{{count}} bijbelteksten geconverteerd',
     pleaseSelectText: 'Selecteer text om te converteren',
     noBibleReferencesFound: 'Geen bijbelverwijzingen gevonden',
+    bibleQuotesInserted: 'Bijbelcitaten succesvol toegevoegd',
+    noBibleLinksFound: 'Geen JW Library links gevonden',
+    bibleQuotesInsertedSelection: 'Bijbelcitaten toegevoegd voor selectie',
+    bibleQuoteInsertedAtCursor: 'Bijbelcitaat toegevoegd bij cursor',
+    noBibleLinkAtCursor: 'Geen JW Library link gevonden bij cursor',
+    bibleQuoteAlreadyExists: 'Bijbelcitaat bestaat al',
+    errorInsertingQuotes: 'Fout bij het toevoegen van bijbelcitaten',
   },
   suggestions: {
     createLink: 'Link maken: {{text}}',
