@@ -401,7 +401,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           }),
       );
 
-
     const previewContainer = settingsContainer.createDiv({
       cls: 'setting-item setting-item--preview',
     });
@@ -441,7 +440,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     });
 
     // Bible quote format setting (moved before callout type)
-    const formatSetting = new Setting(settingsContainer)
+    new Setting(settingsContainer)
       .setName(this.t('settings.bibleQuote.format.name'))
       .setDesc(this.t('settings.bibleQuote.format.description'))
       .addDropdown((dropdown) =>
@@ -455,11 +454,11 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           .onChange(async (value) => {
             this.plugin.settings.bibleQuote.format = value as BibleQuoteFormat;
             await this.plugin.saveSettings();
-            
+
             // Show/hide callout type setting based on format
             const isLongFormat = value !== 'short';
             calloutSetting.settingEl.style.display = isLongFormat ? 'flex' : 'none';
-            
+
             this.updateBibleQuotePreview();
           }),
       );
@@ -518,7 +517,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     if (!link) return;
 
     // Sample lorem ipsum text for preview
-    const sampleText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+    const sampleText =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 
     let markdown = '';
     const format = this.plugin.settings.bibleQuote.format;

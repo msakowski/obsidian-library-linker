@@ -158,11 +158,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
         const content = editor.getValue();
 
         try {
-          const result = await insertBibleQuoteAtCursor(
-            content,
-            cursor.line,
-            this.settings,
-          );
+          const result = await insertBibleQuoteAtCursor(content, cursor.line, this.settings);
           if (result.found) {
             if (result.content !== content) {
               editor.setValue(result.content);

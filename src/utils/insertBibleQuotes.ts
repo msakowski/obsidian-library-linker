@@ -1,6 +1,6 @@
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
-import type { BibleReference, Language, LinkReplacerSettings } from '@/types';
+import type { BibleReference, LinkReplacerSettings } from '@/types';
 
 export interface JWLibraryLinkInfo {
   url: string;
@@ -100,14 +100,18 @@ export async function insertBibleQuote(
   useWOL = false,
 ): Promise<string> {
   try {
-    const result = await BibleTextFetcher.fetchBibleText(linkInfo.reference, settings.language, useWOL);
+    const result = await BibleTextFetcher.fetchBibleText(
+      linkInfo.reference,
+      settings.language,
+      useWOL,
+    );
 
     if (!result.success || !result.text) {
       return content; // Return original content if fetching failed
     }
 
     const lines = content.split('\n');
-    const { lineNumber, lineText } = linkInfo;
+    const { lineNumber } = linkInfo;
 
     // Generate the formatted link
     const link = convertBibleTextToMarkdownLink(linkInfo.reference, settings);
@@ -117,31 +121,19 @@ export async function insertBibleQuote(
 
     // Create the formatted quote based on settings
     let replacementLines: string[] = [];
-    
+
     switch (settings.bibleQuote.format) {
       case 'short':
-        replacementLines = [
-          link,
-          `> ${result.text}`
-        ];
+        replacementLines = [link, `> ${result.text}`];
         break;
       case 'long-foldable':
-        replacementLines = [
-          `> [!${settings.bibleQuote.calloutType}]- ${link}`,
-          `> ${result.text}`
-        ];
+        replacementLines = [`> [!${settings.bibleQuote.calloutType}]- ${link}`, `> ${result.text}`];
         break;
       case 'long-expanded':
-        replacementLines = [
-          `> [!${settings.bibleQuote.calloutType}] ${link}`,
-          `> ${result.text}`
-        ];
+        replacementLines = [`> [!${settings.bibleQuote.calloutType}] ${link}`, `> ${result.text}`];
         break;
       default:
-        replacementLines = [
-          link,
-          `> ${result.text}`
-        ];
+        replacementLines = [link, `> ${result.text}`];
     }
 
     // Replace the original link line with the formatted quote
@@ -182,7 +174,12 @@ export async function insertAllBibleQuotes(
     const nextLine = lines[linkInfo.lineNumber + 1];
 
     // Skip if quote already exists
-    if (currentLine && currentLine.trim().startsWith('>') && (nextLine && nextLine.trim().startsWith('>'))) {
+    if (
+      currentLine &&
+      currentLine.trim().startsWith('>') &&
+      nextLine &&
+      nextLine.trim().startsWith('>')
+    ) {
       continue;
     }
 
@@ -236,9 +233,14 @@ export async function insertBibleQuoteAtCursor(
       // Check if quote already exists (look for various quote formats)
       const currentLine = lines[cursorLine];
       const nextLine = lines[cursorLine + 1];
-      
+
       // Skip if already formatted as callout or if next line is a quote
-      if (currentLine && currentLine.trim().startsWith('>') && (nextLine && nextLine.trim().startsWith('>'))) {
+      if (
+        currentLine &&
+        currentLine.trim().startsWith('>') &&
+        nextLine &&
+        nextLine.trim().startsWith('>')
+      ) {
         return { content, found: true }; // Quote already exists
       }
 

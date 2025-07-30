@@ -141,8 +141,6 @@ export class BibleTextFetcher {
         'i',
       );
 
-      
-
       const match = searchContent.match(singleVersePattern);
 
       if (match && match[1]) {
@@ -153,8 +151,6 @@ export class BibleTextFetcher {
       }
     } else {
       // Verse range extraction
-
-      const endVerseId = `v${paddedBookForVerseId}${paddedChapter}${padVerse(end)}`;
 
       // Pattern: extract from start verse until after end verse, but stop before footnotes/study sections
       const rangePattern = new RegExp(
@@ -187,13 +183,13 @@ export class BibleTextFetcher {
       text
         // Remove footnote links and their content (pattern-based)
         .replace(/<a[^>]*class="footnoteLink"[^>]*>[\s\S]*?<\/a>/gi, '')
-        // Remove study note sections (pattern-based) 
+        // Remove study note sections (pattern-based)
         .replace(/<div[^>]*class="studyBible"[^>]*>[\s\S]*?<\/div>/gi, '')
         // Remove content starting with footnote markers (^ symbol pattern)
         .replace(/\s*\^[\s\S]*$/i, '')
         // Remove any remaining footnote markers
         .replace(/\+/g, '') // Remove + symbols
-        .replace(/\*/g, '') // Remove * symbols  
+        .replace(/\*/g, '') // Remove * symbols
         // Remove incomplete HTML tags at the very end only
         .replace(/<[a-zA-Z][^>]*$/g, '')
         // Clean up excessive whitespace
