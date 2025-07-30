@@ -201,14 +201,15 @@ export class BibleTextFetcher {
 
   private static cleanHtmlText(html: string): string {
     // Use sanitize-html to remove all HTML tags and decode entities safely
-    return sanitizeHtml(html, {
+    const sanitized = sanitizeHtml(html, {
       allowedTags: [], // Remove all tags
       allowedAttributes: {}, // Remove all attributes
-      textFilter: function(text) {
+      textFilter: function (text: string) {
         // Optionally, remove footnote markers and normalize whitespace
         return text.replace(/\+/g, '').replace(/\*/g, '').replace(/\s+/g, ' ');
-      }
-    }).trim();
+      },
+    });
+    return String(sanitized).trim();
   }
 
   private static generateCitation(reference: BibleReference): string {

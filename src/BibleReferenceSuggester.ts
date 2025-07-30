@@ -96,8 +96,8 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
       try {
         reference = parseBibleReference(query, this.plugin.settings.language);
-      } catch (error) {
-        console.debug(error);
+      } catch (error: unknown) {
+        console.debug(error instanceof Error ? error.message : String(error));
         return [
           {
             text: query,

@@ -140,8 +140,11 @@ export async function insertBibleQuote(
     lines.splice(lineNumber, 1, ...replacementLines);
 
     return lines.join('\n');
-  } catch (error) {
-    console.error('Error inserting Bible quote:', error);
+  } catch (error: unknown) {
+    console.error(
+      'Error inserting Bible quote:',
+      error instanceof Error ? error.message : String(error),
+    );
     return content; // Return original content on error
   }
 }
@@ -194,8 +197,11 @@ export async function insertAllBibleQuotes(
           links[j].lineNumber += netLinesAdded;
         }
       }
-    } catch (error) {
-      console.error(`Error processing Bible quote for link ${i}:`, error);
+    } catch (error: unknown) {
+      console.error(
+        `Error processing Bible quote for link ${i}:`,
+        error instanceof Error ? error.message : String(error),
+      );
       continue;
     }
   }

@@ -143,8 +143,11 @@ export default class JWLibraryLinkerPlugin extends Plugin {
           } else {
             new Notice(this.t('notices.noBibleLinksFound'));
           }
-        } catch (error) {
-          console.error('Error inserting Bible quotes:', error);
+        } catch (error: unknown) {
+          console.error(
+            'Error inserting Bible quotes:',
+            error instanceof Error ? error.message : String(error),
+          );
           new Notice(this.t('notices.errorInsertingQuotes'));
         }
       },
@@ -169,8 +172,11 @@ export default class JWLibraryLinkerPlugin extends Plugin {
           } else {
             new Notice(this.t('notices.noBibleLinkAtCursor'));
           }
-        } catch (error) {
-          console.error('Error inserting Bible quote at cursor:', error);
+        } catch (error: unknown) {
+          console.error(
+            'Error inserting Bible quote at cursor:',
+            error instanceof Error ? error.message : String(error),
+          );
           new Notice(this.t('notices.errorInsertingQuotes'));
         }
       },
@@ -210,8 +216,11 @@ export default class JWLibraryLinkerPlugin extends Plugin {
                   } else {
                     new Notice(this.t('notices.noBibleLinkAtCursor'));
                   }
-                } catch (error) {
-                  console.error('Error inserting Bible quote from context menu:', error);
+                } catch (error: unknown) {
+                  console.error(
+                    'Error inserting Bible quote from context menu:',
+                    error instanceof Error ? error.message : String(error),
+                  );
                   new Notice(this.t('notices.errorInsertingQuotes'));
                 }
               });
