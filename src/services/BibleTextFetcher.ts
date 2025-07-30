@@ -202,11 +202,11 @@ export class BibleTextFetcher {
     return html
       .replace(/<[^>]*>/g, '') // Remove HTML tags
       .replace(/&nbsp;/g, ' ') // Replace non-breaking spaces
-      .replace(/&amp;/g, '&') // Replace HTML entities
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
       .replace(/&quot;/g, '"')
       .replace(/&#39;/g, "'")
+      .replace(/&amp;/g, '&') // Replace HTML entities (ampersand last)
       .replace(/\+/g, '') // Remove footnote markers
       .replace(/\*/g, '') // Remove asterisk markers
       .replace(/\s+/g, ' ') // Normalize whitespace
