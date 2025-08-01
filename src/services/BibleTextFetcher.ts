@@ -209,7 +209,12 @@ export class BibleTextFetcher {
         return text.replace(/\+/g, '').replace(/\*/g, '').replace(/\s+/g, ' ');
       },
     });
-    return String(sanitized).trim();
+    // Fix spacing issues where sentences are concatenated without spaces after periods
+    const result = String(sanitized)
+      .replace(/\.([A-ZÄÖÜ])/g, '. $1') // Add space after period before capital letters
+      .replace(/\s+/g, ' ') // Normalize multiple spaces to single space
+      .trim();
+    return result;
   }
 
   private static generateCitation(reference: BibleReference): string {
