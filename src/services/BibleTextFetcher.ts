@@ -1,5 +1,5 @@
 import type { BibleReference, Language } from '@/types';
-import { padBook, padBookForVerseId, padChapter, padVerse } from '@/utils/padNumber';
+import { padBook, padChapter, padVerse } from '@/utils/padNumber';
 import { requestUrl } from 'obsidian';
 import sanitizeHtml from 'sanitize-html';
 
@@ -128,9 +128,9 @@ export class BibleTextFetcher {
     const searchContent = bodyMatch ? bodyMatch[1] : html;
 
     // Build the verse IDs for extraction (HTML uses unpadded book numbers)
-    const paddedBookForVerseId = padBookForVerseId(book);
+    const paddedBook = book.toString();
     const paddedChapter = padChapter(chapter);
-    const startVerseId = `v${paddedBookForVerseId}${paddedChapter}${padVerse(start)}`;
+    const startVerseId = `v${paddedBook}${paddedChapter}${padVerse(start)}`;
 
     if (start === end) {
       // Single verse extraction

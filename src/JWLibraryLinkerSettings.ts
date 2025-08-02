@@ -426,7 +426,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
     // Add Bible Quote Formatting section
     const bibleQuoteContainer = settingsContainer.createDiv({
-      cls: 'setting-item setting-item--bibleQuote',
+      cls: 'setting-item setting-item--column setting-item--bibleQuote',
     });
 
     bibleQuoteContainer.createDiv({
@@ -481,7 +481,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
     // Add Bible quote preview section
     const bibleQuotePreviewContainer = settingsContainer.createDiv({
-      cls: 'setting-item setting-item--bibleQuotePreview',
+      cls: 'setting-item setting-item--preview',
     });
 
     bibleQuotePreviewContainer.createDiv({

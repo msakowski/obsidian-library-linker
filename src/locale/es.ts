@@ -60,7 +60,7 @@ export const es = {
         bold: 'Negrita',
       },
       preview: {
-        name: 'Vista previa',
+        name: 'Vista previa del enlace',
       },
     },
     bibleQuote: {

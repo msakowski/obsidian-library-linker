@@ -59,7 +59,7 @@ export const en = {
         bold: 'Bold',
       },
       preview: {
-        name: 'Preview',
+        name: 'Link preview',
       },
     },
     bibleQuote: {

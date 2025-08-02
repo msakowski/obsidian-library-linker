@@ -58,7 +58,7 @@ export const ko = {
         bold: '굵게',
       },
       preview: {
-        name: '미리보기',
+        name: '링크 미리보기',
       },
     },
     bibleQuote: {

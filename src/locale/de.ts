@@ -60,7 +60,7 @@ export const de = {
         bold: 'Fett',
       },
       preview: {
-        name: 'Vorschau',
+        name: 'Link Vorschau',
       },
     },
     bibleQuote: {

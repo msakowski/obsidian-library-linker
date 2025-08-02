@@ -60,7 +60,7 @@ export const fi = {
         bold: 'Lihavoitu',
       },
       preview: {
-        name: 'Esikatselu',
+        name: 'Linkin esikatselu',
       },
     },
     bibleQuote: {

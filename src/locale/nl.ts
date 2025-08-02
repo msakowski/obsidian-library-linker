@@ -60,7 +60,7 @@ export const nl = {
         bold: 'Vet',
       },
       preview: {
-        name: 'Voorbeeld',
+        name: 'Linkvoorbeeld',
       },
     },
     bibleQuote: {
