@@ -10,6 +10,7 @@ main.js
 # Development
 .idea/
 .vscode/
+.claude/
 *.log
 
 # OS-specific files
