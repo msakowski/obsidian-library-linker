@@ -1,5 +1,13 @@
 # obsidian-library-linker
 
+## 0.6.2
+
+### Patch Changes
+
+- [#132](https://github.com/msakowski/obsidian-library-linker/pull/132) [`6b87fc7`](https://github.com/msakowski/obsidian-library-linker/commit/6b87fc7d4e7db7e582146a6ba24c7a0cc37a393d) Thanks [@msakowski](https://github.com/msakowski)! - fix suggestion box staying open with italic link style on macOS
+
+- [#122](https://github.com/msakowski/obsidian-library-linker/pull/122) [`a08a6b2`](https://github.com/msakowski/obsidian-library-linker/commit/a08a6b265cc3b37da05e890d75dfd400b9b29b42) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - remove par=undefined from publication links without paragraph defined
+
 ## 0.6.1
 
 ### Patch Changes
