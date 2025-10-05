@@ -188,6 +188,9 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     // Replace the entire command and reference with the converted link
     editor.replaceRange(convertedLink, context.start, context.end);
 
+    // Force close the suggestion box to prevent it from staying open with italic formatting
+    this.close();
+
     // Handle opening links
     if (suggestion.command === 'open') {
       const url = formatJWLibraryLink(reference, linkLanguage);
