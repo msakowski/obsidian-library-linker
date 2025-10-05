@@ -126,16 +126,9 @@ export default class JWLibraryLinkerPlugin extends Plugin {
           };
         }
 
-        const content = editor.getValue();
         try {
-          const updatedContent = await insertAllBibleQuotes(
-            content,
-            this.settings,
-            false,
-            contentSelection,
-          );
-          if (content !== updatedContent) {
-            editor.setValue(updatedContent);
+          const count = await insertAllBibleQuotes(editor, this.settings, false, contentSelection);
+          if (count > 0) {
             const notice = contentSelection
               ? this.t('notices.bibleQuotesInsertedSelection')
               : this.t('notices.bibleQuotesInserted');
@@ -157,18 +150,12 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       id: 'insert-bible-quote-at-cursor',
       name: this.t('commands.insertBibleQuoteAtCursor'),
       editorCallback: async (editor: Editor) => {
-        const cursor = editor.getCursor();
-        const content = editor.getValue();
-
         try {
-          const result = await insertBibleQuoteAtCursor(content, cursor.line, this.settings);
-          if (result.found) {
-            if (result.content !== content) {
-              editor.setValue(result.content);
-              new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
-            } else {
-              new Notice(this.t('notices.bibleQuoteAlreadyExists'));
-            }
+          const result = await insertBibleQuoteAtCursor(editor, this.settings);
+          if (result.inserted) {
+            new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
+          } else if (result.alreadyExists) {
+            new Notice(this.t('notices.bibleQuoteAlreadyExists'));
           } else {
             new Notice(this.t('notices.noBibleLinkAtCursor'));
           }
@@ -199,20 +186,12 @@ export default class JWLibraryLinkerPlugin extends Plugin {
               .setTitle(this.t('contextMenu.insertBibleQuote'))
               .setIcon('quote-glyph')
               .onClick(async () => {
-                const content = editor.getValue();
                 try {
-                  const result = await insertBibleQuoteAtCursor(
-                    content,
-                    cursor.line,
-                    this.settings,
-                  );
-                  if (result.found) {
-                    if (result.content !== content) {
-                      editor.setValue(result.content);
-                      new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
-                    } else {
-                      new Notice(this.t('notices.bibleQuoteAlreadyExists'));
-                    }
+                  const result = await insertBibleQuoteAtCursor(editor, this.settings);
+                  if (result.inserted) {
+                    new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
+                  } else if (result.alreadyExists) {
+                    new Notice(this.t('notices.bibleQuoteAlreadyExists'));
                   } else {
                     new Notice(this.t('notices.noBibleLinkAtCursor'));
                   }

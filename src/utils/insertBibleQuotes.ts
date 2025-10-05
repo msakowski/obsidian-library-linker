@@ -1,104 +1,21 @@
+import { Editor } from 'obsidian';
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
-import type { BibleReference, LinkReplacerSettings } from '@/types';
+import type { LinkReplacerSettings } from '@/types';
+import {
+  findJWLibraryLinks,
+  parseJWLibraryLink,
+  type JWLibraryLinkInfo,
+  type ContentSelection,
+} from '@/utils/findJWLibraryLinks';
 
-export interface JWLibraryLinkInfo {
-  url: string;
-  reference: BibleReference;
-  lineNumber: number;
-  lineText: string;
-}
+export type { JWLibraryLinkInfo, ContentSelection };
 
-export function parseJWLibraryLink(url: string): BibleReference | null {
-  // Parse jwlibrary:///finder?bible={bookChapterVerse} format
-  const match = url.match(/jwlibrary:\/\/\/finder\?bible=(\d{8}(?:-\d{8})?)(?:&|$)/);
-  if (!match) return null;
-
-  const bibleCode = match[1];
-
-  // Handle range format (e.g., 40005003-40005005)
-  if (bibleCode.includes('-')) {
-    const [start, end] = bibleCode.split('-');
-    const startRef = parseSingleBibleCode(start);
-    const endRef = parseSingleBibleCode(end);
-
-    if (!startRef || !endRef) return null;
-
-    return {
-      book: startRef.book,
-      chapter: startRef.chapter,
-      verseRanges: [
-        {
-          start: startRef.verseRanges![0].start,
-          end: endRef.verseRanges![0].start,
-        },
-      ],
-    };
-  }
-
-  return parseSingleBibleCode(bibleCode);
-}
-
-function parseSingleBibleCode(code: string): BibleReference | null {
-  if (code.length !== 8) return null;
-
-  const book = parseInt(code.substring(0, 2), 10);
-  const chapter = parseInt(code.substring(2, 5), 10);
-  const verse = parseInt(code.substring(5, 8), 10);
-
-  if (isNaN(book) || isNaN(chapter) || isNaN(verse)) return null;
-
-  return {
-    book,
-    chapter,
-    verseRanges: [{ start: verse, end: verse }],
-  };
-}
-
-export interface ContentSelection {
-  text: string;
-  startLine: number;
-  endLine: number;
-}
-
-export function findJWLibraryLinks(
-  content: string,
-  selection?: ContentSelection,
-): JWLibraryLinkInfo[] {
-  const lines = content.split('\n');
-  const links: JWLibraryLinkInfo[] = [];
-
-  // Determine which lines to search
-  const startLine = selection ? selection.startLine : 0;
-  const endLine = selection ? Math.min(selection.endLine, lines.length - 1) : lines.length - 1;
-
-  for (let i = startLine; i <= endLine; i++) {
-    const line = lines[i];
-    const jwLibraryRegex = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)\s]*)?/g;
-    let match;
-
-    while ((match = jwLibraryRegex.exec(line)) !== null) {
-      const reference = parseJWLibraryLink(match[0]);
-      if (reference) {
-        links.push({
-          url: match[0],
-          reference,
-          lineNumber: i,
-          lineText: line,
-        });
-      }
-    }
-  }
-
-  return links;
-}
-
-export async function insertBibleQuote(
-  content: string,
+async function generateBibleQuoteText(
   linkInfo: JWLibraryLinkInfo,
   settings: LinkReplacerSettings,
   useWOL = false,
-): Promise<string> {
+): Promise<string | null> {
   try {
     const result = await BibleTextFetcher.fetchBibleText(
       linkInfo.reference,
@@ -107,19 +24,14 @@ export async function insertBibleQuote(
     );
 
     if (!result.success || !result.text) {
-      return content; // Return original content if fetching failed
+      return null;
     }
 
-    const lines = content.split('\n');
-    const { lineNumber } = linkInfo;
-
-    // Generate the formatted link
     const link = convertBibleTextToMarkdownLink(linkInfo.reference, settings);
     if (!link) {
-      return content; // Return original content if link generation failed
+      return null;
     }
 
-    // Create the formatted quote based on settings
     let replacementLines: string[] = [];
 
     switch (settings.bibleQuote.format) {
@@ -136,45 +48,45 @@ export async function insertBibleQuote(
         replacementLines = [link, `> ${result.text}`];
     }
 
-    // Replace the original link line with the formatted quote
-    lines.splice(lineNumber, 1, ...replacementLines);
-
-    return lines.join('\n');
+    return replacementLines.join('\n');
   } catch (error: unknown) {
     console.error(
-      'Error inserting Bible quote:',
+      'Error generating Bible quote:',
       error instanceof Error ? error.message : String(error),
     );
-    return content; // Return original content on error
+    return null;
   }
 }
 
 export async function insertAllBibleQuotes(
-  content: string,
+  editor: Editor,
   settings: LinkReplacerSettings,
   useWOL = false,
   selection?: ContentSelection,
-): Promise<string> {
-  const links = findJWLibraryLinks(content, selection);
+): Promise<number> {
+  const links = findJWLibraryLinks(editor, selection);
 
   if (links.length === 0) {
-    return content;
+    return 0;
   }
 
-  let updatedContent = content;
+  const changes: Array<{
+    from: { line: number; ch: number };
+    to: { line: number; ch: number };
+    text: string;
+  }> = [];
 
   // Process links in reverse order to maintain line numbers
   for (let i = links.length - 1; i >= 0; i--) {
     const linkInfo = links[i];
 
-    // Check if quote already exists (simple check for quote marker on next line)
-    const lines = updatedContent.split('\n');
-    if (linkInfo.lineNumber >= lines.length) {
+    if (linkInfo.lineNumber > editor.lastLine()) {
       continue;
     }
 
-    const currentLine = lines[linkInfo.lineNumber];
-    const nextLine = lines[linkInfo.lineNumber + 1];
+    const currentLine = editor.getLine(linkInfo.lineNumber);
+    const nextLine =
+      linkInfo.lineNumber < editor.lastLine() ? editor.getLine(linkInfo.lineNumber + 1) : '';
 
     // Skip if quote already exists
     if (
@@ -187,15 +99,13 @@ export async function insertAllBibleQuotes(
     }
 
     try {
-      updatedContent = await insertBibleQuote(updatedContent, linkInfo, settings, useWOL);
-
-      // Update line numbers for remaining links
-      // We replace 1 line with 2 lines, so net +1 line
-      const netLinesAdded = 1;
-      for (let j = i - 1; j >= 0; j--) {
-        if (links[j].lineNumber > linkInfo.lineNumber) {
-          links[j].lineNumber += netLinesAdded;
-        }
+      const quoteText = await generateBibleQuoteText(linkInfo, settings, useWOL);
+      if (quoteText) {
+        changes.push({
+          from: { line: linkInfo.lineNumber, ch: 0 },
+          to: { line: linkInfo.lineNumber, ch: currentLine.length },
+          text: quoteText,
+        });
       }
     } catch (error: unknown) {
       console.error(
@@ -206,22 +116,26 @@ export async function insertAllBibleQuotes(
     }
   }
 
-  return updatedContent;
+  if (changes.length > 0) {
+    editor.transaction({ changes });
+  }
+
+  return changes.length;
 }
 
 export async function insertBibleQuoteAtCursor(
-  content: string,
-  cursorLine: number,
+  editor: Editor,
   settings: LinkReplacerSettings,
   useWOL = false,
-): Promise<{ content: string; found: boolean }> {
-  const lines = content.split('\n');
+): Promise<{ inserted: boolean; alreadyExists: boolean }> {
+  const cursor = editor.getCursor();
+  const cursorLine = cursor.line;
 
-  if (cursorLine >= lines.length) {
-    return { content, found: false };
+  if (cursorLine > editor.lastLine()) {
+    return { inserted: false, alreadyExists: false };
   }
 
-  const line = lines[cursorLine];
+  const line = editor.getLine(cursorLine);
   const jwLibraryRegex = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)\s]*)?/g;
   let match;
 
@@ -236,9 +150,8 @@ export async function insertBibleQuoteAtCursor(
         lineText: line,
       };
 
-      // Check if quote already exists (look for various quote formats)
-      const currentLine = lines[cursorLine];
-      const nextLine = lines[cursorLine + 1];
+      const currentLine = editor.getLine(cursorLine);
+      const nextLine = cursorLine < editor.lastLine() ? editor.getLine(cursorLine + 1) : '';
 
       // Skip if already formatted as callout or if next line is a quote
       if (
@@ -247,13 +160,24 @@ export async function insertBibleQuoteAtCursor(
         nextLine &&
         nextLine.trim().startsWith('>')
       ) {
-        return { content, found: true }; // Quote already exists
+        return { inserted: false, alreadyExists: true };
       }
 
-      const updatedContent = await insertBibleQuote(content, linkInfo, settings, useWOL);
-      return { content: updatedContent, found: true };
+      const quoteText = await generateBibleQuoteText(linkInfo, settings, useWOL);
+      if (quoteText) {
+        editor.transaction({
+          changes: [
+            {
+              from: { line: cursorLine, ch: 0 },
+              to: { line: cursorLine, ch: currentLine.length },
+              text: quoteText,
+            },
+          ],
+        });
+        return { inserted: true, alreadyExists: false };
+      }
     }
   }
 
-  return { content, found: false };
+  return { inserted: false, alreadyExists: false };
 }
