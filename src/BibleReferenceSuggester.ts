@@ -32,7 +32,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const match = line.match(bibleReferenceRegex);
 
     if (match?.[0]) {
-      if (!line.includes('/b') && !line.includes(`[${match[0]}]`)) {
+      if (!line.includes('/b ') && !line.includes(`[${match[0]}]`)) {
         return {
           start: {
             ch: line.indexOf(match[0]),
@@ -52,14 +52,14 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
      */
 
     // Find position of /b
-    const commandIndex = line.lastIndexOf('/b');
+    const trigger = '/b ';
+    const commandIndex = line.lastIndexOf(trigger);
     if (commandIndex === -1) return null;
 
     // Get the text after /b
-    const afterCommand = line.slice(commandIndex + 2);
-
-    // Show suggestions immediately after "/b " or if there's any text after "/b"
-    if (afterCommand.startsWith(' ') || afterCommand.length > 0) {
+    const afterCommand = line.slice(commandIndex + trigger.length);
+    // Show suggestions if there's any text after "/b "
+    if (afterCommand.length > 0) {
       return {
         start: {
           ch: commandIndex, // Start from the /b
