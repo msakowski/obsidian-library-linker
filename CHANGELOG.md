@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.6.3
+
+### Patch Changes
+
+- [#135](https://github.com/msakowski/obsidian-library-linker/pull/135) [`92e2503`](https://github.com/msakowski/obsidian-library-linker/commit/92e25032c8b37ea118add0bbc751f6bc722d79ea) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Change trigger to '/b ' to prevent trigger on jwpub://b/NWTR links
+
 ## 0.6.2
 
 ### Patch Changes
