@@ -1,4 +1,9 @@
 .jw-library-linker {
+  .setting-item--column {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   .setting-item--linkStyling {
     margin-top: 1em;
     padding-top: 1em;
@@ -25,10 +30,6 @@
   .setting-item--presets,
   .setting-item--linkStyling {
     display: block;
-  }
-
-  .setting-item--preview {
-    padding-top: 32px;
   }
 
   /* Presets section styles */

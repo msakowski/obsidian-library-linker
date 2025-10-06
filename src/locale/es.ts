@@ -60,13 +60,33 @@ export const es = {
         bold: 'Negrita',
       },
       preview: {
-        name: 'Vista previa',
+        name: 'Vista previa del enlace',
+      },
+    },
+    bibleQuote: {
+      name: 'Formato de Citas Bíblicas',
+      description: 'Configurar cómo se formatean las citas bíblicas cuando se insertan',
+      format: {
+        name: 'Formato de cita',
+        description: 'Elegir el formato para las citas bíblicas insertadas',
+        short: 'Corto (cita simple)',
+        longFoldable: 'Largo (callout plegable)',
+        longExpanded: 'Largo (callout expandido)',
+      },
+      calloutType: {
+        name: 'Tipo de callout',
+        description: 'Tipo de callout para formatos largos (ej. quote, note, info)',
+      },
+      preview: {
+        name: 'Vista Previa de Cita Bíblica',
       },
     },
   },
   commands: {
     linkUnlinkedBibleReferences: 'Enlazar referencias bíblicas no enlazadas',
     convertToJWLibraryLinks: 'Convertir los enlaces de la selección en enlaces de la Biblioteca JW',
+    insertBibleQuotes: 'Insertar citas bíblicas para enlaces de la Biblioteca JW',
+    insertBibleQuoteAtCursor: 'Insertar cita bíblica en el cursor',
   },
   convertSuggester: {
     emptyStateText: 'Selecciona un tipo de conversión',
@@ -77,10 +97,20 @@ export const es = {
       // web: 'Web',
     },
   },
+  contextMenu: {
+    insertBibleQuote: 'Insertar cita bíblica',
+  },
   notices: {
     convertedBibleReferences: '{{count}} referencias bíblicas convertidas',
     pleaseSelectText: 'Por favor selecciona texto para convertir',
     noBibleReferencesFound: 'No se encontraron referencias bíblicas',
+    bibleQuotesInserted: 'Citas bíblicas insertadas exitosamente',
+    bibleQuotesInsertedSelection: 'Citas bíblicas insertadas para la selección',
+    bibleQuoteInsertedAtCursor: 'Cita bíblica insertada en el cursor',
+    noBibleLinksFound: 'No se encontraron enlaces de la Biblioteca JW',
+    noBibleLinkAtCursor: 'No se encontró enlace de Biblioteca JW en el cursor',
+    bibleQuoteAlreadyExists: 'La cita bíblica ya existe',
+    errorInsertingQuotes: 'Error al insertar citas bíblicas',
   },
   suggestions: {
     createLink: 'Crear enlace: {{text}}',

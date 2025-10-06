@@ -7,6 +7,7 @@ import type {
   LinkStyles,
   BookLength,
   UpdatedLinkStructure,
+  BibleQuoteFormat,
 } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 
@@ -422,6 +423,130 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
     // Initialize preview
     this.updatePreview();
+
+    // Add Bible Quote Formatting section
+    const bibleQuoteContainer = settingsContainer.createDiv({
+      cls: 'setting-item setting-item--column setting-item--bibleQuote',
+    });
+
+    bibleQuoteContainer.createDiv({
+      text: this.t('settings.bibleQuote.name'),
+      cls: 'setting-item-heading',
+    });
+
+    bibleQuoteContainer.createDiv({
+      text: this.t('settings.bibleQuote.description'),
+      cls: 'setting-item-description',
+    });
+
+    // Bible quote format setting (moved before callout type)
+    new Setting(settingsContainer)
+      .setName(this.t('settings.bibleQuote.format.name'))
+      .setDesc(this.t('settings.bibleQuote.format.description'))
+      .addDropdown((dropdown) =>
+        dropdown
+          .addOptions({
+            short: this.t('settings.bibleQuote.format.short'),
+            'long-foldable': this.t('settings.bibleQuote.format.longFoldable'),
+            'long-expanded': this.t('settings.bibleQuote.format.longExpanded'),
+          })
+          .setValue(this.plugin.settings.bibleQuote.format)
+          .onChange(async (value) => {
+            this.plugin.settings.bibleQuote.format = value as BibleQuoteFormat;
+            await this.plugin.saveSettings();
+
+            // Show/hide callout type setting based on format
+            const isLongFormat = value !== 'short';
+            calloutSetting.settingEl.style.display = isLongFormat ? 'flex' : 'none';
+
+            this.updateBibleQuotePreview();
+          }),
+      );
+
+    // Callout type setting (only shown for long formats)
+    const calloutSetting = new Setting(settingsContainer)
+      .setName(this.t('settings.bibleQuote.calloutType.name'))
+      .setDesc(this.t('settings.bibleQuote.calloutType.description'))
+      .addText((text) =>
+        text.setValue(this.plugin.settings.bibleQuote.calloutType).onChange(async (value) => {
+          this.plugin.settings.bibleQuote.calloutType = value;
+          await this.plugin.saveSettings();
+          this.updateBibleQuotePreview();
+        }),
+      );
+
+    // Show/hide callout type setting based on initial format
+    const isLongFormat = this.plugin.settings.bibleQuote.format !== 'short';
+    calloutSetting.settingEl.style.display = isLongFormat ? 'flex' : 'none';
+
+    // Add Bible quote preview section
+    const bibleQuotePreviewContainer = settingsContainer.createDiv({
+      cls: 'setting-item setting-item--preview',
+    });
+
+    bibleQuotePreviewContainer.createDiv({
+      text: this.t('settings.bibleQuote.preview.name'),
+      cls: 'setting-item-heading',
+    });
+
+    // Create container for bible quote preview content
+    bibleQuotePreviewContainer.createDiv({
+      attr: { id: 'bible-quote-preview-container' },
+    });
+
+    // Initialize bible quote preview
+    this.updateBibleQuotePreview();
+  }
+
+  /**
+   * Updates the Bible quote preview with the selected format
+   */
+  updateBibleQuotePreview(): void {
+    const container = document.getElementById('bible-quote-preview-container');
+    if (!container) return;
+
+    // Sample Bible reference for preview
+    const sampleReference = {
+      book: 40,
+      chapter: 24,
+      verseRanges: [{ start: 14, end: 14 }],
+    };
+
+    // Generate the link
+    const link = convertBibleTextToMarkdownLink(sampleReference, this.plugin.settings);
+    if (!link) return;
+
+    // Sample lorem ipsum text for preview
+    const sampleText =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+
+    let markdown = '';
+    const format = this.plugin.settings.bibleQuote.format;
+    const calloutType = this.plugin.settings.bibleQuote.calloutType;
+
+    switch (format) {
+      case 'short':
+        markdown = `${link}\n> ${sampleText}`;
+        break;
+      case 'long-foldable':
+        markdown = `> [!${calloutType}]- ${link}\n> ${sampleText}`;
+        break;
+      case 'long-expanded':
+        markdown = `> [!${calloutType}] ${link}\n> ${sampleText}`;
+        break;
+    }
+
+    // Clear previous content
+    container.empty();
+
+    // Create a new component instance for this render
+    const component = new MarkdownComponent();
+
+    // Render markdown to HTML
+    void MarkdownRenderer.render(this.app, markdown, container, '.', component);
+
+    // Register the component to ensure proper cleanup
+    this.plugin.addChild(component);
   }
 
   /**
