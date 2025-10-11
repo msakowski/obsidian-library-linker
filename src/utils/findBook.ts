@@ -1,11 +1,12 @@
 import { getBibleBooks } from '@/bibleBooks';
 import type { BibleBook, Language } from '@/types';
 
+const cleanTerm = (name: string): string => {
+  return name.toLowerCase().replace(/[/.\s]/g, '');
+};
+
 export const findBook = (bookQuery: string, language: Language): BibleBook | BibleBook[] => {
-  const trimmedQuerry = bookQuery
-    .toLowerCase()
-    .replace(/[/.\s]/g, '')
-    .trim();
+  const trimmedQuerry = cleanTerm(bookQuery);
 
   if (!trimmedQuerry) {
     console.error('Book query is empty', { bookQuery, trimmedQuerry });
@@ -22,8 +23,20 @@ export const findBook = (bookQuery: string, language: Language): BibleBook | Bib
   const bookEntries = bibleBooks
     .filter((book) => (!book.prefix ? true : trimmedQuerry.match(/^[1-5]/)))
     .filter((book) => {
-      const alias = book.aliases.map((alias) => (book.prefix ? `${book.prefix}${alias}` : alias));
-      return alias.some((alias) => alias.startsWith(trimmedQuerry));
+      // Clean the name versions (they already include the prefix like "1 Samuel")
+      const cleanedNameVersions = [
+        cleanTerm(book.name.short),
+        cleanTerm(book.name.medium),
+        cleanTerm(book.name.long),
+      ];
+
+      // Clean the aliases and prepend prefix if book has one
+      const cleanedAliases = book.aliases.map((alias) =>
+        book.prefix ? `${book.prefix}${cleanTerm(alias)}` : cleanTerm(alias),
+      );
+
+      const allSearchTerms = [...cleanedAliases, ...cleanedNameVersions];
+      return allSearchTerms.some((term) => term.startsWith(trimmedQuerry));
     })
     .map((book) => ({ ...book, idPadded: book.id.toString().padStart(2, '0') }));
 

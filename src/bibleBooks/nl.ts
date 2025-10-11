@@ -3,7 +3,7 @@ import type { BibleBook } from '@/types';
 export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 1,
-    aliases: ['genesis'],
+    aliases: [],
     name: {
       long: 'Genesis',
       medium: 'Gen.',
@@ -12,7 +12,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 2,
-    aliases: ['exodus'],
+    aliases: [],
     name: {
       long: 'Exodus',
       medium: 'Ex.',
@@ -21,7 +21,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 3,
-    aliases: ['leviticus'],
+    aliases: [],
     name: {
       long: 'Leviticus',
       medium: 'Le.',
@@ -30,7 +30,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 4,
-    aliases: ['numeri'],
+    aliases: [],
     name: {
       long: 'Numeri',
       medium: 'Nu.',
@@ -48,7 +48,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 6,
-    aliases: ['jozua'],
+    aliases: [],
     name: {
       long: 'Jozua',
       medium: 'Joz.',
@@ -57,7 +57,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 7,
-    aliases: ['rechters'],
+    aliases: [],
     name: {
       long: 'Rechters',
       medium: 'Recht.',
@@ -66,7 +66,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 8,
-    aliases: ['ruth'],
+    aliases: [],
     name: {
       long: 'Ruth',
       medium: 'Ruth',
@@ -76,7 +76,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 9,
     prefix: '1',
-    aliases: ['samuël', 'samuel'],
+    aliases: ['samuel'],
     name: {
       long: '1 Samuël',
       medium: '1 Sam.',
@@ -86,7 +86,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 10,
     prefix: '2',
-    aliases: ['samuël', 'samuel'],
+    aliases: ['samuel'],
     name: {
       long: '2 Samuël',
       medium: '2 Sam.',
@@ -96,7 +96,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 11,
     prefix: '1',
-    aliases: ['koningen'],
+    aliases: [],
     name: {
       long: '1 Koningen',
       medium: '1 Kon.',
@@ -106,7 +106,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 12,
     prefix: '2',
-    aliases: ['koningen'],
+    aliases: [],
     name: {
       long: '2 Koningen',
       medium: '2 Kon.',
@@ -116,7 +116,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 13,
     prefix: '1',
-    aliases: ['kronieken'],
+    aliases: [],
     name: {
       long: '1 Kronieken',
       medium: '1 Kron.',
@@ -126,7 +126,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 14,
     prefix: '2',
-    aliases: ['kronieken'],
+    aliases: [],
     name: {
       long: '2 Kronieken',
       medium: '2 Kron.',
@@ -135,7 +135,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 15,
-    aliases: ['ezra'],
+    aliases: [],
     name: {
       long: 'Ezra',
       medium: 'Ezra',
@@ -144,7 +144,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 16,
-    aliases: ['nehemia'],
+    aliases: [],
     name: {
       long: 'Nehemia',
       medium: 'Neh.',
@@ -153,7 +153,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 17,
-    aliases: ['esther'],
+    aliases: [],
     name: {
       long: 'Esther',
       medium: 'Est.',
@@ -162,7 +162,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 18,
-    aliases: ['job'],
+    aliases: [],
     name: {
       long: 'Job',
       medium: 'Job',
@@ -171,7 +171,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 19,
-    aliases: ['psalmen', 'psalm'],
+    aliases: ['psalm'],
     name: {
       long: 'Psalmen',
       medium: 'Ps.',
@@ -180,7 +180,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 20,
-    aliases: ['spreuken'],
+    aliases: [],
     name: {
       long: 'Spreuken',
       medium: 'Spr.',
@@ -189,7 +189,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 21,
-    aliases: ['prediker'],
+    aliases: [],
     name: {
       long: 'Prediker',
       medium: 'Pred.',
@@ -198,7 +198,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 22,
-    aliases: ['hooglied'],
+    aliases: [],
     name: {
       long: 'Hooglied',
       medium: 'Hoogl.',
@@ -207,7 +207,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 23,
-    aliases: ['jesaja'],
+    aliases: [],
     name: {
       long: 'Jesaja',
       medium: 'Jes.',
@@ -216,7 +216,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 24,
-    aliases: ['jeremia'],
+    aliases: [],
     name: {
       long: 'Jeremia',
       medium: 'Jer.',
@@ -225,7 +225,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 25,
-    aliases: ['klaagliederen'],
+    aliases: [],
     name: {
       long: 'Klaagliederen',
       medium: 'Klaagl.',
@@ -234,7 +234,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 26,
-    aliases: ['ezechiël', 'ezechiel'],
+    aliases: ['ezechiel'],
     name: {
       long: 'Ezechiël',
       medium: 'Ez.',
@@ -243,7 +243,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 27,
-    aliases: ['daniël', 'daniel'],
+    aliases: ['daniel'],
     name: {
       long: 'Daniël',
       medium: 'Dan.',
@@ -252,7 +252,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 28,
-    aliases: ['hosea'],
+    aliases: [],
     name: {
       long: 'Hosea',
       medium: 'Hos.',
@@ -261,7 +261,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 29,
-    aliases: ['joël', 'joel'],
+    aliases: ['joel'],
     name: {
       long: 'Joël',
       medium: 'Joël',
@@ -270,7 +270,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 30,
-    aliases: ['amos'],
+    aliases: [],
     name: {
       long: 'Amos',
       medium: 'Am.',
@@ -279,7 +279,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 31,
-    aliases: ['obadja'],
+    aliases: [],
     name: {
       long: 'Obadja',
       medium: 'Ob.',
@@ -288,7 +288,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 32,
-    aliases: ['jona'],
+    aliases: [],
     name: {
       long: 'Jona',
       medium: 'Jona',
@@ -297,7 +297,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 33,
-    aliases: ['micha'],
+    aliases: [],
     name: {
       long: 'Micha',
       medium: 'Mi.',
@@ -306,7 +306,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 34,
-    aliases: ['nahum'],
+    aliases: [],
     name: {
       long: 'Nahum',
       medium: 'Nah.',
@@ -315,7 +315,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 35,
-    aliases: ['habakuk'],
+    aliases: [],
     name: {
       long: 'Habakuk',
       medium: 'Hab.',
@@ -324,7 +324,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 36,
-    aliases: ['Zefanja'],
+    aliases: [],
     name: {
       long: 'Zefanja',
       medium: 'Zef.',
@@ -333,7 +333,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 37,
-    aliases: ['haggaï', 'haggai'],
+    aliases: ['haggai'],
     name: {
       long: 'Haggaï',
       medium: 'Hag.',
@@ -342,7 +342,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 38,
-    aliases: ['zacharia'],
+    aliases: [],
     name: {
       long: 'Zacharia',
       medium: 'Zach.',
@@ -351,7 +351,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 39,
-    aliases: ['maleachi'],
+    aliases: [],
     name: {
       long: 'Maleachi',
       medium: 'Mal.',
@@ -360,7 +360,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 40,
-    aliases: ['mattheüs', 'mattheus'],
+    aliases: ['mattheus'],
     name: {
       long: 'Mattheüs',
       medium: 'Mat.',
@@ -369,7 +369,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 41,
-    aliases: ['markus'],
+    aliases: [],
     name: {
       long: 'Markus',
       medium: 'Mar.',
@@ -378,7 +378,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 42,
-    aliases: ['lukas'],
+    aliases: [],
     name: {
       long: 'Lukas',
       medium: 'Luk.',
@@ -387,7 +387,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 43,
-    aliases: ['johannes'],
+    aliases: [],
     name: {
       long: 'Johannes',
       medium: 'Joh.',
@@ -396,7 +396,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 44,
-    aliases: ['handelingen'],
+    aliases: [],
     name: {
       long: 'Handelingen',
       medium: 'Hand.',
@@ -405,7 +405,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 45,
-    aliases: ['romeinen'],
+    aliases: [],
     name: {
       long: 'Romeinen',
       medium: 'Rom.',
@@ -415,7 +415,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 46,
     prefix: '1',
-    aliases: ['korinthe', 'korintiërs', 'korintiers'],
+    aliases: ['korintiërs', 'korintiers'],
     name: {
       long: '1 Korinthe',
       medium: '1 Kor.',
@@ -425,7 +425,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 47,
     prefix: '2',
-    aliases: ['korinthe', 'korintiërs', 'korintiers'],
+    aliases: ['korintiërs', 'korintiers'],
     name: {
       long: '2 Korinthe',
       medium: '2 Kor.',
@@ -434,7 +434,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 48,
-    aliases: ['galaten'],
+    aliases: [],
     name: {
       long: 'Galaten',
       medium: 'Gal.',
@@ -443,7 +443,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 49,
-    aliases: ['efeziërs', 'efeziers'],
+    aliases: ['efeziers'],
     name: {
       long: 'Efeziërs',
       medium: 'Ef.',
@@ -452,7 +452,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 50,
-    aliases: ['filippenzen'],
+    aliases: [],
     name: {
       long: 'Filippenzen',
       medium: 'Fil.',
@@ -461,7 +461,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 51,
-    aliases: ['kolossenzen'],
+    aliases: [],
     name: {
       long: 'Kolossenzen',
       medium: 'Kol.',
@@ -471,7 +471,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 52,
     prefix: '1',
-    aliases: ['thessalonicenzen'],
+    aliases: [],
     name: {
       long: '1 Thessalonicenzen',
       medium: '1 Thess.',
@@ -481,7 +481,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 53,
     prefix: '2',
-    aliases: ['thessalonicenzen'],
+    aliases: [],
     name: {
       long: '2 Thessalonicenzen',
       medium: '2 Thess.',
@@ -491,7 +491,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 54,
     prefix: '1',
-    aliases: ['timotheüs', 'timotheus'],
+    aliases: ['timotheus'],
     name: {
       long: '1 Timotheüs',
       medium: '1 Tim.',
@@ -501,7 +501,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 55,
     prefix: '2',
-    aliases: ['timotheüs', 'timotheus'],
+    aliases: ['timotheus'],
     name: {
       long: '2 Timotheüs',
       medium: '2 Tim.',
@@ -510,7 +510,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 56,
-    aliases: ['titus'],
+    aliases: [],
     name: {
       long: 'Titus',
       medium: 'Tit.',
@@ -519,7 +519,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 57,
-    aliases: ['filemon'],
+    aliases: [],
     name: {
       long: 'Filemon',
       medium: 'Filem.',
@@ -528,7 +528,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 58,
-    aliases: ['hebreeën', 'hebreeen'],
+    aliases: ['hebreeen'],
     name: {
       long: 'Hebreeën',
       medium: 'Heb.',
@@ -537,7 +537,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 59,
-    aliases: ['jakobus'],
+    aliases: [],
     name: {
       long: 'Jakobus',
       medium: 'Jak.',
@@ -547,7 +547,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 60,
     prefix: '1',
-    aliases: ['petrus'],
+    aliases: [],
     name: {
       long: '1 Petrus',
       medium: '1 Pet.',
@@ -557,7 +557,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 61,
     prefix: '2',
-    aliases: ['petrus'],
+    aliases: [],
     name: {
       long: '2 Petrus',
       medium: '2 Pet.',
@@ -567,7 +567,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 62,
     prefix: '1',
-    aliases: ['johannes'],
+    aliases: [],
     name: {
       long: '1 Johannes',
       medium: '1 Joh.',
@@ -577,7 +577,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 63,
     prefix: '2',
-    aliases: ['johannes'],
+    aliases: [],
     name: {
       long: '2 Johannes',
       medium: '2 Joh.',
@@ -587,7 +587,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 64,
     prefix: '3',
-    aliases: ['johannes'],
+    aliases: [],
     name: {
       long: '3 Johannes',
       medium: '3 Joh.',
@@ -596,7 +596,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 65,
-    aliases: ['judas'],
+    aliases: [],
     name: {
       long: 'Judas',
       medium: 'Jud.',
@@ -605,7 +605,7 @@ export const bibleBooksNL: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 66,
-    aliases: ['openbaring'],
+    aliases: [],
     name: {
       long: 'Openbaring',
       medium: 'Open.',
