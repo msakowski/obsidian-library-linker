@@ -1,4 +1,4 @@
-import { Editor, Notice, Plugin } from 'obsidian';
+import { Editor, Notice, Plugin, Menu } from 'obsidian';
 import { ConversionType, convertLinks } from '@/utils/convertLinks';
 import type { LinkReplacerSettings, LinkStyles } from '@/types';
 import { TranslationService } from '@/services/TranslationService';
@@ -6,6 +6,11 @@ import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
 import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
 import { ConvertSuggester } from './ConvertSuggester';
+import {
+  insertAllBibleQuotes,
+  insertBibleQuoteAtCursor,
+  type ContentSelection,
+} from '@/utils/insertBibleQuotes';
 
 export const DEFAULT_STYLES: LinkStyles = {
   bookLength: 'medium',
@@ -21,6 +26,10 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
   openAutomatically: false,
   updatedLinkStructure: 'keepCurrentStructure',
   noLanguageParameter: false,
+  bibleQuote: {
+    format: 'short',
+    calloutType: 'quote',
+  },
   ...DEFAULT_STYLES,
 };
 
@@ -98,8 +107,106 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       },
     });
 
+    this.addCommand({
+      id: 'insert-bible-quotes',
+      name: this.t('commands.insertBibleQuotes'),
+      editorCallback: async (editor: Editor) => {
+        const selection = editor.getSelection();
+        let contentSelection: ContentSelection | undefined;
+
+        // If text is selected, work only on the selection
+        if (selection) {
+          const selectionRange = editor.listSelections()[0];
+          const startLine = Math.min(selectionRange.anchor.line, selectionRange.head.line);
+          const endLine = Math.max(selectionRange.anchor.line, selectionRange.head.line);
+          contentSelection = {
+            text: selection,
+            startLine,
+            endLine,
+          };
+        }
+
+        try {
+          const count = await insertAllBibleQuotes(editor, this.settings, false, contentSelection);
+          if (count > 0) {
+            const notice = contentSelection
+              ? this.t('notices.bibleQuotesInsertedSelection')
+              : this.t('notices.bibleQuotesInserted');
+            new Notice(notice);
+          } else {
+            new Notice(this.t('notices.noBibleLinksFound'));
+          }
+        } catch (error: unknown) {
+          console.error(
+            'Error inserting Bible quotes:',
+            error instanceof Error ? error.message : String(error),
+          );
+          new Notice(this.t('notices.errorInsertingQuotes'));
+        }
+      },
+    });
+
+    this.addCommand({
+      id: 'insert-bible-quote-at-cursor',
+      name: this.t('commands.insertBibleQuoteAtCursor'),
+      editorCallback: async (editor: Editor) => {
+        try {
+          const result = await insertBibleQuoteAtCursor(editor, this.settings);
+          if (result.inserted) {
+            new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
+          } else if (result.alreadyExists) {
+            new Notice(this.t('notices.bibleQuoteAlreadyExists'));
+          } else {
+            new Notice(this.t('notices.noBibleLinkAtCursor'));
+          }
+        } catch (error: unknown) {
+          console.error(
+            'Error inserting Bible quote at cursor:',
+            error instanceof Error ? error.message : String(error),
+          );
+          new Notice(this.t('notices.errorInsertingQuotes'));
+        }
+      },
+    });
+
     this.bibleSuggester = new BibleReferenceSuggester(this);
     this.registerEditorSuggest(this.bibleSuggester);
+
+    // Register context menu for JW Library links
+    this.registerEvent(
+      this.app.workspace.on('editor-menu', (menu: Menu, editor: Editor) => {
+        const cursor = editor.getCursor();
+        const line = editor.getLine(cursor.line);
+
+        // Check if the cursor line contains a JW Library link
+        const jwLibraryRegex = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)\s]*)?/;
+        if (jwLibraryRegex.test(line)) {
+          menu.addItem((item) => {
+            item
+              .setTitle(this.t('contextMenu.insertBibleQuote'))
+              .setIcon('quote-glyph')
+              .onClick(async () => {
+                try {
+                  const result = await insertBibleQuoteAtCursor(editor, this.settings);
+                  if (result.inserted) {
+                    new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
+                  } else if (result.alreadyExists) {
+                    new Notice(this.t('notices.bibleQuoteAlreadyExists'));
+                  } else {
+                    new Notice(this.t('notices.noBibleLinkAtCursor'));
+                  }
+                } catch (error: unknown) {
+                  console.error(
+                    'Error inserting Bible quote from context menu:',
+                    error instanceof Error ? error.message : String(error),
+                  );
+                  new Notice(this.t('notices.errorInsertingQuotes'));
+                }
+              });
+          });
+        }
+      }),
+    );
   }
 
   onunload() {

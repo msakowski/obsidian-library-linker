@@ -59,13 +59,33 @@ export const en = {
         bold: 'Bold',
       },
       preview: {
-        name: 'Preview',
+        name: 'Link preview',
+      },
+    },
+    bibleQuote: {
+      name: 'Bible quote formatting',
+      description: 'Configure how Bible quotes are formatted when inserted',
+      format: {
+        name: 'Quote format',
+        description: 'Choose the format for inserted Bible quotes',
+        short: 'Short (simple quote)',
+        longFoldable: 'Long (foldable callout)',
+        longExpanded: 'Long (expanded callout)',
+      },
+      calloutType: {
+        name: 'Callout type',
+        description: 'Type of callout for long formats (e.g., quote, note, info)',
+      },
+      preview: {
+        name: 'Bible quote preview',
       },
     },
   },
   commands: {
     linkUnlinkedBibleReferences: 'Link unlinked Bible references',
     convertToJWLibraryLinks: 'Convert links in selection to JW Library links',
+    insertBibleQuotes: 'Insert Bible quotes for JW Library links',
+    insertBibleQuoteAtCursor: 'Insert Bible quote at cursor',
   },
   convertSuggester: {
     emptyStateText: 'Select a conversion type',
@@ -76,10 +96,20 @@ export const en = {
       // web: 'Web',
     },
   },
+  contextMenu: {
+    insertBibleQuote: 'Insert Bible quote',
+  },
   notices: {
     convertedBibleReferences: 'Converted {{count}} Bible references',
     pleaseSelectText: 'Please select text to convert',
     noBibleReferencesFound: 'No Bible references found',
+    bibleQuotesInserted: 'Bible quotes inserted successfully',
+    bibleQuotesInsertedSelection: 'Bible quotes inserted for selection',
+    bibleQuoteInsertedAtCursor: 'Bible quote inserted at cursor',
+    noBibleLinksFound: 'No JW Library links found',
+    noBibleLinkAtCursor: 'No JW Library link found at cursor',
+    bibleQuoteAlreadyExists: 'Bible quote already exists',
+    errorInsertingQuotes: 'Error inserting Bible quotes',
   },
   suggestions: {
     createLink: 'Create link: {{text}}',

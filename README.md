@@ -10,7 +10,17 @@ This Obsidian plugin enhances your note-taking experience by providing seamless 
 
 **Plain Text Conversion**: Automatically detects and converts Bible references in selected text to JW Library links
 
-### 2. Bulk Link Conversion
+### 2. Bible Quote Citation
+
+**Automatic Bible Text Insertion**: Fetches and inserts actual Bible text for JW Library links
+
+- Automatically fetches Bible text from JW.org or WOL (Watchtower Online Library)
+- Multiple formatting options: short quotes, expandable callouts, or expanded callouts
+- Customizable callout types (quote, note, info, etc.)
+- Works with existing JW Library links in your notes
+- Command to insert quotes for all links or specific cursor position
+
+### 3. Bulk Link Conversion
 
 Converts JW Library links and web links to formats that work directly in JW Library:
 
@@ -76,6 +86,52 @@ Converts plain text Bible references in selected text to JW Library links
 2. Open the command palette (Ctrl/Cmd + P)
 3. Search for "Link unlinked Bible references"
 4. The plugin will automatically detect and convert valid Bible references to JW Library links
+
+### Inserting Bible Quotes
+
+**Command: "Insert Bible quotes for JW Library links"**
+
+Automatically fetches and inserts Bible text for existing JW Library links in your notes
+
+**For all links in selection/note:**
+1. Select text containing JW Library links (optional - if no selection, processes entire note)
+2. Open the command palette (Ctrl/Cmd + P)
+3. Search for "Insert Bible quotes for JW Library links"
+4. The plugin will fetch Bible text and format it according to your settings
+
+**For cursor position:**
+1. Place your cursor on a line containing a JW Library link
+2. Open the command palette (Ctrl/Cmd + P)
+3. Search for "Insert Bible quote at cursor"
+4. Alternatively, right-click on a line with a JW Library link and select "Insert Bible quote" from the context menu
+
+**Quote Formatting Options:**
+
+The plugin supports three formatting styles configurable in settings:
+
+- **Short format**: Simple quote block below the link
+- **Long foldable**: Collapsible callout (collapsed by default)  
+- **Long expanded**: Expanded callout (visible by default)
+
+**Example outputs:**
+
+Short format:
+```
+[Matthew 6:33](jwlibrary:///finder?bible=40006033)
+> But keep on seeking first the Kingdom and his righteousness, and all these other things will be added to you.
+```
+
+Long foldable format:
+```
+> [!quote]- [Matthew 6:33](jwlibrary:///finder?bible=40006033)
+> But keep on seeking first the Kingdom and his righteousness, and all these other things will be added to you.
+```
+
+Long expanded format:
+```
+> [!quote] [Matthew 6:33](jwlibrary:///finder?bible=40006033)
+> But keep on seeking first the Kingdom and his righteousness, and all these other things will be added to you.
+```
 
 ## Contributing
 
