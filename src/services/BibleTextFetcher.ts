@@ -204,7 +204,7 @@ export class BibleTextFetcher {
     const sanitized = sanitizeHtml(html, {
       allowedTags: [], // Remove all tags
       allowedAttributes: {}, // Remove all attributes
-      textFilter: function (text: string) {
+      textFilter: (text: string): string => {
         // Optionally, remove footnote markers and normalize whitespace
         return text.replace(/\+/g, '').replace(/\*/g, '').replace(/\s+/g, ' ');
       },
