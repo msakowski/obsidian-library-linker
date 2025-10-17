@@ -1,5 +1,15 @@
 # obsidian-library-linker
 
+## 0.7.0
+
+### Minor Changes
+
+- [#127](https://github.com/msakowski/obsidian-library-linker/pull/127) [`03f8ee8`](https://github.com/msakowski/obsidian-library-linker/commit/03f8ee85b9d9f329c8504bf9cd067f68ffe51a2f) Thanks [@msakowski](https://github.com/msakowski)! - Add citation feature that fetches Bible texts from jw.org
+
+### Patch Changes
+
+- [#139](https://github.com/msakowski/obsidian-library-linker/pull/139) [`a08015c`](https://github.com/msakowski/obsidian-library-linker/commit/a08015c3274695d20d912256a99a8af8cb088310) Thanks [@msakowski](https://github.com/msakowski)! - Fix bug where bold styled links keep the context menu open
+
 ## 0.6.3
 
 ### Patch Changes
