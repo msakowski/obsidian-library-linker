@@ -32,7 +32,18 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const match = line.match(bibleReferenceRegex);
 
     if (match?.[0]) {
-      if (!line.includes('/b ') && !line.includes(`[${match[0]}]`)) {
+      // Check if the matched reference is already inside a markdown link
+      const matchStart = line.indexOf(match[0]);
+      const beforeMatch = line.substring(0, matchStart);
+      const afterMatch = line.substring(matchStart + match[0].length);
+
+      // Look for markdown link pattern: [***text***](...)
+      // Check if there's an opening bracket with optional asterisks before, and closing bracket with link after
+      const hasLinkBefore = /\[\*{0,2}$/.test(beforeMatch);
+      const hasLinkAfter = /^\*{0,2}\]\(/.test(afterMatch);
+      const isAlreadyLinked = hasLinkBefore && hasLinkAfter;
+
+      if (!line.includes('/b ') && !isAlreadyLinked) {
         return {
           start: {
             ch: line.indexOf(match[0]),
