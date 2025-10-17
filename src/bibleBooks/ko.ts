@@ -3,7 +3,7 @@ import type { BibleBook } from '@/types';
 export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   {
     id: 1,
-    aliases: ['창세기', '창'],
+    aliases: [],
     name: {
       long: '창세기',
       medium: '창세기',
@@ -12,7 +12,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 2,
-    aliases: ['출애굽기', '출'],
+    aliases: [],
     name: {
       long: '출애굽기',
       medium: '출애굽기',
@@ -21,7 +21,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 3,
-    aliases: ['레위기', '레'],
+    aliases: [],
     name: {
       long: '레위기',
       medium: '레위기',
@@ -30,7 +30,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 4,
-    aliases: ['민수기', '민'],
+    aliases: [],
     name: {
       long: '민수기',
       medium: '민수기',
@@ -39,7 +39,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 5,
-    aliases: ['신명기', '신'],
+    aliases: [],
     name: {
       long: '신명기',
       medium: '신명기',
@@ -48,7 +48,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 6,
-    aliases: ['여호수아', '수'],
+    aliases: [],
     name: {
       long: '여호수아',
       medium: '여호수아',
@@ -57,7 +57,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 7,
-    aliases: ['사사기', '삿'],
+    aliases: [],
     name: {
       long: '사사기',
       medium: '사사기',
@@ -66,7 +66,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 8,
-    aliases: ['룻기', '룻'],
+    aliases: [],
     name: {
       long: '룻기',
       medium: '룻기',
@@ -75,7 +75,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 9,
-    aliases: ['사무엘상', '삼상'],
+    aliases: [],
     name: {
       long: '사무엘상',
       medium: '사무엘상',
@@ -84,7 +84,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 10,
-    aliases: ['사무엘하', '삼하'],
+    aliases: [],
     name: {
       long: '사무엘하',
       medium: '사무엘하',
@@ -93,7 +93,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 11,
-    aliases: ['열왕기상', '왕상'],
+    aliases: [],
     name: {
       long: '열왕기상',
       medium: '열왕기상',
@@ -102,7 +102,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 12,
-    aliases: ['열왕기하', '왕하'],
+    aliases: [],
     name: {
       long: '열왕기하',
       medium: '열왕기하',
@@ -111,7 +111,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 13,
-    aliases: ['역대상', '대상'],
+    aliases: [],
     name: {
       long: '역대상',
       medium: '역대상',
@@ -120,7 +120,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 14,
-    aliases: ['역대하', '대하'],
+    aliases: [],
     name: {
       long: '역대하',
       medium: '역대하',
@@ -129,7 +129,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 15,
-    aliases: ['에스라', '라'],
+    aliases: [],
     name: {
       long: '에스라',
       medium: '에스라',
@@ -138,7 +138,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 16,
-    aliases: ['느헤미야', '느'],
+    aliases: [],
     name: {
       long: '느헤미야',
       medium: '느헤미야',
@@ -147,7 +147,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 17,
-    aliases: ['에스더', '더'],
+    aliases: [],
     name: {
       long: '에스더',
       medium: '에스더',
@@ -156,7 +156,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 18,
-    aliases: ['욥기', '욥'],
+    aliases: [],
     name: {
       long: '욥기',
       medium: '욥기',
@@ -165,7 +165,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 19,
-    aliases: ['시편', '시'],
+    aliases: [],
     name: {
       long: '시편',
       medium: '시편',
@@ -174,7 +174,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 20,
-    aliases: ['잠언', '잠'],
+    aliases: [],
     name: {
       long: '잠언',
       medium: '잠언',
@@ -183,7 +183,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 21,
-    aliases: ['전도서', '전'],
+    aliases: [],
     name: {
       long: '전도서',
       medium: '전도서',
@@ -192,7 +192,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 22,
-    aliases: ['아가', '아'],
+    aliases: [],
     name: {
       long: '아가',
       medium: '아가',
@@ -201,7 +201,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 23,
-    aliases: ['이사야', '사'],
+    aliases: [],
     name: {
       long: '이사야',
       medium: '이사야',
@@ -210,7 +210,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 24,
-    aliases: ['예레미야', '렘'],
+    aliases: [],
     name: {
       long: '예레미야',
       medium: '예레미야',
@@ -219,7 +219,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 25,
-    aliases: ['예레미야 애가', '애'],
+    aliases: [],
     name: {
       long: '예레미야 애가',
       medium: '예레미야 애가',
@@ -228,7 +228,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 26,
-    aliases: ['에스겔', '겔'],
+    aliases: [],
     name: {
       long: '에스겔',
       medium: '에스겔',
@@ -237,7 +237,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 27,
-    aliases: ['다니엘', '단'],
+    aliases: [],
     name: {
       long: '다니엘',
       medium: '다니엘',
@@ -246,7 +246,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 28,
-    aliases: ['호세아', '호'],
+    aliases: [],
     name: {
       long: '호세아',
       medium: '호세아',
@@ -255,7 +255,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 29,
-    aliases: ['요엘', '욜'],
+    aliases: [],
     name: {
       long: '요엘',
       medium: '요엘',
@@ -264,7 +264,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 30,
-    aliases: ['아모스', '암'],
+    aliases: [],
     name: {
       long: '아모스',
       medium: '아모스',
@@ -273,7 +273,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 31,
-    aliases: ['오바댜', '옵'],
+    aliases: [],
     name: {
       long: '오바댜',
       medium: '오바댜',
@@ -282,7 +282,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 32,
-    aliases: ['요나', '온'],
+    aliases: [],
     name: {
       long: '요나',
       medium: '요나',
@@ -291,7 +291,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 33,
-    aliases: ['미가', '미'],
+    aliases: [],
     name: {
       long: '미가',
       medium: '미가',
@@ -300,7 +300,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 34,
-    aliases: ['나훔', '나'],
+    aliases: [],
     name: {
       long: '나훔',
       medium: '나훔',
@@ -309,7 +309,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 35,
-    aliases: ['하박국', '합'],
+    aliases: [],
     name: {
       long: '하박국',
       medium: '하박국',
@@ -318,7 +318,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 36,
-    aliases: ['스바냐', '습'],
+    aliases: [],
     name: {
       long: '스바냐',
       medium: '스바냐',
@@ -327,7 +327,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 37,
-    aliases: ['학개', '학'],
+    aliases: [],
     name: {
       long: '학개',
       medium: '학개',
@@ -336,7 +336,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 38,
-    aliases: ['스가랴', '숙'],
+    aliases: [],
     name: {
       long: '스가랴',
       medium: '스가랴',
@@ -345,7 +345,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 39,
-    aliases: ['말라기', '말'],
+    aliases: [],
     name: {
       long: '말라기',
       medium: '말라기',
@@ -354,7 +354,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 40,
-    aliases: ['마태복음', '마'],
+    aliases: [],
     name: {
       long: '마태복음',
       medium: '마태복음',
@@ -363,7 +363,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 41,
-    aliases: ['마가복음', '막'],
+    aliases: [],
     name: {
       long: '마가복음',
       medium: '마가복음',
@@ -372,7 +372,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 42,
-    aliases: ['누가복음', '눅'],
+    aliases: [],
     name: {
       long: '누가복음',
       medium: '누가복음',
@@ -381,7 +381,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 43,
-    aliases: ['요한복음', '요'],
+    aliases: [],
     name: {
       long: '요한복음',
       medium: '요한복음',
@@ -390,7 +390,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 44,
-    aliases: ['사도행전', '행'],
+    aliases: [],
     name: {
       long: '사도행전',
       medium: '사도행전',
@@ -399,7 +399,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 45,
-    aliases: ['로마서', '롬'],
+    aliases: [],
     name: {
       long: '로마서',
       medium: '로마서',
@@ -408,7 +408,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 46,
-    aliases: ['고린도전서', '고전'],
+    aliases: [],
     name: {
       long: '고린도전서',
       medium: '고린도전서',
@@ -417,7 +417,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 47,
-    aliases: ['고린도후서', '고후'],
+    aliases: [],
     name: {
       long: '고린도후서',
       medium: '고린도후서',
@@ -426,7 +426,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 48,
-    aliases: ['갈라디아서', '갈'],
+    aliases: [],
     name: {
       long: '갈라디아서',
       medium: '갈라디아서',
@@ -435,7 +435,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 49,
-    aliases: ['에베소서', '엡'],
+    aliases: [],
     name: {
       long: '에베소서',
       medium: '에베소서',
@@ -444,7 +444,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 50,
-    aliases: ['빌립보서', '빌'],
+    aliases: [],
     name: {
       long: '빌립보서',
       medium: '빌립보서',
@@ -453,7 +453,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 51,
-    aliases: ['골로새서', '골'],
+    aliases: [],
     name: {
       long: '골로새서',
       medium: '골로새서',
@@ -462,7 +462,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 52,
-    aliases: ['데살로니가전서', '살전'],
+    aliases: [],
     name: {
       long: '데살로니가전서',
       medium: '데살로니가전서',
@@ -471,7 +471,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 53,
-    aliases: ['데살로니가후서', '살후'],
+    aliases: [],
     name: {
       long: '데살로니가후서',
       medium: '데살로니가후서',
@@ -480,7 +480,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 54,
-    aliases: ['디모데전서', '딤전'],
+    aliases: [],
     name: {
       long: '디모데전서',
       medium: '디모데전서',
@@ -489,7 +489,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 55,
-    aliases: ['디모데후서', '딤후'],
+    aliases: [],
     name: {
       long: '디모데후서',
       medium: '디모데후서',
@@ -498,7 +498,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 56,
-    aliases: ['디도서', '딘'],
+    aliases: [],
     name: {
       long: '디도서',
       medium: '디도서',
@@ -507,7 +507,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 57,
-    aliases: ['빌레몬서', '몬'],
+    aliases: [],
     name: {
       long: '빌레몬서',
       medium: '빌레몬서',
@@ -516,7 +516,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 58,
-    aliases: ['히브리서', '히'],
+    aliases: [],
     name: {
       long: '히브리서',
       medium: '히브리서',
@@ -525,7 +525,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 59,
-    aliases: ['야고보서', '약'],
+    aliases: [],
     name: {
       long: '야고보서',
       medium: '야고보서',
@@ -534,7 +534,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 60,
-    aliases: ['베드로전서', '벧전'],
+    aliases: [],
     name: {
       long: '베드로전서',
       medium: '베드로전서',
@@ -543,7 +543,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 61,
-    aliases: ['베드로후서', '벧후'],
+    aliases: [],
     name: {
       long: '베드로후서',
       medium: '베드로후서',
@@ -552,7 +552,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 62,
-    aliases: ['요한1서', '요1'],
+    aliases: [],
     name: {
       long: '요한1서',
       medium: '요한1서',
@@ -561,7 +561,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 63,
-    aliases: ['요한2서', '요2'],
+    aliases: [],
     name: {
       long: '요한2서',
       medium: '요한2서',
@@ -570,7 +570,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 64,
-    aliases: ['요한3서', '요3'],
+    aliases: [],
     name: {
       long: '요한3서',
       medium: '요한3서',
@@ -579,7 +579,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 65,
-    aliases: ['유다서', '유'],
+    aliases: [],
     name: {
       long: '유다서',
       medium: '유다서',
@@ -588,7 +588,7 @@ export const bibleBooksKO: readonly Omit<BibleBook, 'chapters'>[] = [
   },
   {
     id: 66,
-    aliases: ['요한계시록', '계'],
+    aliases: [],
     name: {
       long: '요한계시록',
       medium: '요한계시록',
