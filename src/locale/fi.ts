@@ -60,13 +60,33 @@ export const fi = {
         bold: 'Lihavoitu',
       },
       preview: {
-        name: 'Esikatselu',
+        name: 'Linkin esikatselu',
+      },
+    },
+    bibleQuote: {
+      name: 'Raamatunlainauksen Muotoilu',
+      description: 'Määritä miten raamatunlainaukset muotoillaan kun ne lisätään',
+      format: {
+        name: 'Lainauksen muoto',
+        description: 'Valitse muoto lisättäville raamatunlainauksille',
+        short: 'Lyhyt (yksinkertainen lainaus)',
+        longFoldable: 'Pitkä (taittuvä callout)',
+        longExpanded: 'Pitkä (laajentuva callout)',
+      },
+      calloutType: {
+        name: 'Callout-tyyppi',
+        description: 'Callout-tyyppi pitkille muodoille (esim. quote, note, info)',
+      },
+      preview: {
+        name: 'Raamatunlainauksen Esikatselu',
       },
     },
   },
   commands: {
     linkUnlinkedBibleReferences: 'Linkitä linkittömät raamatunviitteet',
     convertToJWLibraryLinks: 'Muunna valitun tekstin linkit JW-kirjastolinkkiksi',
+    insertBibleQuotes: 'Lisää raamatunlainaukset JW-kirjastolinkeille',
+    insertBibleQuoteAtCursor: 'Lisää raamatunlainaus kursoriin',
   },
   convertSuggester: {
     emptyStateText: 'Valitse muunnostyyppi',
@@ -77,10 +97,20 @@ export const fi = {
       // web: 'Verkko',
     },
   },
+  contextMenu: {
+    insertBibleQuote: 'Lisää raamatunlainaus',
+  },
   notices: {
     convertedBibleReferences: 'Muunnettu {{count}} raamatunviitettä',
     pleaseSelectText: 'Valitse teksti muunnettavaksi',
     noBibleReferencesFound: 'Ei raamatunviitteitä löytynyt',
+    bibleQuotesInserted: 'Raamatunlainaukset lisätty onnistuneesti',
+    noBibleLinksFound: 'JW-kirjastolinkkejä ei löytynyt',
+    bibleQuotesInsertedSelection: 'Raamatunlainaukset lisätty valinnalle',
+    bibleQuoteInsertedAtCursor: 'Raamatunlainaus lisätty kursoriin',
+    noBibleLinkAtCursor: 'JW-kirjastolinkkiä ei löytynyt kursorista',
+    bibleQuoteAlreadyExists: 'Raamatunlainaus on jo olemassa',
+    errorInsertingQuotes: 'Virhe raamatunlainausten lisäämisessä',
   },
   suggestions: {
     createLink: 'Luo linkki: {{text}}',
