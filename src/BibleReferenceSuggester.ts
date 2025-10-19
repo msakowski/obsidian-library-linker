@@ -14,6 +14,8 @@ import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdo
 import type JWLibraryLinkerPlugin from '@/main';
 import { bibleReferenceRegex } from '@/utils/bibleReferenceRegex';
 
+const TRIGGER = '/b ';
+
 export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   plugin: JWLibraryLinkerPlugin;
   private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
@@ -43,7 +45,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       const hasLinkAfter = /^\*{0,2}\]\(/.test(afterMatch);
       const isAlreadyLinked = hasLinkBefore && hasLinkAfter;
 
-      if (!line.includes('/b ') && !isAlreadyLinked) {
+      if (!line.includes(TRIGGER) && !isAlreadyLinked) {
         return {
           start: {
             ch: line.indexOf(match[0]),
@@ -63,7 +65,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
      */
 
     // Find position of /b
-    const trigger = '/b ';
+    const trigger = TRIGGER;
     const commandIndex = line.lastIndexOf(trigger);
     if (commandIndex === -1) return null;
 
@@ -90,8 +92,10 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   getSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
     const query = context.query;
 
+    const isExplicitMode = query.includes(TRIGGER);
+
     // If query is empty (just typed "/b "), show a simple typing message without the {text} placeholder
-    if (query.length === 0) {
+    if (query.length === 0 && isExplicitMode) {
       return [
         {
           text: query,
@@ -101,69 +105,8 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       ];
     }
 
-    // If it's a complete reference, parse and show detailed suggestions
-    if (query.match(bibleReferenceRegex)) {
-      let reference: BibleReference | null = null;
-
-      try {
-        reference = parseBibleReference(query, this.plugin.settings.language);
-      } catch (error: unknown) {
-        console.debug(error instanceof Error ? error.message : String(error));
-        return [
-          {
-            text: query,
-            command: 'typing',
-            description: this.t('suggestions.typing', { text: query }),
-          },
-        ];
-      }
-
-      if (!reference) {
-        return [];
-      }
-
-      const formattedText = formatBibleText(
-        reference,
-        this.plugin.settings.bookLength,
-        this.plugin.settings.language,
-      );
-
-      const links = formatJWLibraryLink(reference, this.plugin.settings.language);
-      const hasMultipleLinks = Array.isArray(links) && links.length > 1;
-
-      const suggestions: BibleSuggestion[] = [
-        {
-          text: query,
-          command: 'link',
-          description: hasMultipleLinks
-            ? this.t('suggestions.createLinks', { text: formattedText })
-            : this.t('suggestions.createLink', { text: formattedText }),
-        },
-      ];
-
-      // If there are multiple links, add individual open options
-      if (hasMultipleLinks) {
-        suggestions.push({
-          text: query,
-          command: 'open',
-          description: this.t('suggestions.createMultipleAndOpenFirst', { text: formattedText }),
-        });
-      } else {
-        suggestions.push({
-          text: query,
-          command: 'open',
-          description: this.t('suggestions.createAndOpen', { text: formattedText }),
-        });
-      }
-      if (this.plugin.settings.openAutomatically) {
-        //Move the create and open suggestion to the top
-        suggestions.unshift(suggestions.pop()!);
-      }
-
-      return suggestions;
-    }
-    // For any other text after /b, show a typing suggestion with the text
-    else {
+    if (!query.match(bibleReferenceRegex)) {
+      if (!isExplicitMode) return [];
       return [
         {
           text: query,
@@ -172,6 +115,69 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
         },
       ];
     }
+
+    // If it's a complete reference, parse and show detailed suggestions
+    let reference: BibleReference | null = null;
+
+    try {
+      reference = parseBibleReference(query, this.plugin.settings.language);
+    } catch (error: unknown) {
+      console.debug(error instanceof Error ? error.message : String(error));
+
+      if (!isExplicitMode) return [];
+
+      return [
+        {
+          text: query,
+          command: 'typing',
+          description: this.t('suggestions.typing', { text: query }),
+        },
+      ];
+    }
+
+    if (!reference) {
+      return [];
+    }
+
+    const formattedText = formatBibleText(
+      reference,
+      this.plugin.settings.bookLength,
+      this.plugin.settings.language,
+    );
+
+    const links = formatJWLibraryLink(reference, this.plugin.settings.language);
+    const hasMultipleLinks = Array.isArray(links) && links.length > 1;
+
+    const suggestions: BibleSuggestion[] = [
+      {
+        text: query,
+        command: 'link',
+        description: hasMultipleLinks
+          ? this.t('suggestions.createLinks', { text: formattedText })
+          : this.t('suggestions.createLink', { text: formattedText }),
+      },
+    ];
+
+    // If there are multiple links, add individual open options
+    if (hasMultipleLinks) {
+      suggestions.push({
+        text: query,
+        command: 'open',
+        description: this.t('suggestions.createMultipleAndOpenFirst', { text: formattedText }),
+      });
+    } else {
+      suggestions.push({
+        text: query,
+        command: 'open',
+        description: this.t('suggestions.createAndOpen', { text: formattedText }),
+      });
+    }
+    if (this.plugin.settings.openAutomatically) {
+      //Move the create and open suggestion to the top
+      suggestions.unshift(suggestions.pop()!);
+    }
+
+    return suggestions;
   }
 
   renderSuggestion(suggestion: BibleSuggestion, el: HTMLElement): void {
