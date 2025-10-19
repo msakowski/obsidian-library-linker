@@ -1,5 +1,21 @@
 # obsidian-library-linker
 
+## 0.7.0
+
+### Minor Changes
+
+- [#127](https://github.com/msakowski/obsidian-library-linker/pull/127) [`03f8ee8`](https://github.com/msakowski/obsidian-library-linker/commit/03f8ee85b9d9f329c8504bf9cd067f68ffe51a2f) Thanks [@msakowski](https://github.com/msakowski)! - Add citation feature that fetches Bible texts from jw.org
+
+### Patch Changes
+
+- [#137](https://github.com/msakowski/obsidian-library-linker/pull/137) [`33cb2bf`](https://github.com/msakowski/obsidian-library-linker/commit/33cb2bf3753128e7eeca61e4d0b18711b0564244) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Match also for name versions. Removes duplicate book names from language files.
+
+- [#140](https://github.com/msakowski/obsidian-library-linker/pull/140) [`5fc2b62`](https://github.com/msakowski/obsidian-library-linker/commit/5fc2b62a209a671ae6b275ff7c1b5bcb34aae0e8) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Early return on silent mode
+
+- [#139](https://github.com/msakowski/obsidian-library-linker/pull/139) [`a08015c`](https://github.com/msakowski/obsidian-library-linker/commit/a08015c3274695d20d912256a99a8af8cb088310) Thanks [@msakowski](https://github.com/msakowski)! - Fix bug where bold styled links keep the context menu open
+
+- [#134](https://github.com/msakowski/obsidian-library-linker/pull/134) [`fdeee41`](https://github.com/msakowski/obsidian-library-linker/commit/fdeee41b151080dc20b7a5cce249cb2e7202df04) Thanks [@dependabot](https://github.com/apps/dependabot)! - Update packages
+
 ## 0.6.3
 
 ### Patch Changes
