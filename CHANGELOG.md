@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.7.1
+
+### Patch Changes
+
+- [#142](https://github.com/msakowski/obsidian-library-linker/pull/142) [`ee01aea`](https://github.com/msakowski/obsidian-library-linker/commit/ee01aeaa4116fc9904fbdbe86937f9fe045eefca) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Refactor out sanitize-html to fix build on iPadOS and Android
+
 ## 0.7.0
 
 ### Minor Changes
