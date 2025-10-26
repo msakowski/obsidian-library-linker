@@ -52,4 +52,7 @@ export class MarkdownRenderer {
   }
 }
 
+// Mock requestUrl function
+export const requestUrl = jest.fn();
+
 // Add any other Obsidian classes/types you need to mock

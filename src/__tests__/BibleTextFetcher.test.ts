@@ -1,13 +1,11 @@
 // Unmock BibleTextFetcher in case other tests mocked it
 jest.unmock('@/services/BibleTextFetcher');
 
+// Mock obsidian module (uses __mocks__/obsidian.ts)
+jest.mock('obsidian');
+
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { requestUrl } from 'obsidian';
-
-// Mock Obsidian's requestUrl
-jest.mock('obsidian', () => ({
-  requestUrl: jest.fn(),
-}));
 
 const mockedRequestUrl = requestUrl as jest.Mock;
 
