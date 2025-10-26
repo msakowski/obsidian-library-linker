@@ -12,6 +12,8 @@ const mockedRequestUrl = requestUrl as jest.Mock;
 describe('BibleTextFetcher', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // Reset mock implementation
+    mockedRequestUrl.mockReset();
   });
 
   describe('fetchBibleText', () => {
