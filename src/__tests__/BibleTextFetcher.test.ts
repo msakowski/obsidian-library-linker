@@ -1,3 +1,6 @@
+// Unmock BibleTextFetcher in case other tests mocked it
+jest.unmock('@/services/BibleTextFetcher');
+
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { requestUrl } from 'obsidian';
 
