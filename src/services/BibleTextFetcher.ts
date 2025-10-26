@@ -1,7 +1,7 @@
 import type { BibleReference, Language } from '@/types';
 import { padBook, padChapter, padVerse } from '@/utils/padNumber';
 import { requestUrl } from 'obsidian';
-import sanitizeHtml from 'sanitize-html';
+import { cleanHtmlText } from '@/utils/cleanHtmlText';
 
 export interface BibleTextResult {
   text: string;
@@ -149,7 +149,7 @@ export class BibleTextFetcher {
       if (match && match[1]) {
         // Clean up study notes and footnotes after extracting the full content
         const cleanedText = this.cleanStudyNotes(match[1]);
-        extractedText = this.cleanHtmlText(cleanedText).trim();
+        extractedText = cleanHtmlText(cleanedText).trim();
       } else {
       }
     } else {
@@ -170,7 +170,7 @@ export class BibleTextFetcher {
       if (match && match[1]) {
         // Clean up study notes and footnotes after extracting the full content
         const cleanedText = this.cleanStudyNotes(match[1]);
-        extractedText = this.cleanHtmlText(cleanedText).trim();
+        extractedText = cleanHtmlText(cleanedText).trim();
       } else {
       }
     }
@@ -202,24 +202,6 @@ export class BibleTextFetcher {
         .replace(/\s+/g, ' ')
         .trim()
     );
-  }
-
-  private static cleanHtmlText(html: string): string {
-    // Use sanitize-html to remove all HTML tags and decode entities safely
-    const sanitized = sanitizeHtml(html, {
-      allowedTags: [], // Remove all tags
-      allowedAttributes: {}, // Remove all attributes
-      textFilter: (text: string): string => {
-        // Optionally, remove footnote markers and normalize whitespace
-        return text.replace(/\+/g, '').replace(/\*/g, '').replace(/\s+/g, ' ');
-      },
-    });
-    // Fix spacing issues where sentences are concatenated without spaces after periods
-    const result = String(sanitized)
-      .replace(/\.([A-ZÄÖÜ])/g, '. $1') // Add space after period before capital letters
-      .replace(/\s+/g, ' ') // Normalize multiple spaces to single space
-      .trim();
-    return result;
   }
 
   private static generateCitation(reference: BibleReference): string {
