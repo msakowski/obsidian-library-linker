@@ -136,8 +136,10 @@ export class BibleTextFetcher {
       // Single verse extraction
 
       // Pattern: extract from verse anchor until next verse anchor or footnotes/study sections
+      // Note: First verse of a chapter shows chapter number (e.g., "3") instead of verse number ("1")
+      // in a <span class="chapterNum"> tag, so we match any content between > and </a>
       const singleVersePattern = new RegExp(
-        `data-anchor='#${startVerseId}'>${start}\\s*</a></(?:span|sup)>\\s*([\\s\\S]*?)` +
+        `data-anchor='#${startVerseId}'>[^<]*</a></(?:span|sup)>\\s*([\\s\\S]*?)` +
           `(?=\\s*<a[^>]*data-anchor='#v\\d+'|\\s*<(?:h[1-6]|div[^>]*class="[^"]*(?:footnotes|studyBible|study-notes|notes)[^"]*"|p[^>]*class="[^"]*(?:footnotes|studyBible|study-notes|notes)[^"]*")|$)`,
         'i',
       );
@@ -154,9 +156,12 @@ export class BibleTextFetcher {
       // Verse range extraction
 
       // Pattern: extract from start verse until after end verse, but stop before footnotes/study sections
+      // Note: First verse of a chapter shows chapter number instead of verse number,
+      // so we match any content between > and </a>
+      const endVerseId = `v${paddedBook}${paddedChapter}${padVerse(end + 1)}`;
       const rangePattern = new RegExp(
-        `data-anchor='#${startVerseId}'>${start}\\s*</a></(?:span|sup)>\\s*([\\s\\S]*?)` +
-          `(?=\\s*<a[^>]*data-anchor='#v\\d+'>${end + 1}\\s*</a>|\\s*<(?:h[1-6]|div[^>]*class="[^"]*(?:footnotes|studyBible|study-notes|notes)[^"]*"|p[^>]*class="[^"]*(?:footnotes|studyBible|study-notes|notes)[^"]*")|$)`,
+        `data-anchor='#${startVerseId}'>[^<]*</a></(?:span|sup)>\\s*([\\s\\S]*?)` +
+          `(?=\\s*<a[^>]*data-anchor='#${endVerseId}'|\\s*<(?:h[1-6]|div[^>]*class="[^"]*(?:footnotes|studyBible|study-notes|notes)[^"]*"|p[^>]*class="[^"]*(?:footnotes|studyBible|study-notes|notes)[^"]*")|$)`,
         'i',
       );
 
