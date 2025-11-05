@@ -97,7 +97,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
 
   // Match book, chapter, and verses part
   const match = input.match(
-    /^([a-z0-9äöüß\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]+?)\s*(\d+)\s*:\s*(.+)$/i,
+    /^([a-z0-9äöüßáóéúíãõâêô\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]+?)\s*(\d+)\s*:\s*(.+)$/i,
   );
 
   if (!match) {
