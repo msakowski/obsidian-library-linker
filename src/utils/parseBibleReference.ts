@@ -123,6 +123,42 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   ) {
     throw new Error('errors.invalidChapter');
   }
+
+  // Check for multi-chapter reference (e.g., "1-4:11" meaning verse 1 to chapter 4 verse 11)
+  const multiChapterMatch = versesPart.match(/^(\d+)-(\d+):(\d+)$/);
+  if (multiChapterMatch) {
+    const [, startVerse, endChapter, endVerse] = multiChapterMatch;
+    const startVerseNumber = parseVerseNumber(startVerse);
+    const endChapterNumber = parseInt(endChapter, 10);
+    const endVerseNumber = parseVerseNumber(endVerse);
+
+    // Validate end chapter
+    if (
+      endChapterNumber < 1 ||
+      (book.chapters !== undefined && endChapterNumber > book.chapters)
+    ) {
+      throw new Error('errors.invalidChapter');
+    }
+
+    // End chapter must be greater than start chapter
+    const startChapterNumber = parseInt(chapter, 10);
+    if (endChapterNumber <= startChapterNumber) {
+      throw new Error('errors.chaptersAscendingOrder');
+    }
+
+    return {
+      book: book.id,
+      chapter: startChapterNumber,
+      endChapter: endChapterNumber,
+      verseRanges: [
+        {
+          start: startVerseNumber,
+          end: endVerseNumber,
+        },
+      ],
+    };
+  }
+
   const versesPartMatch = versesPart.match(/^(\d+)(?:-(\d*))?$/);
 
   if (versesPartMatch) {
@@ -184,13 +220,27 @@ export const parseBibleReferenceFromUrl = (url: string, language: Language): Bib
   const [bookStart, chapterStart, verseStart] = startBookChapterVerse.split(':');
   const [, chapterEnd, verseEnd] = endBookChapterVerse.split(':');
 
-  if (chapterStart !== chapterEnd) {
-    console.log('links with multiple chapters are not supported (yet)');
+  const startChapterNum = parseInt(chapterStart, 10);
+  const endChapterNum = parseInt(chapterEnd, 10);
+
+  // Handle multi-chapter references
+  if (startChapterNum !== endChapterNum) {
+    return {
+      book: parseInt(bookStart, 10),
+      chapter: startChapterNum,
+      endChapter: endChapterNum,
+      verseRanges: [
+        {
+          start: parseInt(verseStart, 10),
+          end: parseInt(verseEnd, 10),
+        },
+      ],
+    };
   }
 
   return {
     book: parseInt(bookStart, 10),
-    chapter: parseInt(chapterStart, 10),
+    chapter: startChapterNum,
     verseRanges: [
       {
         start: parseInt(verseStart, 10),

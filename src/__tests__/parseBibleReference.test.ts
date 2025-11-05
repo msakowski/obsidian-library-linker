@@ -149,4 +149,59 @@ describe('parseBibleReference', () => {
     expect(() => parseBibleReference('joh100:1', 'E')).toThrow('errors.invalidChapter');
     expect(() => parseBibleReference('ps 200:1', 'FI')).toThrow('errors.invalidChapter');
   });
+
+  // Multi-chapter reference tests
+  describe('multi-chapter references', () => {
+    test('parses simple multi-chapter reference', () => {
+      const result = parseBibleReference('matt3:1-4:11', 'E');
+      expect(result).toEqual({
+        book: 40, // Matthew
+        chapter: 3,
+        endChapter: 4,
+        verseRanges: [{ start: 1, end: 11 }],
+      });
+    });
+
+    test('parses multi-chapter reference with spaces', () => {
+      const result = parseBibleReference('Matt 3:1-4:11', 'E');
+      expect(result).toEqual({
+        book: 40,
+        chapter: 3,
+        endChapter: 4,
+        verseRanges: [{ start: 1, end: 11 }],
+      });
+    });
+
+    test('parses multi-chapter reference with punctuation', () => {
+      const result = parseBibleReference('Matt. 3:1-4:11', 'E');
+      expect(result).toEqual({
+        book: 40,
+        chapter: 3,
+        endChapter: 4,
+        verseRanges: [{ start: 1, end: 11 }],
+      });
+    });
+
+    test('parses multi-chapter reference in German', () => {
+      const result = parseBibleReference('1mo1:1-2:3', 'X');
+      expect(result).toEqual({
+        book: 1, // Genesis
+        chapter: 1,
+        endChapter: 2,
+        verseRanges: [{ start: 1, end: 3 }],
+      });
+    });
+
+    test('throws error on chapters in descending order', () => {
+      expect(() => parseBibleReference('matt4:1-3:11', 'E')).toThrow('errors.chaptersAscendingOrder');
+    });
+
+    test('throws error on same start and end chapter', () => {
+      expect(() => parseBibleReference('matt3:1-3:11', 'E')).toThrow('errors.chaptersAscendingOrder');
+    });
+
+    test('throws error on multi-chapter with invalid end chapter', () => {
+      expect(() => parseBibleReference('joh3:1-100:5', 'E')).toThrow('errors.invalidChapter');
+    });
+  });
 });

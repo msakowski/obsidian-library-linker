@@ -55,4 +55,39 @@ describe('formatJWLibraryLink', () => {
       'jwlibrary:///finder?bible=43001006',
     ]);
   });
+
+  // Multi-chapter reference tests
+  describe('multi-chapter references', () => {
+    test('formats multi-chapter reference', () => {
+      const reference: BibleReference = {
+        book: 40, // Matthew
+        chapter: 3,
+        endChapter: 4,
+        verseRanges: [{ start: 1, end: 11 }],
+      };
+      expect(formatJWLibraryLink(reference)).toBe('jwlibrary:///finder?bible=40003001-40004011');
+    });
+
+    test('formats multi-chapter reference with language', () => {
+      const reference: BibleReference = {
+        book: 40, // Matthew
+        chapter: 3,
+        endChapter: 4,
+        verseRanges: [{ start: 1, end: 11 }],
+      };
+      expect(formatJWLibraryLink(reference, 'E')).toBe(
+        'jwlibrary:///finder?bible=40003001-40004011&wtlocale=E',
+      );
+    });
+
+    test('formats multi-chapter reference across many chapters', () => {
+      const reference: BibleReference = {
+        book: 1, // Genesis
+        chapter: 1,
+        endChapter: 50,
+        verseRanges: [{ start: 1, end: 26 }],
+      };
+      expect(formatJWLibraryLink(reference)).toBe('jwlibrary:///finder?bible=01001001-01050026');
+    });
+  });
 });
