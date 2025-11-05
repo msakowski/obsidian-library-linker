@@ -151,7 +151,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   } else {
     // Has colon - format is "Book chapter:verse"
     chapter = parseInt(numberPart, 10);
-    actualVersesPart = versesPart;
+    actualVersesPart = versesPart as string; // TypeScript: versesPart is defined when hasColon is true
 
     if (chapter < 1 || (book.chapters !== undefined && chapter > book.chapters)) {
       throw new Error('errors.invalidChapter');

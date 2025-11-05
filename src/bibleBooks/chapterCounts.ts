@@ -69,4 +69,4 @@ export const chapterCounts: { [id: number]: number } = {
 
 // Books with only one chapter (don't require chapter:verse format)
 // Obadiah (31), Philemon (57), 2 John (63), 3 John (64), Jude (65)
-export const SINGLE_CHAPTER_BOOKS = [31, 57, 63, 64, 65] as const;
+export const SINGLE_CHAPTER_BOOKS: number[] = [31, 57, 63, 64, 65];
