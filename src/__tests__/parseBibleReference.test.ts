@@ -193,11 +193,15 @@ describe('parseBibleReference', () => {
     });
 
     test('throws error on chapters in descending order', () => {
-      expect(() => parseBibleReference('matt4:1-3:11', 'E')).toThrow('errors.chaptersAscendingOrder');
+      expect(() => parseBibleReference('matt4:1-3:11', 'E')).toThrow(
+        'errors.chaptersAscendingOrder',
+      );
     });
 
     test('throws error on same start and end chapter', () => {
-      expect(() => parseBibleReference('matt3:1-3:11', 'E')).toThrow('errors.chaptersAscendingOrder');
+      expect(() => parseBibleReference('matt3:1-3:11', 'E')).toThrow(
+        'errors.chaptersAscendingOrder',
+      );
     });
 
     test('throws error on multi-chapter with invalid end chapter', () => {

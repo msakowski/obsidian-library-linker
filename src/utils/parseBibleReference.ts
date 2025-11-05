@@ -133,10 +133,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     const endVerseNumber = parseVerseNumber(endVerse);
 
     // Validate end chapter
-    if (
-      endChapterNumber < 1 ||
-      (book.chapters !== undefined && endChapterNumber > book.chapters)
-    ) {
+    if (endChapterNumber < 1 || (book.chapters !== undefined && endChapterNumber > book.chapters)) {
       throw new Error('errors.invalidChapter');
     }
 
