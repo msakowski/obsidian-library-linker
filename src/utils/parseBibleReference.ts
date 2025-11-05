@@ -1,4 +1,5 @@
 import { findBook } from '@/utils/findBook';
+import { SINGLE_CHAPTER_BOOKS } from '@/bibleBooks/chapterCounts';
 import type { Language, VerseRange, BibleReference } from '@/types';
 
 function parseVerseNumber(verse: string): number {
@@ -96,15 +97,31 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     .replace(/[\.\s]/g, '');
 
   // Match book, chapter, and verses part
+  // Supports both "Book chapter:verse" and "Book verse" (for single-chapter books)
   const match = input.match(
-    /^([a-z0-9äöüß\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]+?)\s*(\d+)\s*:\s*(.+)$/i,
+    /^([a-z0-9äöüß\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]+?)(\d+.*)$/i,
   );
 
   if (!match) {
     throw new Error('errors.invalidFormat');
   }
 
-  const [, bookName, chapter, versesPart] = match;
+  const [, bookName, remainder] = match;
+
+  // Check if remainder contains a colon (chapter:verse format)
+  const colonIndex = remainder.indexOf(':');
+  let numberPart: string;
+  let versesPart: string | undefined;
+
+  if (colonIndex > 0) {
+    // Has colon: split into chapter and verses
+    numberPart = remainder.substring(0, colonIndex);
+    versesPart = remainder.substring(colonIndex + 1);
+  } else {
+    // No colon: entire remainder is the number (could be chapter or verse)
+    numberPart = remainder;
+    versesPart = undefined;
+  }
 
   const book = findBook(bookName, language);
 
@@ -113,17 +130,39 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   }
 
   if (Array.isArray(book)) {
-    console.log('multiple books found', book, bookName, chapter, versesPart);
+    console.log('multiple books found', book, bookName, numberPart, versesPart);
     throw new Error('errors.multipleBooksFound');
   }
 
-  if (
-    parseInt(chapter, 10) < 1 ||
-    (book.chapters !== undefined && parseInt(chapter, 10) > book.chapters)
-  ) {
-    throw new Error('errors.invalidChapter');
+  // Determine if this is a single-chapter book reference without colon
+  const isSingleChapterBook = SINGLE_CHAPTER_BOOKS.includes(book.id);
+  const hasColon = versesPart !== undefined;
+
+  let chapter: number;
+  let actualVersesPart: string;
+
+  if (!hasColon) {
+    // No colon - format is "Book verse"
+    if (!isSingleChapterBook) {
+      // Multi-chapter books require "chapter:verse" format
+      throw new Error('errors.invalidFormat');
+    }
+    // For single-chapter books, treat numberPart as verse
+    chapter = 1;
+    actualVersesPart = numberPart;
+  } else {
+    // Has colon - format is "Book chapter:verse"
+    chapter = parseInt(numberPart, 10);
+    actualVersesPart = versesPart;
+
+    if (
+      chapter < 1 ||
+      (book.chapters !== undefined && chapter > book.chapters)
+    ) {
+      throw new Error('errors.invalidChapter');
+    }
   }
-  const versesPartMatch = versesPart.match(/^(\d+)(?:-(\d*))?$/);
+  const versesPartMatch = actualVersesPart.match(/^(\d+)(?:-(\d*))?$/);
 
   if (versesPartMatch) {
     const [, startVerse, endVerse] = versesPartMatch;
@@ -138,7 +177,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
 
       return {
         book: book.id,
-        chapter: parseInt(chapter, 10),
+        chapter: chapter,
         verseRanges: [
           {
             start: startVerseNumber,
@@ -150,7 +189,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
 
     return {
       book: book.id,
-      chapter: parseInt(chapter, 10),
+      chapter: chapter,
       verseRanges: [
         {
           start: startVerseNumber,
@@ -163,11 +202,11 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   // TODO: move parseVerseRanges to own file and include simple verse parsing
 
   // Complex verse ranges
-  const result = parseVerseRanges(versesPart);
+  const result = parseVerseRanges(actualVersesPart);
 
   return {
     book: book.id,
-    chapter: parseInt(chapter, 10),
+    chapter: chapter,
     verseRanges: result,
   };
 }
