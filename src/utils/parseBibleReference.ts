@@ -98,9 +98,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
 
   // Match book, chapter, and verses part
   // Supports both "Book chapter:verse" and "Book verse" (for single-chapter books)
-  const match = input.match(
-    /^([a-z0-9äöüß\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]+?)(\d+.*)$/i,
-  );
+  const match = input.match(/^([a-z0-9äöüß\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]+?)(\d+.*)$/i);
 
   if (!match) {
     throw new Error('errors.invalidFormat');
@@ -155,10 +153,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     chapter = parseInt(numberPart, 10);
     actualVersesPart = versesPart;
 
-    if (
-      chapter < 1 ||
-      (book.chapters !== undefined && chapter > book.chapters)
-    ) {
+    if (chapter < 1 || (book.chapters !== undefined && chapter > book.chapters)) {
       throw new Error('errors.invalidChapter');
     }
   }
