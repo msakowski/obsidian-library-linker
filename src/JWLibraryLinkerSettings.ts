@@ -131,6 +131,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             S: 'Español',
             O: 'Nederlands',
             KO: '한국어',
+            F: 'Français',
           } satisfies Record<Language, string>)
           .setValue(this.plugin.settings.language)
           .onChange(async (value) => {
