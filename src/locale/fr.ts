@@ -10,14 +10,15 @@ export const fr = {
     },
     updatedLinkStructure: {
       name: 'Conserver le texte du lien',
-      description: 'Lorsque activé, le texte actuel du lien sera conservé lors de la conversion du texte biblique',
+      description:
+        'Lorsque activé, le texte actuel du lien sera conservé lors de la conversion du texte biblique',
       keepCurrentStructure: 'Conserver la structure actuelle',
       usePluginSettings: 'Utiliser les paramètres du plugin',
     },
     noLanguageParameter: {
       name: 'Créer des liens indépendants de la langue',
       description:
-        'Lorsque activé, aucun paramètre de langue n\'est ajouté au lien. Les liens s\'ouvriront dans la langue de JW Library',
+        "Lorsque activé, aucun paramètre de langue n'est ajouté au lien. Les liens s'ouvriront dans la langue de JW Library",
     },
     bookLength: {
       name: 'Longueur du texte du lien',
@@ -29,18 +30,18 @@ export const fr = {
     linkStyling: {
       name: 'Style du lien',
       description:
-        'Choisissez les caractères ou emoji à ajouter avant, après ou à l\'intérieur du lien, choisissez le style de police',
+        "Choisissez les caractères ou emoji à ajouter avant, après ou à l'intérieur du lien, choisissez le style de police",
       reset: 'Réinitialiser par défaut : "{{default}}"',
       prefixOutsideLink: {
         name: 'Préfixe en dehors du lien',
         description: 'Texte à ajouter avant le lien',
       },
       prefixInsideLink: {
-        name: 'Préfixe à l\'intérieur du lien',
+        name: "Préfixe à l'intérieur du lien",
         description: 'Texte à ajouter au début du texte du lien',
       },
       suffixInsideLink: {
-        name: 'Suffixe à l\'intérieur du lien',
+        name: "Suffixe à l'intérieur du lien",
         description: 'Texte à ajouter à la fin du texte du lien',
       },
       suffixOutsideLink: {
@@ -64,7 +65,8 @@ export const fr = {
     },
     bibleQuote: {
       name: 'Formatage des citations bibliques',
-      description: 'Configurez la façon dont les citations bibliques sont formatées lors de l\'insertion',
+      description:
+        "Configurez la façon dont les citations bibliques sont formatées lors de l'insertion",
       format: {
         name: 'Format de citation',
         description: 'Choisissez le format pour les citations bibliques insérées',
@@ -73,8 +75,8 @@ export const fr = {
         longExpanded: 'Long (encadré développé)',
       },
       calloutType: {
-        name: 'Type d\'encadré',
-        description: 'Type d\'encadré pour les formats longs (par ex., citation, note, info)',
+        name: "Type d'encadré",
+        description: "Type d'encadré pour les formats longs (par ex., citation, note, info)",
       },
       preview: {
         name: 'Aperçu de la citation biblique',
@@ -109,7 +111,7 @@ export const fr = {
     noBibleLinksFound: 'Aucun lien JW Library trouvé',
     noBibleLinkAtCursor: 'Aucun lien JW Library trouvé au curseur',
     bibleQuoteAlreadyExists: 'La citation biblique existe déjà',
-    errorInsertingQuotes: 'Erreur lors de l\'insertion des citations bibliques',
+    errorInsertingQuotes: "Erreur lors de l'insertion des citations bibliques",
   },
   suggestions: {
     createLink: 'Créer un lien : {{text}}',
@@ -121,7 +123,7 @@ export const fr = {
   },
   errors: {
     invalidVerseNumber: 'Numéro de verset invalide',
-    versesAscendingOrder: 'Les versets doivent être dans l\'ordre croissant',
+    versesAscendingOrder: "Les versets doivent être dans l'ordre croissant",
     invalidVerseFormat: 'Format de verset invalide',
     invalidReferenceFormat: 'Format de référence invalide',
     unsupportedLanguage: 'Langue non prise en charge',
