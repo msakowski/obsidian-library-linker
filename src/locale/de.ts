@@ -20,6 +20,11 @@ export const de = {
       description:
         'Wenn aktiviert, werden am Ende eines Links keine Sprachparameter hinzugefügt. Links werden in der jeweiligen Sprache der JW Library geöffnet',
     },
+    reconvertExistingLinks: {
+      name: 'Bestehende Links erneut konvertieren',
+      description:
+        'Wenn aktiviert, werden bereits konvertierte jwlibrary:// Links gemäß den aktuellen Formatierungseinstellungen erneut konvertiert. Dies ermöglicht es, alle Links an die neuesten Einstellungen anzupassen.',
+    },
     bookLength: {
       name: 'Linktext-Länge',
       description: 'Wähle die Länge des Linktextes',

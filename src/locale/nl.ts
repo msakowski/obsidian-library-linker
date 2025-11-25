@@ -20,6 +20,11 @@ export const nl = {
       description:
         'Indien ingeschakeld, worden geen taalparameters toegevoegd aan het einde van een link. Links worden geopend in de taal van de JW Library',
     },
+    reconvertExistingLinks: {
+      name: 'Bestaande links opnieuw converteren',
+      description:
+        'Indien ingeschakeld, worden reeds geconverteerde jwlibrary:// links opnieuw geconverteerd volgens de huidige opmaak-instellingen. Dit maakt het mogelijk om alle links bij te werken naar je nieuwste voorkeuren.',
+    },
     bookLength: {
       name: 'Linktekst-lengte',
       description: 'Kies de lengte van de linktekst',

@@ -26,6 +26,7 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
   openAutomatically: false,
   updatedLinkStructure: 'keepCurrentStructure',
   noLanguageParameter: false,
+  reconvertExistingLinks: false,
   bibleQuote: {
     format: 'short',
     calloutType: 'quote',

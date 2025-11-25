@@ -20,6 +20,11 @@ export const fi = {
       description:
         'Kun tämä on käytössä, linkkiin ei lisätä kieliparametria. Linkit avautuvat JW-kirjaston kielellä',
     },
+    reconvertExistingLinks: {
+      name: 'Muunna olemassa olevat linkit uudelleen',
+      description:
+        'Kun tämä on käytössä, jo muunnetut jwlibrary:// linkit muunnetaan uudelleen nykyisten muotoiluasetusten mukaan. Tämä mahdollistaa kaikkien linkkien päivittämisen vastaamaan uusimpia asetuksia.',
+    },
     bookLength: {
       name: 'Linkin tekstin pituus',
       description: 'Valitse linkin tekstin pituus',

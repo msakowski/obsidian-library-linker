@@ -19,6 +19,11 @@ export const en = {
       description:
         'When enabled, no language parameter is added to the link. Links will open in the language of the JW Library',
     },
+    reconvertExistingLinks: {
+      name: 'Reconvert existing links',
+      description:
+        'When enabled, already-converted jwlibrary:// links will be reconverted according to current formatting settings. This allows you to update all links to match your latest preferences.',
+    },
     bookLength: {
       name: 'Link text length',
       description: 'Choose the length of the link text',
