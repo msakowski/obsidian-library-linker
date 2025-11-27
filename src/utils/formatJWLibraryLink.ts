@@ -6,7 +6,7 @@ export function formatJWLibraryLink(
   reference: BibleReference,
   language?: Language,
 ): string | string[] {
-  const { book, chapter, verseRanges } = reference;
+  const { book, chapter, endChapter, verseRanges } = reference;
 
   if (!bibleBookExists(book)) {
     throw new Error('errors.bookNotFound');
@@ -25,13 +25,15 @@ export function formatJWLibraryLink(
   // For a single range, return a single string
   if (verseRanges.length === 1) {
     const { start, end } = verseRanges[0];
-    const baseReference = padRange(book, chapter, start);
+    const startChapter = chapter;
+    const endChapterValue = endChapter || chapter;
+    const baseReference = padRange(book, startChapter, start);
 
-    if (start === end) {
+    if (start === end && startChapter === endChapterValue) {
       return link(baseReference);
     }
 
-    return link(`${baseReference}-${padRange(book, chapter, end)}`);
+    return link(`${baseReference}-${padRange(book, endChapterValue, end)}`);
   }
 
   // For multiple ranges, return an array of strings
