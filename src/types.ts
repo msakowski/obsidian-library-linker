@@ -1,8 +1,8 @@
 import { bibleBooksDE } from '@/bibleBooks/de';
 
-export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko'; // obsidian language
+export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko' | 'pt'; // obsidian language
 
-export type Language = 'E' | 'X' | 'FI' | 'S' | 'O' | 'KO'; // plugin language
+export type Language = 'E' | 'X' | 'FI' | 'S' | 'O' | 'KO' | 'TPO'; // plugin language
 
 export type BookLength = 'short' | 'medium' | 'long';
 
