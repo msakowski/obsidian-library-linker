@@ -1,4 +1,5 @@
 import { getBibleBookById } from '@/bibleBooks';
+import { SINGLE_CHAPTER_BOOKS } from '@/bibleBooks/chapterCounts';
 import type { BibleReference, Language, BookLength } from '@/types';
 
 export function formatBibleText(
@@ -18,6 +19,12 @@ export function formatBibleText(
   const verseRefs = reference.verseRanges!.map(({ start, end }) =>
     start === end ? start.toString() : `${start}-${end}`,
   );
+
+  // Single-chapter books don't need "chapter:" prefix
+  const isSingleChapterBook = SINGLE_CHAPTER_BOOKS.includes(reference.book);
+  if (isSingleChapterBook) {
+    return `${bookName} ${verseRefs.join(',')}`;
+  }
 
   return `${bookName} ${reference.chapter}:${verseRefs.join(',')}`;
 }
