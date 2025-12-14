@@ -22,7 +22,16 @@ export class BibleTextFetcher {
     try {
       const { book, chapter, verseRanges } = reference;
 
+      console.log('[BibleTextFetcher] Starting fetch for:', {
+        book,
+        chapter,
+        verseRanges,
+        language,
+        useWOL,
+      });
+
       if (!verseRanges || verseRanges.length === 0) {
+        console.error('[BibleTextFetcher] Invalid verse ranges');
         return {
           text: '',
           citation: '',
@@ -44,6 +53,9 @@ export class BibleTextFetcher {
         ? this.buildWOLUrl(bibleCode, language)
         : this.buildJWOrgUrl(bibleCode, language);
 
+      console.log('[BibleTextFetcher] Fetching from URL:', url);
+      console.log('[BibleTextFetcher] Bible code:', bibleCode);
+
       // Fetch the content using Obsidian's requestUrl to avoid CORS issues
       const response = await requestUrl({
         url,
@@ -58,18 +70,31 @@ export class BibleTextFetcher {
           'Upgrade-Insecure-Requests': '1',
         },
       });
+
+      console.log('[BibleTextFetcher] Response status:', response.status);
+
       if (response.status !== 200) {
         throw new Error(`HTTP ${response.status}: ${response.status}`);
       }
 
       const html = response.text;
+      console.log('[BibleTextFetcher] HTML length:', html.length);
+      console.log('[BibleTextFetcher] HTML preview (first 500 chars):', html.substring(0, 500));
+
       const result = this.extractBibleText(html, reference);
+
+      console.log('[BibleTextFetcher] Extracted result:', {
+        textLength: result.text.length,
+        text: result.text,
+        citation: result.citation,
+      });
 
       return {
         ...result,
         success: true,
       };
     } catch (error) {
+      console.error('[BibleTextFetcher] Error:', error);
       return {
         text: '',
         citation: '',
@@ -113,7 +138,14 @@ export class BibleTextFetcher {
   ): { text: string; citation: string } {
     const { book, chapter, verseRanges } = reference;
 
+    console.log('[BibleTextFetcher.extractBibleText] Starting extraction for:', {
+      book,
+      chapter,
+      verseRanges,
+    });
+
     if (!verseRanges || verseRanges.length === 0) {
+      console.error('[BibleTextFetcher.extractBibleText] No verse ranges provided');
       return {
         text: 'Unable to extract Bible text - no verse ranges',
         citation: this.generateCitation(reference),
@@ -127,13 +159,20 @@ export class BibleTextFetcher {
     const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/);
     const searchContent = bodyMatch ? bodyMatch[1] : html;
 
+    console.log('[BibleTextFetcher.extractBibleText] Body content found:', !!bodyMatch);
+    console.log('[BibleTextFetcher.extractBibleText] Search content length:', searchContent.length);
+
     // Build the verse IDs for extraction (HTML uses unpadded book numbers)
     const paddedBook = book.toString();
     const paddedChapter = padChapter(chapter);
     const startVerseId = `v${paddedBook}${paddedChapter}${padVerse(start)}`;
 
+    console.log('[BibleTextFetcher.extractBibleText] Looking for verse ID:', startVerseId);
+    console.log('[BibleTextFetcher.extractBibleText] Verse range:', { start, end });
+
     if (start === end) {
       // Single verse extraction
+      console.log('[BibleTextFetcher.extractBibleText] Extracting single verse');
 
       // Pattern: extract from verse anchor until next verse anchor or footnotes/study sections
       // Note: First verse of a chapter shows chapter number (e.g., "3") instead of verse number ("1")
@@ -146,19 +185,28 @@ export class BibleTextFetcher {
 
       const match = searchContent.match(singleVersePattern);
 
+      console.log('[BibleTextFetcher.extractBibleText] Pattern match found:', !!match);
+
       if (match && match[1]) {
+        console.log('[BibleTextFetcher.extractBibleText] Raw matched HTML:', match[1].substring(0, 200));
         // Clean up study notes and footnotes after extracting the full content
         const cleanedText = this.cleanStudyNotes(match[1]);
+        console.log('[BibleTextFetcher.extractBibleText] After cleanStudyNotes:', cleanedText.substring(0, 200));
         extractedText = cleanHtmlText(cleanedText).trim();
+        console.log('[BibleTextFetcher.extractBibleText] After cleanHtmlText:', extractedText);
       } else {
+        console.error('[BibleTextFetcher.extractBibleText] Failed to match single verse pattern');
       }
     } else {
       // Verse range extraction
+      console.log('[BibleTextFetcher.extractBibleText] Extracting verse range');
 
       // Pattern: extract from start verse until after end verse, but stop before footnotes/study sections
       // Note: First verse of a chapter shows chapter number instead of verse number,
       // so we match any content between > and </a>
       const endVerseId = `v${paddedBook}${paddedChapter}${padVerse(end + 1)}`;
+      console.log('[BibleTextFetcher.extractBibleText] End verse ID:', endVerseId);
+
       const rangePattern = new RegExp(
         `data-anchor='#${startVerseId}'>[^<]*</a></(?:span|sup)>\\s*([\\s\\S]*?)` +
           `(?=\\s*<a[^>]*data-anchor='#${endVerseId}'|\\s*<(?:h[1-6]|div[^>]*class="[^"]*(?:footnotes|studyBible|study-notes|notes)[^"]*"|p[^>]*class="[^"]*(?:footnotes|studyBible|study-notes|notes)[^"]*")|$)`,
@@ -167,16 +215,27 @@ export class BibleTextFetcher {
 
       const match = searchContent.match(rangePattern);
 
+      console.log('[BibleTextFetcher.extractBibleText] Pattern match found:', !!match);
+
       if (match && match[1]) {
+        console.log('[BibleTextFetcher.extractBibleText] Raw matched HTML:', match[1].substring(0, 200));
         // Clean up study notes and footnotes after extracting the full content
         const cleanedText = this.cleanStudyNotes(match[1]);
+        console.log('[BibleTextFetcher.extractBibleText] After cleanStudyNotes:', cleanedText.substring(0, 200));
         extractedText = cleanHtmlText(cleanedText).trim();
+        console.log('[BibleTextFetcher.extractBibleText] After cleanHtmlText:', extractedText);
       } else {
+        console.error('[BibleTextFetcher.extractBibleText] Failed to match verse range pattern');
       }
     }
 
     // Generate citation
     const citation = this.generateCitation(reference);
+
+    console.log('[BibleTextFetcher.extractBibleText] Final result:', {
+      extractedText: extractedText || 'Unable to extract Bible text',
+      citation,
+    });
 
     return {
       text: extractedText || 'Unable to extract Bible text',
