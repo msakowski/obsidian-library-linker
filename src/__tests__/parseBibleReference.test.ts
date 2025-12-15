@@ -208,7 +208,7 @@ describe('parseBibleReference', () => {
       expect(() => parseBibleReference('joh3:1-100:5', 'E')).toThrow('errors.invalidChapter');
     });
   });
-  
+
   // Test cases for single-chapter books
   describe('single-chapter books', () => {
     const singleChapterTestCases = [
