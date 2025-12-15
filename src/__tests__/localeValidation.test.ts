@@ -2,6 +2,7 @@ import { en } from '@/locale/en';
 import { de } from '@/locale/de';
 import { es } from '@/locale/es';
 import { fi } from '@/locale/fi';
+import { fr } from '@/locale/fr';
 
 type NestedObject = { [key: string]: string | NestedObject };
 
@@ -45,6 +46,7 @@ describe('Locale Translation Validation', () => {
     de,
     es,
     fi,
+    fr,
   };
 
   const englishKeys = getNestedKeys(en);
@@ -59,6 +61,7 @@ describe('Locale Translation Validation', () => {
     ['de', de],
     ['es', es],
     ['fi', fi],
+    ['fr', fr],
   ])('%s locale validation', (localeCode, locale) => {
     test(`should have all English keys present in ${localeCode}`, () => {
       const localeKeys = getNestedKeys(locale);
