@@ -123,6 +123,7 @@ export const nl = {
   errors: {
     invalidVerseNumber: 'Ongeldig versnummer',
     versesAscendingOrder: 'Verzen moeten in oplopende volgorde zijn',
+    chaptersAscendingOrder: 'Hoofdstukken moeten in oplopende volgorde zijn',
     invalidVerseFormat: 'Ongeldig versformaat',
     invalidReferenceFormat: 'Ongeldig referentieformaat',
     unsupportedLanguage: 'Niet ondersteunde taal',

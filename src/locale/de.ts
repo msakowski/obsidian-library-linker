@@ -123,6 +123,7 @@ export const de = {
   errors: {
     invalidVerseNumber: 'Ungültige Versnummer',
     versesAscendingOrder: 'Verse müssen in aufsteigender Reihenfolge sein',
+    chaptersAscendingOrder: 'Kapitel müssen in aufsteigender Reihenfolge sein',
     invalidVerseFormat: 'Ungültiges Versformat',
     invalidReferenceFormat: 'Ungültiges Referenzformat',
     unsupportedLanguage: 'Nicht unterstützte Sprache',
