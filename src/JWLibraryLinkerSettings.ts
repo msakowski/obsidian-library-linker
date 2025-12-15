@@ -178,6 +178,16 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         }),
       );
 
+    new Setting(settingsContainer)
+      .setName(this.t('settings.reconvertExistingLinks.name'))
+      .setDesc(this.t('settings.reconvertExistingLinks.description'))
+      .addToggle((toggle) =>
+        toggle.setValue(this.plugin.settings.reconvertExistingLinks).onChange(async (value) => {
+          this.plugin.settings.reconvertExistingLinks = value;
+          await this.plugin.saveSettings();
+        }),
+      );
+
     // Add Link Styling section
 
     const linkStylingContainer = settingsContainer.createDiv({

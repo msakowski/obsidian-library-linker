@@ -29,6 +29,7 @@ export interface LinkReplacerSettings extends LinkStyles {
   openAutomatically: boolean;
   updatedLinkStructure: UpdatedLinkStructure;
   noLanguageParameter: boolean;
+  reconvertExistingLinks: boolean;
   bibleQuote: BibleQuoteSettings;
 }
 
