@@ -92,6 +92,149 @@ describe('convertLinks', () => {
       '[John 3:16](jwlibrary:///finder?bible=43003016)',
     );
   });
+
+  describe('reconvert existing links', () => {
+    test('reconverts existing jwlibrary:// links when reconvertExistingLinks is enabled', () => {
+      const settings: LinkReplacerSettings = {
+        ...TEST_DEFAULT_SETTINGS,
+        reconvertExistingLinks: true,
+      };
+      const input = '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)';
+      const result = convertLinks(input, 'bible', settings);
+      expect(result).toBe('[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)');
+    });
+
+    test('leaves existing jwlibrary:// links unchanged when reconvertExistingLinks is disabled', () => {
+      const settings: LinkReplacerSettings = {
+        ...TEST_DEFAULT_SETTINGS,
+        reconvertExistingLinks: false,
+      };
+      const input = '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)';
+      const result = convertLinks(input, 'bible', settings);
+      expect(result).toBe(input);
+    });
+
+    test('reconverts link text when bookLength changes', () => {
+      const settings: LinkReplacerSettings = {
+        ...TEST_DEFAULT_SETTINGS,
+        reconvertExistingLinks: true,
+        updatedLinkStructure: 'usePluginSettings',
+        bookLength: 'short',
+      };
+      const input = '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)';
+      const result = convertLinks(input, 'bible', settings);
+      expect(result).toBe('[Joh 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)');
+    });
+
+    test('reconverts link with prefixInsideLink and suffixInsideLink', () => {
+      const settings: LinkReplacerSettings = {
+        ...TEST_DEFAULT_SETTINGS,
+        reconvertExistingLinks: true,
+        updatedLinkStructure: 'usePluginSettings',
+        prefixInsideLink: 'Bible: ',
+        suffixInsideLink: ' (NWT)',
+      };
+      const input = '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)';
+      const result = convertLinks(input, 'bible', settings);
+      expect(result).toBe('[Bible: Joh 3:16 (NWT)](jwlibrary:///finder?bible=43003016&wtlocale=E)');
+    });
+
+    test('reconverts link with noLanguageParameter', () => {
+      const settings: LinkReplacerSettings = {
+        ...TEST_DEFAULT_SETTINGS,
+        reconvertExistingLinks: true,
+        noLanguageParameter: true,
+      };
+      const input = '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)';
+      const result = convertLinks(input, 'bible', settings);
+      expect(result).toBe('[John 3:16](jwlibrary:///finder?bible=43003016)');
+    });
+
+    test('reconverts only Bible links when type is "bible"', () => {
+      const settings: LinkReplacerSettings = {
+        ...TEST_DEFAULT_SETTINGS,
+        reconvertExistingLinks: true,
+        updatedLinkStructure: 'usePluginSettings',
+        bookLength: 'short',
+      };
+      const input = `
+        [John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)
+        [Regular Link](https://example.com)
+      `;
+      const expected = `
+        [Joh 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)
+        [Regular Link](https://example.com)
+      `;
+      expect(convertLinks(input, 'bible', settings)).toBe(expected);
+    });
+
+    test('reconverts multiple existing jwlibrary:// links', () => {
+      const settings: LinkReplacerSettings = {
+        ...TEST_DEFAULT_SETTINGS,
+        reconvertExistingLinks: true,
+        updatedLinkStructure: 'usePluginSettings',
+        bookLength: 'short',
+      };
+      const input =
+        '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E) and [Matthew 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)';
+      const expected =
+        '[Joh 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E) and [Mt 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)';
+      expect(convertLinks(input, 'bible', settings)).toBe(expected);
+    });
+
+    test('reconverts verse range links', () => {
+      const settings: LinkReplacerSettings = {
+        ...TEST_DEFAULT_SETTINGS,
+        reconvertExistingLinks: true,
+        updatedLinkStructure: 'usePluginSettings',
+        bookLength: 'short',
+      };
+      const input = '[John 3:16-18](jwlibrary:///finder?bible=43003016-43003018&wtlocale=E)';
+      const result = convertLinks(input, 'bible', settings);
+      expect(result).toBe('[Joh 3:16-18](jwlibrary:///finder?bible=43003016-43003018&wtlocale=E)');
+    });
+
+    test('does not reconvert when type is "publication"', () => {
+      const settings: LinkReplacerSettings = {
+        ...TEST_DEFAULT_SETTINGS,
+        reconvertExistingLinks: true,
+        bookLength: 'short',
+      };
+      const input = '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)';
+      const result = convertLinks(input, 'publication', settings);
+      expect(result).toBe(input);
+    });
+
+    test('reconverts when type is "all"', () => {
+      const settings: LinkReplacerSettings = {
+        ...TEST_DEFAULT_SETTINGS,
+        reconvertExistingLinks: true,
+        updatedLinkStructure: 'usePluginSettings',
+        bookLength: 'short',
+      };
+      const input = '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)';
+      const result = convertLinks(input, 'all', settings);
+      expect(result).toBe('[Joh 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)');
+    });
+
+    test('handles mix of unconverted and already-converted links', () => {
+      const settings: LinkReplacerSettings = {
+        ...TEST_DEFAULT_SETTINGS,
+        reconvertExistingLinks: true,
+        updatedLinkStructure: 'usePluginSettings',
+        bookLength: 'short',
+      };
+      const input = `
+        [John 3:16](jwpub://b/NWTR/43:3:16-43:3:16)
+        [Matthew 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)
+      `;
+      const expected = `
+        [Joh 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)
+        [Mt 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)
+      `;
+      expect(convertLinks(input, 'all', settings)).toBe(expected);
+    });
+  });
 });
 
 export {};
