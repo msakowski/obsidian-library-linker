@@ -172,7 +172,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     }
 
     // End chapter must be greater than start chapter
-    const startChapterNumber = parseInt(chapter, 10);
+    const startChapterNumber = chapter;
     if (endChapterNumber <= startChapterNumber) {
       throw new Error('errors.chaptersAscendingOrder');
     }

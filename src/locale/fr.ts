@@ -124,6 +124,7 @@ export const fr = {
   errors: {
     invalidVerseNumber: 'Numéro de verset invalide',
     versesAscendingOrder: "Les versets doivent être dans l'ordre croissant",
+    chaptersAscendingOrder: "Les chapitres doivent être dans l'ordre croissant",
     invalidVerseFormat: 'Format de verset invalide',
     invalidReferenceFormat: 'Format de référence invalide',
     unsupportedLanguage: 'Langue non prise en charge',
