@@ -20,6 +20,11 @@ export const es = {
       description:
         'Si está activado, no se añadirá ningún parámetro de idioma al enlace. Los enlaces se abrirán en el idioma correspondiente de JW Library',
     },
+    reconvertExistingLinks: {
+      name: 'Reconvertir enlaces existentes',
+      description:
+        'Si está activado, los enlaces jwlibrary:// ya convertidos se reconvertirán según la configuración de formato actual. Esto permite actualizar todos los enlaces para que coincidan con tus preferencias más recientes.',
+    },
     bookLength: {
       name: 'Longitud del texto del enlace',
       description: 'Elige la longitud del texto del enlace',
@@ -123,6 +128,7 @@ export const es = {
   errors: {
     invalidVerseNumber: 'Número de versículo no válido',
     versesAscendingOrder: 'Los versículos deben estar en orden ascendente',
+    chaptersAscendingOrder: 'Los capítulos deben estar en orden ascendente',
     invalidVerseFormat: 'Formato de versículo no válido',
     invalidReferenceFormat: 'Formato de referencia no válido',
     unsupportedLanguage: 'Idioma no compatible',

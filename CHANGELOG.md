@@ -1,5 +1,15 @@
 # obsidian-library-linker
 
+## 0.8.0
+
+### Minor Changes
+
+- [#154](https://github.com/msakowski/obsidian-library-linker/pull/154) [`0f5c0f6`](https://github.com/msakowski/obsidian-library-linker/commit/0f5c0f618c033d93ad6bc70b1fc43c7a6a9f76da) Thanks [@msakowski](https://github.com/msakowski)! - Add French language support with complete Bible book translations and UI localization. Users can now select "Français" in the language dropdown to use the plugin with French Bible references (Genèse, Exode, Matthieu, etc.) and fully translated interface text.
+
+### Patch Changes
+
+- [#164](https://github.com/msakowski/obsidian-library-linker/pull/164) [`a375636`](https://github.com/msakowski/obsidian-library-linker/commit/a375636b372035dfe50872146ac3801523730460) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Fix generating quotes on android
+
 ## 0.7.2
 
 ### Patch Changes

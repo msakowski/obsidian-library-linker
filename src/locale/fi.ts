@@ -20,6 +20,11 @@ export const fi = {
       description:
         'Kun tämä on käytössä, linkkiin ei lisätä kieliparametria. Linkit avautuvat JW-kirjaston kielellä',
     },
+    reconvertExistingLinks: {
+      name: 'Muunna olemassa olevat linkit uudelleen',
+      description:
+        'Kun tämä on käytössä, jo muunnetut jwlibrary:// linkit muunnetaan uudelleen nykyisten muotoiluasetusten mukaan. Tämä mahdollistaa kaikkien linkkien päivittämisen vastaamaan uusimpia asetuksia.',
+    },
     bookLength: {
       name: 'Linkin tekstin pituus',
       description: 'Valitse linkin tekstin pituus',
@@ -123,6 +128,7 @@ export const fi = {
   errors: {
     invalidVerseNumber: 'Virheellinen jaenumero',
     versesAscendingOrder: 'Jaeiden tulee olla kasvavassa järjestyksessä',
+    chaptersAscendingOrder: 'Lukujen tulee olla kasvavassa järjestyksessä',
     invalidVerseFormat: 'Virheellinen jaeformaatti',
     invalidReferenceFormat: 'Virheellinen viiteformaatti',
     unsupportedLanguage: 'Ei tuettu kieli',
