@@ -20,6 +20,11 @@ export const fr = {
       description:
         "Lorsque activé, aucun paramètre de langue n'est ajouté au lien. Les liens s'ouvriront dans la langue de JW Library",
     },
+    reconvertExistingLinks: {
+      name: 'Reconvertir les liens existants',
+      description:
+        'Lorsque activé, les liens jwlibrary:// déjà convertis seront reconvertis selon les paramètres de formatage actuels. Cela vous permet de mettre à jour tous les liens pour correspondre à vos dernières préférences.',
+    },
     bookLength: {
       name: 'Longueur du texte du lien',
       description: 'Choisissez la longueur du texte du lien',
