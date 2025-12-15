@@ -1,5 +1,26 @@
 # obsidian-library-linker
 
+## 0.9.0
+
+### Minor Changes
+
+- [#151](https://github.com/msakowski/obsidian-library-linker/pull/151) [`48be522`](https://github.com/msakowski/obsidian-library-linker/commit/48be5222827f694d1ae347b6b18f30bbc9298e39) Thanks [@msakowski](https://github.com/msakowski)! - Add option to reconvert existing jwlibrary:// links
+
+  Users can now enable a new "Reconvert existing links" setting to update already-converted jwlibrary:// links according to their current formatting preferences. This is useful when changing book name length, prefixes/suffixes, or other link styling options, allowing users to standardize all existing links across their notes to match the latest settings.
+
+- [#149](https://github.com/msakowski/obsidian-library-linker/pull/149) [`6f1c307`](https://github.com/msakowski/obsidian-library-linker/commit/6f1c307e77da7cf367d6e545b29ce24075009cf6) Thanks [@msakowski](https://github.com/msakowski)! - Add support for multi-chapter Bible references
+
+  Implements support for parsing Bible references that span multiple chapters, such as "Matt. 3:1–4:11" (Matthew chapter 3 verse 1 through chapter 4 verse 11).
+  - Extended BibleReference type with optional endChapter field
+  - Updated parseBibleReference to detect and parse multi-chapter format
+  - Updated formatJWLibraryLink to generate correct JW Library URLs for multi-chapter references
+  - Updated parseBibleReferenceFromUrl to handle multi-chapter URLs
+  - Updated bibleReferenceRegex to match multi-chapter patterns
+  - Added comprehensive tests for multi-chapter references
+  - Added error messages in all supported languages (en, de, es, fi, nl, ko)
+
+- [#150](https://github.com/msakowski/obsidian-library-linker/pull/150) [`cbff863`](https://github.com/msakowski/obsidian-library-linker/commit/cbff86321a52165d8d87fd178c0109a7e29a0033) Thanks [@msakowski](https://github.com/msakowski)! - Add support for single-chapter Bible books (Obadiah, Philemon, 2 John, 3 John, Jude). References can now be written as "Jude 3" instead of "Jude 1:3" and will be displayed without the chapter number. JW Library links still use chapter=1 internally as required.
+
 ## 0.8.0
 
 ### Minor Changes
