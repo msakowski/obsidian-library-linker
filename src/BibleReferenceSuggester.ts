@@ -12,7 +12,7 @@ import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { TranslationService } from '@/services/TranslationService';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type JWLibraryLinkerPlugin from '@/main';
-import { bibleReferenceRegex } from '@/utils/bibleReferenceRegex';
+import { getBibleReferenceRegex } from '@/utils/bibleReferenceRegex';
 
 const TRIGGER = '/b ';
 
@@ -31,6 +31,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     /**
      * Silent mode: If there is a complete reference, show it as a suggestion
      */
+    const bibleReferenceRegex = getBibleReferenceRegex(this.plugin.settings.language);
     const match = line.match(bibleReferenceRegex);
 
     if (match?.[0]) {
@@ -105,6 +106,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       ];
     }
 
+    const bibleReferenceRegex = getBibleReferenceRegex(this.plugin.settings.language);
     if (!query.match(bibleReferenceRegex)) {
       if (!isExplicitMode) return [];
       return [
