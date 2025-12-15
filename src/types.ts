@@ -1,8 +1,8 @@
 import { bibleBooksDE } from '@/bibleBooks/de';
 
-export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko'; // obsidian language
+export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko' | 'fr'; // obsidian language
 
-export type Language = 'E' | 'X' | 'FI' | 'S' | 'O' | 'KO'; // plugin language
+export type Language = 'E' | 'X' | 'FI' | 'S' | 'O' | 'KO' | 'F'; // plugin language
 
 export type BookLength = 'short' | 'medium' | 'long';
 
@@ -54,6 +54,7 @@ export interface VerseRange {
 export interface BibleReference {
   book: BibleBookId;
   chapter: number;
+  endChapter?: number; // For multi-chapter references (e.g., "Matt. 3:1-4:11")
   verseRanges?: VerseRange[]; // For complex verse references with multiple ranges
 }
 

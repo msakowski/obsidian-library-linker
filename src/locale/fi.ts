@@ -128,6 +128,7 @@ export const fi = {
   errors: {
     invalidVerseNumber: 'Virheellinen jaenumero',
     versesAscendingOrder: 'Jaeiden tulee olla kasvavassa järjestyksessä',
+    chaptersAscendingOrder: 'Lukujen tulee olla kasvavassa järjestyksessä',
     invalidVerseFormat: 'Virheellinen jaeformaatti',
     invalidReferenceFormat: 'Virheellinen viiteformaatti',
     unsupportedLanguage: 'Ei tuettu kieli',

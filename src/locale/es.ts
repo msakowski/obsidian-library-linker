@@ -128,6 +128,7 @@ export const es = {
   errors: {
     invalidVerseNumber: 'Número de versículo no válido',
     versesAscendingOrder: 'Los versículos deben estar en orden ascendente',
+    chaptersAscendingOrder: 'Los capítulos deben estar en orden ascendente',
     invalidVerseFormat: 'Formato de versículo no válido',
     invalidReferenceFormat: 'Formato de referencia no válido',
     unsupportedLanguage: 'Idioma no compatible',

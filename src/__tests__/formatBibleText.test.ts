@@ -122,4 +122,100 @@ describe('formatBibleText', () => {
       ),
     ).toThrow('errors.bookNotFound');
   });
+
+  describe('single-chapter books', () => {
+    test('formats Obadiah without chapter number', () => {
+      expect(
+        formatBibleText({ book: 31, chapter: 1, verseRanges: [{ start: 1, end: 1 }] }, 'long', 'E'),
+      ).toBe('Obadiah 1');
+      expect(
+        formatBibleText(
+          { book: 31, chapter: 1, verseRanges: [{ start: 1, end: 1 }] },
+          'short',
+          'E',
+        ),
+      ).toBe('Ob 1');
+    });
+
+    test('formats Philemon without chapter number', () => {
+      expect(
+        formatBibleText({ book: 57, chapter: 1, verseRanges: [{ start: 5, end: 5 }] }, 'long', 'E'),
+      ).toBe('Philemon 5');
+      expect(
+        formatBibleText(
+          { book: 57, chapter: 1, verseRanges: [{ start: 5, end: 5 }] },
+          'short',
+          'E',
+        ),
+      ).toBe('Phm 5');
+    });
+
+    test('formats 2 John without chapter number', () => {
+      expect(
+        formatBibleText({ book: 63, chapter: 1, verseRanges: [{ start: 1, end: 1 }] }, 'long', 'E'),
+      ).toBe('2 John 1');
+      expect(
+        formatBibleText(
+          { book: 63, chapter: 1, verseRanges: [{ start: 1, end: 1 }] },
+          'short',
+          'E',
+        ),
+      ).toBe('2Jo 1');
+    });
+
+    test('formats 3 John without chapter number', () => {
+      expect(
+        formatBibleText(
+          { book: 64, chapter: 1, verseRanges: [{ start: 14, end: 14 }] },
+          'long',
+          'E',
+        ),
+      ).toBe('3 John 14');
+      expect(
+        formatBibleText(
+          { book: 64, chapter: 1, verseRanges: [{ start: 14, end: 14 }] },
+          'short',
+          'E',
+        ),
+      ).toBe('3Jo 14');
+    });
+
+    test('formats Jude without chapter number', () => {
+      expect(
+        formatBibleText({ book: 65, chapter: 1, verseRanges: [{ start: 3, end: 3 }] }, 'long', 'E'),
+      ).toBe('Jude 3');
+      expect(
+        formatBibleText(
+          { book: 65, chapter: 1, verseRanges: [{ start: 3, end: 3 }] },
+          'short',
+          'E',
+        ),
+      ).toBe('Jude 3');
+    });
+
+    test('formats Jude verse range without chapter number', () => {
+      expect(
+        formatBibleText({ book: 65, chapter: 1, verseRanges: [{ start: 1, end: 5 }] }, 'long', 'E'),
+      ).toBe('Jude 1-5');
+    });
+
+    test('formats Jude complex verses without chapter number', () => {
+      expect(
+        formatBibleText(
+          {
+            book: 65,
+            chapter: 1,
+            verseRanges: [
+              { start: 1, end: 1 },
+              { start: 3, end: 3 },
+              { start: 5, end: 7 },
+              { start: 10, end: 10 },
+            ],
+          },
+          'long',
+          'E',
+        ),
+      ).toBe('Jude 1,3,5-7,10');
+    });
+  });
 });

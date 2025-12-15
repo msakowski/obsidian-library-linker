@@ -127,6 +127,7 @@ export const en = {
   errors: {
     invalidVerseNumber: 'Invalid verse number',
     versesAscendingOrder: 'Verses must be in ascending order',
+    chaptersAscendingOrder: 'Chapters must be in ascending order',
     invalidVerseFormat: 'Invalid verse format',
     invalidReferenceFormat: 'Invalid reference format',
     unsupportedLanguage: 'Unsupported language',

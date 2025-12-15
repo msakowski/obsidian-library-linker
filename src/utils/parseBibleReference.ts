@@ -1,4 +1,5 @@
 import { findBook } from '@/utils/findBook';
+import { SINGLE_CHAPTER_BOOKS } from '@/bibleBooks/chapterCounts';
 import type { Language, VerseRange, BibleReference } from '@/types';
 
 function parseVerseNumber(verse: string): number {
@@ -96,15 +97,29 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     .replace(/[\.\s]/g, '');
 
   // Match book, chapter, and verses part
-  const match = input.match(
-    /^([a-z0-9äöüß\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]+?)\s*(\d+)\s*:\s*(.+)$/i,
-  );
+  // Supports both "Book chapter:verse" and "Book verse" (for single-chapter books)
+  const match = input.match(/^([a-z0-9äöüß\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]+?)(\d+.*)$/i);
 
   if (!match) {
     throw new Error('errors.invalidFormat');
   }
 
-  const [, bookName, chapter, versesPart] = match;
+  const [, bookName, remainder] = match;
+
+  // Check if remainder contains a colon (chapter:verse format)
+  const colonIndex = remainder.indexOf(':');
+  let numberPart: string;
+  let versesPart: string | undefined;
+
+  if (colonIndex > 0) {
+    // Has colon: split into chapter and verses
+    numberPart = remainder.substring(0, colonIndex);
+    versesPart = remainder.substring(colonIndex + 1);
+  } else {
+    // No colon: entire remainder is the number (could be chapter or verse)
+    numberPart = remainder;
+    versesPart = undefined;
+  }
 
   const book = findBook(bookName, language);
 
@@ -113,17 +128,69 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   }
 
   if (Array.isArray(book)) {
-    console.log('multiple books found', book, bookName, chapter, versesPart);
+    console.log('multiple books found', book, bookName, numberPart, versesPart);
     throw new Error('errors.multipleBooksFound');
   }
 
-  if (
-    parseInt(chapter, 10) < 1 ||
-    (book.chapters !== undefined && parseInt(chapter, 10) > book.chapters)
-  ) {
-    throw new Error('errors.invalidChapter');
+  // Determine if this is a single-chapter book reference without colon
+  const isSingleChapterBook = SINGLE_CHAPTER_BOOKS.includes(book.id);
+  const hasColon = versesPart !== undefined;
+
+  let chapter: number;
+  let actualVersesPart: string;
+
+  if (!hasColon) {
+    // No colon - format is "Book verse"
+    if (!isSingleChapterBook) {
+      // Multi-chapter books require "chapter:verse" format
+      throw new Error('errors.invalidFormat');
+    }
+    // For single-chapter books, treat numberPart as verse
+    chapter = 1;
+    actualVersesPart = numberPart;
+  } else {
+    // Has colon - format is "Book chapter:verse"
+    chapter = parseInt(numberPart, 10);
+    actualVersesPart = versesPart as string; // TypeScript: versesPart is defined when hasColon is true
+
+    if (chapter < 1 || (book.chapters !== undefined && chapter > book.chapters)) {
+      throw new Error('errors.invalidChapter');
+    }
   }
-  const versesPartMatch = versesPart.match(/^(\d+)(?:-(\d*))?$/);
+
+  // Check for multi-chapter reference (e.g., "1-4:11" meaning verse 1 to chapter 4 verse 11)
+  const multiChapterMatch = actualVersesPart.match(/^(\d+)-(\d+):(\d+)$/);
+  if (multiChapterMatch) {
+    const [, startVerse, endChapter, endVerse] = multiChapterMatch;
+    const startVerseNumber = parseVerseNumber(startVerse);
+    const endChapterNumber = parseInt(endChapter, 10);
+    const endVerseNumber = parseVerseNumber(endVerse);
+
+    // Validate end chapter
+    if (endChapterNumber < 1 || (book.chapters !== undefined && endChapterNumber > book.chapters)) {
+      throw new Error('errors.invalidChapter');
+    }
+
+    // End chapter must be greater than start chapter
+    const startChapterNumber = chapter;
+    if (endChapterNumber <= startChapterNumber) {
+      throw new Error('errors.chaptersAscendingOrder');
+    }
+
+    return {
+      book: book.id,
+      chapter: startChapterNumber,
+      endChapter: endChapterNumber,
+      verseRanges: [
+        {
+          start: startVerseNumber,
+          end: endVerseNumber,
+        },
+      ],
+    };
+  }
+
+  const versesPartMatch = actualVersesPart.match(/^(\d+)(?:-(\d*))?$/);
 
   if (versesPartMatch) {
     const [, startVerse, endVerse] = versesPartMatch;
@@ -138,7 +205,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
 
       return {
         book: book.id,
-        chapter: parseInt(chapter, 10),
+        chapter: chapter,
         verseRanges: [
           {
             start: startVerseNumber,
@@ -150,7 +217,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
 
     return {
       book: book.id,
-      chapter: parseInt(chapter, 10),
+      chapter: chapter,
       verseRanges: [
         {
           start: startVerseNumber,
@@ -163,11 +230,11 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   // TODO: move parseVerseRanges to own file and include simple verse parsing
 
   // Complex verse ranges
-  const result = parseVerseRanges(versesPart);
+  const result = parseVerseRanges(actualVersesPart);
 
   return {
     book: book.id,
-    chapter: parseInt(chapter, 10),
+    chapter: chapter,
     verseRanges: result,
   };
 }
@@ -184,13 +251,27 @@ export const parseBibleReferenceFromUrl = (url: string, language: Language): Bib
   const [bookStart, chapterStart, verseStart] = startBookChapterVerse.split(':');
   const [, chapterEnd, verseEnd] = endBookChapterVerse.split(':');
 
-  if (chapterStart !== chapterEnd) {
-    console.log('links with multiple chapters are not supported (yet)');
+  const startChapterNum = parseInt(chapterStart, 10);
+  const endChapterNum = parseInt(chapterEnd, 10);
+
+  // Handle multi-chapter references
+  if (startChapterNum !== endChapterNum) {
+    return {
+      book: parseInt(bookStart, 10),
+      chapter: startChapterNum,
+      endChapter: endChapterNum,
+      verseRanges: [
+        {
+          start: parseInt(verseStart, 10),
+          end: parseInt(verseEnd, 10),
+        },
+      ],
+    };
   }
 
   return {
     book: parseInt(bookStart, 10),
-    chapter: parseInt(chapterStart, 10),
+    chapter: startChapterNum,
     verseRanges: [
       {
         start: parseInt(verseStart, 10),

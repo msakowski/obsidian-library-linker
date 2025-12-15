@@ -126,6 +126,7 @@ export const ko = {
   errors: {
     invalidVerseNumber: '잘못된 절 번호',
     versesAscendingOrder: '절은 오름차순이어야 합니다',
+    chaptersAscendingOrder: '장은 오름차순이어야 합니다',
     invalidVerseFormat: '잘못된 절 형식',
     invalidReferenceFormat: '잘못된 참조 형식',
     unsupportedLanguage: '지원되지 않는 언어',
