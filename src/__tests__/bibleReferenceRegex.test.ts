@@ -1,4 +1,4 @@
-import { bibleReferenceRegex } from '@/utils/bibleReferenceRegex';
+import { getBibleReferenceRegex } from '@/utils/bibleReferenceRegex';
 
 describe('Bible Reference Regex Pattern', () => {
   // The regex pattern we want to test (without the /b part)
@@ -77,6 +77,8 @@ describe('Bible Reference Regex Pattern', () => {
   test('matches valid Bible references', () => {
     validReferences.forEach((reference) => {
       // Create a new regex without g flag for exact matching
+      // Using German language ('X') since test includes German characters
+      const bibleReferenceRegex = getBibleReferenceRegex('X');
       const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'i');
       if (!testRegex.test(reference)) {
         console.error('Should match', { reference });
@@ -88,6 +90,8 @@ describe('Bible Reference Regex Pattern', () => {
   test('does not match invalid Bible references', () => {
     invalidReferences.forEach((reference) => {
       // Create a new regex without g flag for exact matching
+      // Using German language ('X') since test includes German characters
+      const bibleReferenceRegex = getBibleReferenceRegex('X');
       const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'i');
       if (testRegex.test(reference)) {
         console.error('Should not match', { reference });
