@@ -29,6 +29,7 @@ export interface LinkReplacerSettings extends LinkStyles {
   openAutomatically: boolean;
   updatedLinkStructure: UpdatedLinkStructure;
   noLanguageParameter: boolean;
+  reconvertExistingLinks: boolean;
   bibleQuote: BibleQuoteSettings;
 }
 
@@ -53,6 +54,7 @@ export interface VerseRange {
 export interface BibleReference {
   book: BibleBookId;
   chapter: number;
+  endChapter?: number; // For multi-chapter references (e.g., "Matt. 3:1-4:11")
   verseRanges?: VerseRange[]; // For complex verse references with multiple ranges
 }
 

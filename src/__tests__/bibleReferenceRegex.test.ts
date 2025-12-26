@@ -48,6 +48,14 @@ describe('Bible Reference Regex Pattern', () => {
     '신1:1',
     '신1:1-3',
     '수1:1-3,5,7',
+
+    // Multi-chapter references
+    'Matt. 3:1-4:11',
+    'matt3:1-4:11',
+    'Matt 3:1-4:11',
+    '1mo1:1-2:3',
+    '1Mo 1:1-50:26',
+    'Joh 3:16-4:1',
   ];
 
   const invalidReferences = [

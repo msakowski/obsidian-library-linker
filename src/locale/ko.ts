@@ -19,6 +19,11 @@ export const ko = {
       description:
         '활성화하면 링크에 언어 매개변수가 추가되지 않습니다. 링크는 JW Library의 언어로 열립니다',
     },
+    reconvertExistingLinks: {
+      name: '기존 링크 재변환',
+      description:
+        '활성화하면 이미 변환된 jwlibrary:// 링크가 현재 형식 설정에 따라 재변환됩니다. 이를 통해 모든 링크를 최신 설정에 맞게 업데이트할 수 있습니다.',
+    },
     bookLength: {
       name: '링크 텍스트 길이',
       description: '링크 텍스트의 길이를 선택합니다',
@@ -121,6 +126,7 @@ export const ko = {
   errors: {
     invalidVerseNumber: '잘못된 절 번호',
     versesAscendingOrder: '절은 오름차순이어야 합니다',
+    chaptersAscendingOrder: '장은 오름차순이어야 합니다',
     invalidVerseFormat: '잘못된 절 형식',
     invalidReferenceFormat: '잘못된 참조 형식',
     unsupportedLanguage: '지원되지 않는 언어',
