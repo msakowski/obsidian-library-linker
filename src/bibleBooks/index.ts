@@ -38,6 +38,7 @@ export const getBibleBooks = (language: Language): readonly BibleBook[] => {
       break;
     case 'TPO':
       books = bibleBooksPT;
+      break;
     case 'F':
       books = bibleBooksFR;
       break;

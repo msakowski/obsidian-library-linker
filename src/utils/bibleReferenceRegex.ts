@@ -6,6 +6,9 @@ export function getBibleReferenceRegex(language: Language): RegExp {
   if (language === 'X') {
     // German: äöüß
     customChars = 'äöüß';
+  } else if (language === 'TPO') {
+    // Portuguese: ãáàâéêíóôõúç
+    customChars = 'ãáàâéêíóôõúç';
   } else {
     customChars = '';
   }

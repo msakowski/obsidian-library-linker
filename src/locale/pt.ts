@@ -19,6 +19,11 @@ export const pt = {
       description:
         'Ao ativar, as hiperligações da JW Library serão criados sem o parâmetro de idioma. As hiperligações serão abertas no idioma do aplicativo JW Library.',
     },
+    reconvertExistingLinks: {
+      name: 'Reconverter hiperligações existentes',
+      description:
+        'Quando ativado, as hiperligações jwlibrary:// já convertidas serão reconvertidas de acordo com as configurações de formatação atuais. Isso permite atualizar todas as hiperligações para corresponder às suas preferências mais recentes.',
+    },
     bookLength: {
       name: 'Comprimento do texto da hiperligação do livro bíblico',
       description: 'Escolha o comprimento do texto do livro bíblico na hiperligação',
@@ -122,6 +127,7 @@ export const pt = {
   errors: {
     invalidVerseNumber: 'Número de versículo inválido',
     versesAscendingOrder: 'Versículos devem estar em ordem ascendente',
+    chaptersAscendingOrder: 'Capítulos devem estar em ordem ascendente',
     invalidVerseFormat: 'Formato de versículo inválido',
     invalidReferenceFormat: 'Formato de referência inválido',
     unsupportedLanguage: 'Idioma não suportado para referências bíblicas',

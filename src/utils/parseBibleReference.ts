@@ -101,6 +101,9 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   if (language === 'X') {
     // German: äöüß
     customChars = 'äöüß';
+  } else if (language === 'TPO') {
+    // Portuguese: ãáàâéêíóôõúç
+    customChars = 'ãáàâéêíóôõúç';
   } else {
     customChars = '';
   }
