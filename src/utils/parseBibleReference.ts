@@ -96,10 +96,22 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     .toLowerCase()
     .replace(/[\.\s]/g, '');
 
+  // Language-specific characters
+  let customChars: string;
+  if (language === 'X') {
+    // German: äöüß
+    customChars = 'äöüß';
+  } else {
+    customChars = '';
+  }
+
   // Match book, chapter, and verses part
   // Supports both "Book chapter:verse" and "Book verse" (for single-chapter books)
   const match = input.match(
-    /^([a-z0-9äöüßáóéúíãõâêô\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]+?)(\d+.*)$/i,
+    new RegExp(
+      `^([a-z0-9${customChars}\\uAC00-\\uD7AF\\u1100-\\u11FF\\u3130-\\u318F]+?)(\\d+.*)$`,
+      'i',
+    ),
   );
 
   if (!match) {
