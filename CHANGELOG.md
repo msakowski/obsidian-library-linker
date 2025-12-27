@@ -1,5 +1,19 @@
 # obsidian-library-linker
 
+## 0.10.0
+
+### Minor Changes
+
+- [#153](https://github.com/msakowski/obsidian-library-linker/pull/153) [`e5649bd`](https://github.com/msakowski/obsidian-library-linker/commit/e5649bd6eead42ff90ac17dba9276ebf8ceb7e71) Thanks [@pedro-silva-oliveira](https://github.com/pedro-silva-oliveira)! - added pt localisation
+
+### Patch Changes
+
+- [#153](https://github.com/msakowski/obsidian-library-linker/pull/153) [`653a804`](https://github.com/msakowski/obsidian-library-linker/commit/653a804175a61531e43fa7c6a6f24c1a03ee2569) Thanks [@pedro-silva-oliveira](https://github.com/pedro-silva-oliveira)! - refactor: simplify aliases for Bible books in Portuguese localization
+
+- [#166](https://github.com/msakowski/obsidian-library-linker/pull/166) [`028d7eb`](https://github.com/msakowski/obsidian-library-linker/commit/028d7eb9de3e70ab1cdc16c0f2c1eb1a76d06607) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Only include language specific characters when needed
+
+- [#170](https://github.com/msakowski/obsidian-library-linker/pull/170) [`16f0953`](https://github.com/msakowski/obsidian-library-linker/commit/16f0953717baf1638cef60cc6384bae3bbec4457) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Use language specific regex
+
 ## 0.9.0
 
 ### Minor Changes
