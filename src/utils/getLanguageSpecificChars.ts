@@ -12,6 +12,9 @@ export function getLanguageSpecificChars(language: Language): string {
   } else if (language === 'KO') {
     // Korean: 가-힯ᄀ-ᇿ㄰-㆏
     return '\\uAC00-\\uD7AF\\u1100-\\u11FF\\u3130-\\u318F';
+  } else if (language === 'TPO') {
+    // Portuguese: ãáàâéêíóôõúç
+    return 'ãáàâéêíóôõúç';
   }
   return '';
 }
