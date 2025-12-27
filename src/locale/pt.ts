@@ -88,7 +88,8 @@ export const pt = {
   },
   commands: {
     linkUnlinkedBibleReferences: 'Hiperligar referências bíblicas não ligadas',
-    convertToJWLibraryLinks: 'Converter hiperligações selecionadas em hiperligações da JW Library links',
+    convertToJWLibraryLinks:
+      'Converter hiperligações selecionadas em hiperligações da JW Library links',
     insertBibleQuotes: 'Inserir citação bíblica para hiperligações da JW Library',
     insertBibleQuoteAtCursor: 'Inserir citação bíblica no cursor',
   },
