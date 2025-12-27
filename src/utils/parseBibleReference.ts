@@ -1,5 +1,6 @@
 import { findBook } from '@/utils/findBook';
 import { SINGLE_CHAPTER_BOOKS } from '@/bibleBooks/chapterCounts';
+import { getLanguageSpecificChars } from '@/utils/getLanguageSpecificChars';
 import type { Language, VerseRange, BibleReference } from '@/types';
 
 function parseVerseNumber(verse: string): number {
@@ -96,14 +97,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     .toLowerCase()
     .replace(/[\.\s]/g, '');
 
-  // Language-specific characters
-  let customChars: string;
-  if (language === 'X') {
-    // German: äöüß
-    customChars = 'äöüß';
-  } else {
-    customChars = '';
-  }
+  const customChars = getLanguageSpecificChars(language);
 
   // Match book, chapter, and verses part
   // Supports both "Book chapter:verse" and "Book verse" (for single-chapter books)
