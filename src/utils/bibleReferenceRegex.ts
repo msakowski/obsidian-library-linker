@@ -1,20 +1,11 @@
 import type { Language } from '@/types';
+import { getLanguageSpecificChars } from '@/utils/getLanguageSpecificChars';
 
 export function getBibleReferenceRegex(language: Language): RegExp {
-  // Language-specific characters
-  let customChars: string;
-  if (language === 'X') {
-    // German: äöüß
-    customChars = 'äöüß';
-  } else if (language === 'TPO') {
-    // Portuguese: ãáàâéêíóôõúç
-    customChars = 'ãáàâéêíóôõúç';
-  } else {
-    customChars = '';
-  }
+  const customChars = getLanguageSpecificChars(language);
 
   return new RegExp(
-    `([1-5]{1}\\.?\\s?)?[A-Za-z${customChars}\\uAC00-\\uD7AF\\u1100-\\u11FF\\u3130-\\u318F]{1,24}\\.?\\s?\\d+:\\d+(?:-\\d+(?::\\d+)?)?(?:\\s*,\\s*\\d+(?:-\\d+)?)*`,
+    `([1-5]{1}\\.?\\s?)?[a-z${customChars}]{1,24}\\.?\\s?\\d+:\\d+(?:-\\d+(?::\\d+)?)?(?:\\s*,\\s*\\d+(?:-\\d+)?)*`,
     'gi',
   );
 }

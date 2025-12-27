@@ -2,7 +2,7 @@ import { getBibleReferenceRegex } from '@/utils/bibleReferenceRegex';
 
 describe('Bible Reference Regex Pattern', () => {
   // The regex pattern we want to test (without the /b part)
-  const validReferences = [
+  const validGermanReferences = [
     // Simple references
     'joh3:16',
     'ps23:1',
@@ -44,11 +44,6 @@ describe('Bible Reference Regex Pattern', () => {
     'röm8:28',
     'Röm 8:28',
 
-    // Korean references
-    '신1:1',
-    '신1:1-3',
-    '수1:1-3,5,7',
-
     // Multi-chapter references
     'Matt. 3:1-4:11',
     'matt3:1-4:11',
@@ -56,6 +51,13 @@ describe('Bible Reference Regex Pattern', () => {
     '1mo1:1-2:3',
     '1Mo 1:1-50:26',
     'Joh 3:16-4:1',
+  ];
+
+  const validKoreanReferences = [
+    // Korean references
+    '신1:1',
+    '신1:1-3',
+    '수1:1-3,5,7',
   ];
 
   const invalidReferences = [
@@ -74,11 +76,22 @@ describe('Bible Reference Regex Pattern', () => {
     'joh3:1,-2',
   ];
 
-  test('matches valid Bible references', () => {
-    validReferences.forEach((reference) => {
+  test('matches valid German Bible references', () => {
+    validGermanReferences.forEach((reference) => {
       // Create a new regex without g flag for exact matching
-      // Using German language ('X') since test includes German characters
       const bibleReferenceRegex = getBibleReferenceRegex('X');
+      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'i');
+      if (!testRegex.test(reference)) {
+        console.error('Should match', { reference });
+      }
+      expect(testRegex.test(reference)).toBe(true);
+    });
+  });
+
+  test('matches valid Korean Bible references', () => {
+    validKoreanReferences.forEach((reference) => {
+      // Create a new regex without g flag for exact matching
+      const bibleReferenceRegex = getBibleReferenceRegex('KO');
       const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'i');
       if (!testRegex.test(reference)) {
         console.error('Should match', { reference });
