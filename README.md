@@ -94,12 +94,14 @@ Converts plain text Bible references in selected text to JW Library links
 Automatically fetches and inserts Bible text for existing JW Library links in your notes
 
 **For all links in selection/note:**
+
 1. Select text containing JW Library links (optional - if no selection, processes entire note)
 2. Open the command palette (Ctrl/Cmd + P)
 3. Search for "Insert Bible quotes for JW Library links"
 4. The plugin will fetch Bible text and format it according to your settings
 
 **For cursor position:**
+
 1. Place your cursor on a line containing a JW Library link
 2. Open the command palette (Ctrl/Cmd + P)
 3. Search for "Insert Bible quote at cursor"
@@ -110,28 +112,60 @@ Automatically fetches and inserts Bible text for existing JW Library links in yo
 The plugin supports three formatting styles configurable in settings:
 
 - **Short format**: Simple quote block below the link
-- **Long foldable**: Collapsible callout (collapsed by default)  
+- **Long foldable**: Collapsible callout (collapsed by default)
 - **Long expanded**: Expanded callout (visible by default)
 
 **Example outputs:**
 
 Short format:
+
 ```
 [Matthew 6:33](jwlibrary:///finder?bible=40006033)
 > But keep on seeking first the Kingdom and his righteousness, and all these other things will be added to you.
 ```
 
 Long foldable format:
+
 ```
 > [!quote]- [Matthew 6:33](jwlibrary:///finder?bible=40006033)
 > But keep on seeking first the Kingdom and his righteousness, and all these other things will be added to you.
 ```
 
 Long expanded format:
+
 ```
 > [!quote] [Matthew 6:33](jwlibrary:///finder?bible=40006033)
 > But keep on seeking first the Kingdom and his righteousness, and all these other things will be added to you.
 ```
+
+## Local Development
+
+### Testing the Plugin Locally
+
+To test the plugin locally in your Obsidian vault:
+
+1. **Build the plugin:**
+
+   ```bash
+   npm run build
+   ```
+
+2. **Create a symlink to your Obsidian vault's plugins directory:**
+
+   ```bash
+   # Symlink the dist folder contents
+   ln -s /path/to/jw-library-linker/dist /path/to/your/vault/.obsidian/plugins/jw-library-linker
+   ```
+
+3. **Enable the plugin in Obsidian:**
+   - Open Obsidian Settings
+   - Go to Community Plugins
+   - Enable "JW Library Linker"
+
+4. **Development workflow:**
+   - Run `npm run dev` to rebuild in watch mode
+   - Make changes to the source code
+   - In Obsidian run command 'Reload app without saving'
 
 ## Contributing
 
