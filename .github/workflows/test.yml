@@ -20,14 +20,17 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: lint
-        run: npm run test:lint
+        run: pnpm test:lint
 
       - name: unit-test
-        run: npm run test:jest
+        run: pnpm test:jest
 
       - name: typecheck
-        run: npm run test:types
+        run: pnpm test:types
