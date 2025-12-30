@@ -1,5 +1,10 @@
 import { TEST_DEFAULT_SETTINGS } from 'mocks/plugin';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
+import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
+
+beforeAll(() => {
+  initializeTestBibleBooks();
+});
 
 describe('convertBibleTextToMarkdownLink', () => {
   describe('with long format', () => {

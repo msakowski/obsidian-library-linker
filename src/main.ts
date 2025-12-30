@@ -1,7 +1,9 @@
 import { Editor, Notice, Plugin, Menu } from 'obsidian';
 import { ConversionType, convertLinks } from '@/utils/convertLinks';
 import type { LinkReplacerSettings, LinkStyles } from '@/types';
+import { FileLoaderService } from '@/services/FileLoaderService';
 import { TranslationService } from '@/services/TranslationService';
+import { initializeBibleBooks, loadBibleBooks } from '@/stores/bibleBooks';
 import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
 import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
@@ -36,11 +38,33 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
 
 export default class JWLibraryLinkerPlugin extends Plugin {
   settings: LinkReplacerSettings = DEFAULT_SETTINGS;
-  private bibleSuggester: BibleReferenceSuggester = new BibleReferenceSuggester(this);
-  private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
+
+  // Services
+  private fileLoader!: FileLoaderService;
+  private translationService!: TranslationService;
+  private bibleSuggester!: BibleReferenceSuggester;
+
+  // Convenience binding for backward compatibility
+  private t!: (key: string, variables?: Record<string, string>) => string;
 
   async onload() {
+    // Step 1: Initialize file loader
+    this.fileLoader = new FileLoaderService(this.app, this.manifest.dir || '');
+
+    // Step 2: Initialize translation service
+    this.translationService = new TranslationService(this.fileLoader);
+    await this.translationService.initialize();
+    this.t = this.translationService.t.bind(this.translationService);
+
+    // Step 3: Load settings (may update language)
     await this.loadSettings();
+
+    // Step 4: Initialize bible books store with saved language
+    initializeBibleBooks(this.fileLoader);
+    await loadBibleBooks(this.settings.language);
+
+    // Step 5: Initialize UI components
+    this.bibleSuggester = new BibleReferenceSuggester(this);
 
     // Add settings tab
     this.addSettingTab(new JWLibraryLinkerSettings(this.app, this));
@@ -99,7 +123,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
           return;
         }
 
-        new ConvertSuggester(this.app, (selectedType: ConversionType) => {
+        new ConvertSuggester(this.app, this, (selectedType: ConversionType) => {
           const convertedLinks = convertLinks(selection, selectedType, this.settings);
           if (selection !== convertedLinks) {
             editor.replaceSelection(convertedLinks);
@@ -208,6 +232,13 @@ export default class JWLibraryLinkerPlugin extends Plugin {
         }
       }),
     );
+  }
+
+  /**
+   * Get the translation service instance
+   */
+  getTranslationService(): TranslationService {
+    return this.translationService;
   }
 
   onunload() {

@@ -1,6 +1,5 @@
 import { PluginSettingTab, App, Setting, MarkdownRenderer, Component } from 'obsidian';
 import JWLibraryLinkerPlugin, { DEFAULT_SETTINGS, DEFAULT_STYLES } from '@/main';
-import { TranslationService } from '@/services/TranslationService';
 import type {
   Language,
   BibleReference,
@@ -10,6 +9,7 @@ import type {
   BibleQuoteFormat,
 } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
+import { loadBibleBooks } from '@/stores/bibleBooks';
 
 class MarkdownComponent extends Component {
   constructor() {
@@ -19,7 +19,7 @@ class MarkdownComponent extends Component {
 
 export class JWLibraryLinkerSettings extends PluginSettingTab {
   plugin: JWLibraryLinkerPlugin;
-  private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
+  private t: (key: string, variables?: Record<string, string>) => string;
 
   private markdownRenderer = async (containerId: string, markdown: string) => {
     const container = document.getElementById(containerId);
@@ -108,6 +108,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
   constructor(app: App, plugin: JWLibraryLinkerPlugin) {
     super(app, plugin);
     this.plugin = plugin;
+    this.t = this.plugin.getTranslationService().t.bind(this.plugin.getTranslationService());
   }
 
   display(): void {
@@ -136,8 +137,16 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           } satisfies Record<Language, string>)
           .setValue(this.plugin.settings.language)
           .onChange(async (value) => {
-            this.plugin.settings.language = value as Language;
+            const newLanguage = value as Language;
+
+            // Pre-load new language's bible books
+            await loadBibleBooks(newLanguage);
+
+            // Update settings
+            this.plugin.settings.language = newLanguage;
             await this.plugin.saveSettings();
+
+            // Redisplay settings UI
             this.display();
           }),
       );

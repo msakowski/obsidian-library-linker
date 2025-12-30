@@ -4,6 +4,7 @@ import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdo
 import type { LinkReplacerSettings } from '@/types';
 import { TEST_DEFAULT_SETTINGS } from 'mocks/plugin';
 import type { Editor } from 'obsidian';
+import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
 
 // Mock dependencies
 jest.mock('@/services/BibleTextFetcher');
@@ -16,6 +17,10 @@ jest.mock('@/utils/findJWLibraryLinks', () => ({
 }));
 
 import { findJWLibraryLinks } from '@/utils/findJWLibraryLinks';
+
+beforeAll(() => {
+  initializeTestBibleBooks();
+});
 
 describe('insertAllBibleQuotes', () => {
   let mockEditor: jest.Mocked<Editor>;

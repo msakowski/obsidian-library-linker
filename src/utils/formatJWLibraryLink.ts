@@ -1,4 +1,4 @@
-import { bibleBookExists } from '@/bibleBooks';
+import { bibleBookExists } from '@/utils/bibleBookExists';
 import type { BibleReference, Language } from '@/types';
 import { padBook, padChapter, padVerse } from '@/utils/padNumber';
 

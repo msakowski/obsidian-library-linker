@@ -1,6 +1,11 @@
 import { LinkReplacerSettings } from '@/types';
 import { convertLinks } from '@/utils/convertLinks';
 import { TEST_DEFAULT_SETTINGS } from 'mocks/plugin';
+import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
+
+beforeAll(() => {
+  initializeTestBibleBooks();
+});
 
 describe('convertLinks', () => {
   const settings: LinkReplacerSettings = TEST_DEFAULT_SETTINGS;

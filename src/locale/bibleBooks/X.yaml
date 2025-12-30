@@ -1,0 +1,434 @@
+- id: 1
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Mose
+    medium: 1. Mo.
+    short: 1Mo
+- id: 2
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Mose
+    medium: 2. Mo.
+    short: 2Mo
+- id: 3
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3. Mose
+    medium: 3. Mo.
+    short: 3Mo
+- id: 4
+  prefix: '4'
+  aliases: []
+  name:
+    long: 4. Mose
+    medium: 4. Mo.
+    short: 4Mo
+- id: 5
+  prefix: '5'
+  aliases: []
+  name:
+    long: 5. Mose
+    medium: 5. Mo.
+    short: 5Mo
+- id: 6
+  aliases: []
+  name:
+    long: Josua
+    medium: Jos.
+    short: Jos
+- id: 7
+  aliases: []
+  name:
+    long: Richter
+    medium: Ri.
+    short: Ri
+- id: 8
+  aliases: []
+  name:
+    long: Ruth
+    medium: Ru.
+    short: Ru
+- id: 9
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Samuel
+    medium: 1. Sam.
+    short: 1Sa
+- id: 10
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Samuel
+    medium: 2. Sam.
+    short: 2Sa
+- id: 11
+  prefix: '1'
+  aliases:
+    - koenige
+    - konige
+  name:
+    long: 1. Könige
+    medium: 1. Kö.
+    short: 1Kö
+- id: 12
+  prefix: '2'
+  aliases:
+    - koenige
+    - konige
+  name:
+    long: 2. Könige
+    medium: 2. Kö.
+    short: 2Kö
+- id: 13
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Chronika
+    medium: 1. Chr.
+    short: 1Ch
+- id: 14
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Chronika
+    medium: 2. Chr.
+    short: 2Ch
+- id: 15
+  aliases: []
+  name:
+    long: Esra
+    medium: Esr.
+    short: Esr
+- id: 16
+  aliases: []
+  name:
+    long: Nehemia
+    medium: Neh.
+    short: Ne
+- id: 17
+  aliases: []
+  name:
+    long: Esther
+    medium: Est.
+    short: Est
+- id: 18
+  aliases: []
+  name:
+    long: Hiob
+    medium: Hiob
+    short: Hi
+- id: 19
+  aliases: []
+  name:
+    long: Psalm
+    medium: Ps.
+    short: Ps
+- id: 20
+  aliases:
+    - sprueche
+    - spruche
+  name:
+    long: Sprüche
+    medium: Spr.
+    short: Spr
+- id: 21
+  aliases: []
+  name:
+    long: Prediger
+    medium: Pred.
+    short: Pr
+- id: 22
+  aliases: []
+  name:
+    long: Hohes Lied
+    medium: Hoh.
+    short: Hoh
+- id: 23
+  aliases: []
+  name:
+    long: Jesaja
+    medium: Jes.
+    short: Jes
+- id: 24
+  aliases: []
+  name:
+    long: Jeremia
+    medium: Jer.
+    short: Jer
+- id: 25
+  aliases: []
+  name:
+    long: Klagelieder
+    medium: Klg.
+    short: Klg
+- id: 26
+  aliases: []
+  name:
+    long: Hesekiel
+    medium: Hes.
+    short: Hes
+- id: 27
+  aliases: []
+  name:
+    long: Daniel
+    medium: Dan.
+    short: Da
+- id: 28
+  aliases: []
+  name:
+    long: Hosea
+    medium: Hos.
+    short: Hos
+- id: 29
+  aliases: []
+  name:
+    long: Joel
+    medium: Joel
+    short: Joel
+- id: 30
+  aliases: []
+  name:
+    long: Amos
+    medium: Am.
+    short: Am
+- id: 31
+  aliases: []
+  name:
+    long: Obadja
+    medium: Ob.
+    short: Ob
+- id: 32
+  aliases: []
+  name:
+    long: Jona
+    medium: Jona
+    short: Jon
+- id: 33
+  aliases: []
+  name:
+    long: Micha
+    medium: Mi.
+    short: Mi
+- id: 34
+  aliases: []
+  name:
+    long: Nahum
+    medium: Nah.
+    short: Nah
+- id: 35
+  aliases: []
+  name:
+    long: Habakuk
+    medium: Hab.
+    short: Hab
+- id: 36
+  aliases:
+    - zefanja
+  name:
+    long: Zephanja
+    medium: Zeph.
+    short: Ze
+- id: 37
+  aliases: []
+  name:
+    long: Haggai
+    medium: Hag.
+    short: Hag
+- id: 38
+  aliases: []
+  name:
+    long: Sacharja
+    medium: Sach.
+    short: Sach
+- id: 39
+  aliases: []
+  name:
+    long: Maleachi
+    medium: Mal.
+    short: Mal
+- id: 40
+  aliases:
+    - matthaeus
+    - matthaus
+    - mtt
+  name:
+    long: Matthäus
+    medium: Mat.
+    short: Mat
+- id: 41
+  aliases: []
+  name:
+    long: Markus
+    medium: Mar.
+    short: Mar
+- id: 42
+  aliases: []
+  name:
+    long: Lukas
+    medium: Luk.
+    short: Luk
+- id: 43
+  aliases: []
+  name:
+    long: Johannes
+    medium: Joh.
+    short: Joh
+- id: 44
+  aliases: []
+  name:
+    long: Apostelgeschichte
+    medium: Apg.
+    short: Apg
+- id: 45
+  aliases:
+    - roemer
+    - romer
+  name:
+    long: Römer
+    medium: Röm.
+    short: Rö
+- id: 46
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Korinther
+    medium: 1. Kor.
+    short: 1Ko
+- id: 47
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Korinther
+    medium: 2. Kor.
+    short: 2Ko
+- id: 48
+  aliases: []
+  name:
+    long: Galater
+    medium: Gal.
+    short: Gal
+- id: 49
+  aliases: []
+  name:
+    long: Epheser
+    medium: Eph.
+    short: Eph
+- id: 50
+  aliases:
+    - php
+  name:
+    long: Philipper
+    medium: Phil.
+    short: Phil
+- id: 51
+  aliases: []
+  name:
+    long: Kolosser
+    medium: Kol.
+    short: Kol
+- id: 52
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Thessalonicher
+    medium: 1. Thess.
+    short: 1Th
+- id: 53
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Thessalonicher
+    medium: 2. Thess.
+    short: 2Th
+- id: 54
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Timotheus
+    medium: 1. Tim.
+    short: 1Ti
+- id: 55
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Timotheus
+    medium: 2. Tim.
+    short: 2Ti
+- id: 56
+  aliases: []
+  name:
+    long: Titus
+    medium: Tit.
+    short: Tit
+- id: 57
+  aliases: []
+  name:
+    long: Philemon
+    medium: Phlm.
+    short: Phm
+- id: 58
+  aliases:
+    - hebraeer
+    - hebraer
+  name:
+    long: Hebräer
+    medium: Heb.
+    short: Heb
+- id: 59
+  aliases: []
+  name:
+    long: Jakobus
+    medium: Jak.
+    short: Jak
+- id: 60
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Petrus
+    medium: 1. Pet.
+    short: 1Pe
+- id: 61
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Petrus
+    medium: 2. Pet.
+    short: 2Pe
+- id: 62
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Johannes
+    medium: 1. Joh.
+    short: 1Jo
+- id: 63
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Johannes
+    medium: 2. Joh.
+    short: 2Jo
+- id: 64
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3. Johannes
+    medium: 3. Joh.
+    short: 3Jo
+- id: 65
+  aliases: []
+  name:
+    long: Judas
+    medium: Jud.
+    short: Jud
+- id: 66
+  aliases:
+    - offb
+  name:
+    long: Offenbarung
+    medium: Off.
+    short: Off

@@ -1,5 +1,5 @@
 import { findBook } from '@/utils/findBook';
-import { SINGLE_CHAPTER_BOOKS } from '@/bibleBooks/chapterCounts';
+import { SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
 import { getLanguageSpecificChars } from '@/utils/getLanguageSpecificChars';
 import type { Language, VerseRange, BibleReference } from '@/types';
 

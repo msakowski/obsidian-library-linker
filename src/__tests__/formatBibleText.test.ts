@@ -1,4 +1,9 @@
 import { formatBibleText } from '@/utils/formatBibleText';
+import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
+
+beforeAll(() => {
+  initializeTestBibleBooks();
+});
 
 describe('formatBibleText', () => {
   describe('with long format', () => {

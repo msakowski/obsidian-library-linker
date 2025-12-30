@@ -1,5 +1,5 @@
-import { getBibleBooks } from '@/bibleBooks';
 import type { BibleBook, Language } from '@/types';
+import { getBibleBooks } from '@/stores/bibleBooks';
 
 const cleanTerm = (name: string): string => {
   return name.toLowerCase().replace(/[/.\s]/g, '');

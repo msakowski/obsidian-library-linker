@@ -2,16 +2,20 @@
 node_modules/
 
 # Build outputs
+dist/
 *.js.map
-data.json
 .hotreload
-main.js
 
 # Development
 .idea/
 .vscode/
 .claude/
+.cursor/
+.kiro/
 *.log
+
+# Sync software metadata
+_gsdata_/
 
 # OS-specific files
 .DS_Store

@@ -1,4 +1,9 @@
 import { findBook } from '@/utils/findBook';
+import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
+
+beforeAll(() => {
+  initializeTestBibleBooks();
+});
 
 describe('findBook', () => {
   test('finds book by exact match', () => {

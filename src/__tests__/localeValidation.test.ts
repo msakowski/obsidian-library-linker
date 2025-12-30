@@ -1,12 +1,24 @@
-import { en } from '@/locale/en';
-import { de } from '@/locale/de';
-import { es } from '@/locale/es';
-import { fi } from '@/locale/fi';
-import { fr } from '@/locale/fr';
-import { ko } from '@/locale/ko';
-import { nl } from '@/locale/nl';
+import { readdirSync, readFileSync } from 'fs';
+import { join, resolve } from 'path';
 
 type NestedObject = { [key: string]: string | NestedObject };
+
+const PROJECT_ROOT = resolve(__dirname, '../..');
+const LOCALES_DIR = join(PROJECT_ROOT, 'dist/locales');
+
+// Load all JSON locale files from dist/locales/
+const localeFiles = readdirSync(LOCALES_DIR).filter(
+  (file) => file.endsWith('.json') && file.length === 7,
+); // e.g., en.json
+
+const locales: Record<string, NestedObject> = {};
+for (const file of localeFiles) {
+  const locale = file.replace('.json', '');
+  const content = JSON.parse(readFileSync(join(LOCALES_DIR, file), 'utf8')) as NestedObject;
+  locales[locale] = content;
+}
+
+const en = locales.en;
 
 /**
  * Recursively gets all nested keys from an object as dot-notation strings
@@ -43,16 +55,6 @@ function findUnknownKeys(referenceKeys: string[], targetKeys: string[]): string[
 }
 
 describe('Locale Translation Validation', () => {
-  const locales = {
-    en,
-    de,
-    es,
-    fi,
-    fr,
-    ko,
-    nl,
-  };
-
   const englishKeys = getNestedKeys(en);
 
   test('English locale should have keys (baseline check)', () => {
@@ -61,41 +63,37 @@ describe('Locale Translation Validation', () => {
     expect(englishKeys).toContain('commands.linkUnlinkedBibleReferences');
   });
 
-  describe.each([
-    ['de', de],
-    ['es', es],
-    ['fi', fi],
-    ['fr', fr],
-    ['ko', ko],
-    ['nl', nl],
-  ])('%s locale validation', (localeCode, locale) => {
-    test(`should have all English keys present in ${localeCode}`, () => {
-      const localeKeys = getNestedKeys(locale);
-      const missingKeys = findMissingKeys(englishKeys, localeKeys);
+  describe.each(Object.entries(locales).filter(([code]) => code !== 'en'))(
+    '%s locale validation',
+    (localeCode, locale) => {
+      test(`should have all English keys present in ${localeCode}`, () => {
+        const localeKeys = getNestedKeys(locale);
+        const missingKeys = findMissingKeys(englishKeys, localeKeys);
 
-      if (missingKeys.length > 0) {
-        console.error(`Missing keys in ${localeCode}:`, missingKeys);
-      }
+        if (missingKeys.length > 0) {
+          console.error(`Missing keys in ${localeCode}:`, missingKeys);
+        }
 
-      expect(missingKeys).toEqual([]);
-    });
+        expect(missingKeys).toEqual([]);
+      });
 
-    test(`should not have unknown keys in ${localeCode}`, () => {
-      const localeKeys = getNestedKeys(locale);
-      const unknownKeys = findUnknownKeys(englishKeys, localeKeys);
+      test(`should not have unknown keys in ${localeCode}`, () => {
+        const localeKeys = getNestedKeys(locale);
+        const unknownKeys = findUnknownKeys(englishKeys, localeKeys);
 
-      if (unknownKeys.length > 0) {
-        console.error(`Unknown keys in ${localeCode}:`, unknownKeys);
-      }
+        if (unknownKeys.length > 0) {
+          console.error(`Unknown keys in ${localeCode}:`, unknownKeys);
+        }
 
-      expect(unknownKeys).toEqual([]);
-    });
+        expect(unknownKeys).toEqual([]);
+      });
 
-    test(`should have same number of keys as English in ${localeCode}`, () => {
-      const localeKeys = getNestedKeys(locale);
-      expect(localeKeys.length).toBe(englishKeys.length);
-    });
-  });
+      test(`should have same number of keys as English in ${localeCode}`, () => {
+        const localeKeys = getNestedKeys(locale);
+        expect(localeKeys.length).toBe(englishKeys.length);
+      });
+    },
+  );
 
   test('all locales should have identical key structures', () => {
     const allLocaleKeys = Object.entries(locales).map(([code, locale]) => ({
