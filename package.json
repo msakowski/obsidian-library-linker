@@ -5,6 +5,7 @@
   "main": "main.js",
   "scripts": {
     "prebuild": "node scripts/convert-yaml-to-json.mjs",
+    "pretest:jest": "node scripts/convert-yaml-to-json.mjs",
     "dev": "node scripts/convert-yaml-to-json.mjs && node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node scripts/convert-yaml-to-json.mjs && node esbuild.config.mjs production",
     "version": "changeset version && node version-bump.mjs",
