@@ -2,6 +2,7 @@ import { insertAllBibleQuotes, insertBibleQuoteAtCursor } from '@/utils/insertBi
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type { LinkReplacerSettings } from '@/types';
+import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { TEST_DEFAULT_SETTINGS } from 'mocks/plugin';
 import type { Editor } from 'obsidian';
 import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
@@ -43,8 +44,7 @@ describe('insertAllBibleQuotes', () => {
     settings = {
       ...TEST_DEFAULT_SETTINGS,
       bibleQuote: {
-        format: 'short',
-        calloutType: 'quote',
+        template: BIBLE_QUOTE_TEMPLATES.short,
       },
     };
 
@@ -92,8 +92,7 @@ describe('insertAllBibleQuotes', () => {
   });
 
   test('should format quote as long-foldable callout', async () => {
-    settings.bibleQuote.format = 'long-foldable';
-    settings.bibleQuote.calloutType = 'info';
+    settings.bibleQuote.template = BIBLE_QUOTE_TEMPLATES.foldable;
 
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue('jwlibrary:///finder?bible=43003016');
@@ -114,14 +113,14 @@ describe('insertAllBibleQuotes', () => {
         {
           from: { line: 0, ch: 0 },
           to: { line: 0, ch: 'jwlibrary:///finder?bible=43003016'.length },
-          text: '> [!info]- [John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)\n> For God loved the world so much that he gave his only-begotten Son.',
+          text: '> [!quote]- [John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)\n> For God loved the world so much that he gave his only-begotten Son.',
         },
       ],
     });
   });
 
   test('should format quote as long-expanded callout', async () => {
-    settings.bibleQuote.format = 'long-expanded';
+    settings.bibleQuote.template = BIBLE_QUOTE_TEMPLATES.expanded;
 
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue('jwlibrary:///finder?bible=43003016');
@@ -263,8 +262,7 @@ describe('insertBibleQuoteAtCursor', () => {
     settings = {
       ...TEST_DEFAULT_SETTINGS,
       bibleQuote: {
-        format: 'short',
-        calloutType: 'quote',
+        template: BIBLE_QUOTE_TEMPLATES.short,
       },
     };
 

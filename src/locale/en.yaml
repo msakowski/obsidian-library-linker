@@ -52,15 +52,15 @@ settings:
   bibleQuote:
     name: Bible quote formatting
     description: Configure how Bible quotes are formatted when inserted
-    format:
-      name: Quote format
-      description: Choose the format for inserted Bible quotes
-      short: Short (simple quote)
-      longFoldable: Long (foldable callout)
-      longExpanded: Long (expanded callout)
-    calloutType:
-      name: Callout type
-      description: 'Type of callout for long formats (e.g., quote, note, info)'
+    presets:
+      name: Template presets
+      short: Link + quote
+      plain: Link in quote
+      foldable: Foldable Callout
+      expanded: Expanded Callout
+    template:
+      name: Quote template
+      description: 'Customize the quote format using variables: {bibleRef}, {bibleRefLinked}, {quote}'
     preview:
       name: Bible quote preview
 commands:

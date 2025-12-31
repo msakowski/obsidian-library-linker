@@ -52,15 +52,15 @@ settings:
   bibleQuote:
     name: Formatage des citations bibliques
     description: Configurez la façon dont les citations bibliques sont formatées lors de l'insertion
-    format:
-      name: Format de citation
-      description: Choisissez le format pour les citations bibliques insérées
-      short: Court (citation simple)
-      longFoldable: Long (encadré pliable)
-      longExpanded: Long (encadré développé)
-    calloutType:
-      name: Type d'encadré
-      description: "Type d'encadré pour les formats longs (par ex., citation, note, info)"
+    presets:
+      name: Préréglages de modèle
+      short: Lien + citation
+      plain: Lien dans citation
+      foldable: Callout pliable
+      expanded: Callout déplié
+    template:
+      name: Modèle de citation
+      description: 'Personnalisez le format de citation avec les variables : {bibleRef}, {bibleRefLinked}, {quote}'
     preview:
       name: Aperçu de la citation biblique
 commands:

@@ -10,8 +10,14 @@
     border-top: 1px solid var(--background-modifier-border);
   }
 
-  .setting-item-heading {
+  .setting-item-h1 {
     font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .setting-item-h2 {
+    font-size: 1.1em;
     font-weight: bold;
     margin-bottom: 0.5em;
   }
@@ -96,5 +102,18 @@
     border: 1px solid var(--background-modifier-border);
     border-radius: 4px;
     background-color: var(--background-primary);
+  }
+
+  /* Template textarea styles */
+  .setting-item--presets textarea {
+    font-family: var(--font-monospace);
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  blockquote {
+    margin-left: 0;
+    padding-left: 2em;
+    border-left: 2px solid var(--background-modifier-border);
   }
 }
