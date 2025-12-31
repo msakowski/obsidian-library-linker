@@ -1,5 +1,15 @@
 # obsidian-library-linker
 
+## 0.10.1
+
+### Patch Changes
+
+- [#171](https://github.com/msakowski/obsidian-library-linker/pull/171) [`6e3f5af`](https://github.com/msakowski/obsidian-library-linker/commit/6e3f5afd54d2a764df5e7461f0aa1af1e9afc9b9) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Move generated plugin files to dist folder
+
+- [#171](https://github.com/msakowski/obsidian-library-linker/pull/171) [`6e3f5af`](https://github.com/msakowski/obsidian-library-linker/commit/6e3f5afd54d2a764df5e7461f0aa1af1e9afc9b9) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Move translations to yaml
+
+- [#172](https://github.com/msakowski/obsidian-library-linker/pull/172) [`73d49d4`](https://github.com/msakowski/obsidian-library-linker/commit/73d49d4b8ee280ca2e90e9cbf91085c13e6d49ac) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - move to pnpm
+
 ## 0.10.0
 
 ### Minor Changes
