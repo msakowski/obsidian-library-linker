@@ -1,16 +1,19 @@
 import { App, FuzzySuggestModal } from 'obsidian';
-import { TranslationService } from './services/TranslationService';
 import { ConversionType } from './utils/convertLinks';
+import type JWLibraryLinkerPlugin from '@/main';
 
 export class ConvertSuggester extends FuzzySuggestModal<string> {
-  private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
+  private plugin: JWLibraryLinkerPlugin;
+  private t: (key: string, variables?: Record<string, string>) => string;
   private onChoose: (type: ConversionType) => void;
   private convertTypes: ConversionType[] = ['all', 'bible', 'publication'];
 
   emptyStateText: string;
 
-  constructor(app: App, onChoose: (type: ConversionType) => void) {
+  constructor(app: App, plugin: JWLibraryLinkerPlugin, onChoose: (type: ConversionType) => void) {
     super(app);
+    this.plugin = plugin;
+    this.t = this.plugin.getTranslationService().t.bind(this.plugin.getTranslationService());
     this.onChoose = onChoose;
     this.emptyStateText = this.t('convertSuggester.emptyStateText');
   }

@@ -1,5 +1,3 @@
-import { bibleBooksDE } from '@/bibleBooks/de';
-
 export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko' | 'fr' | 'pt'; // obsidian language
 
 export type Language = 'E' | 'X' | 'FI' | 'S' | 'O' | 'KO' | 'F' | 'TPO'; // plugin language
@@ -44,7 +42,8 @@ export interface BibleBook {
 export type BibleBookAbbreviations = readonly string[];
 export type BibleBooks = readonly BibleBookAbbreviations[];
 
-export type BibleBookId = (typeof bibleBooksDE)[number]['id'];
+// Bible book IDs range from 1 (Genesis) to 66 (Revelation)
+export type BibleBookId = number;
 
 export interface VerseRange {
   start: number;

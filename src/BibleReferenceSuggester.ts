@@ -9,7 +9,6 @@ import type { BibleReference, BibleSuggestion } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
-import { TranslationService } from '@/services/TranslationService';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type JWLibraryLinkerPlugin from '@/main';
 import { getBibleReferenceRegex } from '@/utils/bibleReferenceRegex';
@@ -18,11 +17,12 @@ const TRIGGER = '/b ';
 
 export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   plugin: JWLibraryLinkerPlugin;
-  private t = TranslationService.getInstance().t.bind(TranslationService.getInstance());
+  private t: (key: string, variables?: Record<string, string>) => string;
 
   constructor(plugin: JWLibraryLinkerPlugin) {
     super(plugin.app);
     this.plugin = plugin;
+    this.t = this.plugin.getTranslationService().t.bind(this.plugin.getTranslationService());
   }
 
   onTrigger(cursor: EditorPosition, editor: Editor): EditorSuggestTriggerInfo | null {

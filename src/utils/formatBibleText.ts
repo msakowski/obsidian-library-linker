@@ -1,6 +1,6 @@
-import { getBibleBookById } from '@/bibleBooks';
-import { SINGLE_CHAPTER_BOOKS } from '@/bibleBooks/chapterCounts';
+import { SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
 import type { BibleReference, Language, BookLength } from '@/types';
+import { getBibleBookById } from '@/stores/bibleBooks';
 
 export function formatBibleText(
   reference: BibleReference,

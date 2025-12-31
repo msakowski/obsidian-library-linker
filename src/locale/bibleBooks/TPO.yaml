@@ -1,0 +1,516 @@
+- id: 1
+  aliases:
+    - genesis
+    - génesis
+  name:
+    long: Génesis
+    medium: Gén.
+    short: Gén
+- id: 2
+  aliases:
+    - exodo
+    - êxodo
+  name:
+    long: Êxodo
+    medium: Êxo.
+    short: Êx
+- id: 3
+  aliases:
+    - levitico
+    - levítico
+  name:
+    long: Levítico
+    medium: Lev.
+    short: Le
+- id: 4
+  aliases:
+    - numeros
+    - números
+  name:
+    long: Números
+    medium: Núm.
+    short: Núm
+- id: 5
+  aliases:
+    - deuteronómio
+    - deuteronomio
+  name:
+    long: Deuteronómio
+    medium: Deut.
+    short: De
+- id: 6
+  aliases:
+    - josue
+    - josué
+  name:
+    long: Josué
+    medium: Jos.
+    short: Jos
+- id: 7
+  aliases:
+    - jz
+    - juízes
+    - juizes
+  name:
+    long: Juízes
+    medium: Jz.
+    short: Jz
+- id: 8
+  aliases:
+    - rute
+  name:
+    long: Rute
+    medium: Rute
+    short: Ru
+- id: 9
+  prefix: '1'
+  aliases:
+    - samuel
+  name:
+    long: 1 Samuel
+    medium: 1 Sam.
+    short: 1Sa
+- id: 10
+  prefix: '2'
+  aliases:
+    - samuel
+  name:
+    long: 2 Samuel
+    medium: 2 Sam.
+    short: 2Sa
+- id: 11
+  prefix: '1'
+  aliases:
+    - rs
+    - reis
+  name:
+    long: 1 Reis
+    medium: 1 Reis
+    short: 1Rs
+- id: 12
+  prefix: '2'
+  aliases:
+    - rs
+    - reis
+  name:
+    long: 2 Reis
+    medium: 2 Reis
+    short: 2Rs
+- id: 13
+  prefix: '1'
+  aliases:
+    - cr
+    - cronicas
+  name:
+    long: 1 Crónicas
+    medium: 1 Crón.
+    short: 1Cr
+- id: 14
+  prefix: '2'
+  aliases:
+    - cr
+    - cronicas
+  name:
+    long: 2 Crónicas
+    medium: 2 Crón.
+    short: 2Cr
+- id: 15
+  aliases:
+    - esdras
+  name:
+    long: Esdras
+    medium: Esd.
+    short: Esd
+- id: 16
+  aliases:
+    - neemias
+  name:
+    long: Neemias
+    medium: Nee.
+    short: Ne
+- id: 17
+  aliases:
+    - ester
+  name:
+    long: Ester
+    medium: Ester
+    short: Est
+- id: 18
+  aliases:
+    - jó
+  name:
+    long: Jó
+    medium: Jó
+    short: Jó
+- id: 19
+  aliases:
+    - salmos
+  name:
+    long: Salmos
+    medium: Sal.
+    short: Sal
+- id: 20
+  aliases:
+    - provérbios
+    - proverbios
+  name:
+    long: Provérbios
+    medium: Pro.
+    short: Pr
+- id: 21
+  aliases:
+    - eclesiastes
+  name:
+    long: Eclesiastes
+    medium: Ecl.
+    short: Ec
+- id: 22
+  aliases:
+    - cântico de salomão
+    - cantares
+    - cantico de salomao
+  name:
+    long: Cântico de Salomão (Cantares)
+    medium: Cân.
+    short: Cân
+- id: 23
+  aliases:
+    - isaias
+    - isaías
+  name:
+    long: Isaías
+    medium: Isa.
+    short: Is
+- id: 24
+  aliases:
+    - jeremias
+  name:
+    long: Jeremias
+    medium: Jer.
+    short: Je
+- id: 25
+  aliases:
+    - lamentações
+    - lamentacoes
+  name:
+    long: Lamentações
+    medium: Lam.
+    short: La
+- id: 26
+  aliases:
+    - ezequiel
+  name:
+    long: Ezequiel
+    medium: Eze.
+    short: Ez
+- id: 27
+  aliases:
+    - daniel
+  name:
+    long: Daniel
+    medium: Dan.
+    short: Da
+- id: 28
+  aliases:
+    - oseias
+  name:
+    long: Oseias
+    medium: Ose.
+    short: Os
+- id: 29
+  aliases:
+    - jl
+    - joel
+  name:
+    long: Joel
+    medium: Joel
+    short: Jl
+- id: 30
+  aliases:
+    - amos
+    - amós
+  name:
+    long: Amós
+    medium: Am.
+    short: Am
+- id: 31
+  aliases:
+    - obd
+    - obadias
+  name:
+    long: Obadias
+    medium: Oba.
+    short: Ob
+- id: 32
+  aliases:
+    - jonas
+  name:
+    long: Jonas
+    medium: Jonas
+    short: Jon
+- id: 33
+  aliases:
+    - miqueias
+  name:
+    long: Miqueias
+    medium: Miq.
+    short: Miq
+- id: 34
+  aliases:
+    - naum
+  name:
+    long: Naumm
+    medium: Naum
+    short: Na
+- id: 35
+  aliases:
+    - habacuque
+  name:
+    long: Habacuque
+    medium: Hab.
+    short: Hab
+- id: 36
+  aliases:
+    - sofonias
+  name:
+    long: Sofonias
+    medium: Sof.
+    short: Sof
+- id: 37
+  aliases:
+    - ageu
+  name:
+    long: Ageu
+    medium: Ag.
+    short: Ag
+- id: 38
+  aliases:
+    - zacarias
+  name:
+    long: Zacarias
+    medium: Zac.
+    short: Za
+- id: 39
+  aliases:
+    - malaquias
+  name:
+    long: Malaquias
+    medium: Mal.
+    short: Mal
+- id: 40
+  aliases:
+    - mt
+    - mateus
+  name:
+    long: Mateus
+    medium: Mateus
+    short: Mt
+- id: 41
+  aliases:
+    - mr
+    - marcos
+  name:
+    long: Marcos
+    medium: Marcos
+    short: Mr
+- id: 42
+  aliases:
+    - lucas
+  name:
+    long: Lucas
+    medium: Lucas
+    short: Lu
+- id: 43
+  aliases:
+    - joão
+    - joao
+  name:
+    long: João
+    medium: João
+    short: Jo
+- id: 44
+  aliases:
+    - atos
+  name:
+    long: Atos
+    medium: Atos
+    short: At
+- id: 45
+  aliases:
+    - romanos
+  name:
+    long: Romanos
+    medium: Ro.
+    short: Ro
+- id: 46
+  prefix: '1'
+  aliases:
+    - coríntios
+    - corintios
+  name:
+    long: 1 Coríntios
+    medium: 1 Co.
+    short: 1Co
+- id: 47
+  prefix: '2'
+  aliases:
+    - coríntios
+    - corintios
+  name:
+    long: 2 Coríntios
+    medium: 2 Co.
+    short: 2Co
+- id: 48
+  aliases:
+    - galatas
+    - gálatas
+  name:
+    long: Gálatas
+    medium: Gál.
+    short: Gál
+- id: 49
+  aliases:
+    - efésios
+    - efesios
+  name:
+    long: Efésios
+    medium: Ef.
+    short: Ef
+- id: 50
+  aliases:
+    - filipenses
+  name:
+    long: Filipenses
+    medium: Fil.
+    short: Fil
+- id: 51
+  aliases:
+    - colossenses
+  name:
+    long: Colossenses
+    medium: Col.
+    short: Col
+- id: 52
+  prefix: '1'
+  aliases:
+    - tessalonicenses
+  name:
+    long: 1 Tessalonicenses
+    medium: 1 Tess.
+    short: 1Te
+- id: 53
+  prefix: '2'
+  aliases:
+    - tessalonicenses
+  name:
+    long: 2 Tessalonicenses
+    medium: 2 Tess.
+    short: 2Te
+- id: 54
+  prefix: '1'
+  aliases:
+    - timóteo
+    - timoteo
+  name:
+    long: 1 Timóteo
+    medium: 1 Ti.
+    short: 1Ti
+- id: 55
+  prefix: '2'
+  aliases:
+    - timóteo
+    - timoteo
+  name:
+    long: 2 Timóteo
+    medium: 2 Ti.
+    short: 2Ti
+- id: 56
+  aliases:
+    - tito
+  name:
+    long: Tito
+    medium: Tito
+    short: Tit
+- id: 57
+  aliases:
+    - flm
+    - filémon
+    - filemon
+  name:
+    long: Filémon
+    medium: Filémon
+    short: Flm
+- id: 58
+  aliases:
+    - hebreus
+  name:
+    long: Hebreus
+    medium: Heb.
+    short: He
+- id: 59
+  aliases:
+    - tg
+    - tiago
+  name:
+    long: Tiago
+    medium: Tiago
+    short: Tg
+- id: 60
+  prefix: '1'
+  aliases:
+    - pedro
+  name:
+    long: 1 Pedro
+    medium: 1 Pe.
+    short: 1Pe
+- id: 61
+  prefix: '2'
+  aliases:
+    - pedro
+  name:
+    long: 2 Pedro
+    medium: 2 Pe.
+    short: 2Pe
+- id: 62
+  prefix: '1'
+  aliases:
+    - joão
+    - joao
+  name:
+    long: 1 João
+    medium: 1 Jo.
+    short: 1Jo
+- id: 63
+  prefix: '2'
+  aliases:
+    - joão
+    - joao
+  name:
+    long: 2 João
+    medium: 2 Jo.
+    short: 2Jo
+- id: 64
+  prefix: '3'
+  aliases:
+    - joão
+    - joao
+  name:
+    long: 3 João
+    medium: 3 Jo.
+    short: 3Jo
+- id: 65
+  aliases:
+    - judas
+  name:
+    long: Judas
+    medium: Ju
+    short: Ju
+- id: 66
+  aliases:
+    - apocalipse
+    - revelação
+    - revelacao
+  name:
+    long: Apocalipse
+    medium: Ap.
+    short: Ap

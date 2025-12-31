@@ -1,7 +1,7 @@
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { formatBibleText } from '@/utils/formatBibleText';
-import { getBibleBooks } from '@/bibleBooks';
 import type { BibleReference, LinkReplacerSettings, LinkStyles } from '@/types';
+import { getBibleBooks } from '@/stores/bibleBooks';
 
 /**
  * Apply styling to the link text based on font style setting
@@ -35,7 +35,7 @@ export function convertBibleTextToMarkdownLink(
     throw new Error('errors.noValidLinks');
   }
 
-  const bookEntry = getBibleBooks(settings.language)?.find((book) => book.id === reference.book);
+  const bookEntry = getBibleBooks(settings.language).find((book) => book.id === reference.book);
 
   if (!bookEntry) {
     throw new Error('errors.bookNotFound');

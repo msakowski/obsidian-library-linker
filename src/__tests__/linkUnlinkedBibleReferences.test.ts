@@ -1,6 +1,7 @@
 import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
 import type { LinkReplacerSettings } from '@/types';
 import { TEST_DEFAULT_SETTINGS } from 'mocks/plugin';
+import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
 
 interface CallbackArgs {
   changes: Array<{
@@ -10,6 +11,10 @@ interface CallbackArgs {
   }>;
   error: string | undefined;
 }
+
+beforeAll(() => {
+  initializeTestBibleBooks();
+});
 
 describe('linkUnlinkedBibleReferences', () => {
   let settings: LinkReplacerSettings;

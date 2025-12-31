@@ -1,5 +1,10 @@
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import type { Language } from '@/types';
+import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
+
+beforeAll(() => {
+  initializeTestBibleBooks();
+});
 
 describe('parseBibleReference', () => {
   const language: Language = 'X';
