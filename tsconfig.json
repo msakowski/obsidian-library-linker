@@ -16,7 +16,7 @@
     "esModuleInterop": true,
     "paths": {
       "@/*": ["./src/*"],
-      "mocks/*": ["./__mocks__/*"]
+      "mocks/*": ["./src/__tests__/__mocks__/*"]
     }
   },
   "include": ["**/*.ts"],

@@ -1,20 +1,23 @@
 import { readdirSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
+import yaml from 'js-yaml';
 
 type NestedObject = { [key: string]: string | NestedObject };
 
 const PROJECT_ROOT = resolve(__dirname, '../..');
-const LOCALES_DIR = join(PROJECT_ROOT, 'dist/locales');
+const LOCALE_DIR = join(PROJECT_ROOT, 'locale');
 
-// Load all JSON locale files from dist/locales/
-const localeFiles = readdirSync(LOCALES_DIR).filter(
-  (file) => file.endsWith('.json') && file.length === 7,
-); // e.g., en.json
+// Load all YAML locale files from locale/
+const localeFiles = readdirSync(LOCALE_DIR).filter(
+  (file) => file.endsWith('.yaml') && file.length === 7,
+); // e.g., en.yaml
 
 const locales: Record<string, NestedObject> = {};
 for (const file of localeFiles) {
-  const locale = file.replace('.json', '');
-  const content = JSON.parse(readFileSync(join(LOCALES_DIR, file), 'utf8')) as NestedObject;
+  const locale = file.replace('.yaml', '');
+  const content = yaml.load(readFileSync(join(LOCALE_DIR, file), 'utf8'), {
+    schema: yaml.JSON_SCHEMA,
+  }) as NestedObject;
   locales[locale] = content;
 }
 

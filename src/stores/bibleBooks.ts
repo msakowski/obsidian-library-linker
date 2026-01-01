@@ -1,15 +1,11 @@
 import { chapterCounts } from '@/consts/chapterCounts';
 import type { BibleBook, Language } from '@/types';
-import type { FileLoaderService } from '@/services/FileLoaderService';
+import BUNDLED_LOCALES from 'locale:all';
 
 type BibleBookWithoutChapters = Omit<BibleBook, 'chapters'>;
 
-// Interface for file loading - allows easier testing
-type FileLoader = Pick<FileLoaderService, 'loadJSON'>;
-
 // In-memory cache for bible books data
 const booksCache = new Map<Language, readonly BibleBookWithoutChapters[]>();
-let fileLoader: FileLoader | null = null;
 
 /**
  * Get the internal cache (for testing purposes only)
@@ -20,41 +16,27 @@ export function __getCache(): Map<Language, readonly BibleBookWithoutChapters[]>
 }
 
 /**
- * Initialize the bible books store with file loader
- * MUST be called once during plugin startup
- *
- * @param loader - The file loader service instance (or compatible object with loadJSON method)
- */
-export function initializeBibleBooks(loader: FileLoader): void {
-  fileLoader = loader;
-}
-
-/**
  * Load and cache bible books for a language
  * Can be called to pre-load a language before switching
  *
  * @param language - The language code to load
- * @throws Error if store not initialized or loading fails
+ * @throws Error if loading fails
  */
-export async function loadBibleBooks(language: Language): Promise<void> {
+export function loadBibleBooks(language: Language): void {
   // Return early if already loaded
   if (booksCache.has(language)) {
     return;
   }
 
-  if (!fileLoader) {
-    throw new Error('Bible books store not initialized. Call initializeBibleBooks() first.');
-  }
+  const bibleFile = `locale/bibleBooks/${language}.yaml`;
 
-  try {
-    const books = await fileLoader.loadJSON<readonly BibleBookWithoutChapters[]>(
-      `locales/bibleBooks/${language}.json`,
-    );
-    booksCache.set(language, books);
-  } catch (error) {
-    console.error(`Failed to load bible books for language ${language}`, error);
+  if (!(bibleFile in BUNDLED_LOCALES)) {
+    console.error(`Bible books for language ${language} not found in bundle`);
     throw new Error('errors.unsupportedLanguage');
   }
+
+  const books = BUNDLED_LOCALES[bibleFile] as readonly BibleBookWithoutChapters[];
+  booksCache.set(language, books);
 }
 
 /**

@@ -1,8 +1,7 @@
 import type { Locale } from '@/types';
-import type { FileLoaderService } from '@/services/FileLoaderService';
-import { Notice } from 'obsidian';
+import BUNDLED_LOCALES from 'locale:all';
 
-type Translation = {
+export type Translation = {
   settings: {
     language: { name: string; description: string };
     openAutomatically: { name: string; description: string };
@@ -91,11 +90,6 @@ type Translation = {
 export class TranslationService {
   private currentLocale: Locale = 'en';
   private translations = new Map<Locale, Translation>();
-  private fileLoader: FileLoaderService;
-
-  constructor(fileLoader: FileLoaderService) {
-    this.fileLoader = fileLoader;
-  }
 
   /**
    * Initialize with the default locale
@@ -118,29 +112,18 @@ export class TranslationService {
       return;
     }
 
-    try {
-      const translation = await this.fileLoader.loadJSON<Translation>(`locales/${locale}.json`);
+    const localeFile = `locale/${locale}.yaml`;
+
+    if (localeFile in BUNDLED_LOCALES) {
+      const translation = BUNDLED_LOCALES[localeFile] as Translation;
       this.translations.set(locale, translation);
       this.currentLocale = locale;
-    } catch (error) {
-      console.error(`Failed to load locale ${locale}, falling back to 'en'`, error);
-
-      // Fallback to English if not already English
-      if (locale !== 'en') {
-        try {
-          if (!this.translations.has('en')) {
-            const enTranslation = await this.fileLoader.loadJSON<Translation>('locales/en.json');
-            this.translations.set('en', enTranslation);
-          }
-          this.currentLocale = 'en';
-          new Notice('Translation failed to load. Using English.');
-        } catch (fallbackError) {
-          console.error('Failed to load fallback English locale', fallbackError);
-          throw new Error('Critical: Could not load translations. Please reinstall plugin.');
-        }
-      } else {
-        throw new Error('Critical: Could not load English locale. Please reinstall plugin.');
-      }
+    } else if (locale !== 'en') {
+      // Fallback to English
+      console.warn(`Locale ${locale} not found, falling back to English`);
+      await this.loadLocale('en');
+    } else {
+      throw new Error('English locale not found in bundle');
     }
   }
 

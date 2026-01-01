@@ -153,8 +153,8 @@ To test the plugin locally in your Obsidian vault:
 2. **Create a symlink to your Obsidian vault's plugins directory:**
 
    ```bash
-   # Symlink the dist folder contents
-   ln -s /path/to/jw-library-linker/dist /path/to/your/vault/.obsidian/plugins/jw-library-linker
+   # Symlink the plugin directory
+   ln -s /path/to/jw-library-linker /path/to/your/vault/.obsidian/plugins/jw-library-linker
    ```
 
 3. **Enable the plugin in Obsidian:**
