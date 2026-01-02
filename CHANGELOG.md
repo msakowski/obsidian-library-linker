@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.10.2
+
+### Patch Changes
+
+- [#175](https://github.com/msakowski/obsidian-library-linker/pull/175) [`27a4524`](https://github.com/msakowski/obsidian-library-linker/commit/27a452476c02f8cce47a7749c43f15635cc09226) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Fix having the plugin files in the root directory
+
 ## 0.10.1
 
 ### Patch Changes
