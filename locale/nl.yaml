@@ -52,15 +52,15 @@ settings:
   bibleQuote:
     name: Bijbelcitaat Formattering
     description: Configureer hoe bijbelcitaten worden geformatteerd wanneer ze worden ingevoegd
-    format:
-      name: Citaat formaat
-      description: Kies het formaat voor ingevoegde bijbelcitaten
-      short: Kort (eenvoudig citaat)
-      longFoldable: Lang (inklapbaar callout)
-      longExpanded: Lang (uitgeklapt callout)
-    calloutType:
-      name: Callout type
-      description: 'Type callout voor lange formaten (bijv. quote, note, info)'
+    presets:
+      name: Sjabloonvoorinstellingen
+      short: Link + citaat
+      plain: Link in citaat
+      foldable: Inklapbare callout
+      expanded: Uitgeklapte callout
+    template:
+      name: Citaatsjabloon
+      description: 'Pas het citaatformaat aan met variabelen: {bibleRef}, {bibleRefLinked}, {quote}'
     preview:
       name: Bijbelcitaat Voorbeeld
 commands:

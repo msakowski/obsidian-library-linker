@@ -52,15 +52,15 @@ settings:
   bibleQuote:
     name: Raamatunlainauksen Muotoilu
     description: Määritä miten raamatunlainaukset muotoillaan kun ne lisätään
-    format:
-      name: Lainauksen muoto
-      description: Valitse muoto lisättäville raamatunlainauksille
-      short: Lyhyt (yksinkertainen lainaus)
-      longFoldable: Pitkä (taittuvä callout)
-      longExpanded: Pitkä (laajentuva callout)
-    calloutType:
-      name: Callout-tyyppi
-      description: 'Callout-tyyppi pitkille muodoille (esim. quote, note, info)'
+    presets:
+      name: Malliesiasutukset
+      short: Linkki + lainaus
+      plain: Linkki lainauksessa
+      foldable: Taitettava callout
+      expanded: Laajennettu callout
+    template:
+      name: Lainausmalli
+      description: 'Mukauta lainausmuotoa muuttujilla: {bibleRef}, {bibleRefLinked}, {quote}'
     preview:
       name: Raamatunlainauksen Esikatselu
 commands:

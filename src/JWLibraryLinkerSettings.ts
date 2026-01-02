@@ -6,9 +6,10 @@ import type {
   LinkStyles,
   BookLength,
   UpdatedLinkStructure,
-  BibleQuoteFormat,
 } from '@/types';
+import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
+import { formatBibleText } from '@/utils/formatBibleText';
 import { loadBibleBooks } from '@/stores/bibleBooks';
 
 class MarkdownComponent extends Component {
@@ -355,7 +356,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
     presetText.createDiv({
       text: this.t('settings.linkStyling.presets.name'),
-      cls: 'setting-item-heading',
+      cls: 'setting-item-h1',
     });
 
     presetText.createDiv({
@@ -429,7 +430,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     // Add preview section
     previewContainer.createDiv({
       text: this.t('settings.linkStyling.preview.name'),
-      cls: 'setting-item-heading',
+      cls: 'setting-item-h1',
     });
 
     // Create container for preview content
@@ -450,64 +451,66 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       cls: 'setting-item setting-item--column setting-item--bibleQuote',
     });
 
-    bibleQuoteContainer.createDiv({
-      text: this.t('settings.bibleQuote.name'),
-      cls: 'setting-item-heading',
+    const bibleQuoteInfo = bibleQuoteContainer.createDiv({
+      cls: 'setting-item-info',
     });
 
-    bibleQuoteContainer.createDiv({
+    bibleQuoteInfo.createDiv({
+      text: this.t('settings.bibleQuote.name'),
+      cls: 'setting-item-h1',
+    });
+
+    bibleQuoteInfo.createDiv({
       text: this.t('settings.bibleQuote.description'),
       cls: 'setting-item-description',
     });
 
-    // Bible quote format setting (moved before callout type)
-    new Setting(settingsContainer)
-      .setName(this.t('settings.bibleQuote.format.name'))
-      .setDesc(this.t('settings.bibleQuote.format.description'))
-      .addDropdown((dropdown) =>
-        dropdown
-          .addOptions({
-            short: this.t('settings.bibleQuote.format.short'),
-            'long-foldable': this.t('settings.bibleQuote.format.longFoldable'),
-            'long-expanded': this.t('settings.bibleQuote.format.longExpanded'),
-          })
-          .setValue(this.plugin.settings.bibleQuote.format)
+    // Template presets
+    const templatePresetContainer = bibleQuoteContainer.createDiv({
+      cls: 'setting-item-presets',
+    });
+
+    templatePresetContainer.createDiv({
+      text: this.t('settings.bibleQuote.presets.name'),
+      cls: 'setting-item-h2',
+    });
+
+    const buttonsRow = templatePresetContainer.createDiv({
+      cls: 'preset-buttons-container',
+    });
+
+    // Create 4 preset buttons
+    this.createPresetButton(buttonsRow, 'short', BIBLE_QUOTE_TEMPLATES.short);
+    this.createPresetButton(buttonsRow, 'plain', BIBLE_QUOTE_TEMPLATES.plain);
+    this.createPresetButton(buttonsRow, 'foldable', BIBLE_QUOTE_TEMPLATES.foldable);
+    this.createPresetButton(buttonsRow, 'expanded', BIBLE_QUOTE_TEMPLATES.expanded);
+
+    // Template textarea
+    new Setting(bibleQuoteContainer)
+      .setName(this.t('settings.bibleQuote.template.name'))
+      .setDesc(this.t('settings.bibleQuote.template.description'))
+      .setClass('setting-item--quote')
+      .addTextArea((text) => {
+        text
+          .setValue(this.plugin.settings.bibleQuote.template)
+          .setPlaceholder('{bibleRefLinked}\\n> {quote}')
           .onChange(async (value) => {
-            this.plugin.settings.bibleQuote.format = value as BibleQuoteFormat;
+            this.plugin.settings.bibleQuote.template = value;
             await this.plugin.saveSettings();
-
-            // Show/hide callout type setting based on format
-            const isLongFormat = value !== 'short';
-            calloutSetting.settingEl.style.display = isLongFormat ? 'flex' : 'none';
-
             this.updateBibleQuotePreview();
-          }),
-      );
-
-    // Callout type setting (only shown for long formats)
-    const calloutSetting = new Setting(settingsContainer)
-      .setName(this.t('settings.bibleQuote.calloutType.name'))
-      .setDesc(this.t('settings.bibleQuote.calloutType.description'))
-      .addText((text) =>
-        text.setValue(this.plugin.settings.bibleQuote.calloutType).onChange(async (value) => {
-          this.plugin.settings.bibleQuote.calloutType = value;
-          await this.plugin.saveSettings();
-          this.updateBibleQuotePreview();
-        }),
-      );
-
-    // Show/hide callout type setting based on initial format
-    const isLongFormat = this.plugin.settings.bibleQuote.format !== 'short';
-    calloutSetting.settingEl.style.display = isLongFormat ? 'flex' : 'none';
+          });
+        text.inputEl.rows = 4;
+        text.inputEl.cols = 50;
+      });
 
     // Add Bible quote preview section
-    const bibleQuotePreviewContainer = settingsContainer.createDiv({
-      cls: 'setting-item setting-item--preview',
+    const bibleQuotePreviewContainer = bibleQuoteContainer.createDiv({
+      cls: 'setting-item-preview',
     });
 
     bibleQuotePreviewContainer.createDiv({
       text: this.t('settings.bibleQuote.preview.name'),
-      cls: 'setting-item-heading',
+      cls: 'setting-item-h2',
     });
 
     // Create container for bible quote preview content
@@ -520,7 +523,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
   }
 
   /**
-   * Updates the Bible quote preview with the selected format
+   * Updates the Bible quote preview with the selected template
    */
   updateBibleQuotePreview(): void {
     const container = document.getElementById('bible-quote-preview-container');
@@ -533,29 +536,26 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       verseRanges: [{ start: 14, end: 14 }],
     };
 
-    // Generate the link
-    const link = convertBibleTextToMarkdownLink(sampleReference, this.plugin.settings);
-    if (!link) return;
+    // Generate the linked reference
+    const bibleRefLinked = convertBibleTextToMarkdownLink(sampleReference, this.plugin.settings);
+    if (!bibleRefLinked) return;
+
+    // Generate the plain text reference
+    const bibleRef = formatBibleText(
+      sampleReference,
+      this.plugin.settings.bookLength,
+      this.plugin.settings.language,
+    );
 
     // Sample lorem ipsum text for preview
     const sampleText =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 
-    let markdown = '';
-    const format = this.plugin.settings.bibleQuote.format;
-    const calloutType = this.plugin.settings.bibleQuote.calloutType;
-
-    switch (format) {
-      case 'short':
-        markdown = `${link}\n> ${sampleText}`;
-        break;
-      case 'long-foldable':
-        markdown = `> [!${calloutType}]- ${link}\n> ${sampleText}`;
-        break;
-      case 'long-expanded':
-        markdown = `> [!${calloutType}] ${link}\n> ${sampleText}`;
-        break;
-    }
+    // Process template with sample data
+    const markdown = this.plugin.settings.bibleQuote.template
+      .replace(/\{bibleRef\}/g, bibleRef)
+      .replace(/\{bibleRefLinked\}/g, bibleRefLinked)
+      .replace(/\{quote\}/g, sampleText);
 
     // Clear previous content
     container.empty();
@@ -568,6 +568,25 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
     // Register the component to ensure proper cleanup
     this.plugin.addChild(component);
+  }
+
+  /**
+   * Creates a preset button for the Bible quote template
+   */
+  createPresetButton(container: HTMLElement, name: string, template: string): void {
+    const button = container.createEl('button', {
+      text: this.t(`settings.bibleQuote.presets.${name}`),
+      cls: 'mod-cta preset-button',
+    });
+
+    button.addEventListener('click', () => {
+      void (async () => {
+        this.plugin.settings.bibleQuote.template = template;
+        await this.plugin.saveSettings();
+        this.display(); // Refresh to show new template in textarea
+        this.updateBibleQuotePreview();
+      })();
+    });
   }
 
   /**

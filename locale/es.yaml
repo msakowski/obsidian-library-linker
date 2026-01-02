@@ -52,15 +52,15 @@ settings:
   bibleQuote:
     name: Formato de Citas Bíblicas
     description: Configurar cómo se formatean las citas bíblicas cuando se insertan
-    format:
-      name: Formato de cita
-      description: Elegir el formato para las citas bíblicas insertadas
-      short: Corto (cita simple)
-      longFoldable: Largo (callout plegable)
-      longExpanded: Largo (callout expandido)
-    calloutType:
-      name: Tipo de callout
-      description: 'Tipo de callout para formatos largos (ej. quote, note, info)'
+    presets:
+      name: Plantillas predefinidas
+      short: Enlace + cita
+      plain: Enlace en cita
+      foldable: Callout plegable
+      expanded: Callout expandido
+    template:
+      name: Plantilla de cita
+      description: 'Personaliza el formato de cita usando variables: {bibleRef}, {bibleRefLinked}, {quote}'
     preview:
       name: Vista Previa de Cita Bíblica
 commands:

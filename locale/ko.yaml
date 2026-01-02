@@ -52,15 +52,15 @@ settings:
   bibleQuote:
     name: 성경 인용문 형식
     description: 성경 인용문이 삽입될 때의 형식을 구성합니다
-    format:
-      name: 인용문 형식
-      description: 삽입되는 성경 인용문의 형식을 선택합니다
-      short: 짧게 (간단한 인용문)
-      longFoldable: 길게 (접을 수 있는 콜아웃)
-      longExpanded: 길게 (확장된 콜아웃)
-    calloutType:
-      name: 콜아웃 유형
-      description: '긴 형식을 위한 콜아웃 유형 (예: quote, note, info)'
+    presets:
+      name: 템플릿 프리셋
+      short: 링크 + 인용문
+      plain: 인용문 안의 링크
+      foldable: 접을 수 있는 콜아웃
+      expanded: 펼쳐진 콜아웃
+    template:
+      name: 인용문 템플릿
+      description: '변수를 사용하여 인용문 형식을 사용자 정의하세요: {bibleRef}, {bibleRefLinked}, {quote}'
     preview:
       name: 성경 인용문 미리보기
 commands:

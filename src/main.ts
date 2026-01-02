@@ -1,6 +1,7 @@
 import { Editor, Notice, Plugin, Menu } from 'obsidian';
 import { ConversionType, convertLinks } from '@/utils/convertLinks';
-import type { LinkReplacerSettings, LinkStyles } from '@/types';
+import type { LinkReplacerSettings, LinkStyles, BibleQuoteFormat } from '@/types';
+import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { TranslationService } from '@/services/TranslationService';
 import { loadBibleBooks } from '@/stores/bibleBooks';
 import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
@@ -29,11 +30,23 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
   noLanguageParameter: false,
   reconvertExistingLinks: false,
   bibleQuote: {
-    format: 'short',
-    calloutType: 'quote',
+    template: BIBLE_QUOTE_TEMPLATES.short,
   },
   ...DEFAULT_STYLES,
 };
+
+function migrateFormatToTemplate(format: BibleQuoteFormat): string {
+  switch (format) {
+    case 'short':
+      return BIBLE_QUOTE_TEMPLATES.short;
+    case 'long-foldable':
+      return BIBLE_QUOTE_TEMPLATES.foldable;
+    case 'long-expanded':
+      return BIBLE_QUOTE_TEMPLATES.expanded;
+    default:
+      return BIBLE_QUOTE_TEMPLATES.short;
+  }
+}
 
 export default class JWLibraryLinkerPlugin extends Plugin {
   settings: LinkReplacerSettings = DEFAULT_SETTINGS;
@@ -244,6 +257,14 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       ...DEFAULT_SETTINGS,
       ...((await this.loadData()) as LinkReplacerSettings),
     };
+
+    // Migrate old format to template
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+    const oldFormat = (this.settings.bibleQuote as any).format as BibleQuoteFormat | undefined;
+    if (oldFormat && !this.settings.bibleQuote.template) {
+      this.settings.bibleQuote.template = migrateFormatToTemplate(oldFormat);
+      await this.saveSettings();
+    }
   }
 
   async saveSettings() {

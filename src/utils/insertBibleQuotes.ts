@@ -1,6 +1,7 @@
 import { Editor } from 'obsidian';
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
+import { formatBibleText } from '@/utils/formatBibleText';
 import type { LinkReplacerSettings } from '@/types';
 import {
   findJWLibraryLinks,
@@ -10,6 +11,20 @@ import {
 } from '@/utils/findJWLibraryLinks';
 
 export type { JWLibraryLinkInfo, ContentSelection };
+
+function processTemplate(
+  template: string,
+  variables: {
+    bibleRef: string;
+    bibleRefLinked: string;
+    quote: string;
+  },
+): string {
+  return template
+    .replace(/\{bibleRef\}/g, variables.bibleRef)
+    .replace(/\{bibleRefLinked\}/g, variables.bibleRefLinked)
+    .replace(/\{quote\}/g, variables.quote);
+}
 
 async function generateBibleQuoteText(
   linkInfo: JWLibraryLinkInfo,
@@ -27,28 +42,20 @@ async function generateBibleQuoteText(
       return null;
     }
 
-    const link = convertBibleTextToMarkdownLink(linkInfo.reference, settings);
-    if (!link) {
+    const bibleRefLinked = convertBibleTextToMarkdownLink(linkInfo.reference, settings);
+    if (!bibleRefLinked) {
       return null;
     }
 
-    let replacementLines: string[] = [];
+    const bibleRef = formatBibleText(linkInfo.reference, settings.bookLength, settings.language);
 
-    switch (settings.bibleQuote.format) {
-      case 'short':
-        replacementLines = [link, `> ${result.text}`];
-        break;
-      case 'long-foldable':
-        replacementLines = [`> [!${settings.bibleQuote.calloutType}]- ${link}`, `> ${result.text}`];
-        break;
-      case 'long-expanded':
-        replacementLines = [`> [!${settings.bibleQuote.calloutType}] ${link}`, `> ${result.text}`];
-        break;
-      default:
-        replacementLines = [link, `> ${result.text}`];
-    }
+    const processed = processTemplate(settings.bibleQuote.template, {
+      bibleRef,
+      bibleRefLinked,
+      quote: result.text,
+    });
 
-    return replacementLines.join('\n');
+    return processed;
   } catch (error: unknown) {
     console.error(
       'Error generating Bible quote:',

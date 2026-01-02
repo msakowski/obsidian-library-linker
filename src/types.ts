@@ -17,9 +17,15 @@ export type UpdatedLinkStructure = 'keepCurrentStructure' | 'usePluginSettings';
 
 export type BibleQuoteFormat = 'short' | 'long-foldable' | 'long-expanded';
 
+export const BIBLE_QUOTE_TEMPLATES = {
+  short: '{bibleRefLinked}\n> {quote}',
+  plain: '> {bibleRefLinked}\n> {quote}',
+  foldable: '> [!quote]- {bibleRefLinked}\n> {quote}',
+  expanded: '> [!quote] {bibleRefLinked}\n> {quote}',
+} as const;
+
 export interface BibleQuoteSettings {
-  format: BibleQuoteFormat;
-  calloutType: string; // e.g., 'quote', 'note', 'info'
+  template: string; // Template for quote formatting
 }
 
 export interface LinkReplacerSettings extends LinkStyles {
