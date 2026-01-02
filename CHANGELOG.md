@@ -1,5 +1,20 @@
 # obsidian-library-linker
 
+## 0.11.1
+
+### Patch Changes
+
+- [#178](https://github.com/msakowski/obsidian-library-linker/pull/178) [`6d0f9ab`](https://github.com/msakowski/obsidian-library-linker/commit/6d0f9abafb6d3bd77a6094e4e922425d21039a13) Thanks [@msakowski](https://github.com/msakowski)! - Fix Korean Bible book names
+
+  Updated Korean Bible book names to match correct translations:
+  - Fixed medium and short forms for books with mismatches
+  - Added proper spacing in compound book names (e.g., '고린도 전서' instead of '고린도전서')
+  - Corrected specific book names like '솔로몬의 노래' for Song of Songs
+  - Updated abbreviations like '욘' for Jonah and '슥' for Zechariah
+  - Standardized format for numbered books (e.g., '요한 1서' instead of '요한1서')
+
+  This addresses user feedback about incorrect Korean Bible book names and ensures proper recognition of Korean Bible references.
+
 ## 0.11.0
 
 ### Minor Changes
