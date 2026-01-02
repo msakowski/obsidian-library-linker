@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.11.0
+
+### Minor Changes
+
+- [#174](https://github.com/msakowski/obsidian-library-linker/pull/174) [`26fcd7b`](https://github.com/msakowski/obsidian-library-linker/commit/26fcd7b511ca91ff2f9ad1c556162ebcf6cc20aa) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Use template to format quotes
+
 ## 0.10.2
 
 ### Patch Changes
