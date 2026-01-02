@@ -141,7 +141,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
             const newLanguage = value as Language;
 
             // Pre-load new language's bible books
-            await loadBibleBooks(newLanguage);
+            loadBibleBooks(newLanguage);
 
             // Update settings
             this.plugin.settings.language = newLanguage;

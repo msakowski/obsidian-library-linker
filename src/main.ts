@@ -2,9 +2,8 @@ import { Editor, Notice, Plugin, Menu } from 'obsidian';
 import { ConversionType, convertLinks } from '@/utils/convertLinks';
 import type { LinkReplacerSettings, LinkStyles, BibleQuoteFormat } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
-import { FileLoaderService } from '@/services/FileLoaderService';
 import { TranslationService } from '@/services/TranslationService';
-import { initializeBibleBooks, loadBibleBooks } from '@/stores/bibleBooks';
+import { loadBibleBooks } from '@/stores/bibleBooks';
 import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
 import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
@@ -53,7 +52,6 @@ export default class JWLibraryLinkerPlugin extends Plugin {
   settings: LinkReplacerSettings = DEFAULT_SETTINGS;
 
   // Services
-  private fileLoader!: FileLoaderService;
   private translationService!: TranslationService;
   private bibleSuggester!: BibleReferenceSuggester;
 
@@ -61,22 +59,18 @@ export default class JWLibraryLinkerPlugin extends Plugin {
   private t!: (key: string, variables?: Record<string, string>) => string;
 
   async onload() {
-    // Step 1: Initialize file loader
-    this.fileLoader = new FileLoaderService(this.app, this.manifest.dir || '');
-
-    // Step 2: Initialize translation service
-    this.translationService = new TranslationService(this.fileLoader);
+    // Step 1: Initialize translation service
+    this.translationService = new TranslationService();
     await this.translationService.initialize();
     this.t = this.translationService.t.bind(this.translationService);
 
-    // Step 3: Load settings (may update language)
+    // Step 2: Load settings (may update language)
     await this.loadSettings();
 
-    // Step 4: Initialize bible books store with saved language
-    initializeBibleBooks(this.fileLoader);
-    await loadBibleBooks(this.settings.language);
+    // Step 3: Load bible books for saved language
+    loadBibleBooks(this.settings.language);
 
-    // Step 5: Initialize UI components
+    // Step 4: Initialize UI components
     this.bibleSuggester = new BibleReferenceSuggester(this);
 
     // Add settings tab

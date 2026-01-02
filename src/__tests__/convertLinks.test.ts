@@ -1,4 +1,4 @@
-import { LinkReplacerSettings } from '@/types';
+import type { LinkReplacerSettings } from '@/types';
 import { convertLinks } from '@/utils/convertLinks';
 import { TEST_DEFAULT_SETTINGS } from 'mocks/plugin';
 import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
@@ -8,7 +8,7 @@ beforeAll(() => {
 });
 
 describe('convertLinks', () => {
-  const settings: LinkReplacerSettings = TEST_DEFAULT_SETTINGS;
+  const settings = TEST_DEFAULT_SETTINGS;
   test('converts Bible references', () => {
     const input = '[John 3:16](jwpub://b/NWTR/43:3:16-43:3:16)';
     expect(convertLinks(input, 'bible', settings)).toBe(

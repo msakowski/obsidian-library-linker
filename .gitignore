@@ -4,8 +4,12 @@ package-lock.json
 
 # Build outputs
 dist/
+main.js
 *.js.map
 .hotreload
+
+# Obsidian plugin data (user settings)
+data.json
 
 # Development
 .idea/

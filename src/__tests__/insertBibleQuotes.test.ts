@@ -46,7 +46,7 @@ describe('insertAllBibleQuotes', () => {
       bibleQuote: {
         template: BIBLE_QUOTE_TEMPLATES.short,
       },
-    };
+    } satisfies LinkReplacerSettings;
 
     // Mock BibleTextFetcher
     (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValue({
@@ -264,7 +264,7 @@ describe('insertBibleQuoteAtCursor', () => {
       bibleQuote: {
         template: BIBLE_QUOTE_TEMPLATES.short,
       },
-    };
+    } satisfies LinkReplacerSettings;
 
     (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValue({
       success: true,
