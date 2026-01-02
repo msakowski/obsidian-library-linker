@@ -46,7 +46,7 @@ describe('insertAllBibleQuotes', () => {
         format: 'short',
         calloutType: 'quote',
       },
-    };
+    } satisfies LinkReplacerSettings;
 
     // Mock BibleTextFetcher
     (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValue({
@@ -266,7 +266,7 @@ describe('insertBibleQuoteAtCursor', () => {
         format: 'short',
         calloutType: 'quote',
       },
-    };
+    } satisfies LinkReplacerSettings;
 
     (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValue({
       success: true,

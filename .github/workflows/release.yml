@@ -107,7 +107,10 @@ jobs:
         run: |
           pnpm build
           mkdir ${{ env.PLUGIN_NAME }}
-          cp -r dist/* ${{ env.PLUGIN_NAME }}/
+          cp main.js ${{ env.PLUGIN_NAME }}/
+          cp manifest.json ${{ env.PLUGIN_NAME }}/
+          cp styles.css ${{ env.PLUGIN_NAME }}/
+          cp -r locale ${{ env.PLUGIN_NAME }}/
           zip -r ${{ env.PLUGIN_NAME }}-${{ github.ref_name }}.zip ${{ env.PLUGIN_NAME }}
           ls
 
@@ -119,6 +122,8 @@ jobs:
           body: ${{ env.RELEASE_NOTES }}
           files: |
             ${{ env.PLUGIN_NAME }}-${{ github.ref_name }}.zip
-            dist/**
+            main.js
+            manifest.json
+            styles.css
         env:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
