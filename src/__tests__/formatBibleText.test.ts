@@ -228,14 +228,14 @@ describe('formatBibleText', () => {
     test('formats multi-chapter reference with long format', () => {
       expect(
         formatBibleText(
-          { 
-            book: 40, 
-            chapter: 3, 
-            endChapter: 4, 
-            verseRanges: [{ start: 1, end: 11 }] 
-          }, 
-          'long', 
-          'X'
+          {
+            book: 40,
+            chapter: 3,
+            endChapter: 4,
+            verseRanges: [{ start: 1, end: 11 }],
+          },
+          'long',
+          'X',
         ),
       ).toBe('Matthäus 3:1-4:11');
     });
@@ -243,14 +243,14 @@ describe('formatBibleText', () => {
     test('formats multi-chapter reference with short format', () => {
       expect(
         formatBibleText(
-          { 
-            book: 40, 
-            chapter: 3, 
-            endChapter: 4, 
-            verseRanges: [{ start: 1, end: 11 }] 
-          }, 
-          'short', 
-          'X'
+          {
+            book: 40,
+            chapter: 3,
+            endChapter: 4,
+            verseRanges: [{ start: 1, end: 11 }],
+          },
+          'short',
+          'X',
         ),
       ).toBe('Mat 3:1-4:11');
     });
@@ -258,14 +258,14 @@ describe('formatBibleText', () => {
     test('formats Genesis multi-chapter reference', () => {
       expect(
         formatBibleText(
-          { 
-            book: 1, 
-            chapter: 1, 
-            endChapter: 2, 
-            verseRanges: [{ start: 1, end: 3 }] 
-          }, 
-          'long', 
-          'E'
+          {
+            book: 1,
+            chapter: 1,
+            endChapter: 2,
+            verseRanges: [{ start: 1, end: 3 }],
+          },
+          'long',
+          'E',
         ),
       ).toBe('Genesis 1:1-2:3');
     });
@@ -273,14 +273,14 @@ describe('formatBibleText', () => {
     test('formats John multi-chapter reference', () => {
       expect(
         formatBibleText(
-          { 
-            book: 43, 
-            chapter: 2, 
-            endChapter: 3, 
-            verseRanges: [{ start: 3, end: 6 }] 
-          }, 
-          'short', 
-          'E'
+          {
+            book: 43,
+            chapter: 2,
+            endChapter: 3,
+            verseRanges: [{ start: 3, end: 6 }],
+          },
+          'short',
+          'E',
         ),
       ).toBe('Joh 2:3-3:6');
     });
