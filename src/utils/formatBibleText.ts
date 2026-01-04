@@ -26,5 +26,13 @@ export function formatBibleText(
     return `${bookName} ${verseRefs.join(',')}`;
   }
 
+  // Handle multi-chapter references
+  if (reference.endChapter && reference.endChapter !== reference.chapter) {
+    // For multi-chapter references, the verseRanges contain start verse and end verse
+    const startVerse = reference.verseRanges![0].start;
+    const endVerse = reference.verseRanges![0].end;
+    return `${bookName} ${reference.chapter}:${startVerse}-${reference.endChapter}:${endVerse}`;
+  }
+
   return `${bookName} ${reference.chapter}:${verseRefs.join(',')}`;
 }
