@@ -6,7 +6,7 @@ export function formatJWLibraryLink(
   reference: BibleReference,
   language?: Language,
 ): string | string[] {
-  const { book, chapter, endChapter, verseRanges } = reference;
+  const { book, chapter, endChapter, verseRanges, isWholeChapter } = reference;
 
   if (!bibleBookExists(book)) {
     throw new Error('errors.bookNotFound');
@@ -21,6 +21,13 @@ export function formatJWLibraryLink(
 
   const padRange = (book: number, chapter: number, start: number) =>
     `${padBook(book)}${padChapter(chapter)}${padVerse(start)}`;
+
+  // Handle whole chapter references with optimized format
+  if (isWholeChapter && verseRanges.length === 1) {
+    const baseReference = padRange(book, chapter, 0); // Start with verse 000
+    const endReference = padRange(book, chapter, 99); // End with verse 99
+    return link(`${baseReference}-${endReference}`);
+  }
 
   // For a single range, return a single string
   if (verseRanges.length === 1) {

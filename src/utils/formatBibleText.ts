@@ -15,6 +15,15 @@ export function formatBibleText(
 
   const bookName = bookEntry.name[bookLength];
 
+  // Handle whole chapter references
+  if (reference.isWholeChapter) {
+    const isSingleChapterBook = SINGLE_CHAPTER_BOOKS.includes(reference.book);
+    if (isSingleChapterBook) {
+      return bookName; // Just "Jude" for single-chapter books
+    }
+    return `${bookName} ${reference.chapter}`; // "1 Kings 1" for whole chapters
+  }
+
   // Format the verse reference
   const verseRefs = reference.verseRanges!.map(({ start, end }) =>
     start === end ? start.toString() : `${start}-${end}`,

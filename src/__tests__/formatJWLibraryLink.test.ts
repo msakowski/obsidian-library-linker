@@ -90,4 +90,60 @@ describe('formatJWLibraryLink', () => {
       expect(formatJWLibraryLink(reference)).toBe('jwlibrary:///finder?bible=01001001-01050026');
     });
   });
+
+  // Whole chapter reference tests (new feature)
+  describe('whole chapter references', () => {
+    test('formats whole chapter link for 1 Kings 1', () => {
+      const result = formatJWLibraryLink({
+        book: 11,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 53 }],
+        isWholeChapter: true,
+      });
+      expect(result).toBe('jwlibrary:///finder?bible=11001000-11001099');
+    });
+
+    test('formats whole chapter link for John 3', () => {
+      const result = formatJWLibraryLink({
+        book: 43,
+        chapter: 3,
+        verseRanges: [{ start: 1, end: 36 }],
+        isWholeChapter: true,
+      });
+      expect(result).toBe('jwlibrary:///finder?bible=43003000-43003099');
+    });
+
+    test('formats whole chapter link for Psalms 23', () => {
+      const result = formatJWLibraryLink({
+        book: 19,
+        chapter: 23,
+        verseRanges: [{ start: 1, end: 6 }],
+        isWholeChapter: true,
+      });
+      expect(result).toBe('jwlibrary:///finder?bible=19023000-19023099');
+    });
+
+    test('formats whole chapter link with language parameter', () => {
+      const result = formatJWLibraryLink(
+        {
+          book: 11,
+          chapter: 1,
+          verseRanges: [{ start: 1, end: 53 }],
+          isWholeChapter: true,
+        },
+        'E',
+      );
+      expect(result).toBe('jwlibrary:///finder?bible=11001000-11001099&wtlocale=E');
+    });
+
+    test('formats whole single-chapter book', () => {
+      const result = formatJWLibraryLink({
+        book: 65, // Jude
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 25 }],
+        isWholeChapter: true,
+      });
+      expect(result).toBe('jwlibrary:///finder?bible=65001000-65001099');
+    });
+  });
 });

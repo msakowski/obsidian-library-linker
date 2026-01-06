@@ -1,5 +1,6 @@
 import { findBook } from '@/utils/findBook';
 import { SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
+import { getVerseCount } from '@/consts/verseCounts';
 import { getLanguageSpecificChars } from '@/utils/getLanguageSpecificChars';
 import type { Language, VerseRange, BibleReference } from '@/types';
 
@@ -100,10 +101,10 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   const customChars = getLanguageSpecificChars(language);
 
   // Match book, chapter, and verses part
-  // Supports both "Book chapter:verse" and "Book verse" (for single-chapter books)
+  // Supports "Book chapter:verse", "Book verse" (for single-chapter books), "Book chapter" (for whole chapters), and "Book" (for whole single-chapter books)
   const match = input.match(
     new RegExp(
-      `^([a-z0-9${customChars}\\uAC00-\\uD7AF\\u1100-\\u11FF\\u3130-\\u318F]+?)(\\d+.*)$`,
+      `^([a-z0-9${customChars}\\uAC00-\\uD7AF\\u1100-\\u11FF\\u3130-\\u318F]+?)(?:(\\d+.*))?$`,
       'i',
     ),
   );
@@ -113,6 +114,44 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   }
 
   const [, bookName, remainder] = match;
+
+  const book = findBook(bookName, language);
+
+  if (!book) {
+    throw new Error('errors.bookNotFound');
+  }
+
+  if (Array.isArray(book)) {
+    console.log('multiple books found', book, bookName, remainder);
+    throw new Error('errors.multipleBooksFound');
+  }
+
+  // Handle case where there's no remainder (just book name)
+  if (!remainder) {
+    // Only single-chapter books can be referenced without chapter/verse
+    const isSingleChapterBook = SINGLE_CHAPTER_BOOKS.includes(book.id);
+    if (!isSingleChapterBook) {
+      throw new Error('errors.invalidFormat');
+    }
+
+    // Get the verse count for this single-chapter book
+    const verseCount = getVerseCount(book.id, 1);
+    if (!verseCount) {
+      throw new Error('errors.invalidChapter');
+    }
+
+    return {
+      book: book.id,
+      chapter: 1,
+      verseRanges: [
+        {
+          start: 1,
+          end: verseCount,
+        },
+      ],
+      isWholeChapter: true,
+    };
+  }
 
   // Check if remainder contains a colon (chapter:verse format)
   const colonIndex = remainder.indexOf(':');
@@ -129,17 +168,6 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     versesPart = undefined;
   }
 
-  const book = findBook(bookName, language);
-
-  if (!book) {
-    throw new Error('errors.bookNotFound');
-  }
-
-  if (Array.isArray(book)) {
-    console.log('multiple books found', book, bookName, numberPart, versesPart);
-    throw new Error('errors.multipleBooksFound');
-  }
-
   // Determine if this is a single-chapter book reference without colon
   const isSingleChapterBook = SINGLE_CHAPTER_BOOKS.includes(book.id);
   const hasColon = versesPart !== undefined;
@@ -148,14 +176,19 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   let actualVersesPart: string;
 
   if (!hasColon) {
-    // No colon - format is "Book verse"
-    if (!isSingleChapterBook) {
-      // Multi-chapter books require "chapter:verse" format
-      throw new Error('errors.invalidFormat');
+    // No colon - could be "Book verse" (single-chapter) or "Book chapter" (whole chapter)
+    if (isSingleChapterBook) {
+      // For single-chapter books, treat numberPart as verse
+      chapter = 1;
+      actualVersesPart = numberPart;
+    } else {
+      // For multi-chapter books without colon, treat as whole chapter reference
+      chapter = parseInt(numberPart, 10);
+      if (chapter < 1 || (book.chapters !== undefined && chapter > book.chapters)) {
+        throw new Error('errors.invalidChapter');
+      }
+      actualVersesPart = ''; // Empty indicates whole chapter
     }
-    // For single-chapter books, treat numberPart as verse
-    chapter = 1;
-    actualVersesPart = numberPart;
   } else {
     // Has colon - format is "Book chapter:verse"
     chapter = parseInt(numberPart, 10);
@@ -195,6 +228,28 @@ export function parseBibleReference(input: string, language: Language): BibleRef
           end: endVerseNumber,
         },
       ],
+    };
+  }
+
+  // Check if this is a chapter-only reference (no verses specified)
+  // This happens when user inputs like "1 Kings 1" or "John 3"
+  if (actualVersesPart === '' || actualVersesPart.match(/^\s*$/)) {
+    // Get the verse count for this chapter to create a full chapter range
+    const verseCount = getVerseCount(book.id, chapter);
+    if (!verseCount) {
+      throw new Error('errors.invalidChapter');
+    }
+
+    return {
+      book: book.id,
+      chapter: chapter,
+      verseRanges: [
+        {
+          start: 1,
+          end: verseCount,
+        },
+      ],
+      isWholeChapter: true,
     };
   }
 

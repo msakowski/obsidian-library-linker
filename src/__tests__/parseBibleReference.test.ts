@@ -310,10 +310,110 @@ describe('parseBibleReference', () => {
       expect(parseResult).toEqual(expected);
     });
 
-    test('throws error when multi-chapter book uses verse-only format', () => {
-      // John has 21 chapters, so "John 3" without colon should fail
-      expect(() => parseBibleReference('John 3', 'E')).toThrow('errors.invalidFormat');
-      expect(() => parseBibleReference('Psalm 23', 'E')).toThrow('errors.invalidFormat');
+    test('throws error when multi-chapter book uses verse-only format without chapter support', () => {
+      // These should still fail because they look like verse references, not chapter references
+      expect(() => parseBibleReference('John', 'E')).toThrow('errors.invalidFormat'); // Just book name for multi-chapter book
+    });
+  });
+
+  // Test cases for whole chapter references (new feature)
+  describe('whole chapter references', () => {
+    test('parses whole chapter for multi-chapter book', () => {
+      const result = parseBibleReference('1 Kings 1', 'E');
+      expect(result).toEqual({
+        book: 11,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 53 }],
+        isWholeChapter: true,
+      });
+    });
+
+    test('parses whole chapter for John', () => {
+      const result = parseBibleReference('John 3', 'E');
+      expect(result).toEqual({
+        book: 43,
+        chapter: 3,
+        verseRanges: [{ start: 1, end: 36 }],
+        isWholeChapter: true,
+      });
+    });
+
+    test('parses whole chapter for Psalms', () => {
+      const result = parseBibleReference('Psalm 23', 'E');
+      expect(result).toEqual({
+        book: 19,
+        chapter: 23,
+        verseRanges: [{ start: 1, end: 6 }],
+        isWholeChapter: true,
+      });
+    });
+
+    test('parses whole chapter with short book name', () => {
+      const result = parseBibleReference('1Ki 1', 'E');
+      expect(result).toEqual({
+        book: 11,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 53 }],
+        isWholeChapter: true,
+      });
+    });
+
+    test('parses whole chapter for Genesis', () => {
+      const result = parseBibleReference('Genesis 1', 'E');
+      expect(result).toEqual({
+        book: 1,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 31 }],
+        isWholeChapter: true,
+      });
+    });
+
+    test('parses whole chapter for Revelation', () => {
+      const result = parseBibleReference('Revelation 22', 'E');
+      expect(result).toEqual({
+        book: 66,
+        chapter: 22,
+        verseRanges: [{ start: 1, end: 21 }],
+        isWholeChapter: true,
+      });
+    });
+
+    test('parses whole Jude book', () => {
+      const result = parseBibleReference('Jude', 'E');
+      expect(result).toEqual({
+        book: 65,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 25 }],
+        isWholeChapter: true,
+      });
+    });
+
+    test('parses whole Philemon book', () => {
+      const result = parseBibleReference('Philemon', 'E');
+      expect(result).toEqual({
+        book: 57,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 25 }],
+        isWholeChapter: true,
+      });
+    });
+
+    test('parses whole Obadiah book', () => {
+      const result = parseBibleReference('Obadiah', 'E');
+      expect(result).toEqual({
+        book: 31,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 21 }],
+        isWholeChapter: true,
+      });
+    });
+
+    test('throws error for invalid chapter', () => {
+      expect(() => parseBibleReference('John 100', 'E')).toThrow('errors.invalidChapter');
+    });
+
+    test('throws error for invalid book', () => {
+      expect(() => parseBibleReference('InvalidBook 1', 'E')).toThrow('errors.bookNotFound');
     });
   });
 });

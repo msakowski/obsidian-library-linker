@@ -285,4 +285,96 @@ describe('formatBibleText', () => {
       ).toBe('Joh 2:3-3:6');
     });
   });
+
+  describe('whole chapter references', () => {
+    test('formats whole chapter for multi-chapter book with long format', () => {
+      expect(
+        formatBibleText(
+          {
+            book: 11, // 1 Kings
+            chapter: 1,
+            verseRanges: [{ start: 1, end: 53 }],
+            isWholeChapter: true,
+          },
+          'long',
+          'E',
+        ),
+      ).toBe('1 Kings 1');
+    });
+
+    test('formats whole chapter for multi-chapter book with short format', () => {
+      expect(
+        formatBibleText(
+          {
+            book: 11, // 1 Kings
+            chapter: 1,
+            verseRanges: [{ start: 1, end: 53 }],
+            isWholeChapter: true,
+          },
+          'short',
+          'E',
+        ),
+      ).toBe('1Ki 1');
+    });
+
+    test('formats whole chapter for John', () => {
+      expect(
+        formatBibleText(
+          {
+            book: 43, // John
+            chapter: 3,
+            verseRanges: [{ start: 1, end: 36 }],
+            isWholeChapter: true,
+          },
+          'long',
+          'E',
+        ),
+      ).toBe('John 3');
+    });
+
+    test('formats whole chapter for Psalms', () => {
+      expect(
+        formatBibleText(
+          {
+            book: 19, // Psalms
+            chapter: 23,
+            verseRanges: [{ start: 1, end: 6 }],
+            isWholeChapter: true,
+          },
+          'short',
+          'E',
+        ),
+      ).toBe('Ps 23');
+    });
+
+    test('formats whole single-chapter book', () => {
+      expect(
+        formatBibleText(
+          {
+            book: 65, // Jude
+            chapter: 1,
+            verseRanges: [{ start: 1, end: 25 }],
+            isWholeChapter: true,
+          },
+          'long',
+          'E',
+        ),
+      ).toBe('Jude');
+    });
+
+    test('formats whole single-chapter book with short format', () => {
+      expect(
+        formatBibleText(
+          {
+            book: 57, // Philemon
+            chapter: 1,
+            verseRanges: [{ start: 1, end: 25 }],
+            isWholeChapter: true,
+          },
+          'short',
+          'E',
+        ),
+      ).toBe('Phm');
+    });
+  });
 });
