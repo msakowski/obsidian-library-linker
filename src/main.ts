@@ -80,6 +80,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     this.addCommand({
       id: 'link-unlinked-bible-references',
       name: this.t('commands.linkUnlinkedBibleReferences'),
+      icon: 'link-2',
       editorCallback: (editor: Editor) => {
         const selection = {
           text: editor.getSelection(),
@@ -123,6 +124,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     this.addCommand({
       id: 'convert-jw-links',
       name: this.t('commands.convertToJWLibraryLinks'),
+      icon: 'link-2',
       editorCallback: (editor: Editor) => {
         const selection = editor.getSelection();
         if (!selection) {
@@ -142,6 +144,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     this.addCommand({
       id: 'insert-bible-quotes',
       name: this.t('commands.insertBibleQuotes'),
+      icon: 'text-quote',
       editorCallback: async (editor: Editor) => {
         const selection = editor.getSelection();
         let contentSelection: ContentSelection | undefined;
@@ -181,6 +184,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     this.addCommand({
       id: 'insert-bible-quote-at-cursor',
       name: this.t('commands.insertBibleQuoteAtCursor'),
+      icon: 'text-quote',
       editorCallback: async (editor: Editor) => {
         try {
           const result = await insertBibleQuoteAtCursor(editor, this.settings);
