@@ -143,11 +143,30 @@ export async function insertBibleQuoteAtCursor(
   }
 
   const line = editor.getLine(cursorLine);
-  const jwLibraryRegex = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)\s]*)?/g;
-  let match;
+  const currentLine = editor.getLine(cursorLine);
+  const nextLine = cursorLine < editor.lastLine() ? editor.getLine(cursorLine + 1) : '';
 
-  // Find the first JW Library link on the cursor line
-  while ((match = jwLibraryRegex.exec(line)) !== null) {
+  // Skip if already formatted as callout or if next line is a quote
+  if (
+    currentLine &&
+    currentLine.trim().startsWith('>') &&
+    nextLine &&
+    nextLine.trim().startsWith('>')
+  ) {
+    return { inserted: false, alreadyExists: true };
+  }
+
+  // Find all JW Library links on the cursor line
+  const jwLibraryRegex = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)\s]*)?/g;
+  const matches = Array.from(line.matchAll(jwLibraryRegex));
+
+  if (matches.length === 0) {
+    return { inserted: false, alreadyExists: false };
+  }
+
+  // Generate quotes for all links on the line
+  const quoteTexts: string[] = [];
+  for (const match of matches) {
     const reference = parseJWLibraryLink(match[0]);
     if (reference) {
       const linkInfo: JWLibraryLinkInfo = {
@@ -157,33 +176,26 @@ export async function insertBibleQuoteAtCursor(
         lineText: line,
       };
 
-      const currentLine = editor.getLine(cursorLine);
-      const nextLine = cursorLine < editor.lastLine() ? editor.getLine(cursorLine + 1) : '';
-
-      // Skip if already formatted as callout or if next line is a quote
-      if (
-        currentLine &&
-        currentLine.trim().startsWith('>') &&
-        nextLine &&
-        nextLine.trim().startsWith('>')
-      ) {
-        return { inserted: false, alreadyExists: true };
-      }
-
       const quoteText = await generateBibleQuoteText(linkInfo, settings, useWOL);
       if (quoteText) {
-        editor.transaction({
-          changes: [
-            {
-              from: { line: cursorLine, ch: 0 },
-              to: { line: cursorLine, ch: currentLine.length },
-              text: quoteText,
-            },
-          ],
-        });
-        return { inserted: true, alreadyExists: false };
+        quoteTexts.push(quoteText);
       }
     }
+  }
+
+  // If we generated any quotes, replace the line with all of them
+  if (quoteTexts.length > 0) {
+    const combinedText = quoteTexts.join('\n');
+    editor.transaction({
+      changes: [
+        {
+          from: { line: cursorLine, ch: 0 },
+          to: { line: cursorLine, ch: currentLine.length },
+          text: combinedText,
+        },
+      ],
+    });
+    return { inserted: true, alreadyExists: false };
   }
 
   return { inserted: false, alreadyExists: false };
