@@ -1,5 +1,13 @@
 # obsidian-library-linker
 
+## 0.11.3
+
+### Patch Changes
+
+- [#191](https://github.com/msakowski/obsidian-library-linker/pull/191) [`68057ce`](https://github.com/msakowski/obsidian-library-linker/commit/68057ce3d6bf705fd8bf8e8a43691f5ced69d75c) Thanks [@msakowski](https://github.com/msakowski)! - Fix "Insert Bible quote at cursor" command to handle multiple verse ranges on the same line. Previously, when using this command on a line with comma-separated verses (e.g., Genesis 2:9,15-17), only the first verse would be quoted and subsequent links would be deleted. Now all verse ranges on the cursor line are properly quoted.
+
+- [#190](https://github.com/msakowski/obsidian-library-linker/pull/190) [`9f69e40`](https://github.com/msakowski/obsidian-library-linker/commit/9f69e40688ef340bf8bcab239ffbfb5c69a19ecc) Thanks [@yarko-w](https://github.com/yarko-w)! - Add icons to editor commands to improve usability of the Obsidian mobile quick action bar.
+
 ## 0.11.2
 
 ### Patch Changes
