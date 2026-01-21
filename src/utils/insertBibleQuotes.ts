@@ -185,7 +185,7 @@ export async function insertBibleQuoteAtCursor(
 
   // If we generated any quotes, replace the line with all of them
   if (quoteTexts.length > 0) {
-    const combinedText = quoteTexts.join('\n');
+    const combinedText = quoteTexts.join('\n\n');
     editor.transaction({
       changes: [
         {
