@@ -331,4 +331,46 @@ describe('insertBibleQuoteAtCursor', () => {
     expect(result).toEqual({ inserted: false, alreadyExists: false });
     expect(mockTransaction).not.toHaveBeenCalled();
   });
+
+  test('should insert quotes for all links on the same line', async () => {
+    mockGetCursor.mockReturnValue({ line: 0, ch: 10 });
+    mockLastLine.mockReturnValue(0);
+    mockGetLine.mockReturnValue(
+      'jwlibrary:///finder?bible=43003016 and jwlibrary:///finder?bible=40005003',
+    );
+
+    (BibleTextFetcher.fetchBibleText as jest.Mock)
+      .mockResolvedValueOnce({
+        success: true,
+        text: 'For God loved the world so much that he gave his only-begotten Son.',
+      })
+      .mockResolvedValueOnce({
+        success: true,
+        text: 'Happy are those conscious of their spiritual need.',
+      });
+
+    (convertBibleTextToMarkdownLink as jest.Mock)
+      .mockReturnValueOnce('[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)')
+      .mockReturnValueOnce('[Matt. 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)');
+
+    const result = await insertBibleQuoteAtCursor(mockEditor, settings);
+
+    expect(result).toEqual({ inserted: true, alreadyExists: false });
+    expect(mockTransaction).toHaveBeenCalledWith({
+      changes: [
+        {
+          from: { line: 0, ch: 0 },
+          to: {
+            line: 0,
+            ch: 'jwlibrary:///finder?bible=43003016 and jwlibrary:///finder?bible=40005003'.length,
+          },
+          text:
+            '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)\n' +
+            '> For God loved the world so much that he gave his only-begotten Son.\n\n' +
+            '[Matt. 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)\n' +
+            '> Happy are those conscious of their spiritual need.',
+        },
+      ],
+    });
+  });
 });
