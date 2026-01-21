@@ -366,7 +366,7 @@ describe('insertBibleQuoteAtCursor', () => {
           },
           text:
             '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)\n' +
-            '> For God loved the world so much that he gave his only-begotten Son.\n' +
+            '> For God loved the world so much that he gave his only-begotten Son.\n\n' +
             '[Matt. 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)\n' +
             '> Happy are those conscious of their spiritual need.',
         },
