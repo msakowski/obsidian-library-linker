@@ -21,9 +21,9 @@ function processTemplate(
   },
 ): string {
   return template
-    .replace(/\{bibleRef\}/g, variables.bibleRef)
-    .replace(/\{bibleRefLinked\}/g, variables.bibleRefLinked)
-    .replace(/\{quote\}/g, variables.quote);
+    .replace(/\{bibleRef\}/g, variables.bibleRef.trim())
+    .replace(/\{bibleRefLinked\}/g, variables.bibleRefLinked.trim())
+    .replace(/\{quote\}/g, variables.quote.trim());
 }
 
 async function generateBibleQuoteText(
