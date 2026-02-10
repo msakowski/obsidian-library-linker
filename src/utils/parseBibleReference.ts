@@ -2,6 +2,7 @@ import { findBook } from '@/utils/findBook';
 import { SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
 import { getLanguageSpecificChars } from '@/utils/getLanguageSpecificChars';
 import type { Language, VerseRange, BibleReference } from '@/types';
+import { logger } from '@/utils/logger';
 
 function parseVerseNumber(verse: string): number {
   const num = parseInt(verse, 10);
@@ -136,7 +137,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   }
 
   if (Array.isArray(book)) {
-    console.log('multiple books found', book, bookName, numberPart, versesPart);
+    logger.log('multiple books found', book, bookName, numberPart, versesPart);
     throw new Error('errors.multipleBooksFound');
   }
 

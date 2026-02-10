@@ -2,6 +2,7 @@ import type { BibleReference, Language } from '@/types';
 import { padBook, padChapter, padVerse } from '@/utils/padNumber';
 import { requestUrl } from 'obsidian';
 import { cleanHtmlText } from '@/utils/cleanHtmlText';
+import { logger } from '@/utils/logger';
 
 export interface BibleTextResult {
   text: string;
@@ -19,6 +20,7 @@ export class BibleTextFetcher {
     language: Language = 'E',
     useWOL = false,
   ): Promise<BibleTextResult> {
+    logger.log('fetchBibleText', reference, language);
     try {
       const { book, chapter, verseRanges } = reference;
 
@@ -44,6 +46,8 @@ export class BibleTextFetcher {
         ? this.buildWOLUrl(bibleCode, language)
         : this.buildJWOrgUrl(bibleCode, language);
 
+      logger.log('url', url);
+
       // Fetch the content using Obsidian's requestUrl to avoid CORS issues
       const response = await requestUrl({
         url,
@@ -57,6 +61,9 @@ export class BibleTextFetcher {
           'Upgrade-Insecure-Requests': '1',
         },
       });
+
+      logger.log('response', response);
+
       if (response.status !== 200) {
         throw new Error(`HTTP ${response.status}: ${response.status}`);
       }

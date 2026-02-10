@@ -13,6 +13,7 @@ import {
   insertBibleQuoteAtCursor,
   type ContentSelection,
 } from '@/utils/insertBibleQuotes';
+import { logger } from '@/utils/logger';
 
 export const DEFAULT_STYLES: LinkStyles = {
   bookLength: 'medium',
@@ -172,7 +173,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
             new Notice(this.t('notices.noBibleLinksFound'));
           }
         } catch (error: unknown) {
-          console.error(
+          logger.error(
             'Error inserting Bible quotes:',
             error instanceof Error ? error.message : String(error),
           );
@@ -196,7 +197,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
             new Notice(this.t('notices.noBibleLinkAtCursor'));
           }
         } catch (error: unknown) {
-          console.error(
+          logger.error(
             'Error inserting Bible quote at cursor:',
             error instanceof Error ? error.message : String(error),
           );
@@ -232,7 +233,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
                     new Notice(this.t('notices.noBibleLinkAtCursor'));
                   }
                 } catch (error: unknown) {
-                  console.error(
+                  logger.error(
                     'Error inserting Bible quote from context menu:',
                     error instanceof Error ? error.message : String(error),
                   );
@@ -243,6 +244,8 @@ export default class JWLibraryLinkerPlugin extends Plugin {
         }
       }),
     );
+
+    logger.log('Plugin loaded');
   }
 
   /**
