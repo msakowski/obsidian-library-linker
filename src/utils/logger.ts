@@ -1,6 +1,6 @@
-declare const DEBUG: boolean;
+declare const DEBUG: string;
 
-const debugEnabled = typeof DEBUG !== 'undefined' && DEBUG;
+const debugEnabled = typeof DEBUG !== 'undefined' && DEBUG === 'true';
 const PREFIX = '[JWLinker]';
 
 // Methods that don't take a prefix as the first argument
