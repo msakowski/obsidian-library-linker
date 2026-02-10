@@ -1,6 +1,7 @@
 import { chapterCounts } from '@/consts/chapterCounts';
 import type { BibleBook, Language } from '@/types';
 import BUNDLED_LOCALES from 'locale:all';
+import { logger } from '@/utils/logger';
 
 type BibleBookWithoutChapters = Omit<BibleBook, 'chapters'>;
 
@@ -31,7 +32,7 @@ export function loadBibleBooks(language: Language): void {
   const bibleFile = `locale/bibleBooks/${language}.yaml`;
 
   if (!(bibleFile in BUNDLED_LOCALES)) {
-    console.error(`Bible books for language ${language} not found in bundle`);
+    logger.error(`Bible books for language ${language} not found in bundle`);
     throw new Error('errors.unsupportedLanguage');
   }
 
@@ -51,7 +52,7 @@ export function getBibleBooks(language: Language): readonly BibleBook[] {
   const books = booksCache.get(language);
 
   if (!books) {
-    console.error(`Bible books for language ${language} not loaded. Call loadBibleBooks() first.`);
+    logger.error(`Bible books for language ${language} not loaded. Call loadBibleBooks() first.`);
     throw new Error('errors.unsupportedLanguage');
   }
 

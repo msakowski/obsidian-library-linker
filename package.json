@@ -4,7 +4,7 @@
   "description": "An Obsidian plugin that helps creating JW Library links",
   "main": "main.js",
   "scripts": {
-    "dev": "node esbuild.config.mjs",
+    "dev": "DEBUG=true node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "version": "changeset version && node version-bump.mjs",
     "release": "VERSION=$(jq -r '.version' manifest.json) && git tag -a $VERSION -m \"Release $VERSION\" && git push origin $VERSION",
