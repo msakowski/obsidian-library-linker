@@ -1,5 +1,6 @@
 import type { Locale } from '@/types';
 import BUNDLED_LOCALES from 'locale:all';
+import { logger } from '@/utils/logger';
 
 export type Translation = {
   settings: {
@@ -120,7 +121,7 @@ export class TranslationService {
       this.currentLocale = locale;
     } else if (locale !== 'en') {
       // Fallback to English
-      console.warn(`Locale ${locale} not found, falling back to English`);
+      logger.warn(`Locale ${locale} not found, falling back to English`);
       await this.loadLocale('en');
     } else {
       throw new Error('English locale not found in bundle');
@@ -147,7 +148,7 @@ export class TranslationService {
     const translation = this.translations.get(this.currentLocale);
 
     if (!translation) {
-      console.error(`Locale ${this.currentLocale} not loaded. Call initialize() first.`);
+      logger.error(`Locale ${this.currentLocale} not loaded. Call initialize() first.`);
       return key;
     }
 
@@ -185,7 +186,7 @@ export class TranslationService {
       }
     } catch (error) {
       // Fallback to default 'en' if localStorage is not available
-      console.debug('Could not access localStorage, using default locale', error);
+      logger.info('Could not access localStorage, using default locale', error);
     }
     return 'en';
   }

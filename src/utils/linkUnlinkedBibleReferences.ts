@@ -2,6 +2,7 @@ import { parseBibleReference } from '@/utils/parseBibleReference';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type { BibleReference, LinkReplacerSettings } from '@/types';
 import { getBibleReferenceRegex } from '@/utils/bibleReferenceRegex';
+import { logger } from '@/utils/logger';
 
 type Change = {
   from: { line: number; ch: number };
@@ -44,7 +45,7 @@ export function linkUnlinkedBibleReferences(
           });
         }
       } catch {
-        console.error('Invalid reference', { line, match, lineIndex });
+        logger.error('Invalid reference', { line, match, lineIndex });
         // Skip invalid references
         continue;
       }

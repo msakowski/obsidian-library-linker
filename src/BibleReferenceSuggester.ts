@@ -12,6 +12,7 @@ import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type JWLibraryLinkerPlugin from '@/main';
 import { getBibleReferenceRegex } from '@/utils/bibleReferenceRegex';
+import { logger } from '@/utils/logger';
 
 const TRIGGER = '/b ';
 
@@ -124,7 +125,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     try {
       reference = parseBibleReference(query, this.plugin.settings.language);
     } catch (error: unknown) {
-      console.debug(error instanceof Error ? error.message : String(error));
+      logger.error(error instanceof Error ? error.message : String(error));
 
       if (!isExplicitMode) return [];
 

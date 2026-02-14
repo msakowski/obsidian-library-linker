@@ -1,5 +1,6 @@
 import type { Editor } from 'obsidian';
 import type { BibleReference } from '@/types';
+import { logger } from './logger';
 
 export interface JWLibraryLinkInfo {
   url: string;
@@ -76,7 +77,11 @@ export function findJWLibraryLinks(
     let match;
 
     while ((match = jwLibraryRegex.exec(line)) !== null) {
+      logger.log('match', match);
+
       const reference = parseJWLibraryLink(match[0]);
+
+      logger.log('reference', reference);
       if (reference) {
         links.push({
           url: match[0],

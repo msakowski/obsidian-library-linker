@@ -9,6 +9,7 @@ import {
   type JWLibraryLinkInfo,
   type ContentSelection,
 } from '@/utils/findJWLibraryLinks';
+import { logger } from '@/utils/logger';
 
 export type { JWLibraryLinkInfo, ContentSelection };
 
@@ -21,9 +22,9 @@ function processTemplate(
   },
 ): string {
   return template
-    .replace(/\{bibleRef\}/g, variables.bibleRef)
-    .replace(/\{bibleRefLinked\}/g, variables.bibleRefLinked)
-    .replace(/\{quote\}/g, variables.quote);
+    .replace(/\{bibleRef\}/g, variables.bibleRef.trim())
+    .replace(/\{bibleRefLinked\}/g, variables.bibleRefLinked.trim())
+    .replace(/\{quote\}/g, variables.quote.trim());
 }
 
 async function generateBibleQuoteText(
@@ -73,6 +74,8 @@ export async function insertAllBibleQuotes(
 ): Promise<number> {
   const links = findJWLibraryLinks(editor, selection);
 
+  logger.log('insertAllBibleQuotes', links);
+
   if (links.length === 0) {
     return 0;
   }
@@ -115,7 +118,7 @@ export async function insertAllBibleQuotes(
         });
       }
     } catch (error: unknown) {
-      console.error(
+      logger.error(
         `Error processing Bible quote for link ${i}:`,
         error instanceof Error ? error.message : String(error),
       );
@@ -137,6 +140,8 @@ export async function insertBibleQuoteAtCursor(
 ): Promise<{ inserted: boolean; alreadyExists: boolean }> {
   const cursor = editor.getCursor();
   const cursorLine = cursor.line;
+
+  logger.log('insertBibleQuoteAtCursor', cursorLine);
 
   if (cursorLine > editor.lastLine()) {
     return { inserted: false, alreadyExists: false };
@@ -168,6 +173,7 @@ export async function insertBibleQuoteAtCursor(
   const quoteTexts: string[] = [];
   for (const match of matches) {
     const reference = parseJWLibraryLink(match[0]);
+    logger.log('reference', reference);
     if (reference) {
       const linkInfo: JWLibraryLinkInfo = {
         url: match[0],

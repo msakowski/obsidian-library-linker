@@ -1,5 +1,6 @@
 import type { BibleBook, Language } from '@/types';
 import { getBibleBooks } from '@/stores/bibleBooks';
+import { logger } from '@/utils/logger';
 
 const cleanTerm = (name: string): string => {
   return name.toLowerCase().replace(/[/.\s]/g, '');
@@ -9,14 +10,14 @@ export const findBook = (bookQuery: string, language: Language): BibleBook | Bib
   const trimmedQuerry = cleanTerm(bookQuery);
 
   if (!trimmedQuerry) {
-    console.error('Book query is empty', { bookQuery, trimmedQuerry });
+    logger.error('Book query is empty', { bookQuery, trimmedQuerry });
     throw new Error('errors.bookNotFound');
   }
 
   const bibleBooks = getBibleBooks(language);
 
   if (!bibleBooks) {
-    console.error('No bible books found', { bookQuery, trimmedQuerry });
+    logger.error('No bible books found', { bookQuery, trimmedQuerry });
     throw new Error('errors.bookNotFound');
   }
 
