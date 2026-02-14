@@ -1,6 +1,5 @@
 import { findBook } from '@/utils/findBook';
 import { SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
-import { getLanguageSpecificChars } from '@/utils/getLanguageSpecificChars';
 import type { Language, VerseRange, BibleReference } from '@/types';
 
 function parseVerseNumber(verse: string): number {
@@ -97,16 +96,9 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     .toLowerCase()
     .replace(/[\.\s]/g, '');
 
-  const customChars = getLanguageSpecificChars(language);
-
   // Match book, chapter, and verses part
   // Supports both "Book chapter:verse" and "Book verse" (for single-chapter books)
-  const match = input.match(
-    new RegExp(
-      `^([a-z0-9${customChars}\\uAC00-\\uD7AF\\u1100-\\u11FF\\u3130-\\u318F]+?)(\\d+.*)$`,
-      'i',
-    ),
-  );
+  const match = input.match(new RegExp(`^([\\p{L}0-9]+?)(\\d+.*)$`, 'iu'));
 
   if (!match) {
     throw new Error('errors.invalidFormat');

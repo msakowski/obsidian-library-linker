@@ -24,7 +24,7 @@ export function linkUnlinkedBibleReferences(
   }[] = [];
 
   // Scan each line for Bible references using the findBibleReferenceRegex
-  const bibleReferenceRegex = getBibleReferenceRegex(settings.language);
+  const bibleReferenceRegex = getBibleReferenceRegex();
   lines.forEach((line, lineIndex) => {
     let match;
     while ((match = bibleReferenceRegex.exec(line)) !== null) {
