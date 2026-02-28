@@ -12,11 +12,9 @@ export function cleanHtmlText(html: string): string {
   // (double spaces will be normalized later)
   let text = html.replace(/<[^>]*>/g, ' ');
 
-  // Decode HTML entities using a temporary DOM element
-  // This works safely in the browser/Electron environment
-  const decoder = document.createElement('textarea');
-  decoder.innerHTML = text;
-  text = decoder.value;
+  // Decode HTML entities safely using DOMParser
+  const parsed = new DOMParser().parseFromString(text, 'text/html');
+  text = parsed.body.textContent || '';
 
   // Remove footnote markers and normalize whitespace
   text = text
