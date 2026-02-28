@@ -1,103 +1,103 @@
 settings:
   language:
-    name: Language
-    description: Select the language for Bible references
+    name: Jezik
+    description: Odaberite jezik za biblijske reference
   openAutomatically:
-    name: Open links automatically
-    description: Moves the "Link and open" command to the top of the list
+    name: Automatski otvori linkove
+    description: Pomiče naredbu "Poveži i otvori" na vrh popisa
   updatedLinkStructure:
-    name: Keep link text
-    description: When enabled, the current link text will be kept when converting Bible text
-    keepCurrentStructure: Keep current structure
-    usePluginSettings: Use plugin settings
+    name: Zadrži tekst linka
+    description: Kada je omogućeno, trenutni tekst linka bit će zadržan prilikom pretvaranja biblijskog teksta
+    keepCurrentStructure: Zadrži trenutnu strukturu
+    usePluginSettings: Koristi postavke dodatka
   noLanguageParameter:
-    name: Create links language independent
-    description: When enabled, no language parameter is added to the link. Links will open in the language of the JW Library
+    name: Izradi linkove neovisno o jeziku
+    description: Kada je omogućeno, jezični parametar se ne dodaje na link. Linkovi se otvaraju na jeziku JW Library aplikacije
   reconvertExistingLinks:
-    name: Reconvert existing links
-    description: When enabled, already-converted jwlibrary:// links will be reconverted according to current formatting settings. This allows you to update all links to match your latest preferences.
+    name: Ponovno pretvori postojeće linkove
+    description: Kada je omogućeno, već pretvoreni jwlibrary:// linkovi bit će ponovno pretvoreni prema trenutnim postavkama oblikovanja. To vam omogućuje ažuriranje svih linkova prema najnovijim postavkama.
   bookLength:
-    name: Link text length
-    description: Choose the length of the link text
-    short: Short
-    medium: Medium
-    long: Long
+    name: Duljina teksta linka
+    description: Odaberite duljinu teksta linka
+    short: Kratko
+    medium: Srednje
+    long: Dugo
   linkStyling:
-    name: Link styling
-    description: Choose characters or emoji to add before, after or inside the link, Choose font style
-    reset: 'Reset to default: "{{default}}"'
+    name: Stil linka
+    description: Odaberite znakove ili emojije za dodavanje prije, poslije ili unutar linka; odaberite stil fonta
+    reset: 'Vrati na zadano: "{{default}}"'
     prefixOutsideLink:
-      name: Prefix outside link
-      description: Text to add before the link
+      name: Prefiks izvan linka
+      description: Tekst koji se dodaje prije linka
     prefixInsideLink:
-      name: Prefix inside link
-      description: Text to add at the beginning of the link text
+      name: Prefiks unutar linka
+      description: Tekst koji se dodaje na početak teksta linka
     suffixInsideLink:
-      name: Suffix inside link
-      description: Text to add at the end of the link text
+      name: Sufiks unutar linka
+      description: Tekst koji se dodaje na kraj teksta linka
     suffixOutsideLink:
-      name: Suffix outside link
-      description: Text to add after the link
+      name: Sufiks izvan linka
+      description: Tekst koji se dodaje nakon linka
     presets:
-      name: Style presets
-      description: Choose a preset style for the link
+      name: Stilske predloške
+      description: Odaberite stilsku predložak za link
     fontStyle:
-      name: Font style
-      description: Choose the font style for the link text
-      normal: Normal
-      italic: Italic
-      bold: Bold
+      name: Stil fonta
+      description: Odaberite stil fonta za tekst linka
+      normal: Normalno
+      italic: Kurziv
+      bold: Podebljano
     preview:
-      name: Link preview
+      name: Pregled linka
   bibleQuote:
-    name: Bible quote formatting
-    description: Configure how Bible quotes are formatted when inserted
+    name: Oblikovanje biblijskog citata
+    description: Konfigurirajte oblikovanje biblijskih citata prilikom umetanja
     presets:
-      name: Template presets
-      short: Link + quote
-      plain: Link in quote
-      foldable: Foldable Callout
-      expanded: Expanded Callout
+      name: Predlošci predložaka
+      short: Link + citat
+      plain: Link u citatu
+      foldable: Sklopivi okvir
+      expanded: Prošireni okvir
     template:
-      name: Quote template
-      description: 'Customize the quote format using variables: {bibleRef}, {bibleRefLinked}, {quote}'
+      name: Predložak citata
+      description: 'Prilagodite format citata pomoću varijabli: {bibleRef}, {bibleRefLinked}, {quote}'
     preview:
-      name: Bible quote preview
+      name: Pregled biblijskog citata
 commands:
-  linkUnlinkedBibleReferences: Link unlinked Bible references
-  convertToJWLibraryLinks: Convert links in selection to JW Library links
-  insertBibleQuotes: Insert Bible quotes for JW Library links
-  insertBibleQuoteAtCursor: Insert Bible quote at cursor
+  linkUnlinkedBibleReferences: Poveži nepovezane biblijske reference
+  convertToJWLibraryLinks: Pretvori linkove u odabiru u JW Library linkove
+  insertBibleQuotes: Umetni biblijske citate za JW Library linkove
+  insertBibleQuoteAtCursor: Umetni biblijski citat na položaj kursora
 convertSuggester:
-  emptyStateText: Select a conversion type
+  emptyStateText: Odaberite vrstu pretvorbe
   options:
-    all: All
-    bible: Bible references
-    publication: Publications
+    all: Sve
+    bible: Biblijske reference
+    publication: Publikacije
 contextMenu:
-  insertBibleQuote: Insert Bible quote
+  insertBibleQuote: Umetni biblijski citat
 notices:
-  convertedBibleReferences: Converted {{count}} Bible references
-  pleaseSelectText: Please select text to convert
-  noBibleReferencesFound: No Bible references found
-  bibleQuotesInserted: Bible quotes inserted successfully
-  bibleQuotesInsertedSelection: Bible quotes inserted for selection
-  bibleQuoteInsertedAtCursor: Bible quote inserted at cursor
-  noBibleLinksFound: No JW Library links found
-  noBibleLinkAtCursor: No JW Library link found at cursor
-  bibleQuoteAlreadyExists: Bible quote already exists
-  errorInsertingQuotes: Error inserting Bible quotes
+  convertedBibleReferences: 'Pretvoreno {{count}} biblijskih referenci'
+  pleaseSelectText: Molimo odaberite tekst za pretvorbu
+  noBibleReferencesFound: Nisu pronađene biblijske reference
+  bibleQuotesInserted: Biblijski citati uspješno umetnuti
+  bibleQuotesInsertedSelection: Biblijski citati umetnuti za odabir
+  bibleQuoteInsertedAtCursor: Biblijski citat umetnut na položaj kursora
+  noBibleLinksFound: Nisu pronađeni JW Library linkovi
+  noBibleLinkAtCursor: JW Library link nije pronađen na položaju kursora
+  bibleQuoteAlreadyExists: Biblijski citat već postoji
+  errorInsertingQuotes: Greška prilikom umetanja biblijskih citata
 suggestions:
-  createLink: 'Create link: {{text}}'
-  createLinks: 'Create links: {{text}}'
-  createAndOpen: 'Create link and open: {{text}}'
-  createMultipleAndOpenFirst: 'Create links and open first: {{text}}'
-  typing: 'Enter Bible reference: {{text}}'
-  typingEmpty: Enter Bible reference
+  createLink: 'Izradi link: {{text}}'
+  createLinks: 'Izradi linkove: {{text}}'
+  createAndOpen: 'Izradi link i otvori: {{text}}'
+  createMultipleAndOpenFirst: 'Izradi linkove i otvori prvi: {{text}}'
+  typing: 'Unesite biblijsku referencu: {{text}}'
+  typingEmpty: Unesite biblijsku referencu
 errors:
-  invalidVerseNumber: Invalid verse number
-  versesAscendingOrder: Verses must be in ascending order
-  chaptersAscendingOrder: Chapters must be in ascending order
-  invalidVerseFormat: Invalid verse format
-  invalidReferenceFormat: Invalid reference format
-  unsupportedLanguage: Unsupported language
+  invalidVerseNumber: Nevažeći broj retka
+  versesAscendingOrder: Retci moraju biti u uzlaznom redoslijedu
+  chaptersAscendingOrder: Poglavlja moraju biti u uzlaznom redoslijedu
+  invalidVerseFormat: Nevažeći format retka
+  invalidReferenceFormat: Nevažeći format reference
+  unsupportedLanguage: Nepodržani jezik
