@@ -257,8 +257,20 @@ export const parseBibleReferenceFromUrl = (url: string, language: Language): Bib
 
   // Extract book, chapter and verse
   const [startBookChapterVerse, endBookChapterVerse] = bibleRef.split('-');
-  const [bookStart, chapterStart, verseStart] = startBookChapterVerse.split(':');
-  const [, chapterEnd, verseEnd] = endBookChapterVerse.split(':');
+
+  if (!endBookChapterVerse) {
+    throw new Error('errors.invalidReferenceFormat');
+  }
+
+  const startParts = startBookChapterVerse.split(':');
+  const endParts = endBookChapterVerse.split(':');
+
+  if (startParts.length < 3 || endParts.length < 3) {
+    throw new Error('errors.invalidReferenceFormat');
+  }
+
+  const [bookStart, chapterStart, verseStart] = startParts;
+  const [, chapterEnd, verseEnd] = endParts;
 
   const startChapterNum = parseInt(chapterStart, 10);
   const endChapterNum = parseInt(chapterEnd, 10);
