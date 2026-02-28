@@ -15,6 +15,9 @@ export function getLanguageSpecificChars(language: Language): string {
   } else if (language === 'TPO') {
     // Portuguese: ãáàâéêíóôõúç
     return 'ãáàâéêíóôõúç';
+  } else if (language === 'CR') {
+    // Croatian: čćšžđ
+    return 'čćšžđ';
   }
   return '';
 }
