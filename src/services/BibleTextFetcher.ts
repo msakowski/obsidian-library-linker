@@ -48,19 +48,8 @@ export class BibleTextFetcher {
 
       logger.log('url', url);
 
-      // Fetch the content using Obsidian's requestUrl to avoid CORS issues
-      const response = await requestUrl({
-        url,
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-          Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-          'Accept-Language': 'en-US,en;q=0.5',
-          DNT: '1',
-          Connection: 'keep-alive',
-          'Upgrade-Insecure-Requests': '1',
-        },
-      });
+      // Fetch the content using Obsidian's requestUrl (no CORS restrictions in Electron)
+      const response = await requestUrl({ url });
 
       logger.log('response', response);
 
@@ -127,87 +116,46 @@ export class BibleTextFetcher {
     }
 
     const { start, end } = verseRanges[0];
-    let extractedText = '';
 
-    // Extract the body content where the actual Bible text should be
-    const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/);
-    const searchContent = bodyMatch ? bodyMatch[1] : html;
+    const doc = new DOMParser().parseFromString(html, 'text/html');
 
-    // Build the verse IDs for extraction (HTML uses unpadded book numbers)
-    const paddedBook = book.toString();
-    const paddedChapter = padChapter(chapter);
-    const startVerseId = `v${paddedBook}${paddedChapter}${padVerse(start)}`;
+    // Build verse ID used in the HTML (unpadded book number)
+    const buildVerseId = (verse: number) => `v${book}${padChapter(chapter)}${padVerse(verse)}`;
 
-    if (start === end) {
-      // Single verse extraction
+    // Collect text from target verses
+    const textParts: string[] = [];
 
-      // Pattern: extract from verse anchor until next verse anchor or footnotes/study sections
-      // Note: First verse of a chapter shows chapter number (e.g., "3") instead of verse number ("1")
-      // in a <span class="chapterNum"> tag, so we match any content between > and </a>
-      const singleVersePattern = new RegExp(
-        `data-anchor='#${startVerseId}'>[^<]*</a></(?:span|sup)>\\s*([\\s\\S]*?)` +
-          `(?=\\s*<a[^>]*data-anchor='#v\\d+'|\\s*<(?:h[1-6]|div[^>]*class="[^"]*(?:footnotes|studyBible|study-notes|notes)[^"]*"|p[^>]*class="[^"]*(?:footnotes|studyBible|study-notes|notes)[^"]*")|$)`,
-        'i',
-      );
+    for (let v = start; v <= end; v++) {
+      const verseId = buildVerseId(v);
+      const verseSpan = doc.getElementById(verseId);
 
-      const match = searchContent.match(singleVersePattern);
+      if (!verseSpan) continue;
 
-      if (match && match[1]) {
-        // Clean up study notes and footnotes after extracting the full content
-        const cleanedText = this.cleanStudyNotes(match[1]);
-        extractedText = cleanHtmlText(cleanedText).trim();
-      } else {
-      }
-    } else {
-      // Verse range extraction
+      // Clone the verse element so we can modify it without affecting the original
+      const clone = verseSpan.cloneNode(true) as HTMLElement;
 
-      // Pattern: extract from start verse until after end verse, but stop before footnotes/study sections
-      // Note: First verse of a chapter shows chapter number instead of verse number,
-      // so we match any content between > and </a>
-      const endVerseId = `v${paddedBook}${paddedChapter}${padVerse(end + 1)}`;
-      const rangePattern = new RegExp(
-        `data-anchor='#${startVerseId}'>[^<]*</a></(?:span|sup)>\\s*([\\s\\S]*?)` +
-          `(?=\\s*<a[^>]*data-anchor='#${endVerseId}'|\\s*<(?:h[1-6]|div[^>]*class="[^"]*(?:footnotes|studyBible|study-notes|notes)[^"]*"|p[^>]*class="[^"]*(?:footnotes|studyBible|study-notes|notes)[^"]*")|$)`,
-        'i',
-      );
+      // Remove footnote links
+      clone.querySelectorAll('a.footnoteLink, a.xrefLink').forEach((el) => el.remove());
 
-      const match = searchContent.match(rangePattern);
+      // Remove study note sections
+      clone.querySelectorAll('.studyBible, .study-notes, .notes').forEach((el) => el.remove());
 
-      if (match && match[1]) {
-        // Clean up study notes and footnotes after extracting the full content
-        const cleanedText = this.cleanStudyNotes(match[1]);
-        extractedText = cleanHtmlText(cleanedText).trim();
-      } else {
+      // Remove verse number elements (chapterNum span and verseNum sup)
+      clone.querySelectorAll('.chapterNum, .verseNum').forEach((el) => el.remove());
+
+      const rawText = cleanHtmlText(clone.innerHTML).trim();
+      if (rawText) {
+        textParts.push(rawText);
       }
     }
 
-    // Generate citation
+    const extractedText = textParts.join(' ');
     const citation = this.generateCitation(reference);
 
     return {
       text: extractedText || 'Unable to extract Bible text',
       citation,
     };
-  }
-
-  private static cleanStudyNotes(text: string): string {
-    return (
-      text
-        // Remove footnote links and their content (pattern-based)
-        .replace(/<a[^>]*class="footnoteLink"[^>]*>[\s\S]*?<\/a>/gi, '')
-        // Remove study note sections (pattern-based)
-        .replace(/<div[^>]*class="studyBible"[^>]*>[\s\S]*?<\/div>/gi, '')
-        // Remove content starting with footnote markers (^ symbol pattern)
-        .replace(/\s*\^[\s\S]*$/i, '')
-        // Remove any remaining footnote markers
-        .replace(/\+/g, '') // Remove + symbols
-        .replace(/\*/g, '') // Remove * symbols
-        // Remove incomplete HTML tags at the very end only
-        .replace(/<[a-zA-Z][^>]*$/g, '')
-        // Clean up excessive whitespace
-        .replace(/\s+/g, ' ')
-        .trim()
-    );
   }
 
   private static generateCitation(reference: BibleReference): string {
