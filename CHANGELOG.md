@@ -1,5 +1,15 @@
 # obsidian-library-linker
 
+## 0.11.4
+
+### Patch Changes
+
+- [#195](https://github.com/msakowski/obsidian-library-linker/pull/195) [`78b53af`](https://github.com/msakowski/obsidian-library-linker/commit/78b53af5ab0ff20d59f97816024885a45239709b) Thanks [@msakowski](https://github.com/msakowski)! - Fix trailing whitespace in template variables breaking Markdown formatting. The plugin now trims whitespace from {bibleRef}, {bibleRefLinked}, and {quote} variables before substitution, preventing issues with bold/italic formatting in custom quote templates.
+
+- [#200](https://github.com/msakowski/obsidian-library-linker/pull/200) [`d07b3fc`](https://github.com/msakowski/obsidian-library-linker/commit/d07b3fcf82b05bc489f163cc87a66f1cb958b1ed) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add build step to test workflow
+
+- [#199](https://github.com/msakowski/obsidian-library-linker/pull/199) [`d81fccf`](https://github.com/msakowski/obsidian-library-linker/commit/d81fccfec4723ae4ed0432990b31cfde3760f011) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add more logging for development
+
 ## 0.11.3
 
 ### Patch Changes
