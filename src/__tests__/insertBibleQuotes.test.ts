@@ -236,6 +236,46 @@ describe('insertAllBibleQuotes', () => {
     expect(count).toBe(0);
     expect(mockTransaction).not.toHaveBeenCalled();
   });
+
+  test('should trim whitespace from variables in custom template', async () => {
+    // Test for bug where trailing whitespace breaks markdown formatting
+    settings.bibleQuote.template = '> ***{bibleRefLinked}***\n> *{quote}*';
+
+    mockLastLine.mockReturnValue(0);
+    mockGetLine.mockReturnValue('jwlibrary:///finder?bible=43003016');
+
+    (findJWLibraryLinks as jest.Mock).mockReturnValue([
+      {
+        url: 'jwlibrary:///finder?bible=43003016',
+        reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        lineNumber: 0,
+        lineText: 'jwlibrary:///finder?bible=43003016',
+      },
+    ]);
+
+    // Mock with trailing whitespace to simulate the bug
+    (convertBibleTextToMarkdownLink as jest.Mock).mockReturnValue(
+      '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E) ',
+    );
+
+    (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValue({
+      success: true,
+      text: 'For God loved the world so much that he gave his only-begotten Son. ',
+    });
+
+    await insertAllBibleQuotes(mockEditor, settings);
+
+    // Verify that whitespace is trimmed and markdown formatting is preserved
+    expect(mockTransaction).toHaveBeenCalledWith({
+      changes: [
+        {
+          from: { line: 0, ch: 0 },
+          to: { line: 0, ch: 'jwlibrary:///finder?bible=43003016'.length },
+          text: '> ***[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)***\n> *For God loved the world so much that he gave his only-begotten Son.*',
+        },
+      ],
+    });
+  });
 });
 
 describe('insertBibleQuoteAtCursor', () => {

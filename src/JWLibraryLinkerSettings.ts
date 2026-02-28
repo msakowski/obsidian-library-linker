@@ -11,6 +11,7 @@ import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { loadBibleBooks } from '@/stores/bibleBooks';
+import { logger } from '@/utils/logger';
 
 class MarkdownComponent extends Component {
   constructor() {
@@ -636,7 +637,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     } catch (err: unknown) {
       // Safe error logging
       const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
-      console.debug(errorMessage);
+      logger.error(errorMessage);
     }
   }
 }
