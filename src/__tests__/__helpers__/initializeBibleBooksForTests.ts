@@ -12,7 +12,7 @@ const LOCALE_DIR = join(PROJECT_ROOT, 'locale');
  * @param languages Languages to pre-load (defaults to common test languages)
  */
 export function initializeTestBibleBooks(
-  languages: Language[] = ['E', 'X', 'FI', 'O', 'S', 'F', 'KO', 'TPO'],
+  languages: Language[] = ['E', 'X', 'FI', 'O', 'S', 'F', 'KO', 'TPO', 'CR'],
 ): void {
   const booksCache = __getCache();
 
