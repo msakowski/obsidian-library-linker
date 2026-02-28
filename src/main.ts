@@ -72,8 +72,6 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     loadBibleBooks(this.settings.language);
 
     // Step 4: Initialize UI components
-    this.bibleSuggester = new BibleReferenceSuggester(this);
-
     // Add settings tab
     this.addSettingTab(new JWLibraryLinkerSettings(this.app, this));
 
