@@ -32,7 +32,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     /**
      * Silent mode: If there is a complete reference, show it as a suggestion
      */
-    const bibleReferenceRegex = getBibleReferenceRegex(this.plugin.settings.language);
+    const bibleReferenceRegex = getBibleReferenceRegex();
     const match = line.match(bibleReferenceRegex);
 
     if (match?.[0]) {
@@ -107,7 +107,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       ];
     }
 
-    const bibleReferenceRegex = getBibleReferenceRegex(this.plugin.settings.language);
+    const bibleReferenceRegex = getBibleReferenceRegex();
     if (!query.match(bibleReferenceRegex)) {
       if (!isExplicitMode) return [];
       return [

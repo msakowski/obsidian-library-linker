@@ -1,12 +1,7 @@
-import type { Language } from '@/types';
-import { getLanguageSpecificChars } from '@/utils/getLanguageSpecificChars';
-
-export function getBibleReferenceRegex(language: Language): RegExp {
-  const customChars = getLanguageSpecificChars(language);
-
+export function getBibleReferenceRegex(): RegExp {
   return new RegExp(
-    `([1-5]{1}\\.?\\s?)?[a-z${customChars}]{1,24}\\.?\\s?\\d+:\\d+(?:-\\d+(?::\\d+)?)?(?:\\s*,\\s*\\d+(?:-\\d+)?)*`,
-    'gi',
+    `([1-5]{1}\\.?\\s?)?\\p{L}{1,24}\\.?\\s?\\d+:\\d+(?:-\\d+(?::\\d+)?)?(?:\\s*,\\s*\\d+(?:-\\d+)?)*`,
+    'giu',
   );
 }
 

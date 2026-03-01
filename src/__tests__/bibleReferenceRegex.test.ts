@@ -60,6 +60,19 @@ describe('Bible Reference Regex Pattern', () => {
     '수1:1-3,5,7',
   ];
 
+  const validSpanishReferences = [
+    // Spanish references with accented characters
+    'Génesis 3:1',
+    'Éxodo 1:1',
+    'Levítico 1:1',
+    'Números 1:1',
+    'Josué 1:1',
+    '1 Crónicas 1:1',
+    'Nehemías 1:1',
+    'Eclesiastés 1:1',
+    'Isaías 1:1',
+  ];
+
   const invalidReferences = [
     // Invalid formats
     'joh:1',
@@ -78,9 +91,8 @@ describe('Bible Reference Regex Pattern', () => {
 
   test('matches valid German Bible references', () => {
     validGermanReferences.forEach((reference) => {
-      // Create a new regex without g flag for exact matching
-      const bibleReferenceRegex = getBibleReferenceRegex('X');
-      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'i');
+      const bibleReferenceRegex = getBibleReferenceRegex();
+      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'iu');
       if (!testRegex.test(reference)) {
         console.error('Should match', { reference });
       }
@@ -90,9 +102,19 @@ describe('Bible Reference Regex Pattern', () => {
 
   test('matches valid Korean Bible references', () => {
     validKoreanReferences.forEach((reference) => {
-      // Create a new regex without g flag for exact matching
-      const bibleReferenceRegex = getBibleReferenceRegex('KO');
-      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'i');
+      const bibleReferenceRegex = getBibleReferenceRegex();
+      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'iu');
+      if (!testRegex.test(reference)) {
+        console.error('Should match', { reference });
+      }
+      expect(testRegex.test(reference)).toBe(true);
+    });
+  });
+
+  test('matches valid Spanish Bible references with accents', () => {
+    validSpanishReferences.forEach((reference) => {
+      const bibleReferenceRegex = getBibleReferenceRegex();
+      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'iu');
       if (!testRegex.test(reference)) {
         console.error('Should match', { reference });
       }
@@ -102,10 +124,8 @@ describe('Bible Reference Regex Pattern', () => {
 
   test('does not match invalid Bible references', () => {
     invalidReferences.forEach((reference) => {
-      // Create a new regex without g flag for exact matching
-      // Using German language ('X') since test includes German characters
-      const bibleReferenceRegex = getBibleReferenceRegex('X');
-      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'i');
+      const bibleReferenceRegex = getBibleReferenceRegex();
+      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'iu');
       if (testRegex.test(reference)) {
         console.error('Should not match', { reference });
       }
