@@ -1,6 +1,5 @@
 import { findBook } from '@/utils/findBook';
 import { SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
-import { getLanguageSpecificChars } from '@/utils/getLanguageSpecificChars';
 import type { Language, VerseRange, BibleReference } from '@/types';
 import { logger } from '@/utils/logger';
 
@@ -98,16 +97,9 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     .toLowerCase()
     .replace(/[\.\s]/g, '');
 
-  const customChars = getLanguageSpecificChars(language);
-
   // Match book, chapter, and verses part
   // Supports both "Book chapter:verse" and "Book verse" (for single-chapter books)
-  const match = input.match(
-    new RegExp(
-      `^([a-z0-9${customChars}\\uAC00-\\uD7AF\\u1100-\\u11FF\\u3130-\\u318F]+?)(\\d+.*)$`,
-      'i',
-    ),
-  );
+  const match = input.match(new RegExp(`^([\\p{L}0-9]+?)(\\d+.*)$`, 'iu'));
 
   if (!match) {
     throw new Error('errors.invalidFormat');
@@ -257,8 +249,20 @@ export const parseBibleReferenceFromUrl = (url: string, language: Language): Bib
 
   // Extract book, chapter and verse
   const [startBookChapterVerse, endBookChapterVerse] = bibleRef.split('-');
-  const [bookStart, chapterStart, verseStart] = startBookChapterVerse.split(':');
-  const [, chapterEnd, verseEnd] = endBookChapterVerse.split(':');
+
+  if (!endBookChapterVerse) {
+    throw new Error('errors.invalidReferenceFormat');
+  }
+
+  const startParts = startBookChapterVerse.split(':');
+  const endParts = endBookChapterVerse.split(':');
+
+  if (startParts.length < 3 || endParts.length < 3) {
+    throw new Error('errors.invalidReferenceFormat');
+  }
+
+  const [bookStart, chapterStart, verseStart] = startParts;
+  const [, chapterEnd, verseEnd] = endParts;
 
   const startChapterNum = parseInt(chapterStart, 10);
   const endChapterNum = parseInt(chapterEnd, 10);
