@@ -1,0 +1,413 @@
+- id: 1
+  aliases: []
+  name:
+    long: Postanak
+    medium: Post.
+    short: Pos
+- id: 2
+  aliases: []
+  name:
+    long: Izlazak
+    medium: Izl.
+    short: Izl
+- id: 3
+  aliases: []
+  name:
+    long: Levitski zakonik
+    medium: Lev.
+    short: Le
+- id: 4
+  aliases: []
+  name:
+    long: Brojevi
+    medium: Broj.
+    short: Br
+- id: 5
+  aliases: []
+  name:
+    long: Ponovljeni zakon
+    medium: Pnz.
+    short: Pnz
+- id: 6
+  aliases: []
+  name:
+    long: Jošua
+    medium: Još.
+    short: Jš
+- id: 7
+  aliases: []
+  name:
+    long: Suci
+    medium: Suci
+    short: Su
+- id: 8
+  aliases: []
+  name:
+    long: Ruta
+    medium: Ruta
+    short: Ru
+- id: 9
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Samuelova
+    medium: 1. Sam.
+    short: 1Sa
+- id: 10
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Samuelova
+    medium: 2. Sam.
+    short: 2Sa
+- id: 11
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Kraljevima
+    medium: 1. Kralj.
+    short: 1Kr
+- id: 12
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Kraljevima
+    medium: 2. Kralj.
+    short: 2Kr
+- id: 13
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Ljetopisa
+    medium: 1. Ljet.
+    short: 1Lje
+- id: 14
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Ljetopisa
+    medium: 2. Ljet.
+    short: 2Lje
+- id: 15
+  aliases: []
+  name:
+    long: Ezra
+    medium: Ezra
+    short: Ezr
+- id: 16
+  aliases: []
+  name:
+    long: Nehemija
+    medium: Neh.
+    short: Ne
+- id: 17
+  aliases: []
+  name:
+    long: Estera
+    medium: Est.
+    short: Es
+- id: 18
+  aliases: []
+  name:
+    long: Job
+    medium: Job
+    short: Job
+- id: 19
+  aliases: []
+  name:
+    long: Psalmi
+    medium: Psal.
+    short: Ps
+- id: 20
+  aliases: []
+  name:
+    long: Mudre izreke
+    medium: Izr.
+    short: Izr
+- id: 21
+  aliases: []
+  name:
+    long: Propovjednik
+    medium: Prop.
+    short: Pr
+- id: 22
+  aliases: []
+  name:
+    long: Pjesma nad pjesmama
+    medium: Pjes.
+    short: Pj
+- id: 23
+  aliases: []
+  name:
+    long: Izaija
+    medium: Iza.
+    short: Iza
+- id: 24
+  aliases: []
+  name:
+    long: Jeremija
+    medium: Jer.
+    short: Jr
+- id: 25
+  aliases: []
+  name:
+    long: Tužaljke
+    medium: Tuž.
+    short: Tu
+- id: 26
+  aliases: []
+  name:
+    long: Ezekijel
+    medium: Ezek.
+    short: Eze
+- id: 27
+  aliases: []
+  name:
+    long: Danijel
+    medium: Dan.
+    short: Da
+- id: 28
+  aliases: []
+  name:
+    long: Hošea
+    medium: Hoš.
+    short: Ho
+- id: 29
+  aliases: []
+  name:
+    long: Joel
+    medium: Joel
+    short: Jl
+- id: 30
+  aliases: []
+  name:
+    long: Amos
+    medium: Amos
+    short: Am
+- id: 31
+  aliases: []
+  name:
+    long: Obadija
+    medium: Obad.
+    short: Ob
+- id: 32
+  aliases: []
+  name:
+    long: Jona
+    medium: Jona
+    short: Jn
+- id: 33
+  aliases: []
+  name:
+    long: Mihej
+    medium: Mih.
+    short: Mi
+- id: 34
+  aliases: []
+  name:
+    long: Nahum
+    medium: Nah.
+    short: Na
+- id: 35
+  aliases: []
+  name:
+    long: Habakuk
+    medium: Hab.
+    short: Hb
+- id: 36
+  aliases: []
+  name:
+    long: Sefanija
+    medium: Sef.
+    short: Sf
+- id: 37
+  aliases: []
+  name:
+    long: Hagaj
+    medium: Hag.
+    short: Hg
+- id: 38
+  aliases: []
+  name:
+    long: Zaharija
+    medium: Zah.
+    short: Za
+- id: 39
+  aliases: []
+  name:
+    long: Malahija
+    medium: Mal.
+    short: Ml
+- id: 40
+  aliases: []
+  name:
+    long: Matej
+    medium: Mat.
+    short: Mt
+- id: 41
+  aliases: []
+  name:
+    long: Marko
+    medium: Mar.
+    short: Mk
+- id: 42
+  aliases: []
+  name:
+    long: Luka
+    medium: Luka
+    short: Lk
+- id: 43
+  aliases: []
+  name:
+    long: Ivan
+    medium: Ivan
+    short: Iv
+- id: 44
+  aliases: []
+  name:
+    long: Djela apostolska
+    medium: Djela
+    short: Dj
+- id: 45
+  aliases: []
+  name:
+    long: Rimljanima
+    medium: Rim.
+    short: Ri
+- id: 46
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Korinćanima
+    medium: 1. Kor.
+    short: 1Ko
+- id: 47
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Korinćanima
+    medium: 2. Kor.
+    short: 2Ko
+- id: 48
+  aliases: []
+  name:
+    long: Galaćanima
+    medium: Gal.
+    short: Ga
+- id: 49
+  aliases: []
+  name:
+    long: Efežanima
+    medium: Efež.
+    short: Ef
+- id: 50
+  aliases: []
+  name:
+    long: Filipljanima
+    medium: Filip.
+    short: Flp
+- id: 51
+  aliases: []
+  name:
+    long: Kološanima
+    medium: Kol.
+    short: Kol
+- id: 52
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Solunjanima
+    medium: 1. Sol.
+    short: 1So
+- id: 53
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Solunjanima
+    medium: 2. Sol.
+    short: 2So
+- id: 54
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Timoteju
+    medium: 1. Tim.
+    short: 1Ti
+- id: 55
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Timoteju
+    medium: 2. Tim.
+    short: 2Ti
+- id: 56
+  aliases: []
+  name:
+    long: Titu
+    medium: Titu
+    short: Tit
+- id: 57
+  aliases: []
+  name:
+    long: Filemonu
+    medium: Filem.
+    short: Flm
+- id: 58
+  aliases: []
+  name:
+    long: Hebrejima
+    medium: Hebr.
+    short: He
+- id: 59
+  aliases: []
+  name:
+    long: Jakov
+    medium: Jak.
+    short: Jk
+- id: 60
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Petrova
+    medium: 1. Petr.
+    short: 1Pe
+- id: 61
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Petrova
+    medium: 2. Petr.
+    short: 2Pe
+- id: 62
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Ivanova
+    medium: 1. Ivan.
+    short: 1Iv
+- id: 63
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Ivanova
+    medium: 2. Ivan.
+    short: 2Iv
+- id: 64
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3. Ivanova
+    medium: 3. Ivan.
+    short: 3Iv
+- id: 65
+  aliases: []
+  name:
+    long: Juda
+    medium: Juda
+    short: Jd
+- id: 66
+  aliases: []
+  name:
+    long: Otkrivenje
+    medium: Otkr.
+    short: Ot
