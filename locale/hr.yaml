@@ -1,0 +1,103 @@
+settings:
+  language:
+    name: Jezik
+    description: Odaberite jezik za biblijske reference
+  openAutomatically:
+    name: Automatski otvori linkove
+    description: Pomiče naredbu "Poveži i otvori" na vrh popisa
+  updatedLinkStructure:
+    name: Zadrži tekst linka
+    description: Kada je omogućeno, trenutni tekst linka bit će zadržan prilikom pretvaranja biblijskog teksta
+    keepCurrentStructure: Zadrži trenutnu strukturu
+    usePluginSettings: Koristi postavke dodatka
+  noLanguageParameter:
+    name: Izradi linkove neovisno o jeziku
+    description: Kada je omogućeno, jezični parametar se ne dodaje na link. Linkovi se otvaraju na jeziku JW Library aplikacije
+  reconvertExistingLinks:
+    name: Ponovno pretvori postojeće linkove
+    description: Kada je omogućeno, već pretvoreni jwlibrary:// linkovi bit će ponovno pretvoreni prema trenutnim postavkama oblikovanja. To vam omogućuje ažuriranje svih linkova prema najnovijim postavkama.
+  bookLength:
+    name: Duljina teksta linka
+    description: Odaberite duljinu teksta linka
+    short: Kratko
+    medium: Srednje
+    long: Dugo
+  linkStyling:
+    name: Stil linka
+    description: Odaberite znakove ili emojije za dodavanje prije, poslije ili unutar linka; odaberite stil fonta
+    reset: 'Vrati na zadano: "{{default}}"'
+    prefixOutsideLink:
+      name: Prefiks izvan linka
+      description: Tekst koji se dodaje prije linka
+    prefixInsideLink:
+      name: Prefiks unutar linka
+      description: Tekst koji se dodaje na početak teksta linka
+    suffixInsideLink:
+      name: Sufiks unutar linka
+      description: Tekst koji se dodaje na kraj teksta linka
+    suffixOutsideLink:
+      name: Sufiks izvan linka
+      description: Tekst koji se dodaje nakon linka
+    presets:
+      name: Stilske predloške
+      description: Odaberite stilsku predložak za link
+    fontStyle:
+      name: Stil fonta
+      description: Odaberite stil fonta za tekst linka
+      normal: Normalno
+      italic: Kurziv
+      bold: Podebljano
+    preview:
+      name: Pregled linka
+  bibleQuote:
+    name: Oblikovanje biblijskog citata
+    description: Konfigurirajte oblikovanje biblijskih citata prilikom umetanja
+    presets:
+      name: Predlošci predložaka
+      short: Link + citat
+      plain: Link u citatu
+      foldable: Sklopivi okvir
+      expanded: Prošireni okvir
+    template:
+      name: Predložak citata
+      description: 'Prilagodite format citata pomoću varijabli: {bibleRef}, {bibleRefLinked}, {quote}'
+    preview:
+      name: Pregled biblijskog citata
+commands:
+  linkUnlinkedBibleReferences: Poveži nepovezane biblijske reference
+  convertToJWLibraryLinks: Pretvori linkove u odabiru u JW Library linkove
+  insertBibleQuotes: Umetni biblijske citate za JW Library linkove
+  insertBibleQuoteAtCursor: Umetni biblijski citat na položaj kursora
+convertSuggester:
+  emptyStateText: Odaberite vrstu pretvorbe
+  options:
+    all: Sve
+    bible: Biblijske reference
+    publication: Publikacije
+contextMenu:
+  insertBibleQuote: Umetni biblijski citat
+notices:
+  convertedBibleReferences: 'Pretvoreno {{count}} biblijskih referenci'
+  pleaseSelectText: Molimo odaberite tekst za pretvorbu
+  noBibleReferencesFound: Nisu pronađene biblijske reference
+  bibleQuotesInserted: Biblijski citati uspješno umetnuti
+  bibleQuotesInsertedSelection: Biblijski citati umetnuti za odabir
+  bibleQuoteInsertedAtCursor: Biblijski citat umetnut na položaj kursora
+  noBibleLinksFound: Nisu pronađeni JW Library linkovi
+  noBibleLinkAtCursor: JW Library link nije pronađen na položaju kursora
+  bibleQuoteAlreadyExists: Biblijski citat već postoji
+  errorInsertingQuotes: Greška prilikom umetanja biblijskih citata
+suggestions:
+  createLink: 'Izradi link: {{text}}'
+  createLinks: 'Izradi linkove: {{text}}'
+  createAndOpen: 'Izradi link i otvori: {{text}}'
+  createMultipleAndOpenFirst: 'Izradi linkove i otvori prvi: {{text}}'
+  typing: 'Unesite biblijsku referencu: {{text}}'
+  typingEmpty: Unesite biblijsku referencu
+errors:
+  invalidVerseNumber: Nevažeći broj retka
+  versesAscendingOrder: Retci moraju biti u uzlaznom redoslijedu
+  chaptersAscendingOrder: Poglavlja moraju biti u uzlaznom redoslijedu
+  invalidVerseFormat: Nevažeći format retka
+  invalidReferenceFormat: Nevažeći format reference
+  unsupportedLanguage: Nepodržani jezik
