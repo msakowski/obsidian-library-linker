@@ -1,179 +1,147 @@
 # JW Library Linker for Obsidian
 
-This Obsidian plugin enhances your note-taking experience by providing seamless integration with JW Library links and Bible references.
+Instantly create, convert, and enrich Bible references with direct links to [JW Library](https://www.jw.org/en/online-help/jw-library/). Type a reference, get a clickable link — it's that simple.
+
+## Supported Languages
+
+| Language | Code |
+|---|---|
+| English | E |
+| Deutsch (German) | X |
+| Suomi (Finnish) | FI |
+| Español (Spanish) | S |
+| Nederlands (Dutch) | O |
+| 한국어 (Korean) | KO |
+| Français (French) | F |
+| Português (Portugal) | TPO |
+| Hrvatski (Croatian) | CR |
+
+The plugin UI automatically adapts to your Obsidian language setting, and Bible book names are fully translated for each language.
 
 ## Features
 
-### 1. Bible Reference Linking
+### 1. Create Bible Reference Links
 
-**Quick Reference Creation**: `/b` command for inserting new Bible references
+Type a Bible reference and the plugin creates a markdown link that opens directly in JW Library.
 
-**Plain Text Conversion**: Automatically detects and converts Bible references in selected text to JW Library links
-
-### 2. Bible Quote Citation
-
-**Automatic Bible Text Insertion**: Fetches and inserts actual Bible text for JW Library links
-
-- Automatically fetches Bible text from JW.org or WOL (Watchtower Online Library)
-- Multiple formatting options: short quotes, expandable callouts, or expanded callouts
-- Customizable callout types (quote, note, info, etc.)
-- Works with existing JW Library links in your notes
-- Command to insert quotes for all links or specific cursor position
-
-### 3. Bulk Link Conversion
-
-Converts JW Library links and web links to formats that work directly in JW Library:
-
-- Converts Bible verse and publication links from `jwpub://` to `jwlibrary://` format
-- Converts jw.org web links to `jwlibrary://` format
-- Option to maintain the original text of the link while updating the URL
-- Command with suggester interface to choose conversion type (all links, Bible verses only, publications only, or web links only)
-
-## Usage
-
-### Creating Bible References to JW Library
-
-There are two types of methods to use:
-
-**Command mode**
-
-1. Type `/b` followed by a space
-2. Enter the Bible reference (e.g., `matthäus 24:14` or `joh 3:16` or `off21:3`)  
-   (better suggestions while typing are in the doing)
-3. Select the desired option from the suggestions to either create a link or create and open the link
-
-**Silent mode**
-
-1. Enter the Bible reference (e.g., `matthäus 24:14` or `joh 3:16` or `off21:3`).  
-   Once there is a valid reference possible the suggestion opens.
-2. Select the desired option from the suggestions to either create a link or create and open the link
-
-**Example conversions:**
+**Command mode** — type `/b` followed by a reference:
 
 ```
-/b mat 24:14
-→ [Matthäus 24:14](jwlibrary:///finder?bible=40024014)
-
-/b joh1:1,2,4
-→ [Johannes 1:1-2](link),[4](link)
-
-/b joh1:1,2,4,6,7-8,12-14
-→ [Johannes 1:1-2](link),[4](link),[6-8](link),[12-14](link)
+/b mat 24:14     →  [Matthew 24:14](jwlibrary:///finder?bible=40024014)
+/b joh 3:16      →  [John 3:16](jwlibrary:///finder?bible=43003016)
 ```
 
-### Converting Existing Links
+**Silent mode** — just type the reference directly. Once a valid reference is detected, the suggestion popup appears automatically.
 
-**Command: Convert to JW Library links**
+**Supported reference formats:**
 
-Opens a suggester to choose which type of links to convert (all links, Bible verse links only, publication links only, or web links only) in the selected text
+| Format | Example | Result |
+|---|---|---|
+| Single verse | `/b mat 24:14` | Matthew 24:14 |
+| Verse range | `/b rom 8:28-30` | Romans 8:28-30 |
+| Multiple verses | `/b joh 1:1,2,4` | John 1:1-2, 4 |
+| Complex ranges | `/b joh 1:1,2,4,6,7-8,12-14` | John 1:1-2, 4, 6-8, 12-14 |
+| Multi-chapter | `/b mat 3:1-4:11` | Matthew 3:1–4:11 |
+| Single-chapter books | `/b jude 3` | Jude 3 |
 
-1. Select the text containing the links you want to convert
-2. Open the command palette (Ctrl/Cmd + P)
-3. Search for "Convert to JW Library links"
-4. Choose the type of conversion you want:
-   - **All**: Converts all JW Library links (Bible verses, publications, and web links)
-   - **Bible**: Only converts Bible verse links
-   - **Publication**: Only converts publication links
-   - **Web**: Only converts jw.org web links
+### 2. Insert Bible Quotes
 
-### Converting Plain Text Bible References
+Fetch actual Bible text from jw.org and insert it directly into your notes.
 
-**Command: "Link unlinked Bible references"**
+**Three ways to insert quotes:**
 
-Converts plain text Bible references in selected text to JW Library links
+1. **Command palette** → "Insert Bible quotes for JW Library links" — processes selected text or the entire note
+2. **Command palette** → "Insert Bible quote at cursor" — inserts a quote for the link at your cursor
+3. **Right-click** on a JW Library link → "Insert Bible quote"
 
-1. Select text containing Bible references (e.g., "John 3:16" or "Romans 8:28")
-2. Open the command palette (Ctrl/Cmd + P)
-3. Search for "Link unlinked Bible references"
-4. The plugin will automatically detect and convert valid Bible references to JW Library links
+**Customizable quote templates:**
 
-### Inserting Bible Quotes
-
-**Command: "Insert Bible quotes for JW Library links"**
-
-Automatically fetches and inserts Bible text for existing JW Library links in your notes
-
-**For all links in selection/note:**
-
-1. Select text containing JW Library links (optional - if no selection, processes entire note)
-2. Open the command palette (Ctrl/Cmd + P)
-3. Search for "Insert Bible quotes for JW Library links"
-4. The plugin will fetch Bible text and format it according to your settings
-
-**For cursor position:**
-
-1. Place your cursor on a line containing a JW Library link
-2. Open the command palette (Ctrl/Cmd + P)
-3. Search for "Insert Bible quote at cursor"
-4. Alternatively, right-click on a line with a JW Library link and select "Insert Bible quote" from the context menu
-
-**Quote Formatting Options:**
-
-The plugin supports three formatting styles configurable in settings:
-
-- **Short format**: Simple quote block below the link
-- **Long foldable**: Collapsible callout (collapsed by default)
-- **Long expanded**: Expanded callout (visible by default)
-
-**Example outputs:**
-
-Short format:
-
-```
+```markdown
+<!-- Link + quote -->
 [Matthew 6:33](jwlibrary:///finder?bible=40006033)
-> But keep on seeking first the Kingdom and his righteousness, and all these other things will be added to you.
-```
+> But keep on seeking first the Kingdom...
 
-Long foldable format:
-
-```
+<!-- Foldable callout (collapsed by default) -->
 > [!quote]- [Matthew 6:33](jwlibrary:///finder?bible=40006033)
-> But keep on seeking first the Kingdom and his righteousness, and all these other things will be added to you.
-```
+> But keep on seeking first the Kingdom...
 
-Long expanded format:
-
-```
+<!-- Expanded callout -->
 > [!quote] [Matthew 6:33](jwlibrary:///finder?bible=40006033)
-> But keep on seeking first the Kingdom and his righteousness, and all these other things will be added to you.
+> But keep on seeking first the Kingdom...
 ```
 
-## Local Development
+You can also create your own template using the variables `{bibleRef}`, `{bibleRefLinked}`, and `{quote}`.
 
-### Testing the Plugin Locally
+### 3. Convert Existing Links
 
-To test the plugin locally in your Obsidian vault:
+Convert `jwpub://` links, publication links, and jw.org web links into `jwlibrary://` links that open directly in JW Library.
 
-1. **Build the plugin:**
+1. Select text containing links
+2. Open the command palette (Ctrl/Cmd + P)
+3. Run "Convert links in selection to JW Library links"
+4. Choose what to convert:
+   - **All** — Bible verses, publications, and web links
+   - **Bible** — Bible verse links only
+   - **Publication** — Publication links only
 
-   ```bash
-   npm run build
-   ```
+### 4. Link Unlinked Bible References
 
-2. **Create a symlink to your Obsidian vault's plugins directory:**
+Have plain-text Bible references in your notes? Convert them all at once.
 
-   ```bash
-   # Symlink the plugin directory
-   ln -s /path/to/jw-library-linker /path/to/your/vault/.obsidian/plugins/jw-library-linker
-   ```
+1. Select text containing references like "John 3:16" or "Romans 8:28"
+2. Open the command palette (Ctrl/Cmd + P)
+3. Run "Link unlinked Bible references"
 
-3. **Enable the plugin in Obsidian:**
-   - Open Obsidian Settings
-   - Go to Community Plugins
-   - Enable "JW Library Linker"
+The plugin detects valid references and converts them to JW Library links.
 
-4. **Development workflow:**
-   - Run `npm run dev` to rebuild in watch mode
-   - Make changes to the source code
-   - In Obsidian run command 'Reload app without saving'
+## Settings
 
-## Contributing
+### Language
+Choose the language for Bible book names and link generation. The plugin UI language follows your Obsidian language setting automatically.
 
-If you have ideas or want to help improve this plugin take a look at our [contribution guidelines](https://github.com/msakowski/obsidian-library-linker/blob/main/CONTRIBUTING.md)
+### Open Automatically
+Moves the "Create link and open" option to the top of the suggestion list, so pressing Enter opens the link in JW Library immediately.
+
+### Link Styling
+Customize how links appear in your notes:
+
+- **Book name length** — short (`Mat`), medium (`Matt.`), or long (`Matthew`)
+- **Prefix/suffix** — add text before or after the link (e.g., parentheses)
+- **Font style** — normal, *italic*, or **bold**
+- **Presets** — quickly apply common styles like `(Mat 3:16)` or `📖 Mat 3:16`
+
+### Language-Independent Links
+Omits the language parameter from generated links. Links will open in JW Library's default language instead.
+
+### Keep Link Text
+When converting existing links, choose whether to preserve the original link text or reformat it using your plugin settings.
+
+### Reconvert Existing Links
+Re-process already converted `jwlibrary://` links with your current formatting settings.
+
+### Bible Quote Template
+Customize the format of inserted Bible quotes with a live preview. Choose from presets or write your own template.
+
+## Commands
+
+| Command | Description |
+|---|---|
+| Link unlinked Bible references | Convert plain text references in selection to links |
+| Convert links in selection to JW Library links | Convert jwpub/web links to JW Library format |
+| Insert Bible quotes for JW Library links | Fetch and insert Bible text for links in selection or note |
+| Insert Bible quote at cursor | Insert Bible text for the link at cursor position |
 
 ## Known Issues
 
-| Plugin                                                                                            | Issue                             | Fix                                   |
-| ------------------------------------------------------------------------------------------------- | --------------------------------- | ------------------------------------- |
-| [Iconize](obsidian://show-plugin?id=obsidian-icon-folder)                                         | Clock emoji shows when typing `:` | Edit Iconize trigger from `:` to `::` |
-| [Various Complements](https://tadashi-aikawa.github.io/docs-obsidian-various-complements-plugin/) | Suggestions get overwritten       | 🤷‍♂️                                    |
+| Plugin | Issue | Fix |
+|---|---|---|
+| [Iconize](obsidian://show-plugin?id=obsidian-icon-folder) | Clock emoji shows when typing `:` | Change Iconize trigger from `:` to `::` |
+| [Various Complements](https://tadashi-aikawa.github.io/docs-obsidian-various-complements-plugin/) | Suggestions get overwritten | No fix available |
+
+## Contributing
+
+If you have ideas or want to help improve this plugin, take a look at our [contribution guidelines](https://github.com/msakowski/obsidian-library-linker/blob/main/CONTRIBUTING.md).
+
+## Support
+
+If you find this plugin useful, consider [buying me a coffee](https://buymeacoffee.com/m12i).
