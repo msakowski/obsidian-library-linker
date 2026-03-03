@@ -1,5 +1,41 @@
 # obsidian-library-linker
 
+## 0.12.0
+
+### Minor Changes
+
+- [#208](https://github.com/msakowski/obsidian-library-linker/pull/208) [`b2647b0`](https://github.com/msakowski/obsidian-library-linker/commit/b2647b013a25802293a72b1ef54a95b781703906) Thanks [@msakowski](https://github.com/msakowski)! - Add Croatian language support (Hrvatski) with bible book names sourced from jw.org
+
+### Patch Changes
+
+- [#195](https://github.com/msakowski/obsidian-library-linker/pull/195) [`78b53af`](https://github.com/msakowski/obsidian-library-linker/commit/78b53af5ab0ff20d59f97816024885a45239709b) Thanks [@msakowski](https://github.com/msakowski)! - Fix trailing whitespace in template variables breaking Markdown formatting. The plugin now trims whitespace from {bibleRef}, {bibleRefLinked}, and {quote} variables before substitution, preventing issues with bold/italic formatting in custom quote templates.
+
+- [#217](https://github.com/msakowski/obsidian-library-linker/pull/217) [`63c8809`](https://github.com/msakowski/obsidian-library-linker/commit/63c88098c9fb9b0ec51261890ddd7963ce785019) Thanks [@msakowski](https://github.com/msakowski)! - Cache enriched bible books in getBibleBooks to avoid creating new arrays on every call.
+
+- [#215](https://github.com/msakowski/obsidian-library-linker/pull/215) [`09cdeb9`](https://github.com/msakowski/obsidian-library-linker/commit/09cdeb9ae94652c004f2a49752fa1b6678444f77) Thanks [@msakowski](https://github.com/msakowski)! - Deep merge nested bibleQuote settings so new default properties are preserved for existing users on upgrade.
+
+- [#212](https://github.com/msakowski/obsidian-library-linker/pull/212) [`84bf468`](https://github.com/msakowski/obsidian-library-linker/commit/84bf468843fa05e04409d5ebbe42c313601eec03) Thanks [@msakowski](https://github.com/msakowski)! - Add defensive checks to parseBibleReferenceFromUrl to prevent crashes on malformed jwpub:// URLs.
+
+- [#218](https://github.com/msakowski/obsidian-library-linker/pull/218) [`1cc57ec`](https://github.com/msakowski/obsidian-library-linker/commit/1cc57ecb5d0a915421cd808ccb17a0c3192f2f74) Thanks [@msakowski](https://github.com/msakowski)! - Replace fragile regex-based HTML parsing in BibleTextFetcher with DOMParser for more resilient and maintainable Bible text extraction.
+
+- [#200](https://github.com/msakowski/obsidian-library-linker/pull/200) [`d07b3fc`](https://github.com/msakowski/obsidian-library-linker/commit/d07b3fcf82b05bc489f163cc87a66f1cb958b1ed) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add build step to test workflow
+
+- [#205](https://github.com/msakowski/obsidian-library-linker/pull/205) [`9bd47e9`](https://github.com/msakowski/obsidian-library-linker/commit/9bd47e961fbadf0acad28c892e58d2248a4c1c96) Thanks [@msakowski](https://github.com/msakowski)! - Fix Bible reference detection for book names with accented characters (e.g., Génesis, Éxodo, Levítico) by using Unicode letter matching instead of ASCII-only character classes
+
+- [#209](https://github.com/msakowski/obsidian-library-linker/pull/209) [`dcd6bec`](https://github.com/msakowski/obsidian-library-linker/commit/dcd6bec838285a43d6a990c7fa3e9dd6d5d5f7c3) Thanks [@msakowski](https://github.com/msakowski)! - Update minimatch to patch ReDoS vulnerability in matchOne()
+
+- [#199](https://github.com/msakowski/obsidian-library-linker/pull/199) [`d81fccf`](https://github.com/msakowski/obsidian-library-linker/commit/d81fccfec4723ae4ed0432990b31cfde3760f011) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add more logging for development
+
+- [#214](https://github.com/msakowski/obsidian-library-linker/pull/214) [`f723a2f`](https://github.com/msakowski/obsidian-library-linker/commit/f723a2f6ee0ecdb22124db5017841f137dab0597) Thanks [@msakowski](https://github.com/msakowski)! - Always pass through error and warn calls in the logger regardless of debug mode, so real errors are visible in production.
+
+- [#216](https://github.com/msakowski/obsidian-library-linker/pull/216) [`e4a1b0c`](https://github.com/msakowski/obsidian-library-linker/commit/e4a1b0c2564d0799ca056d5d69537a75d2592eb0) Thanks [@msakowski](https://github.com/msakowski)! - Remove duplicate BibleReferenceSuggester instantiation in plugin onload.
+
+- [#213](https://github.com/msakowski/obsidian-library-linker/pull/213) [`11a9eee`](https://github.com/msakowski/obsidian-library-linker/commit/11a9eee61a9626cb50b2915d27b621adf9f71ca1) Thanks [@msakowski](https://github.com/msakowski)! - Remove unnecessary spoofed User-Agent headers from BibleTextFetcher. Obsidian's requestUrl runs in Electron without CORS restrictions.
+
+- [#210](https://github.com/msakowski/obsidian-library-linker/pull/210) [`6175e94`](https://github.com/msakowski/obsidian-library-linker/commit/6175e949d9d827ccd0f7e0a3e4125e9a43d1900b) Thanks [@msakowski](https://github.com/msakowski)! - Rewrite README with clearer structure, supported languages table, and concise feature documentation
+
+- [#211](https://github.com/msakowski/obsidian-library-linker/pull/211) [`288449e`](https://github.com/msakowski/obsidian-library-linker/commit/288449e45e7a1a795567dae9fc9e7eaeefd32d81) Thanks [@msakowski](https://github.com/msakowski)! - Use DOMParser instead of innerHTML for HTML entity decoding in cleanHtmlText, improving safety of HTML-to-text conversion.
+
 ## 0.11.3
 
 ### Patch Changes
