@@ -1,4 +1,4 @@
-import { getBibleReferenceRegex } from '@/utils/bibleReferenceRegex';
+import { BIBLE_REFERENCE_REGEX } from '@/utils/bibleReferenceRegex';
 
 describe('Bible Reference Regex Pattern', () => {
   // The regex pattern we want to test (without the /b part)
@@ -91,8 +91,7 @@ describe('Bible Reference Regex Pattern', () => {
 
   test('matches valid German Bible references', () => {
     validGermanReferences.forEach((reference) => {
-      const bibleReferenceRegex = getBibleReferenceRegex();
-      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'iu');
+      const testRegex = new RegExp(`^${BIBLE_REFERENCE_REGEX.source}$`, 'iu');
       if (!testRegex.test(reference)) {
         console.error('Should match', { reference });
       }
@@ -102,8 +101,7 @@ describe('Bible Reference Regex Pattern', () => {
 
   test('matches valid Korean Bible references', () => {
     validKoreanReferences.forEach((reference) => {
-      const bibleReferenceRegex = getBibleReferenceRegex();
-      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'iu');
+      const testRegex = new RegExp(`^${BIBLE_REFERENCE_REGEX.source}$`, 'iu');
       if (!testRegex.test(reference)) {
         console.error('Should match', { reference });
       }
@@ -113,8 +111,7 @@ describe('Bible Reference Regex Pattern', () => {
 
   test('matches valid Spanish Bible references with accents', () => {
     validSpanishReferences.forEach((reference) => {
-      const bibleReferenceRegex = getBibleReferenceRegex();
-      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'iu');
+      const testRegex = new RegExp(`^${BIBLE_REFERENCE_REGEX.source}$`, 'iu');
       if (!testRegex.test(reference)) {
         console.error('Should match', { reference });
       }
@@ -124,8 +121,7 @@ describe('Bible Reference Regex Pattern', () => {
 
   test('does not match invalid Bible references', () => {
     invalidReferences.forEach((reference) => {
-      const bibleReferenceRegex = getBibleReferenceRegex();
-      const testRegex = new RegExp(`^${bibleReferenceRegex.source}$`, 'iu');
+      const testRegex = new RegExp(`^${BIBLE_REFERENCE_REGEX.source}$`, 'iu');
       if (testRegex.test(reference)) {
         console.error('Should not match', { reference });
       }

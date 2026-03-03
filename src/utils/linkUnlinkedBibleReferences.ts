@@ -1,7 +1,7 @@
 import { parseBibleReference } from '@/utils/parseBibleReference';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type { BibleReference, LinkReplacerSettings } from '@/types';
-import { getBibleReferenceRegex } from '@/utils/bibleReferenceRegex';
+import { BIBLE_REFERENCE_REGEX } from '@/utils/bibleReferenceRegex';
 import { logger } from '@/utils/logger';
 
 type Change = {
@@ -25,10 +25,9 @@ export function linkUnlinkedBibleReferences(
   }[] = [];
 
   // Scan each line for Bible references using the findBibleReferenceRegex
-  const bibleReferenceRegex = getBibleReferenceRegex();
   lines.forEach((line, lineIndex) => {
     let match;
-    while ((match = bibleReferenceRegex.exec(line)) !== null) {
+    while ((match = BIBLE_REFERENCE_REGEX.exec(line)) !== null) {
       // check if match is already a link
       if (line.includes(`[${match[0]}]`)) {
         continue;

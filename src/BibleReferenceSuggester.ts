@@ -11,7 +11,7 @@ import { parseBibleReference } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type JWLibraryLinkerPlugin from '@/main';
-import { getBibleReferenceRegex } from '@/utils/bibleReferenceRegex';
+import { BIBLE_REFERENCE_REGEX } from '@/utils/bibleReferenceRegex';
 import { logger } from '@/utils/logger';
 
 const TRIGGER = '/b ';
@@ -32,8 +32,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     /**
      * Silent mode: If there is a complete reference, show it as a suggestion
      */
-    const bibleReferenceRegex = getBibleReferenceRegex();
-    const match = line.match(bibleReferenceRegex);
+    const match = line.match(BIBLE_REFERENCE_REGEX);
 
     if (match?.[0]) {
       // Check if the matched reference is already inside a markdown link
@@ -107,8 +106,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       ];
     }
 
-    const bibleReferenceRegex = getBibleReferenceRegex();
-    if (!query.match(bibleReferenceRegex)) {
+    if (!query.match(BIBLE_REFERENCE_REGEX)) {
       if (!isExplicitMode) return [];
       return [
         {
