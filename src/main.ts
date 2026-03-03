@@ -260,9 +260,14 @@ export default class JWLibraryLinkerPlugin extends Plugin {
   }
 
   async loadSettings() {
+    const savedData = (await this.loadData()) as LinkReplacerSettings;
     this.settings = {
       ...DEFAULT_SETTINGS,
-      ...((await this.loadData()) as LinkReplacerSettings),
+      ...savedData,
+      bibleQuote: {
+        ...DEFAULT_SETTINGS.bibleQuote,
+        ...savedData?.bibleQuote,
+      },
     };
 
     // Migrate old format to template
