@@ -60,18 +60,17 @@ export default class JWLibraryLinkerPlugin extends Plugin {
   private t!: (key: string, variables?: Record<string, string>) => string;
 
   async onload() {
-    // Step 1: Initialize translation service
+    // Initialize translation service
     this.translationService = new TranslationService();
     await this.translationService.initialize();
     this.t = this.translationService.t.bind(this.translationService);
 
-    // Step 2: Load settings (may update language)
+    // Load settings (may update language)
     await this.loadSettings();
 
-    // Step 3: Load bible books for saved language
+    // Load bible books for saved language
     loadBibleBooks(this.settings.language);
 
-    // Step 4: Initialize UI components
     // Add settings tab
     this.addSettingTab(new JWLibraryLinkerSettings(this.app, this));
 
