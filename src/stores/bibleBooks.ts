@@ -8,6 +8,9 @@ type BibleBookWithoutChapters = Omit<BibleBook, 'chapters'>;
 // In-memory cache for bible books data
 const booksCache = new Map<Language, readonly BibleBookWithoutChapters[]>();
 
+// Cache for enriched books (with chapter counts merged in)
+const enrichedBooksCache = new Map<Language, readonly BibleBook[]>();
+
 /**
  * Get the internal cache (for testing purposes only)
  * @internal
@@ -49,6 +52,9 @@ export function loadBibleBooks(language: Language): void {
  * @throws Error if language not loaded
  */
 export function getBibleBooks(language: Language): readonly BibleBook[] {
+  const cached = enrichedBooksCache.get(language);
+  if (cached) return cached;
+
   const books = booksCache.get(language);
 
   if (!books) {
@@ -56,10 +62,12 @@ export function getBibleBooks(language: Language): readonly BibleBook[] {
     throw new Error('errors.unsupportedLanguage');
   }
 
-  return books.map((book) => ({
+  const enriched = books.map((book) => ({
     ...book,
     chapters: chapterCounts[book.id],
   }));
+  enrichedBooksCache.set(language, enriched);
+  return enriched;
 }
 
 /**
