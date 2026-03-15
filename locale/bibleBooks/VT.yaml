@@ -1,0 +1,413 @@
+- id: 1
+  aliases: []
+  name:
+    long: Sáng thế
+    medium: Sáng
+    short: Sa
+- id: 2
+  aliases: []
+  name:
+    long: Xuất Ai Cập
+    medium: Xuất
+    short: Xu
+- id: 3
+  aliases: []
+  name:
+    long: Lê-vi
+    medium: Lê
+    short: Lê
+- id: 4
+  aliases: []
+  name:
+    long: Dân số
+    medium: Dân
+    short: Dân
+- id: 5
+  aliases: []
+  name:
+    long: Phục truyền luật lệ
+    medium: Phục
+    short: Phu
+- id: 6
+  aliases: []
+  name:
+    long: Giô-suê
+    medium: Giô-suê
+    short: Gs
+- id: 7
+  aliases: []
+  name:
+    long: Quan xét
+    medium: Quan
+    short: Qu
+- id: 8
+  aliases: []
+  name:
+    long: Ru-tơ
+    medium: Ru
+    short: Ru
+- id: 9
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Sa-mu-ên
+    medium: 1 Sa
+    short: 1Sa
+- id: 10
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Sa-mu-ên
+    medium: 2 Sa
+    short: 2Sa
+- id: 11
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Các vua
+    medium: 1 Vua
+    short: 1V
+- id: 12
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Các vua
+    medium: 2 Vua
+    short: 2V
+- id: 13
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Sử ký
+    medium: 1 Sử
+    short: 1Sử
+- id: 14
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Sử ký
+    medium: 2 Sử
+    short: 2Sử
+- id: 15
+  aliases: []
+  name:
+    long: Ê-xơ-ra
+    medium: Ê-xơ-ra
+    short: Êxr
+- id: 16
+  aliases: []
+  name:
+    long: Nê-hê-mi
+    medium: Nê
+    short: Nê
+- id: 17
+  aliases: []
+  name:
+    long: Ê-xơ-tê
+    medium: Ê-xơ-tê
+    short: Êxt
+- id: 18
+  aliases: []
+  name:
+    long: Gióp
+    medium: Gióp
+    short: Gp
+- id: 19
+  aliases: []
+  name:
+    long: Thi thiên
+    medium: Thi
+    short: Th
+- id: 20
+  aliases: []
+  name:
+    long: Châm ngôn
+    medium: Châm
+    short: Ch
+- id: 21
+  aliases: []
+  name:
+    long: Truyền đạo
+    medium: Truyền
+    short: Tr
+- id: 22
+  aliases: []
+  name:
+    long: Nhã ca
+    medium: Nhã
+    short: Nhã
+- id: 23
+  aliases: []
+  name:
+    long: Ê-sai
+    medium: Ê-sai
+    short: Ês
+- id: 24
+  aliases: []
+  name:
+    long: Giê-rê-mi
+    medium: Giê
+    short: Giê
+- id: 25
+  aliases: []
+  name:
+    long: Ai ca
+    medium: Ai
+    short: Ai
+- id: 26
+  aliases: []
+  name:
+    long: Ê-xê-chi-ên
+    medium: Ê-xê
+    short: Êxê
+- id: 27
+  aliases: []
+  name:
+    long: Đa-ni-ên
+    medium: Đa
+    short: Đa
+- id: 28
+  aliases: []
+  name:
+    long: Ô-sê
+    medium: Ô-sê
+    short: Ôsê
+- id: 29
+  aliases: []
+  name:
+    long: Giô-ên
+    medium: Giô-ên
+    short: Gê
+- id: 30
+  aliases: []
+  name:
+    long: A-mốt
+    medium: A-mốt
+    short: Am
+- id: 31
+  aliases: []
+  name:
+    long: Áp-đia
+    medium: Áp
+    short: Áp
+- id: 32
+  aliases: []
+  name:
+    long: Giô-na
+    medium: Giô-na
+    short: Gn
+- id: 33
+  aliases: []
+  name:
+    long: Mi-chê
+    medium: Mi
+    short: Mi
+- id: 34
+  aliases: []
+  name:
+    long: Na-hum
+    medium: Na
+    short: Na
+- id: 35
+  aliases: []
+  name:
+    long: Ha-ba-cúc
+    medium: Ha-ba
+    short: Hab
+- id: 36
+  aliases: []
+  name:
+    long: Xô-phô-ni
+    medium: Xô
+    short: Xô
+- id: 37
+  aliases: []
+  name:
+    long: Ha-gai
+    medium: Ha-gai
+    short: Hag
+- id: 38
+  aliases: []
+  name:
+    long: Xa-cha-ri
+    medium: Xa
+    short: Xa
+- id: 39
+  aliases: []
+  name:
+    long: Ma-la-chi
+    medium: Mal
+    short: Mal
+- id: 40
+  aliases: []
+  name:
+    long: Ma-thi-ơ
+    medium: Mat
+    short: Mat
+- id: 41
+  aliases: []
+  name:
+    long: Mác
+    medium: Mác
+    short: Mác
+- id: 42
+  aliases: []
+  name:
+    long: Lu-ca
+    medium: Lu
+    short: Lu
+- id: 43
+  aliases: []
+  name:
+    long: Giăng
+    medium: Giăng
+    short: Gi
+- id: 44
+  aliases: []
+  name:
+    long: Công vụ
+    medium: Công
+    short: Cv
+- id: 45
+  aliases: []
+  name:
+    long: Rô-ma
+    medium: Rô
+    short: Rô
+- id: 46
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Cô-rinh-tô
+    medium: 1 Cô
+    short: 1Cô
+- id: 47
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Cô-rinh-tô
+    medium: 2 Cô
+    short: 2Cô
+- id: 48
+  aliases: []
+  name:
+    long: Ga-la-ti
+    medium: Ga
+    short: Ga
+- id: 49
+  aliases: []
+  name:
+    long: Ê-phê-sô
+    medium: Ê-phê
+    short: Êph
+- id: 50
+  aliases: []
+  name:
+    long: Phi-líp
+    medium: Phi-líp
+    short: Phl
+- id: 51
+  aliases: []
+  name:
+    long: Cô-lô-se
+    medium: Cô
+    short: Cô
+- id: 52
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Tê-sa-lô-ni-ca
+    medium: 1 Tê
+    short: 1Tê
+- id: 53
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Tê-sa-lô-ni-ca
+    medium: 2 Tê
+    short: 2Tê
+- id: 54
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Ti-mô-thê
+    medium: 1 Ti
+    short: 1Ti
+- id: 55
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Ti-mô-thê
+    medium: 2 Ti
+    short: 2Ti
+- id: 56
+  aliases: []
+  name:
+    long: Tít
+    medium: Tít
+    short: Tít
+- id: 57
+  aliases: []
+  name:
+    long: Phi-lê-môn
+    medium: Phi-lê
+    short: Phlm
+- id: 58
+  aliases: []
+  name:
+    long: Hê-bơ-rơ
+    medium: Hê
+    short: Hê
+- id: 59
+  aliases: []
+  name:
+    long: Gia-cơ
+    medium: Gia
+    short: Gia
+- id: 60
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Phi-e-rơ
+    medium: 1 Phi
+    short: 1Ph
+- id: 61
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Phi-e-rơ
+    medium: 2 Phi
+    short: 2Ph
+- id: 62
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Giăng
+    medium: 1 Giăng
+    short: 1Gi
+- id: 63
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Giăng
+    medium: 2 Giăng
+    short: 2Gi
+- id: 64
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3 Giăng
+    medium: 3 Giăng
+    short: 3Gi
+- id: 65
+  aliases: []
+  name:
+    long: Giu-đe
+    medium: Giu
+    short: Giu
+- id: 66
+  aliases: []
+  name:
+    long: Khải huyền
+    medium: Khải
+    short: Kh
