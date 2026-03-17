@@ -1,0 +1,103 @@
+settings:
+  language:
+    name: Ngôn ngữ
+    description: Chọn ngôn ngữ cho các tham chiếu Kinh Thánh
+  openAutomatically:
+    name: Tự động mở liên kết
+    description: Di chuyển lệnh "Tạo liên kết và mở" lên đầu danh sách
+  updatedLinkStructure:
+    name: Giữ nguyên văn bản liên kết
+    description: Khi bật, văn bản liên kết hiện tại sẽ được giữ nguyên khi chuyển đổi văn bản Kinh Thánh
+    keepCurrentStructure: Giữ cấu trúc hiện tại
+    usePluginSettings: Sử dụng cài đặt của plugin
+  noLanguageParameter:
+    name: Tạo liên kết không phụ thuộc ngôn ngữ
+    description: Khi bật, tham số ngôn ngữ sẽ không được thêm vào liên kết. Liên kết sẽ mở theo ngôn ngữ của JW Library
+  reconvertExistingLinks:
+    name: Chuyển đổi lại các liên kết hiện có
+    description: Khi bật, các liên kết jwlibrary:// đã được chuyển đổi trước đó sẽ được chuyển đổi lại theo cài đặt định dạng hiện tại. Điều này cho phép bạn cập nhật tất cả liên kết để phù hợp với tùy chọn mới nhất của mình.
+  bookLength:
+    name: Độ dài văn bản liên kết
+    description: Chọn độ dài của văn bản liên kết
+    short: Ngắn
+    medium: Trung bình
+    long: Dài
+  linkStyling:
+    name: Kiểu định dạng liên kết
+    description: Chọn ký tự hoặc emoji để thêm trước, sau hoặc bên trong liên kết, Chọn kiểu phông chữ
+    reset: 'Đặt lại về mặc định: "{{default}}"'
+    prefixOutsideLink:
+      name: Tiền tố bên ngoài liên kết
+      description: Văn bản thêm trước liên kết
+    prefixInsideLink:
+      name: Tiền tố bên trong liên kết
+      description: Văn bản thêm ở đầu văn bản liên kết
+    suffixInsideLink:
+      name: Hậu tố bên trong liên kết
+      description: Văn bản thêm ở cuối văn bản liên kết
+    suffixOutsideLink:
+      name: Hậu tố bên ngoài liên kết
+      description: Văn bản thêm sau liên kết
+    presets:
+      name: Mẫu kiểu định dạng
+      description: Chọn một kiểu định dạng sẵn cho liên kết
+    fontStyle:
+      name: Kiểu chữ
+      description: Chọn kiểu chữ cho văn bản liên kết
+      normal: Bình thường
+      italic: Nghiêng
+      bold: Đậm
+    preview:
+      name: Xem trước liên kết
+  bibleQuote:
+    name: Định dạng trích dẫn Kinh Thánh
+    description: Cấu hình cách trích dẫn Kinh Thánh được định dạng khi chèn vào
+    presets:
+      name: Mẫu định dạng
+      short: Liên kết + câu trích
+      plain: Liên kết trong trích dẫn
+      foldable: Callout có thể thu gọn
+      expanded: Callout mở rộng
+    template:
+      name: Mẫu trích dẫn
+      description: 'Tùy chỉnh định dạng trích dẫn bằng các biến: {bibleRef}, {bibleRefLinked}, {quote}'
+    preview:
+      name: Xem trước trích dẫn Kinh Thánh
+commands:
+  linkUnlinkedBibleReferences: Tạo liên kết cho các tham chiếu Kinh Thánh chưa có liên kết
+  convertToJWLibraryLinks: Chuyển các liên kết trong vùng chọn sang liên kết JW Library
+  insertBibleQuotes: Chèn câu trích Kinh Thánh cho các liên kết JW Library
+  insertBibleQuoteAtCursor: Chèn câu trích Kinh Thánh tại vị trí con trỏ
+convertSuggester:
+  emptyStateText: Chọn loại chuyển đổi
+  options:
+    all: Tất cả
+    bible: Tham chiếu Kinh Thánh
+    publication: Ấn phẩm
+contextMenu:
+  insertBibleQuote: Chèn câu trích Kinh Thánh
+notices:
+  convertedBibleReferences: Đã chuyển đổi {{count}} tham chiếu Kinh Thánh
+  pleaseSelectText: Vui lòng chọn văn bản để chuyển đổi
+  noBibleReferencesFound: Không tìm thấy tham chiếu Kinh Thánh
+  bibleQuotesInserted: Đã chèn câu trích Kinh Thánh thành công
+  bibleQuotesInsertedSelection: Đã chèn câu trích Kinh Thánh cho vùng chọn
+  bibleQuoteInsertedAtCursor: Đã chèn câu trích Kinh Thánh tại vị trí con trỏ
+  noBibleLinksFound: Không tìm thấy liên kết JW Library
+  noBibleLinkAtCursor: Không tìm thấy liên kết JW Library tại vị trí con trỏ
+  bibleQuoteAlreadyExists: Câu trích Kinh Thánh đã tồn tại
+  errorInsertingQuotes: Lỗi khi chèn câu trích Kinh Thánh
+suggestions:
+  createLink: 'Tạo liên kết: {{text}}'
+  createLinks: 'Tạo các liên kết: {{text}}'
+  createAndOpen: 'Tạo liên kết và mở: {{text}}'
+  createMultipleAndOpenFirst: 'Tạo các liên kết và mở liên kết đầu tiên: {{text}}'
+  typing: 'Nhập tham chiếu Kinh Thánh: {{text}}'
+  typingEmpty: Nhập tham chiếu Kinh Thánh
+errors:
+  invalidVerseNumber: Số câu không hợp lệ
+  versesAscendingOrder: Các câu phải theo thứ tự tăng dần
+  chaptersAscendingOrder: Các chương phải theo thứ tự tăng dần
+  invalidVerseFormat: Định dạng câu không hợp lệ
+  invalidReferenceFormat: Định dạng tham chiếu không hợp lệ
+  unsupportedLanguage: Ngôn ngữ không được hỗ trợ
