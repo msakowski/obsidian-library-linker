@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.12.1
+
+### Patch Changes
+
+- [#222](https://github.com/msakowski/obsidian-library-linker/pull/222) [`bd5721c`](https://github.com/msakowski/obsidian-library-linker/commit/bd5721c481a8ced1b71d9b65581e61ce0063a3e8) Thanks [@vangquan](https://github.com/vangquan)! - Vietnamese
+
 ## 0.12.0
 
 ### Minor Changes
