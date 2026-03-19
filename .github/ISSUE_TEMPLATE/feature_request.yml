@@ -1,0 +1,56 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a feature! Please fill out the sections below.
+
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin Version
+      placeholder: e.g. 0.12.1
+    validations:
+      required: false
+
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: Operating System
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - iOS
+        - Android
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What feature would you like to see? Why would it be useful?
+      placeholder: I would like the plugin to...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution-proposal
+    attributes:
+      label: Solution Proposal
+      description: If you have an idea for how this could be implemented, describe it here.
+      placeholder: One way to implement this would be...
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context, screenshots, or links that might be helpful.
+    validations:
+      required: false
