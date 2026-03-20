@@ -201,7 +201,8 @@ export class TranslationService {
       locale === 'ko' ||
       locale === 'pt' ||
       locale === 'fr' ||
-      locale === 'hr'
+      locale === 'hr' ||
+      locale === 'vi' 
     );
   }
 }
