@@ -1,9 +1,9 @@
-import { parseBibleReference } from '@/utils/parseBibleReference';
+import { parseBibleReference, extractBibleReferenceFromMatch } from '@/utils/parseBibleReference';
 import type { Language } from '@/types';
 import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
 
 beforeAll(() => {
-  initializeTestBibleBooks();
+  initializeTestBibleBooks(['E', 'X', 'FI', 'O', 'S', 'F', 'KO', 'TPO', 'CR', 'VT']);
 });
 
 describe('parseBibleReference', () => {
@@ -314,6 +314,100 @@ describe('parseBibleReference', () => {
       // John has 21 chapters, so "John 3" without colon should fail
       expect(() => parseBibleReference('John 3', 'E')).toThrow('errors.invalidFormat');
       expect(() => parseBibleReference('Psalm 23', 'E')).toThrow('errors.invalidFormat');
+    });
+  });
+
+  describe('hyphenated book names (Vietnamese)', () => {
+    test('parses Vietnamese book name with hyphens', () => {
+      expect(parseBibleReference('Lê-vi 1:1', 'VT')).toEqual({
+        book: 3,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 1 }],
+      });
+    });
+
+    test('parses Vietnamese book name with multiple hyphens', () => {
+      expect(parseBibleReference('Nê-hê-mi 1:1', 'VT')).toEqual({
+        book: 16,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 1 }],
+      });
+    });
+
+    test('parses Vietnamese book with hyphens and verse range', () => {
+      expect(parseBibleReference('Đa-ni-ên 3:1-5', 'VT')).toEqual({
+        book: 27,
+        chapter: 3,
+        verseRanges: [{ start: 1, end: 5 }],
+      });
+    });
+
+    test('parses Vietnamese book with prefix, spaces, and hyphens', () => {
+      expect(parseBibleReference('1 Sa-mu-ên 1:1', 'VT')).toEqual({
+        book: 9,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 1 }],
+      });
+    });
+  });
+
+  describe('multi-word book names (Korean)', () => {
+    test('parses Korean book name with spaces', () => {
+      expect(parseBibleReference('고린도 전서 1:1', 'KO')).toEqual({
+        book: 46,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 1 }],
+      });
+    });
+
+    test('parses Korean long book name with spaces', () => {
+      expect(parseBibleReference('요한 계시록 1:1', 'KO')).toEqual({
+        book: 66,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 1 }],
+      });
+    });
+
+    test('parses Korean multi-word book with verse range', () => {
+      expect(parseBibleReference('디모데 전서 3:1-5', 'KO')).toEqual({
+        book: 54,
+        chapter: 3,
+        verseRanges: [{ start: 1, end: 5 }],
+      });
+    });
+  });
+
+  describe('extractBibleReferenceFromMatch', () => {
+    test('extracts reference from match with leading words', () => {
+      const result = extractBibleReferenceFromMatch('Some text before John 3:16', 'E');
+      expect(result).not.toBeNull();
+      expect(result!.text).toBe('John 3:16');
+      expect(result!.offset).toBe(17);
+      expect(result!.reference.book).toBe(43);
+    });
+
+    test('extracts reference when match is exact', () => {
+      const result = extractBibleReferenceFromMatch('John 3:16', 'E');
+      expect(result).not.toBeNull();
+      expect(result!.text).toBe('John 3:16');
+      expect(result!.offset).toBe(0);
+    });
+
+    test('extracts Korean multi-word reference from match', () => {
+      const result = extractBibleReferenceFromMatch('요한 계시록 1:1', 'KO');
+      expect(result).not.toBeNull();
+      expect(result!.reference.book).toBe(66);
+    });
+
+    test('extracts Vietnamese hyphenated reference from match', () => {
+      const result = extractBibleReferenceFromMatch('Lê-vi 1:1', 'VT');
+      expect(result).not.toBeNull();
+      expect(result!.reference.book).toBe(3);
+    });
+
+    test('returns null for invalid reference', () => {
+      const result = extractBibleReferenceFromMatch('not a reference', 'E');
+      expect(result).toBeNull();
     });
   });
 });

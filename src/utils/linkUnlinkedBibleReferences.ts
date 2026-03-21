@@ -1,4 +1,4 @@
-import { parseBibleReference } from '@/utils/parseBibleReference';
+import { extractBibleReferenceFromMatch } from '@/utils/parseBibleReference';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type { BibleReference, LinkReplacerSettings } from '@/types';
 import { BIBLE_REFERENCE_REGEX } from '@/utils/bibleReferenceRegex';
@@ -28,26 +28,27 @@ export function linkUnlinkedBibleReferences(
   lines.forEach((line, lineIndex) => {
     let match;
     while ((match = BIBLE_REFERENCE_REGEX.exec(line)) !== null) {
-      // check if match is already a link
-      if (line.includes(`[${match[0]}]`)) {
+      const result = extractBibleReferenceFromMatch(match[0], settings.language);
+
+      if (!result) {
+        logger.error('Invalid reference', { line, match, lineIndex });
         continue;
       }
 
-      try {
-        const reference = parseBibleReference(match[0], settings.language);
-        if (reference) {
-          foundReferences.push({
-            line: lineIndex,
-            index: match.index,
-            text: match[0],
-            reference: reference,
-          });
-        }
-      } catch {
-        logger.error('Invalid reference', { line, match, lineIndex });
-        // Skip invalid references
+      const actualIndex = match.index + result.offset;
+      const actualText = result.text;
+
+      // check if match is already a link
+      if (line.includes(`[${actualText}]`)) {
         continue;
       }
+
+      foundReferences.push({
+        line: lineIndex,
+        index: actualIndex,
+        text: actualText,
+        reference: result.reference,
+      });
     }
   });
 
