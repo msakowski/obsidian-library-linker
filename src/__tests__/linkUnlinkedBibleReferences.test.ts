@@ -84,6 +84,54 @@ describe('linkUnlinkedBibleReferences', () => {
     });
   });
 
+  describe('should not link false-positive regex matches', () => {
+    test('should not link timestamps or durations', () => {
+      const text = `The video12:34 timestamp shows the key moment. Check runtime3:45 for details.`;
+
+      linkUnlinkedBibleReferences(text, settings, callbackMock);
+
+      expect(callbackMock).toHaveBeenCalledWith({
+        changes: [],
+        error: 'notices.noBibleReferencesFound',
+      });
+    });
+
+    test('should not link technical notation', () => {
+      const text = `Connect to port8:80 and check section4:2 of the manual.`;
+
+      linkUnlinkedBibleReferences(text, settings, callbackMock);
+
+      expect(callbackMock).toHaveBeenCalledWith({
+        changes: [],
+        error: 'notices.noBibleReferencesFound',
+      });
+    });
+
+    test('should not link version-like patterns', () => {
+      const text = `See release2:0 changelog and build12:1 notes.`;
+
+      linkUnlinkedBibleReferences(text, settings, callbackMock);
+
+      expect(callbackMock).toHaveBeenCalledWith({
+        changes: [],
+        error: 'notices.noBibleReferencesFound',
+      });
+    });
+
+    test('should only link real Bible references and skip false positives in mixed text', () => {
+      const text = `Check video12:34 for context. Also read John 3:16 for encouragement. The step2:5 guide is helpful.`;
+
+      linkUnlinkedBibleReferences(text, settings, callbackMock);
+
+      const callbackArgs = callbackMock.mock.calls[0][0];
+      expect(callbackArgs.error).toBeUndefined();
+      expect(callbackArgs.changes.length).toBe(1);
+      expect(callbackArgs.changes[0].text).toBe(
+        '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)',
+      );
+    });
+  });
+
   test('should preserve spaces around Bible references when converting to links', () => {
     // Arrange
     const textWithSpaces = `Some text before John 3:16 and some text after.`;
