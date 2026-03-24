@@ -6,7 +6,7 @@ import yaml from 'js-yaml';
 import { globSync } from 'glob';
 
 // In Jest/CommonJS context, __dirname is available
-const projectRoot = path.resolve(__dirname, '..');
+const projectRoot = path.resolve(__dirname, '../../..');
 
 // Discover all locale files using glob (same as build time)
 const localeFiles = globSync('locale/*.yaml', { cwd: projectRoot, absolute: false });
