@@ -1,5 +1,5 @@
 // obsidian language
-export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko' | 'fr' | 'pt' | 'hr' | 'vi';
+export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko' | 'fr' | 'pt' | 'hr' | 'vi' | 'cs';
 
 // plugin language
 export type Language =
@@ -13,6 +13,7 @@ export type Language =
   | 'TPO'
   | 'C'
   | 'VT'
+  | 'B'
   // Sign languages
   | 'ASL'
   | 'LSA'

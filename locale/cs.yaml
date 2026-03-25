@@ -1,0 +1,103 @@
+settings:
+  language:
+    name: Jazyk
+    description: Vyberte jazyk pro biblické reference
+  openAutomatically:
+    name: Automaticky otevřít odkaz
+    description: Přesune příkaz "Vytvořit odkaz a otevřít" na vrchol seznamu
+  updatedLinkStructure:
+    name: Zachovat text odkazu
+    description: Pokud je zapnuto, aktuální text odkazu bude zachován při převodu biblického textu
+    keepCurrentStructure: Zachovat aktuální strukturu
+    usePluginSettings: Použít nastavení pluginu
+  noLanguageParameter:
+    name: Vytvářet odkazy bez jazykového parametru
+    description: Pokud je zapnuto, jazykový parametr nebude přidán do odkazu. Odkaz se otevře v jazyce aplikace JW Library
+  reconvertExistingLinks:
+    name: Znovu převést existující odkazy
+    description: Pokud je zapnuto, již převedené jwlibrary:// odkazy budou znovu převedeny podle aktuálního nastavení formátování. Umožňuje aktualizovat všechny odkazy podle nejnovějších preferencí.
+  bookLength:
+    name: Délka textu odkazu
+    description: Vyberte délku textu odkazu
+    short: Krátký
+    medium: Střední
+    long: Dlouhý
+  linkStyling:
+    name: Styl odkazu
+    description: Vyberte znaky nebo emoji pro přidání před, za nebo do odkazu; vyberte styl písma
+    reset: 'Obnovit výchozí: "{{default}}"'
+    prefixOutsideLink:
+      name: Předpona mimo odkaz
+      description: Text přidaný před odkaz
+    prefixInsideLink:
+      name: Předpona uvnitř odkazu
+      description: Text přidaný na začátek textu odkazu
+    suffixInsideLink:
+      name: Přípona uvnitř odkazu
+      description: Text přidaný na konec textu odkazu
+    suffixOutsideLink:
+      name: Přípona mimo odkaz
+      description: Text přidaný za odkaz
+    presets:
+      name: Přednastavené styly
+      description: Vyberte přednastavený styl odkazu
+    fontStyle:
+      name: Styl písma
+      description: Vyberte styl písma pro text odkazu
+      normal: Normální
+      italic: Kurzíva
+      bold: Tučné
+    preview:
+      name: Náhled odkazu
+  bibleQuote:
+    name: Formátování biblické citace
+    description: Nakonfigurujte formátování biblických citací při vkládání
+    presets:
+      name: Přednastavené šablony
+      short: Odkaz + citace
+      plain: Odkaz v citaci
+      foldable: Sbalitelný blok
+      expanded: Rozbalený blok
+    template:
+      name: Šablona citace
+      description: 'Přizpůsobte formát citace pomocí proměnných: {bibleRef}, {bibleRefLinked}, {quote}'
+    preview:
+      name: Náhled biblické citace
+commands:
+  linkUnlinkedBibleReferences: Propojit neodkazované biblické reference
+  convertToJWLibraryLinks: Převést odkazy ve výběru na JW Library odkazy
+  insertBibleQuotes: Vložit biblické citace pro JW Library odkazy
+  insertBibleQuoteAtCursor: Vložit biblickou citaci na pozici kurzoru
+convertSuggester:
+  emptyStateText: Vyberte typ převodu
+  options:
+    all: Vše
+    bible: Biblické reference
+    publication: Publikace
+contextMenu:
+  insertBibleQuote: Vložit biblickou citaci
+notices:
+  convertedBibleReferences: 'Převedeno {{count}} biblických referencí'
+  pleaseSelectText: Prosím vyberte text k převodu
+  noBibleReferencesFound: Nebyly nalezeny žádné biblické reference
+  bibleQuotesInserted: Biblické citace úspěšně vloženy
+  bibleQuotesInsertedSelection: Biblické citace vloženy pro výběr
+  bibleQuoteInsertedAtCursor: Biblická citace vložena na pozici kurzoru
+  noBibleLinksFound: Nebyly nalezeny žádné JW Library odkazy
+  noBibleLinkAtCursor: Na pozici kurzoru nebyl nalezen žádný JW Library odkaz
+  bibleQuoteAlreadyExists: Biblická citace již existuje
+  errorInsertingQuotes: Chyba při vkládání biblických citací
+suggestions:
+  createLink: 'Vytvořit odkaz: {{text}}'
+  createLinks: 'Vytvořit odkazy: {{text}}'
+  createAndOpen: 'Vytvořit odkaz a otevřít: {{text}}'
+  createMultipleAndOpenFirst: 'Vytvořit odkazy a otevřít první: {{text}}'
+  typing: 'Zadejte biblickou referenci: {{text}}'
+  typingEmpty: Zadejte biblickou referenci
+errors:
+  invalidVerseNumber: Neplatné číslo verše
+  versesAscendingOrder: Verše musí být ve vzestupném pořadí
+  chaptersAscendingOrder: Kapitoly musí být ve vzestupném pořadí
+  invalidVerseFormat: Neplatný formát verše
+  invalidReferenceFormat: Neplatný formát reference
+  unsupportedLanguage: Nepodporovaný jazyk

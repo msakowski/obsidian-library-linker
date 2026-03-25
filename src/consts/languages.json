@@ -82,6 +82,15 @@
     "isRTL": false
   },
   {
+    "code": "B",
+    "locale": "cs",
+    "vernacular": "Čeština",
+    "script": "ROMAN",
+    "name": "Czech",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
     "code": "X",
     "locale": "de",
     "vernacular": "Deutsch",
