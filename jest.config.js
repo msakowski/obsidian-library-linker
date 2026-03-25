@@ -10,5 +10,6 @@ module.exports = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^mocks/(.*)$': '<rootDir>/src/__tests__/__mocks__/$1',
+    '^locale:all$': '<rootDir>/src/__tests__/__mocks__/locale-all',
   },
 };
