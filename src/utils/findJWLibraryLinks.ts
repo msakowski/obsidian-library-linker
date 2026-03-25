@@ -15,6 +15,8 @@ export interface ContentSelection {
   endLine: number;
 }
 
+const JW_LIBRARY_LINK_REGEX = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)\s]*)?/g;
+
 function parseSingleBibleCode(code: string): BibleReference | null {
   if (code.length !== 8) return null;
 
@@ -73,23 +75,29 @@ export function findJWLibraryLinks(
 
   for (let i = startLine; i <= endLine; i++) {
     const line = editor.getLine(i);
-    const jwLibraryRegex = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)\s]*)?/g;
-    let match;
+    links.push(...findJWLibraryLinksInLine(line, i));
+  }
 
-    while ((match = jwLibraryRegex.exec(line)) !== null) {
-      logger.log('match', match);
+  return links;
+}
 
-      const reference = parseJWLibraryLink(match[0]);
+export function findJWLibraryLinksInLine(line: string, lineNumber: number): JWLibraryLinkInfo[] {
+  const links: JWLibraryLinkInfo[] = [];
+  const matches = Array.from(line.matchAll(JW_LIBRARY_LINK_REGEX));
 
-      logger.log('reference', reference);
-      if (reference) {
-        links.push({
-          url: match[0],
-          reference,
-          lineNumber: i,
-          lineText: line,
-        });
-      }
+  for (const match of matches) {
+    logger.log('match', match);
+
+    const reference = parseJWLibraryLink(match[0]);
+
+    logger.log('reference', reference);
+    if (reference) {
+      links.push({
+        url: match[0],
+        reference,
+        lineNumber,
+        lineText: line,
+      });
     }
   }
 

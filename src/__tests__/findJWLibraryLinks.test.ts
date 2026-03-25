@@ -1,4 +1,4 @@
-import { findJWLibraryLinks } from '@/utils/findJWLibraryLinks';
+import { findJWLibraryLinks, findJWLibraryLinksInLine } from '@/utils/findJWLibraryLinks';
 import type { Editor } from 'obsidian';
 
 describe('findJWLibraryLinks', () => {
@@ -91,5 +91,23 @@ describe('findJWLibraryLinks', () => {
     const links = findJWLibraryLinks(mockEditor);
 
     expect(links).toHaveLength(0);
+  });
+
+  test('should find markdown JW Library links in a line', () => {
+    const links = findJWLibraryLinksInLine(
+      '[Matt. 24:14](jwlibrary:///finder?bible=40024014&wtlocale=E)',
+      0,
+    );
+
+    expect(links).toHaveLength(1);
+    expect(links[0]).toMatchObject({
+      url: 'jwlibrary:///finder?bible=40024014&wtlocale=E',
+      lineNumber: 0,
+      reference: {
+        book: 40,
+        chapter: 24,
+        verseRanges: [{ start: 14, end: 14 }],
+      },
+    });
   });
 });
