@@ -5,6 +5,7 @@ import { formatBibleText } from '@/utils/formatBibleText';
 import type { LinkReplacerSettings } from '@/types';
 import {
   findJWLibraryLinks,
+  findJWLibraryLinksInLine,
   parseJWLibraryLink,
   type JWLibraryLinkInfo,
   type ContentSelection,
@@ -147,7 +148,6 @@ export async function insertBibleQuoteAtCursor(
     return { inserted: false, alreadyExists: false };
   }
 
-  const line = editor.getLine(cursorLine);
   const currentLine = editor.getLine(cursorLine);
   const nextLine = cursorLine < editor.lastLine() ? editor.getLine(cursorLine + 1) : '';
 
@@ -161,42 +161,57 @@ export async function insertBibleQuoteAtCursor(
     return { inserted: false, alreadyExists: true };
   }
 
-  // Find all JW Library links on the cursor line
-  const jwLibraryRegex = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)\s]*)?/g;
-  const matches = Array.from(line.matchAll(jwLibraryRegex));
+  const candidateLineNumbers = [
+    cursorLine,
+    cursorLine > 0 ? cursorLine - 1 : null,
+    cursorLine < editor.lastLine() ? cursorLine + 1 : null,
+  ].filter((lineNumber): lineNumber is number => lineNumber !== null);
 
-  if (matches.length === 0) {
+  let linksOnTargetLine: JWLibraryLinkInfo[] = [];
+  let targetLineNumber = cursorLine;
+  let targetLineText = currentLine;
+
+  for (const lineNumber of candidateLineNumbers) {
+    const lineText = editor.getLine(lineNumber);
+    const links = findJWLibraryLinksInLine(lineText, lineNumber);
+    if (links.length > 0) {
+      linksOnTargetLine = links;
+      targetLineNumber = lineNumber;
+      targetLineText = lineText;
+      break;
+    }
+  }
+
+  if (linksOnTargetLine.length === 0) {
     return { inserted: false, alreadyExists: false };
   }
 
-  // Generate quotes for all links on the line
   const quoteTexts: string[] = [];
-  for (const match of matches) {
-    const reference = parseJWLibraryLink(match[0]);
+  for (const linkInfo of linksOnTargetLine) {
+    const reference = parseJWLibraryLink(linkInfo.url);
     logger.log('reference', reference);
     if (reference) {
-      const linkInfo: JWLibraryLinkInfo = {
-        url: match[0],
-        reference,
-        lineNumber: cursorLine,
-        lineText: line,
-      };
-
-      const quoteText = await generateBibleQuoteText(linkInfo, settings, useWOL);
+      const quoteText = await generateBibleQuoteText(
+        {
+          ...linkInfo,
+          reference,
+        },
+        settings,
+        useWOL,
+      );
       if (quoteText) {
         quoteTexts.push(quoteText);
       }
     }
   }
 
-  // If we generated any quotes, replace the line with all of them
   if (quoteTexts.length > 0) {
     const combinedText = quoteTexts.join('\n\n');
     editor.transaction({
       changes: [
         {
-          from: { line: cursorLine, ch: 0 },
-          to: { line: cursorLine, ch: currentLine.length },
+          from: { line: targetLineNumber, ch: 0 },
+          to: { line: targetLineNumber, ch: targetLineText.length },
           text: combinedText,
         },
       ],
