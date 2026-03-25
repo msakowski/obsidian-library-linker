@@ -89,6 +89,29 @@ describe('Bible Reference Regex Pattern', () => {
     'joh3:1,-2',
   ];
 
+  // Strings that match the regex pattern but are NOT Bible references.
+  // These pass the regex but get rejected by parseBibleReference/findBook.
+  // We test them separately to document that the regex is intentionally broad
+  // and that false-positive filtering happens at the parsing layer.
+  const falsePositiveRegexMatches = [
+    // Timestamps and durations
+    'video12:34',
+    'runtime3:45',
+    'duration1:30',
+
+    // Technical notation
+    'port8:80',
+    'section4:2',
+    'step2:5',
+    'item1:3',
+    'page3:14',
+    'chapter10:2',
+
+    // Version-like patterns
+    'release2:0',
+    'build12:1',
+  ];
+
   test('matches valid German Bible references', () => {
     validGermanReferences.forEach((reference) => {
       const testRegex = new RegExp(`^${BIBLE_REFERENCE_REGEX.source}$`, 'iu');
@@ -126,6 +149,13 @@ describe('Bible Reference Regex Pattern', () => {
         console.error('Should not match', { reference });
       }
       expect(testRegex.test(reference)).toBe(false);
+    });
+  });
+
+  test('matches false-positive patterns (regex is intentionally broad, filtering happens at parse level)', () => {
+    falsePositiveRegexMatches.forEach((reference) => {
+      const testRegex = new RegExp(`^${BIBLE_REFERENCE_REGEX.source}$`, 'iu');
+      expect(testRegex.test(reference)).toBe(true);
     });
   });
 });
