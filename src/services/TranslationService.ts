@@ -177,16 +177,22 @@ export class TranslationService {
 
   private detectObsidianLocale(): Locale {
     try {
-      // Only try to access localStorage in a browser environment
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const obsidianLocale = window.localStorage.getItem('language');
-        if (this.isValidLocale(obsidianLocale)) {
-          return obsidianLocale as Locale;
+      if (typeof window !== 'undefined') {
+        // Obsidian sets the locale via moment.js
+        const momentLocale = (
+          window as Window & { moment?: { locale: () => string } }
+        ).moment?.locale();
+        if (this.isValidLocale(momentLocale ?? null)) {
+          return momentLocale as Locale;
+        }
+        // Fallback: some older versions stored it in localStorage
+        const storageLocale = window.localStorage?.getItem('language');
+        if (this.isValidLocale(storageLocale)) {
+          return storageLocale as Locale;
         }
       }
     } catch (error) {
-      // Fallback to default 'en' if localStorage is not available
-      logger.info('Could not access localStorage, using default locale', error);
+      logger.info('Could not detect locale, using default locale', error);
     }
     return 'en';
   }

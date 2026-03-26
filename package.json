@@ -4,7 +4,7 @@
   "description": "An Obsidian plugin that helps creating JW Library links",
   "main": "main.js",
   "scripts": {
-    "dev": "DEBUG=true node esbuild.config.mjs",
+    "dev": "cross-env DEBUG=true node esbuild.config.mjs",
     "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "version": "changeset version && node version-bump.mjs",
     "release": "VERSION=$(jq -r '.version' manifest.json) && git tag -a $VERSION -m \"Release $VERSION\" && git push origin $VERSION",
@@ -33,6 +33,7 @@
     "@typescript-eslint/eslint-plugin": "^8.57.1",
     "@typescript-eslint/parser": "^8.57.1",
     "builtin-modules": "^5.0.0",
+    "cross-env": "^10.1.0",
     "esbuild": "^0.27.4",
     "eslint": "^10.1.0",
     "eslint-config-prettier": "^10.1.8",

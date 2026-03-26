@@ -52,7 +52,7 @@ export function yamlPlugin() {
           const fullPath = path.resolve(__dirname, file);
           const yamlContent = fs.readFileSync(fullPath, 'utf8');
           const parsed = yaml.load(yamlContent, { schema: yaml.JSON_SCHEMA });
-          locales[file] = parsed;
+          locales[file.replace(/\\/g, '/')] = parsed;
         }
 
         // Return as ES module
