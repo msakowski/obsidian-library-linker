@@ -339,6 +339,35 @@ describe('insertBibleQuoteAtCursor', () => {
     });
   });
 
+  test('should insert quote when cursor is on the same line as a markdown link', async () => {
+    const linkLine = '[Mat 24:14](jwlibrary:///finder?bible=40024014&wtlocale=E)';
+    mockGetCursor.mockReturnValue({ line: 0, ch: linkLine.length });
+    mockLastLine.mockReturnValue(0);
+    mockGetLine.mockReturnValue(linkLine);
+
+    (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValueOnce({
+      success: true,
+      text: 'And this good news of the Kingdom will be preached in all the inhabited earth.',
+    });
+
+    (convertBibleTextToMarkdownLink as jest.Mock).mockReturnValueOnce(linkLine);
+
+    const result = await insertBibleQuoteAtCursor(mockEditor, settings);
+
+    expect(result).toEqual({ inserted: true, alreadyExists: false });
+    expect(mockTransaction).toHaveBeenCalledWith({
+      changes: [
+        {
+          from: { line: 0, ch: 0 },
+          to: { line: 0, ch: linkLine.length },
+          text:
+            '[Mat 24:14](jwlibrary:///finder?bible=40024014&wtlocale=E)\n' +
+            '> And this good news of the Kingdom will be preached in all the inhabited earth.',
+        },
+      ],
+    });
+  });
+
   test('should detect existing quote', async () => {
     mockGetCursor.mockReturnValue({ line: 0, ch: 10 });
     mockLastLine.mockReturnValue(1);

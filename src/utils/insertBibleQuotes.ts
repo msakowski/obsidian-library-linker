@@ -41,6 +41,7 @@ async function generateBibleQuoteText(
     );
 
     if (!result.success || !result.text) {
+      logger.warn('Bible text fetch failed:', result.error ?? 'unknown error');
       return null;
     }
 
@@ -59,7 +60,7 @@ async function generateBibleQuoteText(
 
     return processed;
   } catch (error: unknown) {
-    console.error(
+    logger.error(
       'Error generating Bible quote:',
       error instanceof Error ? error.message : String(error),
     );
@@ -138,7 +139,7 @@ export async function insertBibleQuoteAtCursor(
   editor: Editor,
   settings: LinkReplacerSettings,
   useWOL = false,
-): Promise<{ inserted: boolean; alreadyExists: boolean }> {
+): Promise<{ inserted: boolean; alreadyExists: boolean; fetchFailed?: boolean }> {
   const cursor = editor.getCursor();
   const cursorLine = cursor.line;
 
@@ -183,6 +184,11 @@ export async function insertBibleQuoteAtCursor(
   }
 
   if (linksOnTargetLine.length === 0) {
+    logger.warn(
+      'insertBibleQuoteAtCursor: no JW Library link found near cursor (line',
+      cursorLine,
+      ')',
+    );
     return { inserted: false, alreadyExists: false };
   }
 
@@ -219,5 +225,9 @@ export async function insertBibleQuoteAtCursor(
     return { inserted: true, alreadyExists: false };
   }
 
-  return { inserted: false, alreadyExists: false };
+  logger.warn(
+    'insertBibleQuoteAtCursor: link found but Bible text fetch failed for',
+    linksOnTargetLine.map((l) => l.url),
+  );
+  return { inserted: false, alreadyExists: false, fetchFailed: true };
 }

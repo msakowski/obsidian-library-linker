@@ -1,3 +1,5 @@
+// @jest-environment jsdom
+
 // Unmock BibleTextFetcher in case other tests mocked it
 jest.unmock('@/services/BibleTextFetcher');
 
@@ -12,7 +14,6 @@ const mockedRequestUrl = requestUrl as jest.Mock;
 describe('BibleTextFetcher', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Reset mock implementation
     mockedRequestUrl.mockReset();
   });
 
@@ -27,10 +28,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -57,10 +55,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -86,10 +81,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -113,10 +105,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -144,10 +133,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -177,10 +163,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -208,10 +191,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {

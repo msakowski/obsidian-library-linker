@@ -190,6 +190,8 @@ export default class JWLibraryLinkerPlugin extends Plugin {
             new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
           } else if (result.alreadyExists) {
             new Notice(this.t('notices.bibleQuoteAlreadyExists'));
+          } else if (result.fetchFailed) {
+            new Notice(this.t('notices.errorInsertingQuotes'));
           } else {
             new Notice(this.t('notices.noBibleLinkAtCursor'));
           }
@@ -226,6 +228,8 @@ export default class JWLibraryLinkerPlugin extends Plugin {
                     new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
                   } else if (result.alreadyExists) {
                     new Notice(this.t('notices.bibleQuoteAlreadyExists'));
+                  } else if (result.fetchFailed) {
+                    new Notice(this.t('notices.errorInsertingQuotes'));
                   } else {
                     new Notice(this.t('notices.noBibleLinkAtCursor'));
                   }

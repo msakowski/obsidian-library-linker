@@ -17,15 +17,40 @@ pnpm dev
 
 ## Testing the Plugin Locally in Obsidian
 
-1. Start dev mode with `pnpm dev`
-2. Symlink the project directory into your Obsidian vault's plugins folder:
+There are two ways to get the dev build into your vault. Pick whichever suits your OS.
 
-   ```bash
-   ln -s /path/to/jw-library-linker /path/to/your/vault/.obsidian/plugins/jw-library-linker
-   ```
+### Option A — `OBSIDIAN_PLUGIN_DIR` (recommended on Windows)
 
-3. In Obsidian, go to **Settings > Community Plugins** and enable **JW Library Linker**
-4. After making code changes, run the Obsidian command **"Reload app without saving"** to pick up the new build
+Set the `OBSIDIAN_PLUGIN_DIR` environment variable to the plugin folder inside your vault. The dev build will write `main.js` directly there on every change.
+
+**Windows (Command Prompt / PowerShell — set once per session):**
+
+```cmd
+set OBSIDIAN_PLUGIN_DIR=C:\Users\YourName\Documents\MyVault\.obsidian\plugins\jw-library-linker
+pnpm dev
+```
+
+**macOS / Linux:**
+
+```bash
+OBSIDIAN_PLUGIN_DIR="/path/to/your/vault/.obsidian/plugins/jw-library-linker" pnpm dev
+```
+
+> **Tip:** Copy the `manifest.json` and `styles.css` files into that folder once. After that, only `main.js` is updated on each rebuild.
+
+### Option B — Symlink (macOS / Linux)
+
+```bash
+ln -s /path/to/jw-library-linker /path/to/your/vault/.obsidian/plugins/jw-library-linker
+pnpm dev
+```
+
+---
+
+After either setup:
+
+1. In Obsidian, go to **Settings > Community Plugins** and enable **JW Library Linker**
+2. After making code changes, run the Obsidian command **"Reload app without saving"** to pick up the new build
 
 ## Available Scripts
 

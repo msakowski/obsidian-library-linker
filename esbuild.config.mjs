@@ -18,7 +18,7 @@ const context = await esbuild.context({
   entryPoints: ['src/main.ts'],
   bundle: true,
   define: {
-    DEBUG: process.env.DEBUG || 'false',
+    DEBUG: JSON.stringify(process.env.DEBUG || 'false'),
   },
   plugins: [yamlPlugin()],
   external: [
@@ -42,7 +42,11 @@ const context = await esbuild.context({
   logLevel: 'info',
   sourcemap: prod ? false : 'inline',
   treeShaking: true,
-  outfile: 'main.js',
+  outfile: prod
+    ? 'main.js'
+    : process.env.OBSIDIAN_PLUGIN_DIR
+      ? `${process.env.OBSIDIAN_PLUGIN_DIR}/main.js`
+      : 'main.js',
   minify: prod,
 });
 
