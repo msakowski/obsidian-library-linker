@@ -114,18 +114,13 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       ];
     }
 
-    if (!query.match(BIBLE_REFERENCE_REGEX)) {
-      if (!isExplicitMode) return [];
-      return [
-        {
-          text: query,
-          command: 'typing',
-          description: this.t('suggestions.typing', { text: query }),
-        },
-      ];
+    // Silent mode: use generic regex to avoid false positives
+    if (!isExplicitMode && !query.match(BIBLE_REFERENCE_REGEX)) {
+      return [];
     }
 
-    // If it's a complete reference, parse and show detailed suggestions
+    // Try parsing the reference directly — this handles all book name formats
+    // including multi-word, hyphenated, and digit-suffixed names
     let reference: BibleReference | null = null;
 
     try {
