@@ -79,9 +79,9 @@ When the data-driven regex captures `Sa-mu-ên 3:1`, the parser strips hyphens b
 
 - Built once after `loadBibleBooks()` during plugin startup
 - Rebuilt when the user changes their language setting
-- Stored on the plugin instance (e.g., `this.bookNameRegex: RegExp`)
-- `linkUnlinkedBibleReferences` receives the regex as an additional parameter alongside `settings`
-- `BibleReferenceSuggester` accesses it via `this.plugin.bookNameRegex`
+- `linkUnlinkedBibleReferences` builds the regex internally from `settings.language` — no signature change needed for callers
+- `BibleReferenceSuggester` doesn't need the data-driven regex (it bypasses the regex gate in `/b` mode and uses the generic regex in silent mode)
+- No caching needed initially — `buildBookNameRegex` is cheap (runs once per bulk convert or language change). Caching can be added later if profiling shows a need.
 
 `BIBLE_REFERENCE_REGEX` continues to exist — still used by silent mode. No changes to YAML files or data loading.
 
@@ -122,7 +122,7 @@ In silent mode, `요1` remains undetectable by the generic regex. This is accept
 | `src/utils/parseBibleReference.ts` | Input preprocessing adds hyphen stripping |
 | `src/utils/linkUnlinkedBibleReferences.ts` | Accept and use data-driven regex |
 | `src/BibleReferenceSuggester.ts` | Remove regex gate in `/b` mode; use data-driven regex reference |
-| `src/main.ts` | Build and cache data-driven regex on init and language change |
+| `src/main.ts` | No changes needed — regex is built on demand |
 | `src/__tests__/buildBookNameRegex.test.ts` | New — tests for regex builder |
 | `src/__tests__/findBook.test.ts` | Add hyphen normalization tests |
 | `src/__tests__/parseBibleReference.test.ts` | Add Korean/Vietnamese parsing tests |
