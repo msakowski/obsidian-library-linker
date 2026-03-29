@@ -101,6 +101,14 @@ describe('Bible Reference Regex Pattern', () => {
     'Isaías 1:1',
   ];
 
+  const validVietnameseReferences = [
+    'Lê-vi 25:1',
+    'Ru-tơ 1:1',
+    'Giô-suê 1:1',
+    'Ha-ba-cúc 1:1',
+    'Mi-chê 1:1',
+  ];
+
   const invalidReferences = [
     // Invalid formats
     'joh:1',
