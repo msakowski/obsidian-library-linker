@@ -1,7 +1,7 @@
-import { extractBibleReferenceFromMatch } from '@/utils/parseBibleReference';
+import { parseBibleReference } from '@/utils/parseBibleReference';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type { BibleReference, LinkReplacerSettings } from '@/types';
-import { BIBLE_REFERENCE_REGEX } from '@/utils/bibleReferenceRegex';
+import { buildBookNameRegex } from '@/utils/buildBookNameRegex';
 import { logger } from '@/utils/logger';
 
 type Change = {
@@ -16,6 +16,7 @@ export function linkUnlinkedBibleReferences(
   callback: (settings: { changes: Change[]; error: string | undefined }) => void,
 ): void {
   const lines = currentContent.split('\n');
+  const regex = buildBookNameRegex(settings.language);
 
   const foundReferences: {
     line: number;
@@ -27,28 +28,27 @@ export function linkUnlinkedBibleReferences(
   // Scan each line for Bible references using the findBibleReferenceRegex
   lines.forEach((line, lineIndex) => {
     let match;
-    while ((match = BIBLE_REFERENCE_REGEX.exec(line)) !== null) {
-      const result = extractBibleReferenceFromMatch(match[0], settings.language);
-
-      if (!result) {
-        logger.error('Invalid reference', { line, match, lineIndex });
-        continue;
-      }
-
-      const actualIndex = match.index + result.offset;
-      const actualText = result.text;
-
+    while ((match = regex.exec(line)) !== null) {
       // check if match is already a link
-      if (line.includes(`[${actualText}]`)) {
+      if (line.includes(`[${match[0]}]`)) {
         continue;
       }
 
-      foundReferences.push({
-        line: lineIndex,
-        index: actualIndex,
-        text: actualText,
-        reference: result.reference,
-      });
+      try {
+        const reference = parseBibleReference(match[0], settings.language);
+        if (reference) {
+          foundReferences.push({
+            line: lineIndex,
+            index: match.index,
+            text: match[0],
+            reference: reference,
+          });
+        }
+      } catch {
+        logger.error('Invalid reference', { line, match, lineIndex });
+        // Skip invalid references
+        continue;
+      }
     }
   });
 
