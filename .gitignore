@@ -36,3 +36,4 @@ Thumbs.db
 
 # Optional: Obsidian workspace files
 .obsidian/
+.worktrees
