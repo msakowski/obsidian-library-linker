@@ -86,6 +86,8 @@ describe('Bible Reference Regex Pattern', () => {
     '1 Sa-mu-ên 1:1',
     '1 Phi-e-rơ 1:1',
     '2 Phi-e-rơ 1:1',
+    'Giô-suê 1:1',
+    'Mi-chê 1:1',
   ];
 
   const validSpanishReferences = [
@@ -99,14 +101,6 @@ describe('Bible Reference Regex Pattern', () => {
     'Nehemías 1:1',
     'Eclesiastés 1:1',
     'Isaías 1:1',
-  ];
-
-  const validVietnameseReferences = [
-    'Lê-vi 25:1',
-    'Ru-tơ 1:1',
-    'Giô-suê 1:1',
-    'Ha-ba-cúc 1:1',
-    'Mi-chê 1:1',
   ];
 
   const invalidReferences = [
