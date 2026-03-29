@@ -66,12 +66,54 @@ describe('parseBibleReference', () => {
         ],
       },
     },
+    {
+      description: 'parses Vietnamese hyphenated book name',
+      input: 'Lê-vi 25:1',
+      language: 'VT' as Language,
+      expected: {
+        book: 3,
+        chapter: 25,
+        verseRanges: [{ start: 1, end: 1 }],
+      },
+    },
+    {
+      description: 'parses Vietnamese hyphenated book name with prefix',
+      input: '1 Sa-mu-ên 3:1',
+      language: 'VT' as Language,
+      expected: {
+        book: 9,
+        chapter: 3,
+        verseRanges: [{ start: 1, end: 1 }],
+      },
+    },
+    {
+      description: 'parses Korean multi-word book name (Revelation)',
+      input: '요한 계시록 1:1',
+      language: 'KO' as Language,
+      expected: {
+        book: 66,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 1 }],
+      },
+    },
   ];
 
   // Run the successful parsing tests
-  test.each(successTestCases)('$description', ({ input, expected }) => {
-    const parseResult = parseBibleReference(input, language);
+  test.each(successTestCases)('$description', ({ input, expected, language: testLanguage }) => {
+    const parseResult = parseBibleReference(input, testLanguage ?? language);
     expect(parseResult).toEqual(expected);
+  });
+
+  // Known limitation: Korean multi-word book names like "요한 1서" (1 John) are ambiguous
+  // because the extraction regex captures "요한" (John) as the book name, leaving "1서1:1"
+  // as the remainder. This will be addressed in Task 3 (Korean digit-suffixed names).
+  test.skip('parses Korean multi-word book name (1 John)', () => {
+    const parseResult = parseBibleReference('요한 1서 1:1', 'KO');
+    expect(parseResult).toEqual({
+      book: 62,
+      chapter: 1,
+      verseRanges: [{ start: 1, end: 1 }],
+    });
   });
 
   // Test cases for error handling - ascending order errors
