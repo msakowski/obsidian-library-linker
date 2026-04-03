@@ -14,6 +14,7 @@ export interface LinkStyles {
 }
 
 export type UpdatedLinkStructure = 'keepCurrentStructure' | 'usePluginSettings';
+export type DesktopCitationMode = 'webviewer' | 'backgroundRequest';
 
 export type BibleQuoteFormat = 'short' | 'long-foldable' | 'long-expanded';
 
@@ -34,6 +35,7 @@ export interface LinkReplacerSettings extends LinkStyles {
   updatedLinkStructure: UpdatedLinkStructure;
   noLanguageParameter: boolean;
   reconvertExistingLinks: boolean;
+  desktopCitationMode: DesktopCitationMode;
   bibleQuote: BibleQuoteSettings;
 }
 

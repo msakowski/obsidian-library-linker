@@ -16,6 +16,11 @@ settings:
   reconvertExistingLinks:
     name: Reconvertir enlaces existentes
     description: Si está activado, los enlaces jwlibrary:// ya convertidos se reconvertirán según la configuración de formato actual. Esto permite actualizar todos los enlaces para que coincidan con tus preferencias más recientes.
+  desktopCitationMode:
+    name: Modo de citas bíblicas en escritorio
+    description: Elige cómo se obtiene el texto bíblico en escritorio. El visor web es más rápido, pero abre brevemente la página. La solicitud en segundo plano se queda en el editor, pero puede tardar unos 20 segundos.
+    webviewer: Visor web
+    backgroundRequest: Solicitud en segundo plano
   bookLength:
     name: Longitud del texto del enlace
     description: Elige la longitud del texto del enlace
@@ -87,6 +92,7 @@ notices:
   noBibleLinkAtCursor: No se encontró enlace de Biblioteca JW en el cursor
   bibleQuoteAlreadyExists: La cita bíblica ya existe
   errorInsertingQuotes: Error al insertar citas bíblicas
+  bibleQuoteFetchFailed: No se pudo obtener el texto bíblico — inténtelo de nuevo
 suggestions:
   createLink: 'Crear enlace: {{text}}'
   createLinks: 'Crear enlaces: {{text}}'

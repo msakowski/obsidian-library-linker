@@ -16,6 +16,11 @@ settings:
   reconvertExistingLinks:
     name: Ponovno pretvori postojeće linkove
     description: Kada je omogućeno, već pretvoreni jwlibrary:// linkovi bit će ponovno pretvoreni prema trenutnim postavkama oblikovanja. To vam omogućuje ažuriranje svih linkova prema najnovijim postavkama.
+  desktopCitationMode:
+    name: Način citiranja Biblije na desktopu
+    description: Odaberite kako se biblijski tekst dohvaća na desktopu. Webviewer je brži, ali nakratko otvara stranicu. Pozadinski zahtjev ostaje u editoru, ali može trajati oko 20 sekundi.
+    webviewer: Webviewer
+    backgroundRequest: Pozadinski zahtjev
   bookLength:
     name: Duljina teksta linka
     description: Odaberite duljinu teksta linka
@@ -87,6 +92,7 @@ notices:
   noBibleLinkAtCursor: JW Library link nije pronađen na položaju kursora
   bibleQuoteAlreadyExists: Biblijski citat već postoji
   errorInsertingQuotes: Greška prilikom umetanja biblijskih citata
+  bibleQuoteFetchFailed: Nije moguće dohvatiti biblijski tekst — pokušajte ponovo
 suggestions:
   createLink: 'Izradi link: {{text}}'
   createLinks: 'Izradi linkove: {{text}}'

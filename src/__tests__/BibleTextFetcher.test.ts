@@ -3,17 +3,44 @@ jest.unmock('@/services/BibleTextFetcher');
 
 // Mock obsidian module (uses __mocks__/obsidian.ts)
 jest.mock('obsidian');
+jest.mock('child_process', () => ({
+  execFile: jest.fn(),
+}));
 
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
-import { requestUrl } from 'obsidian';
+import { Platform, request } from 'obsidian';
+import { execFile } from 'child_process';
 
-const mockedRequestUrl = requestUrl as jest.Mock;
+const mockedRequest = request as jest.Mock;
+const mockedExecFile = execFile as unknown as jest.Mock;
+const mockedPlatform = Platform as { isDesktopApp: boolean; isMobileApp: boolean };
+
+jest.mock('util', () => {
+  const actual = jest.requireActual<typeof import('util')>('util');
+  return {
+    ...actual,
+    promisify: jest.fn((fn: (...args: unknown[]) => void) => {
+      return (...args: unknown[]) =>
+        new Promise((resolve, reject) => {
+          fn(...args, (error: Error | null, stdout: string) => {
+            if (error) {
+              reject(error);
+              return;
+            }
+            resolve({ stdout });
+          });
+        });
+    }),
+  };
+});
 
 describe('BibleTextFetcher', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Reset mock implementation
-    mockedRequestUrl.mockReset();
+    mockedRequest.mockReset();
+    mockedExecFile.mockReset();
+    mockedPlatform.isDesktopApp = false;
+    mockedPlatform.isMobileApp = true;
   });
 
   describe('fetchBibleText', () => {
@@ -27,10 +54,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequest.mockResolvedValue(html);
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -57,10 +81,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequest.mockResolvedValue(html);
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -86,10 +107,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequest.mockResolvedValue(html);
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -113,10 +131,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequest.mockResolvedValue(html);
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -144,10 +159,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequest.mockResolvedValue(html);
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -177,10 +189,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequest.mockResolvedValue(html);
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -208,10 +217,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequest.mockResolvedValue(html);
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -228,6 +234,118 @@ describe('BibleTextFetcher', () => {
         expect(result.text).not.toContain('*');
         expect(result.text).not.toContain('xrefLink');
         expect(result.text).not.toContain('footnoteLink');
+      });
+    });
+
+    describe('network fallback behavior', () => {
+      test('falls back to curl when request() fails', async () => {
+        const html = `
+          <div id="bibleText">
+            <span class="verse" id="v43003016">For God loved the world so much</span>
+          </div>
+        `;
+        const curlStdout =
+          `${html}\n` +
+          '__JWLINKER_CURL_META__200\thttps://www.jw.org/finder?bible=43003016\ttext/html; charset=utf-8\t9.812';
+
+        mockedRequest.mockRejectedValue(new Error('net::ERR_HTTP2_PROTOCOL_ERROR'));
+        mockedPlatform.isDesktopApp = true;
+        mockedPlatform.isMobileApp = false;
+        mockedExecFile.mockImplementation(
+          (
+            _file: string,
+            _args: string[],
+            _options: Record<string, unknown>,
+            callback: (error: Error | null, stdout: string) => void,
+          ) => callback(null, curlStdout),
+        );
+
+        const result = await BibleTextFetcher.fetchBibleText(
+          {
+            book: 43,
+            chapter: 3,
+            verseRanges: [{ start: 16, end: 16 }],
+          },
+          'E',
+          false,
+          'backgroundRequest',
+        );
+
+        expect(result.success).toBe(true);
+        expect(result.text).toContain('For God loved the world so much');
+        expect(mockedExecFile).toHaveBeenCalledWith(
+          'curl',
+          expect.arrayContaining([
+            '-sS',
+            '-L',
+            '--compressed',
+            '--max-time',
+            '30',
+            '--output',
+            '-',
+            '--write-out',
+          ]),
+          { maxBuffer: 1024 * 1024 },
+          expect.any(Function),
+        );
+      });
+
+      test('returns combined error when request() and curl both fail', async () => {
+        mockedRequest.mockRejectedValue(new Error('net::ERR_HTTP2_PROTOCOL_ERROR'));
+        mockedPlatform.isDesktopApp = true;
+        mockedPlatform.isMobileApp = false;
+        mockedExecFile.mockImplementation(
+          (
+            _file: string,
+            _args: string[],
+            _options: Record<string, unknown>,
+            callback: (error: Error | null, stdout: string) => void,
+          ) => callback(new Error('spawn curl ENOENT'), ''),
+        );
+
+        const result = await BibleTextFetcher.fetchBibleText(
+          {
+            book: 43,
+            chapter: 3,
+            verseRanges: [{ start: 16, end: 16 }],
+          },
+          'E',
+          false,
+          'backgroundRequest',
+        );
+
+        expect(result.success).toBe(false);
+        expect(result.error).toContain('background request failed: spawn curl ENOENT');
+      });
+
+      test('returns a descriptive error when curl metadata is missing', async () => {
+        mockedRequest.mockRejectedValue(new Error('net::ERR_HTTP2_PROTOCOL_ERROR'));
+        mockedPlatform.isDesktopApp = true;
+        mockedPlatform.isMobileApp = false;
+        mockedExecFile.mockImplementation(
+          (
+            _file: string,
+            _args: string[],
+            _options: Record<string, unknown>,
+            callback: (error: Error | null, stdout: string) => void,
+          ) => callback(null, '<html>missing metadata</html>'),
+        );
+
+        const result = await BibleTextFetcher.fetchBibleText(
+          {
+            book: 43,
+            chapter: 3,
+            verseRanges: [{ start: 16, end: 16 }],
+          },
+          'E',
+          false,
+          'backgroundRequest',
+        );
+
+        expect(result.success).toBe(false);
+        expect(result.error).toContain(
+          'background request failed: curl output missing metadata marker',
+        );
       });
     });
   });

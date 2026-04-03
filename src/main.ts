@@ -3,6 +3,7 @@ import { ConversionType, convertLinks } from '@/utils/convertLinks';
 import type { LinkReplacerSettings, LinkStyles, BibleQuoteFormat } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { TranslationService } from '@/services/TranslationService';
+import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { loadBibleBooks } from '@/stores/bibleBooks';
 import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
@@ -30,6 +31,7 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
   updatedLinkStructure: 'keepCurrentStructure',
   noLanguageParameter: false,
   reconvertExistingLinks: false,
+  desktopCitationMode: 'backgroundRequest',
   bibleQuote: {
     template: BIBLE_QUOTE_TEMPLATES.short,
   },
@@ -64,6 +66,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     this.translationService = new TranslationService();
     await this.translationService.initialize();
     this.t = this.translationService.t.bind(this.translationService);
+    BibleTextFetcher.initialize(this.app);
 
     // Load settings (may update language)
     await this.loadSettings();
@@ -160,12 +163,14 @@ export default class JWLibraryLinkerPlugin extends Plugin {
         }
 
         try {
-          const count = await insertAllBibleQuotes(editor, this.settings, false, contentSelection);
-          if (count > 0) {
+          const result = await insertAllBibleQuotes(editor, this.settings, false, contentSelection);
+          if (result.inserted > 0) {
             const notice = contentSelection
               ? this.t('notices.bibleQuotesInsertedSelection')
               : this.t('notices.bibleQuotesInserted');
             new Notice(notice);
+          } else if (result.fetchFailed > 0) {
+            new Notice(this.t('notices.bibleQuoteFetchFailed'));
           } else {
             new Notice(this.t('notices.noBibleLinksFound'));
           }
@@ -190,6 +195,8 @@ export default class JWLibraryLinkerPlugin extends Plugin {
             new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
           } else if (result.alreadyExists) {
             new Notice(this.t('notices.bibleQuoteAlreadyExists'));
+          } else if (result.fetchFailed) {
+            new Notice(this.t('notices.bibleQuoteFetchFailed'));
           } else {
             new Notice(this.t('notices.noBibleLinkAtCursor'));
           }
@@ -226,6 +233,8 @@ export default class JWLibraryLinkerPlugin extends Plugin {
                     new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
                   } else if (result.alreadyExists) {
                     new Notice(this.t('notices.bibleQuoteAlreadyExists'));
+                  } else if (result.fetchFailed) {
+                    new Notice(this.t('notices.bibleQuoteFetchFailed'));
                   } else {
                     new Notice(this.t('notices.noBibleLinkAtCursor'));
                   }
@@ -250,10 +259,6 @@ export default class JWLibraryLinkerPlugin extends Plugin {
    */
   getTranslationService(): TranslationService {
     return this.translationService;
-  }
-
-  onunload() {
-    // Clean up plugin resources if needed
   }
 
   async loadSettings() {
