@@ -14,6 +14,91 @@ export interface BibleTextResult {
 export class BibleTextFetcher {
   private static readonly JW_ORG_BASE = 'https://www.jw.org/finder?bible=';
   private static readonly WOL_BASE = 'https://wol.jw.org/en/wol/b/r1/lp-e/';
+  private static readonly MIN_REQUEST_INTERVAL_MS = 800;
+  private static readonly CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+  private static lastRequestTime = -Infinity;
+  private static readonly chapterHtmlCache = new Map<string, { html: string; timestamp: number }>();
+
+  /** Clears the chapter HTML cache and resets the throttle timer. */
+  static clearCache(): void {
+    this.chapterHtmlCache.clear();
+    this.lastRequestTime = -Infinity;
+  }
+
+  private static async throttleRequest(): Promise<void> {
+    const wait = this.MIN_REQUEST_INTERVAL_MS - (Date.now() - this.lastRequestTime);
+    if (wait > 0) {
+      await new Promise<void>((resolve) => setTimeout(resolve, wait));
+    }
+    this.lastRequestTime = Date.now();
+  }
+
+  private static getCachedHtml(cacheKey: string): string | null {
+    const entry = this.chapterHtmlCache.get(cacheKey);
+    if (!entry) return null;
+    if (Date.now() - entry.timestamp > this.CACHE_TTL_MS) {
+      this.chapterHtmlCache.delete(cacheKey);
+      return null;
+    }
+    return entry.html;
+  }
+
+  /**
+   * Fetches the full chapter HTML, using a cache to avoid redundant requests.
+   * Always requests verse 001 as the entry point — jw.org returns the full chapter HTML
+   * regardless of which verse is requested. Throttles real HTTP requests to at most one
+   * every 800 ms to avoid triggering jw.org rate limiting.
+   */
+  private static async fetchChapterHtml(
+    book: number,
+    chapter: number,
+    language: Language,
+    useWOL: boolean,
+  ): Promise<string> {
+    const paddedBook = padBook(book);
+    const paddedChapter = padChapter(chapter);
+    const cacheKey = `${useWOL ? 'wol' : 'jw'}:${language}:${paddedBook}${paddedChapter}`;
+
+    const cached = this.getCachedHtml(cacheKey);
+    if (cached) {
+      logger.log('chapter cache hit', cacheKey);
+      return cached;
+    }
+
+    await this.throttleRequest();
+
+    // Re-check after the throttle wait — a concurrent request may have fetched and cached it
+    const cachedAfterWait = this.getCachedHtml(cacheKey);
+    if (cachedAfterWait) return cachedAfterWait;
+
+    const chapterCode = `${paddedBook}${paddedChapter}001`;
+    const url = useWOL
+      ? this.buildWOLUrl(chapterCode, language)
+      : this.buildJWOrgUrl(chapterCode, language);
+
+    logger.log('fetching chapter', url);
+
+    const response = await requestUrl({
+      url,
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        DNT: '1',
+        Connection: 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+      },
+    });
+
+    if (response.status !== 200) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    this.chapterHtmlCache.set(cacheKey, { html: response.text, timestamp: Date.now() });
+    return response.text;
+  }
 
   static async fetchBibleText(
     reference: BibleReference,
@@ -33,39 +118,7 @@ export class BibleTextFetcher {
         };
       }
 
-      // Format the Bible reference for the URL
-      const bibleCode = this.formatBibleCode(
-        book,
-        chapter,
-        verseRanges[0].start,
-        verseRanges[0].end,
-      );
-
-      // Choose the appropriate URL based on preference
-      const url = useWOL
-        ? this.buildWOLUrl(bibleCode, language)
-        : this.buildJWOrgUrl(bibleCode, language);
-
-      logger.log('url', url);
-
-      const response = await requestUrl({
-        url,
-        headers: {
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-          Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-          'Accept-Language': 'en-US,en;q=0.5',
-          DNT: '1',
-          Connection: 'keep-alive',
-          'Upgrade-Insecure-Requests': '1',
-        },
-      });
-
-      if (response.status !== 200) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-
-      const html = response.text;
+      const html = await this.fetchChapterHtml(book, chapter, language, useWOL);
       const result = this.extractBibleText(html, reference);
 
       return {
@@ -80,24 +133,6 @@ export class BibleTextFetcher {
         error: error instanceof Error ? error.message : 'Unknown error occurred',
       };
     }
-  }
-
-  private static formatBibleCode(
-    book: number,
-    chapter: number,
-    startVerse: number,
-    endVerse?: number,
-  ): string {
-    const paddedBook = padBook(book);
-    const paddedChapter = padChapter(chapter);
-    const paddedStart = padVerse(startVerse);
-
-    if (endVerse && endVerse !== startVerse) {
-      const paddedEnd = padVerse(endVerse);
-      return `${paddedBook}${paddedChapter}${paddedStart}-${paddedBook}${paddedChapter}${paddedEnd}`;
-    }
-
-    return `${paddedBook}${paddedChapter}${paddedStart}`;
   }
 
   private static buildJWOrgUrl(bibleCode: string, language: Language): string {

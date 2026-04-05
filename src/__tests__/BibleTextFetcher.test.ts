@@ -15,6 +15,7 @@ describe('BibleTextFetcher', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockedRequestUrl.mockReset();
+    BibleTextFetcher.clearCache();
   });
 
   describe('fetchBibleText', () => {
@@ -209,6 +210,152 @@ describe('BibleTextFetcher', () => {
         expect(result.text).not.toContain('xrefLink');
         expect(result.text).not.toContain('footnoteLink');
       });
+    });
+  });
+
+  describe('chapter-level caching', () => {
+    test('makes only one HTTP request for two verses in the same chapter', async () => {
+      const chapterHtml = `
+        <div id="bibleText">
+          <span class="verse" id="v43003016"><span class="chapterNum"><a>16 </a></span> For God loved the world so much</span>
+          <span class="verse" id="v43003017"><sup class="verseNum"><a>17 </a></sup> For God did not send his Son</span>
+        </div>
+      `;
+      mockedRequestUrl.mockResolvedValue({ status: 200, text: chapterHtml });
+
+      const r1 = await BibleTextFetcher.fetchBibleText(
+        { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        'E',
+      );
+      const r2 = await BibleTextFetcher.fetchBibleText(
+        { book: 43, chapter: 3, verseRanges: [{ start: 17, end: 17 }] },
+        'E',
+      );
+
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(1);
+      expect(r1.success).toBe(true);
+      expect(r2.success).toBe(true);
+      expect(r1.text).toContain('For God loved the world so much');
+      expect(r2.text).toContain('For God did not send his Son');
+    });
+
+    test('fetches separately for different chapters', async () => {
+      const html1 = `<span class="verse" id="v43003016"><span class="chapterNum">16 </span>For God loved the world</span>`;
+      const html2 = `<span class="verse" id="v43004006"><span class="chapterNum">6 </span>Jesus said to her</span>`;
+      mockedRequestUrl
+        .mockResolvedValueOnce({ status: 200, text: html1 })
+        .mockResolvedValueOnce({ status: 200, text: html2 });
+
+      await BibleTextFetcher.fetchBibleText(
+        { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        'E',
+      );
+      await BibleTextFetcher.fetchBibleText(
+        { book: 43, chapter: 4, verseRanges: [{ start: 6, end: 6 }] },
+        'E',
+      );
+
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(2);
+    });
+
+    test('fetches separately for the same chapter in different languages', async () => {
+      const htmlE = `<span class="verse" id="v43003016"><span class="chapterNum">16 </span>For God loved the world</span>`;
+      const htmlX = `<span class="verse" id="v43003016"><span class="chapterNum">16 </span>Denn Gott hat die Welt so sehr geliebt</span>`;
+      mockedRequestUrl
+        .mockResolvedValueOnce({ status: 200, text: htmlE })
+        .mockResolvedValueOnce({ status: 200, text: htmlX });
+
+      await BibleTextFetcher.fetchBibleText(
+        { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        'E',
+      );
+      await BibleTextFetcher.fetchBibleText(
+        { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        'X',
+      );
+
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(2);
+    });
+
+    test('always fetches chapter at verse 001 regardless of requested verse', async () => {
+      const html = `<span class="verse" id="v43003016"><span class="chapterNum">16 </span>For God loved the world</span>`;
+      mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
+
+      await BibleTextFetcher.fetchBibleText(
+        { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        'E',
+      );
+
+      const [[callArg]] = mockedRequestUrl.mock.calls as [[{ url: string }]];
+      expect(callArg.url).toContain('43003001');
+    });
+  });
+
+  describe('request throttling', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    test('throttles consecutive requests for different chapters', async () => {
+      const html1 = `<span class="verse" id="v43003016"><span class="chapterNum">16 </span>For God loved the world</span>`;
+      const html2 = `<span class="verse" id="v43004006"><span class="chapterNum">6 </span>Jesus said to her</span>`;
+      mockedRequestUrl
+        .mockResolvedValueOnce({ status: 200, text: html1 })
+        .mockResolvedValueOnce({ status: 200, text: html2 });
+
+      // First request — no previous request, no throttle wait
+      const p1 = BibleTextFetcher.fetchBibleText(
+        { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        'E',
+      );
+      await jest.runAllTimersAsync();
+      const r1 = await p1;
+      expect(r1.success).toBe(true);
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(1);
+
+      // Second request immediately after — throttle delay kicks in before the HTTP request
+      const p2 = BibleTextFetcher.fetchBibleText(
+        { book: 43, chapter: 4, verseRanges: [{ start: 6, end: 6 }] },
+        'E',
+      );
+      // Before timers run, the second HTTP request has not been made yet
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(1);
+
+      await jest.runAllTimersAsync();
+      const r2 = await p2;
+      expect(r2.success).toBe(true);
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(2);
+    });
+
+    test('does not throttle cache hits', async () => {
+      const chapterHtml = `
+        <span class="verse" id="v43003016"><span class="chapterNum">16 </span>For God loved the world</span>
+        <span class="verse" id="v43003017"><sup class="verseNum">17 </sup>For God did not send his Son</span>
+      `;
+      mockedRequestUrl.mockResolvedValue({ status: 200, text: chapterHtml });
+
+      // First request fetches and caches the chapter
+      const p1 = BibleTextFetcher.fetchBibleText(
+        { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        'E',
+      );
+      await jest.runAllTimersAsync();
+      await p1;
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(1);
+
+      // Second request for same chapter — cache hit, resolves without running any timers
+      const p2 = BibleTextFetcher.fetchBibleText(
+        { book: 43, chapter: 3, verseRanges: [{ start: 17, end: 17 }] },
+        'E',
+      );
+      const r2 = await p2;
+
+      expect(r2.success).toBe(true);
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(1); // Still only 1 HTTP request
     });
   });
 });
