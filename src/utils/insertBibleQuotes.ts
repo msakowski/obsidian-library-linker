@@ -1,8 +1,8 @@
 import { Editor } from 'obsidian';
-import { BibleTextFetcher } from '@/services/BibleTextFetcher';
+import { OnlineBibleCitationProvider } from '@/services/OnlineBibleCitationProvider';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import { formatBibleText } from '@/utils/formatBibleText';
-import type { LinkReplacerSettings } from '@/types';
+import type { BibleCitationProvider, LinkReplacerSettings } from '@/types';
 import {
   findJWLibraryLinks,
   findJWLibraryLinksInLine,
@@ -31,14 +31,10 @@ function processTemplate(
 async function generateBibleQuoteText(
   linkInfo: JWLibraryLinkInfo,
   settings: LinkReplacerSettings,
-  useWOL = false,
+  provider: BibleCitationProvider,
 ): Promise<string | null> {
   try {
-    const result = await BibleTextFetcher.fetchBibleText(
-      linkInfo.reference,
-      settings.language,
-      useWOL,
-    );
+    const result = await provider.getCitation(linkInfo.reference, settings.language);
 
     if (!result.success || !result.text) {
       return null;
@@ -70,7 +66,7 @@ async function generateBibleQuoteText(
 export async function insertAllBibleQuotes(
   editor: Editor,
   settings: LinkReplacerSettings,
-  useWOL = false,
+  provider: BibleCitationProvider = new OnlineBibleCitationProvider(),
   selection?: ContentSelection,
 ): Promise<number> {
   const links = findJWLibraryLinks(editor, selection);
@@ -110,7 +106,7 @@ export async function insertAllBibleQuotes(
     }
 
     try {
-      const quoteText = await generateBibleQuoteText(linkInfo, settings, useWOL);
+      const quoteText = await generateBibleQuoteText(linkInfo, settings, provider);
       if (quoteText) {
         changes.push({
           from: { line: linkInfo.lineNumber, ch: 0 },
@@ -137,7 +133,7 @@ export async function insertAllBibleQuotes(
 export async function insertBibleQuoteAtCursor(
   editor: Editor,
   settings: LinkReplacerSettings,
-  useWOL = false,
+  provider: BibleCitationProvider = new OnlineBibleCitationProvider(),
 ): Promise<{ inserted: boolean; alreadyExists: boolean }> {
   const cursor = editor.getCursor();
   const cursorLine = cursor.line;
@@ -197,7 +193,7 @@ export async function insertBibleQuoteAtCursor(
           reference,
         },
         settings,
-        useWOL,
+        provider,
       );
       if (quoteText) {
         quoteTexts.push(quoteText);

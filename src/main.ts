@@ -3,6 +3,12 @@ import { ConversionType, convertLinks } from '@/utils/convertLinks';
 import type { LinkReplacerSettings, LinkStyles, BibleQuoteFormat } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { TranslationService } from '@/services/TranslationService';
+import { FileSystemOfflineBibleRepository } from '@/services/FileSystemOfflineBibleRepository';
+import { OfflineBibleCitationProvider } from '@/services/OfflineBibleCitationProvider';
+import { OnlineBibleCitationProvider } from '@/services/OnlineBibleCitationProvider';
+import { ConfiguredBibleCitationProvider } from '@/services/ConfiguredBibleCitationProvider';
+import { BibleEpubImportService } from '@/services/BibleEpubImportService';
+import { getOfflineBibleRootPath } from '@/services/PluginDataPathService';
 import { loadBibleBooks } from '@/stores/bibleBooks';
 import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
@@ -33,6 +39,11 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
   bibleQuote: {
     template: BIBLE_QUOTE_TEMPLATES.short,
   },
+  offlineBible: {
+    enabled: true,
+    preferOffline: true,
+    allowOnlineFallback: false,
+  },
   ...DEFAULT_STYLES,
 };
 
@@ -55,6 +66,9 @@ export default class JWLibraryLinkerPlugin extends Plugin {
   // Services
   private translationService!: TranslationService;
   private bibleSuggester!: BibleReferenceSuggester;
+  private offlineBibleRepository!: FileSystemOfflineBibleRepository;
+  private bibleCitationProvider!: ConfiguredBibleCitationProvider;
+  private epubImportService!: BibleEpubImportService;
 
   // Convenience binding for backward compatibility
   private t!: (key: string, variables?: Record<string, string>) => string;
@@ -67,6 +81,15 @@ export default class JWLibraryLinkerPlugin extends Plugin {
 
     // Load settings (may update language)
     await this.loadSettings();
+
+    const offlineBibleRootPath = getOfflineBibleRootPath(this.app, this.manifest.id);
+    this.offlineBibleRepository = new FileSystemOfflineBibleRepository(offlineBibleRootPath);
+    this.epubImportService = new BibleEpubImportService(this.offlineBibleRepository);
+    this.bibleCitationProvider = new ConfiguredBibleCitationProvider(
+      () => this.settings,
+      new OfflineBibleCitationProvider(this.offlineBibleRepository),
+      new OnlineBibleCitationProvider(),
+    );
 
     // Load bible books for saved language
     loadBibleBooks(this.settings.language);
@@ -160,7 +183,12 @@ export default class JWLibraryLinkerPlugin extends Plugin {
         }
 
         try {
-          const count = await insertAllBibleQuotes(editor, this.settings, false, contentSelection);
+          const count = await insertAllBibleQuotes(
+            editor,
+            this.settings,
+            this.bibleCitationProvider,
+            contentSelection,
+          );
           if (count > 0) {
             const notice = contentSelection
               ? this.t('notices.bibleQuotesInsertedSelection')
@@ -185,7 +213,11 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       icon: 'text-quote',
       editorCallback: async (editor: Editor) => {
         try {
-          const result = await insertBibleQuoteAtCursor(editor, this.settings);
+          const result = await insertBibleQuoteAtCursor(
+            editor,
+            this.settings,
+            this.bibleCitationProvider,
+          );
           if (result.inserted) {
             new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
           } else if (result.alreadyExists) {
@@ -221,7 +253,11 @@ export default class JWLibraryLinkerPlugin extends Plugin {
               .setIcon('quote-glyph')
               .onClick(async () => {
                 try {
-                  const result = await insertBibleQuoteAtCursor(editor, this.settings);
+                  const result = await insertBibleQuoteAtCursor(
+                    editor,
+                    this.settings,
+                    this.bibleCitationProvider,
+                  );
                   if (result.inserted) {
                     new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
                   } else if (result.alreadyExists) {
@@ -252,6 +288,18 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     return this.translationService;
   }
 
+  getBibleCitationProvider(): ConfiguredBibleCitationProvider {
+    return this.bibleCitationProvider;
+  }
+
+  getOfflineBibleRepository(): FileSystemOfflineBibleRepository {
+    return this.offlineBibleRepository;
+  }
+
+  getEpubImportService(): BibleEpubImportService {
+    return this.epubImportService;
+  }
+
   onunload() {
     // Clean up plugin resources if needed
   }
@@ -264,6 +312,10 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       bibleQuote: {
         ...DEFAULT_SETTINGS.bibleQuote,
         ...savedData?.bibleQuote,
+      },
+      offlineBible: {
+        ...DEFAULT_SETTINGS.offlineBible,
+        ...savedData?.offlineBible,
       },
     };
 
