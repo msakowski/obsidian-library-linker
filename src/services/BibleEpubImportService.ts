@@ -109,9 +109,6 @@ export class BibleEpubImportService implements EpubImportService {
         const navContent = archiveEntries.get(navPath);
 
         if (!navContent) {
-          if (chapter === 1) {
-            break;
-          }
           break;
         }
 
