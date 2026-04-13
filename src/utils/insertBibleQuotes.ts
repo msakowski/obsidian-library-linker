@@ -55,7 +55,7 @@ async function generateBibleQuoteText(
 
     return processed;
   } catch (error: unknown) {
-    console.error(
+    logger.error(
       'Error generating Bible quote:',
       error instanceof Error ? error.message : String(error),
     );
