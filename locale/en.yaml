@@ -16,11 +16,6 @@ settings:
   reconvertExistingLinks:
     name: Reconvert existing links
     description: When enabled, already-converted jwlibrary:// links will be reconverted according to current formatting settings. This allows you to update all links to match your latest preferences.
-  desktopCitationMode:
-    name: Desktop Bible citation mode
-    description: Choose how Bible text is fetched on desktop. Webviewer is faster but briefly opens the page. Background request stays in the editor but can take around 20 seconds.
-    webviewer: Webviewer
-    backgroundRequest: Background request
   bookLength:
     name: Link text length
     description: Choose the length of the link text

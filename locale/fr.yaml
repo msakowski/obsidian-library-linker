@@ -16,11 +16,6 @@ settings:
   reconvertExistingLinks:
     name: Reconvertir les liens existants
     description: Lorsque activé, les liens jwlibrary:// déjà convertis seront reconvertis selon les paramètres de formatage actuels. Cela vous permet de mettre à jour tous les liens pour correspondre à vos dernières préférences.
-  desktopCitationMode:
-    name: Mode de citation biblique sur ordinateur
-    description: Choisissez comment le texte biblique est récupéré sur ordinateur. Le webviewer est plus rapide, mais ouvre brièvement la page. La requête en arrière-plan reste dans l’éditeur, mais peut prendre environ 20 secondes.
-    webviewer: Webviewer
-    backgroundRequest: Requête en arrière-plan
   bookLength:
     name: Longueur du texte du lien
     description: Choisissez la longueur du texte du lien

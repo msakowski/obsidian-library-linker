@@ -353,7 +353,6 @@ describe('BibleTextFetcher', () => {
             verseRanges: [{ start: 14, end: 14 }],
           },
           'E',
-          'backgroundRequest',
         );
 
         expect(result.success).toBe(true);
@@ -414,14 +413,13 @@ describe('BibleTextFetcher', () => {
             verseRanges: [{ start: 16, end: 16 }],
           },
           'E',
-          'backgroundRequest',
         );
 
         expect(result.success).toBe(false);
-        expect(result.error).toContain('background request failed: spawn curl ENOENT');
+        expect(result.error).toContain('All fetch methods failed');
       });
 
-      test('returns a descriptive error when curl metadata is missing', async () => {
+      test('remembers curl unavailability across requests', async () => {
         mockedRequestUrl.mockRejectedValue(new Error('net::ERR_HTTP2_PROTOCOL_ERROR'));
         mockedPlatform.isDesktopApp = true;
         mockedPlatform.isMobileApp = false;
@@ -431,23 +429,23 @@ describe('BibleTextFetcher', () => {
             _args: string[],
             _options: Record<string, unknown>,
             callback: (error: Error | null, stdout: string) => void,
-          ) => callback(null, '<html>missing metadata</html>'),
+          ) => callback(new Error('spawn curl ENOENT'), ''),
         );
 
-        const result = await BibleTextFetcher.fetchBibleText(
-          {
-            book: 43,
-            chapter: 3,
-            verseRanges: [{ start: 16, end: 16 }],
-          },
+        // First call: curl is tried and fails with ENOENT
+        await BibleTextFetcher.fetchBibleText(
+          { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
           'E',
-          'backgroundRequest',
         );
+        expect(mockedExecFile).toHaveBeenCalledTimes(1);
 
-        expect(result.success).toBe(false);
-        expect(result.error).toContain(
-          'background request failed: curl output missing metadata marker',
+        // Second call: curl should be skipped entirely
+        mockedExecFile.mockClear();
+        await BibleTextFetcher.fetchBibleText(
+          { book: 43, chapter: 4, verseRanges: [{ start: 1, end: 1 }] },
+          'E',
         );
+        expect(mockedExecFile).not.toHaveBeenCalled();
       });
     });
   });

@@ -1,4 +1,4 @@
-import type { BibleReference, DesktopCitationMode, Language } from '@/types';
+import type { BibleReference, Language } from '@/types';
 import type { App, WorkspaceLeaf } from 'obsidian';
 import { padChapter, padVerse } from '@/utils/padNumber';
 import { Platform, requestUrl } from 'obsidian';
@@ -56,6 +56,7 @@ export class BibleTextFetcher {
   private static app: App | null = null;
   private static lastRequestTime = -Infinity;
   private static readonly chapterHtmlCache = new Map<string, { html: string; timestamp: number }>();
+  private static curlAvailable: boolean | null = null; // null = untested
 
   static initialize(app: App): void {
     this.app = app;
@@ -64,12 +65,12 @@ export class BibleTextFetcher {
   static clearCache(): void {
     this.chapterHtmlCache.clear();
     this.lastRequestTime = -Infinity;
+    this.curlAvailable = null;
   }
 
   static async fetchBibleText(
     reference: BibleReference,
     language: Language = 'E',
-    desktopCitationMode: DesktopCitationMode = 'backgroundRequest',
   ): Promise<BibleTextResult> {
     logger.log('fetchBibleText', reference, language);
     try {
@@ -84,7 +85,7 @@ export class BibleTextFetcher {
         };
       }
 
-      const html = await this.fetchChapterHtml(book, chapter, language, desktopCitationMode);
+      const html = await this.fetchChapterHtml(book, chapter, language);
       const result = this.extractBibleText(html, reference);
 
       return {
@@ -111,7 +112,6 @@ export class BibleTextFetcher {
     book: number,
     chapter: number,
     language: Language,
-    desktopCitationMode: DesktopCitationMode,
   ): Promise<string> {
     const cacheKey = `${language}:${book}:${chapter}`;
 
@@ -130,7 +130,7 @@ export class BibleTextFetcher {
     const url = this.buildWOLUrl(book, chapter, language);
     logger.log('fetching chapter', url);
 
-    const html = await this.fetchHtml(url, desktopCitationMode);
+    const html = await this.fetchHtml(url);
     this.chapterHtmlCache.set(cacheKey, { html, timestamp: Date.now() });
     return html;
   }
@@ -154,14 +154,13 @@ export class BibleTextFetcher {
   }
 
   /**
-   * Fetches HTML from a WOL URL.
-   * Primary: requestUrl (works on all platforms, bypasses CORS via Electron's net module).
-   * Desktop fallback: curl or webviewer if requestUrl fails (e.g. HTTP/2 errors).
+   * Fetches HTML from a WOL URL with automatic fallback.
+   *
+   * All platforms: try requestUrl first.
+   * Desktop fallback chain: curl (if available) → webviewer (if registered).
+   * Mobile: no fallback — requestUrl is the only path.
    */
-  private static async fetchHtml(
-    url: string,
-    desktopCitationMode: DesktopCitationMode,
-  ): Promise<string> {
+  private static async fetchHtml(url: string): Promise<string> {
     try {
       const response = await requestUrl({ url });
       if (response.status !== 200) {
@@ -176,39 +175,58 @@ export class BibleTextFetcher {
         throw error;
       }
 
-      logger.log('fetchHtml: falling back to desktop strategy');
+      // Desktop fallback 1: curl
+      if (this.curlAvailable !== false) {
+        try {
+          const html = await this.fetchWithCurl(url);
+          this.curlAvailable = true;
+          return html;
+        } catch (curlError) {
+          const curlMsg = curlError instanceof Error ? curlError.message : String(curlError);
+          if (curlMsg.includes('ENOENT')) {
+            logger.warn('fetchHtml: curl not available, skipping for future requests');
+            this.curlAvailable = false;
+          } else {
+            logger.warn('fetchHtml: curl failed —', curlMsg);
+          }
+        }
+      }
 
-      if (desktopCitationMode === 'webviewer' && this.app) {
+      // Desktop fallback 2: webviewer
+      if (this.isWebviewerAvailable()) {
         try {
           return await this.fetchWithWebviewer(url);
         } catch (webviewError) {
           logger.warn(
-            'fetchHtml: webviewer citation failed, using background request instead —',
+            'fetchHtml: webviewer failed —',
             webviewError instanceof Error ? webviewError.message : String(webviewError),
           );
         }
       }
 
-      return this.fetchWithCurl(url);
+      throw new Error(`All fetch methods failed for ${url}`);
     }
   }
 
+  private static isWebviewerAvailable(): boolean {
+    if (!this.app) return false;
+    // Check if the webviewer view type is registered in Obsidian
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+    const viewByType = (this.app as any).viewRegistry?.viewByType as
+      | Record<string, unknown>
+      | undefined;
+    return viewByType?.['webviewer'] !== undefined;
+  }
+
   private static async fetchWithCurl(url: string): Promise<string> {
-    try {
-      const result = await this.fetchWithSystemCurl(url);
-      logger.log(
-        'fetchHtml: background request completed',
-        `http=${result.meta.httpCode}`,
-        `effectiveUrl=${result.meta.effectiveUrl}`,
-        `contentType=${result.meta.contentType || 'unknown'}`,
-        `curlTime=${Math.round(result.meta.timeTotalSeconds * 1000)}ms`,
-        `bytes=${result.html.length}`,
-      );
-      return result.html;
-    } catch (error) {
-      const curlError = error instanceof Error ? error.message : String(error);
-      throw new Error(`background request failed: ${curlError}`);
-    }
+    const result = await this.fetchWithSystemCurl(url);
+    logger.log(
+      'fetchHtml: curl completed',
+      `http=${result.meta.httpCode}`,
+      `curlTime=${Math.round(result.meta.timeTotalSeconds * 1000)}ms`,
+      `bytes=${result.html.length}`,
+    );
+    return result.html;
   }
 
   private static async fetchWithWebviewer(url: string): Promise<string> {
@@ -459,8 +477,6 @@ export class BibleTextFetcher {
   }
 
   private static generateCitation(reference: BibleReference): string {
-    // This would need to be enhanced to generate proper book names
-    // For now, return a simple format
     const { book, chapter, verseRanges } = reference;
 
     if (!verseRanges || verseRanges.length === 0) {

@@ -31,7 +31,6 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
   updatedLinkStructure: 'keepCurrentStructure',
   noLanguageParameter: false,
   reconvertExistingLinks: false,
-  desktopCitationMode: 'backgroundRequest',
   bibleQuote: {
     template: BIBLE_QUOTE_TEMPLATES.short,
   },

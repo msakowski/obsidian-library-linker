@@ -34,11 +34,7 @@ async function generateBibleQuoteText(
 ): Promise<string | null> {
   try {
     logger.log('generateBibleQuoteText: fetching text for', linkInfo.reference);
-    const result = await BibleTextFetcher.fetchBibleText(
-      linkInfo.reference,
-      settings.language,
-      settings.desktopCitationMode,
-    );
+    const result = await BibleTextFetcher.fetchBibleText(linkInfo.reference, settings.language);
 
     if (!result.success || !result.text) {
       logger.warn(

@@ -16,11 +16,6 @@ settings:
   reconvertExistingLinks:
     name: Chuyển đổi lại các liên kết hiện có
     description: Khi bật, các liên kết jwlibrary:// đã được chuyển đổi trước đó sẽ được chuyển đổi lại theo cài đặt định dạng hiện tại. Điều này cho phép bạn cập nhật tất cả liên kết để phù hợp với tùy chọn mới nhất của mình.
-  desktopCitationMode:
-    name: Chế độ trích dẫn Kinh Thánh trên desktop
-    description: Chọn cách lấy văn bản Kinh Thánh trên desktop. Webviewer nhanh hơn nhưng sẽ mở trang trong chốc lát. Yêu cầu nền vẫn ở trong trình soạn thảo nhưng có thể mất khoảng 20 giây.
-    webviewer: Webviewer
-    backgroundRequest: Yêu cầu nền
   bookLength:
     name: Độ dài văn bản liên kết
     description: Chọn độ dài của văn bản liên kết

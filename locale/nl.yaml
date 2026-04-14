@@ -16,11 +16,6 @@ settings:
   reconvertExistingLinks:
     name: Bestaande links opnieuw converteren
     description: Indien ingeschakeld, worden reeds geconverteerde jwlibrary:// links opnieuw geconverteerd volgens de huidige opmaak-instellingen. Dit maakt het mogelijk om alle links bij te werken naar je nieuwste voorkeuren.
-  desktopCitationMode:
-    name: Desktopmodus voor Bijbelcitaten
-    description: Kies hoe Bijbeltekst op desktop wordt opgehaald. Webviewer is sneller, maar opent de pagina kort. Achtergrondverzoek blijft in de editor, maar kan ongeveer 20 seconden duren.
-    webviewer: Webviewer
-    backgroundRequest: Achtergrondverzoek
   bookLength:
     name: Linktekst-lengte
     description: Kies de lengte van de linktekst

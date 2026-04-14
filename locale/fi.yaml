@@ -16,11 +16,6 @@ settings:
   reconvertExistingLinks:
     name: Muunna olemassa olevat linkit uudelleen
     description: Kun tämä on käytössä, jo muunnetut jwlibrary:// linkit muunnetaan uudelleen nykyisten muotoiluasetusten mukaan. Tämä mahdollistaa kaikkien linkkien päivittämisen vastaamaan uusimpia asetuksia.
-  desktopCitationMode:
-    name: Työpöydän raamatunlainaustapa
-    description: Valitse, miten raamatunteksti haetaan työpöydällä. Webviewer on nopeampi, mutta avaa sivun hetkeksi. Taustapyyntö pysyy editorissa, mutta voi kestää noin 20 sekuntia.
-    webviewer: Webviewer
-    backgroundRequest: Taustapyyntö
   bookLength:
     name: Linkin tekstin pituus
     description: Valitse linkin tekstin pituus

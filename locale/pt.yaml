@@ -16,11 +16,6 @@ settings:
   reconvertExistingLinks:
     name: Reconverter hiperligações existentes
     description: Quando ativado, as hiperligações jwlibrary:// já convertidas serão reconvertidas de acordo com as configurações de formatação atuais. Isso permite atualizar todas as hiperligações para corresponder às suas preferências mais recentes.
-  desktopCitationMode:
-    name: Modo de citação bíblica no desktop
-    description: Escolha como o texto bíblico é obtido no desktop. O Webviewer é mais rápido, mas abre a página por alguns segundos. A solicitação em segundo plano permanece no editor, mas pode demorar cerca de 20 segundos.
-    webviewer: Webviewer
-    backgroundRequest: Solicitação em segundo plano
   bookLength:
     name: Comprimento do texto da hiperligação do livro bíblico
     description: Escolha o comprimento do texto do livro bíblico na hiperligação

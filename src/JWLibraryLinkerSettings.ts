@@ -5,7 +5,6 @@ import type {
   BibleReference,
   LinkStyles,
   BookLength,
-  DesktopCitationMode,
   UpdatedLinkStructure,
 } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
@@ -468,22 +467,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       text: this.t('settings.bibleQuote.description'),
       cls: 'setting-item-description',
     });
-
-    new Setting(bibleQuoteContainer)
-      .setName(this.t('settings.desktopCitationMode.name'))
-      .setDesc(this.t('settings.desktopCitationMode.description'))
-      .addDropdown((dropdown) =>
-        dropdown
-          .addOptions({
-            webviewer: this.t('settings.desktopCitationMode.webviewer'),
-            backgroundRequest: this.t('settings.desktopCitationMode.backgroundRequest'),
-          } satisfies Record<DesktopCitationMode, string>)
-          .setValue(this.plugin.settings.desktopCitationMode)
-          .onChange(async (value) => {
-            this.plugin.settings.desktopCitationMode = value as DesktopCitationMode;
-            await this.plugin.saveSettings();
-          }),
-      );
 
     // Template presets
     const templatePresetContainer = bibleQuoteContainer.createDiv({
