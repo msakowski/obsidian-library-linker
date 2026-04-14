@@ -7,7 +7,7 @@ import {
 } from 'obsidian';
 import type { BibleReference, BibleSuggestion } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
-import { parseBibleReference } from '@/utils/parseBibleReference';
+import { parseBibleReference, extractBibleReferenceFromMatch } from '@/utils/parseBibleReference';
 import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type JWLibraryLinkerPlugin from '@/main';
@@ -35,29 +35,37 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     const match = line.match(BIBLE_REFERENCE_REGEX);
 
     if (match?.[0]) {
-      // Check if the matched reference is already inside a markdown link
-      const matchStart = line.indexOf(match[0]);
-      const beforeMatch = line.substring(0, matchStart);
-      const afterMatch = line.substring(matchStart + match[0].length);
+      // The regex may over-match leading words (e.g. "some text before John 3:16").
+      // Trim from the front to find the actual book name.
+      const result = extractBibleReferenceFromMatch(match[0], this.plugin.settings.language);
 
-      // Look for markdown link pattern: [***text***](...)
-      // Check if there's an opening bracket with optional asterisks before, and closing bracket with link after
-      const hasLinkBefore = /\[\*{0,2}$/.test(beforeMatch);
-      const hasLinkAfter = /^\*{0,2}\]\(/.test(afterMatch);
-      const isAlreadyLinked = hasLinkBefore && hasLinkAfter;
+      if (result) {
+        const rawMatchStart = line.indexOf(match[0]);
+        const matchStart = rawMatchStart + result.offset;
+        const matchEnd = matchStart + result.text.length;
 
-      if (!line.includes(TRIGGER) && !isAlreadyLinked) {
-        return {
-          start: {
-            ch: line.indexOf(match[0]),
-            line: cursor.line,
-          },
-          end: {
-            ch: line.indexOf(match[0]) + match[0].length,
-            line: cursor.line,
-          },
-          query: match[0],
-        };
+        // Check if the matched reference is already inside a markdown link
+        const beforeMatch = line.substring(0, matchStart);
+        const afterMatch = line.substring(matchEnd);
+
+        // Look for markdown link pattern: [***text***](...)
+        const hasLinkBefore = /\[\*{0,2}$/.test(beforeMatch);
+        const hasLinkAfter = /^\*{0,2}\]\(/.test(afterMatch);
+        const isAlreadyLinked = hasLinkBefore && hasLinkAfter;
+
+        if (!line.includes(TRIGGER) && !isAlreadyLinked) {
+          return {
+            start: {
+              ch: matchStart,
+              line: cursor.line,
+            },
+            end: {
+              ch: matchEnd,
+              line: cursor.line,
+            },
+            query: result.text,
+          };
+        }
       }
     }
 
