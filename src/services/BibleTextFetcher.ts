@@ -1,7 +1,7 @@
 import type { BibleReference, DesktopCitationMode, Language } from '@/types';
 import type { App, WorkspaceLeaf } from 'obsidian';
-import { padBook, padChapter, padVerse } from '@/utils/padNumber';
-import { Platform, request } from 'obsidian';
+import { padChapter, padVerse } from '@/utils/padNumber';
+import { Platform, requestUrl } from 'obsidian';
 import { cleanHtmlText } from '@/utils/cleanHtmlText';
 import { logger } from '@/utils/logger';
 
@@ -28,21 +28,47 @@ interface WebviewElement extends HTMLElement {
   isLoading?: () => boolean;
 }
 
+interface WOLLangConfig {
+  locale: string;
+  region: string;
+  lp: string;
+}
+
+const WOL_LANG_CONFIG: Record<string, WOLLangConfig> = {
+  E: { locale: 'en', region: 'r1', lp: 'lp-e' },
+  X: { locale: 'de', region: 'r10', lp: 'lp-x' },
+  FI: { locale: 'fi', region: 'r16', lp: 'lp-fi' },
+  O: { locale: 'nl', region: 'r18', lp: 'lp-o' },
+  S: { locale: 'es', region: 'r4', lp: 'lp-s' },
+  F: { locale: 'fr', region: 'r30', lp: 'lp-f' },
+  KO: { locale: 'ko', region: 'r8', lp: 'lp-ko' },
+  TPO: { locale: 'pt', region: 'r5', lp: 'lp-t' },
+  CR: { locale: 'hr', region: 'r19', lp: 'lp-c' },
+  VT: { locale: 'vi', region: 'r47', lp: 'lp-vt' },
+};
+
 export class BibleTextFetcher {
-  private static readonly JW_ORG_BASE = 'https://www.jw.org/finder?bible=';
-  private static readonly WOL_BASE = 'https://wol.jw.org/en/wol/b/r1/';
+  private static readonly WOL_BASE = 'https://wol.jw.org';
   private static readonly CURL_META_MARKER = '__JWLINKER_CURL_META__';
   private static readonly WEBVIEWER_TIMEOUT_MS = 30000;
+  private static readonly MIN_REQUEST_INTERVAL_MS = 800;
+  private static readonly CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
   private static app: App | null = null;
+  private static lastRequestTime = -Infinity;
+  private static readonly chapterHtmlCache = new Map<string, { html: string; timestamp: number }>();
 
   static initialize(app: App): void {
     this.app = app;
   }
 
+  static clearCache(): void {
+    this.chapterHtmlCache.clear();
+    this.lastRequestTime = -Infinity;
+  }
+
   static async fetchBibleText(
     reference: BibleReference,
     language: Language = 'E',
-    useWOL = false,
     desktopCitationMode: DesktopCitationMode = 'backgroundRequest',
   ): Promise<BibleTextResult> {
     logger.log('fetchBibleText', reference, language);
@@ -58,20 +84,7 @@ export class BibleTextFetcher {
         };
       }
 
-      // Format the Bible reference for the URL
-      const bibleCode = this.formatBibleCode(
-        book,
-        chapter,
-        verseRanges[0].start,
-        verseRanges[0].end,
-      );
-
-      // Choose the appropriate URL based on preference
-      const url = useWOL
-        ? this.buildWOLUrl(bibleCode, language)
-        : this.buildJWOrgUrl(bibleCode, language);
-
-      const html = await this.fetchHtml(url, desktopCitationMode);
+      const html = await this.fetchChapterHtml(book, chapter, language, desktopCitationMode);
       const result = this.extractBibleText(html, reference);
 
       return {
@@ -88,54 +101,96 @@ export class BibleTextFetcher {
     }
   }
 
-  private static formatBibleCode(
+  /**
+   * Fetches full chapter HTML, using a cache to avoid redundant requests.
+   * WOL returns the full chapter regardless of which verse is in the URL,
+   * so we cache by language + book + chapter. Consecutive requests to different
+   * chapters are throttled to at most one every 800ms.
+   */
+  private static async fetchChapterHtml(
     book: number,
     chapter: number,
-    startVerse: number,
-    endVerse?: number,
-  ): string {
-    const paddedBook = padBook(book);
-    const paddedChapter = padChapter(chapter);
-    const paddedStart = padVerse(startVerse);
+    language: Language,
+    desktopCitationMode: DesktopCitationMode,
+  ): Promise<string> {
+    const cacheKey = `${language}:${book}:${chapter}`;
 
-    if (endVerse && endVerse !== startVerse) {
-      const paddedEnd = padVerse(endVerse);
-      return `${paddedBook}${paddedChapter}${paddedStart}-${paddedBook}${paddedChapter}${paddedEnd}`;
+    const cached = this.getCachedHtml(cacheKey);
+    if (cached) {
+      logger.log('chapter cache hit', cacheKey);
+      return cached;
     }
 
-    return `${paddedBook}${paddedChapter}${paddedStart}`;
+    await this.throttle();
+
+    // Re-check after throttle — a concurrent request may have populated the cache
+    const cachedAfterWait = this.getCachedHtml(cacheKey);
+    if (cachedAfterWait) return cachedAfterWait;
+
+    const url = this.buildWOLUrl(book, chapter, language);
+    logger.log('fetching chapter', url);
+
+    const html = await this.fetchHtml(url, desktopCitationMode);
+    this.chapterHtmlCache.set(cacheKey, { html, timestamp: Date.now() });
+    return html;
+  }
+
+  private static getCachedHtml(cacheKey: string): string | null {
+    const entry = this.chapterHtmlCache.get(cacheKey);
+    if (!entry) return null;
+    if (Date.now() - entry.timestamp > this.CACHE_TTL_MS) {
+      this.chapterHtmlCache.delete(cacheKey);
+      return null;
+    }
+    return entry.html;
+  }
+
+  private static async throttle(): Promise<void> {
+    const wait = this.MIN_REQUEST_INTERVAL_MS - (Date.now() - this.lastRequestTime);
+    if (wait > 0) {
+      await new Promise<void>((resolve) => setTimeout(resolve, wait));
+    }
+    this.lastRequestTime = Date.now();
   }
 
   /**
-   * Fetches HTML from a URL.
-   * Mobile uses Obsidian's request() directly.
-   * Desktop uses either the webviewer or a background request, depending on settings.
+   * Fetches HTML from a WOL URL.
+   * Primary: requestUrl (works on all platforms, bypasses CORS via Electron's net module).
+   * Desktop fallback: curl or webviewer if requestUrl fails (e.g. HTTP/2 errors).
    */
   private static async fetchHtml(
     url: string,
     desktopCitationMode: DesktopCitationMode,
   ): Promise<string> {
-    if (!Platform.isDesktopApp) {
-      return this.fetchWithRequest(url);
-    }
-
-    if (desktopCitationMode === 'webviewer' && this.app) {
-      try {
-        return await this.fetchWithWebviewer(url);
-      } catch (error) {
-        logger.warn(
-          'fetchHtml: webviewer citation failed, using background request instead —',
-          error instanceof Error ? error.message : String(error),
-        );
+    try {
+      const response = await requestUrl({ url });
+      if (response.status !== 200) {
+        throw new Error(`HTTP ${response.status}`);
       }
+      return response.text;
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      logger.warn('fetchHtml: requestUrl failed —', message);
+
+      if (!Platform.isDesktopApp) {
+        throw error;
+      }
+
+      logger.log('fetchHtml: falling back to desktop strategy');
+
+      if (desktopCitationMode === 'webviewer' && this.app) {
+        try {
+          return await this.fetchWithWebviewer(url);
+        } catch (webviewError) {
+          logger.warn(
+            'fetchHtml: webviewer citation failed, using background request instead —',
+            webviewError instanceof Error ? webviewError.message : String(webviewError),
+          );
+        }
+      }
+
+      return this.fetchWithCurl(url);
     }
-
-    return this.fetchWithCurl(url);
-  }
-
-  private static async fetchWithRequest(url: string): Promise<string> {
-    const html = await request({ url, headers: { 'User-Agent': '' } });
-    return html;
   }
 
   private static async fetchWithCurl(url: string): Promise<string> {
@@ -325,16 +380,18 @@ export class BibleTextFetcher {
     };
   }
 
-  private static buildJWOrgUrl(bibleCode: string, language: Language): string {
-    const langParam = language !== 'E' ? `&wtlocale=${language}` : '';
-    return `${this.JW_ORG_BASE}${bibleCode}${langParam}`;
+  static buildWOLUrl(book: number, chapter: number, language: Language): string {
+    const config = WOL_LANG_CONFIG[language];
+    if (!config) {
+      throw new Error(`Unsupported language for WOL: ${language}`);
+    }
+    return `${this.WOL_BASE}/${config.locale}/wol/b/${config.region}/${config.lp}/nwt/${book}/${chapter}`;
   }
 
-  private static buildWOLUrl(bibleCode: string, language: Language): string {
-    const langCode = `lp-${language.toLowerCase()}`;
-    return `${this.WOL_BASE}${langCode}/nwt/${bibleCode}`;
-  }
-
+  /**
+   * Extracts Bible text from HTML.
+   * Supports both jw.org format (id="v40024014") and WOL format (id="v40-24-14-1").
+   */
   private static extractBibleText(
     html: string,
     reference: BibleReference,
@@ -352,29 +409,39 @@ export class BibleTextFetcher {
 
     const doc = new DOMParser().parseFromString(html, 'text/html');
 
-    // Build verse ID used in the HTML (unpadded book number)
-    const buildVerseId = (verse: number) => `v${book}${padChapter(chapter)}${padVerse(verse)}`;
+    // Try WOL format first (id="v{book}-{chapter}-{verse}-{segment}")
+    // then fall back to jw.org format (id="v{paddedBook}{paddedChapter}{paddedVerse}")
+    const isWOL = doc.querySelector(`[id^="v${book}-${chapter}-"]`) !== null;
 
-    // Collect text from target verses
     const textParts: string[] = [];
 
     for (let v = start; v <= end; v++) {
-      const verseId = buildVerseId(v);
-      const verseSpan = doc.getElementById(verseId);
+      let verseEl: Element | null = null;
 
-      if (!verseSpan) continue;
+      if (isWOL) {
+        // WOL: verse spans have id="v{book}-{chapter}-{verse}-{segment}"
+        // There may be multiple segments per verse (e.g. v40-24-14-1, v40-24-14-2)
+        verseEl = doc.querySelector(`span[id="v${book}-${chapter}-${v}-1"]`);
+      } else {
+        // jw.org: verse spans have id="v{paddedBook}{paddedChapter}{paddedVerse}"
+        const verseId = `v${book}${padChapter(chapter)}${padVerse(v)}`;
+        verseEl = doc.getElementById(verseId);
+      }
 
-      // Clone the verse element so we can modify it without affecting the original
-      const clone = verseSpan.cloneNode(true) as HTMLElement;
+      if (!verseEl) continue;
 
-      // Remove footnote links
-      clone.querySelectorAll('a.footnoteLink, a.xrefLink').forEach((el) => el.remove());
+      const clone = verseEl.cloneNode(true) as HTMLElement;
+
+      // Remove footnote/cross-reference links (both jw.org and WOL formats)
+      clone.querySelectorAll('a.footnoteLink, a.xrefLink, a.b').forEach((el) => el.remove());
 
       // Remove study note sections
       clone.querySelectorAll('.studyBible, .study-notes, .notes').forEach((el) => el.remove());
 
-      // Remove verse number elements (chapterNum span and verseNum sup)
+      // Remove verse number elements
       clone.querySelectorAll('.chapterNum, .verseNum').forEach((el) => el.remove());
+      // WOL: verse number links have class "vl"
+      clone.querySelectorAll('a.vl').forEach((el) => el.remove());
 
       const rawText = cleanHtmlText(clone.innerHTML).trim();
       if (rawText) {

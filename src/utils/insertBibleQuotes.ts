@@ -31,14 +31,12 @@ function processTemplate(
 async function generateBibleQuoteText(
   linkInfo: JWLibraryLinkInfo,
   settings: LinkReplacerSettings,
-  useWOL = false,
 ): Promise<string | null> {
   try {
     logger.log('generateBibleQuoteText: fetching text for', linkInfo.reference);
     const result = await BibleTextFetcher.fetchBibleText(
       linkInfo.reference,
       settings.language,
-      useWOL,
       settings.desktopCitationMode,
     );
 
@@ -87,7 +85,7 @@ export interface InsertQuotesResult {
 export async function insertAllBibleQuotes(
   editor: Editor,
   settings: LinkReplacerSettings,
-  useWOL = false,
+  _useWOL = false,
   selection?: ContentSelection,
 ): Promise<InsertQuotesResult> {
   const links = findJWLibraryLinks(editor, selection);
@@ -146,7 +144,7 @@ export async function insertAllBibleQuotes(
     }
 
     try {
-      const quoteText = await generateBibleQuoteText(linkInfo, settings, useWOL);
+      const quoteText = await generateBibleQuoteText(linkInfo, settings);
       if (quoteText) {
         changes.push({
           from: { line: linkInfo.lineNumber, ch: 0 },
@@ -183,7 +181,6 @@ export async function insertAllBibleQuotes(
 export async function insertBibleQuoteAtCursor(
   editor: Editor,
   settings: LinkReplacerSettings,
-  useWOL = false,
 ): Promise<{ inserted: boolean; alreadyExists: boolean; fetchFailed: boolean }> {
   const cursor = editor.getCursor();
   const cursorLine = cursor.line;
@@ -243,7 +240,6 @@ export async function insertBibleQuoteAtCursor(
           reference,
         },
         settings,
-        useWOL,
       );
       if (quoteText) {
         quoteTexts.push(quoteText);

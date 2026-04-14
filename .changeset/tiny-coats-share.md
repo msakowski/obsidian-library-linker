@@ -2,13 +2,10 @@
 "jw-library-linker": minor
 ---
 
-Add configurable desktop Bible citation modes for quote insertion.
+Switch Bible quote fetching from jw.org to wol.jw.org as the primary source.
 
-Fetching Bible text from `jw.org` works reliably through Obsidian's built-in request path on iOS and Android, but fails on desktop Electron with `ERR_HTTP2_PROTOCOL_ERROR` for the same URLs. Investigation showed that the page URLs still load successfully through other desktop client paths on the same machine, which points to a desktop-specific network/client mismatch rather than broken references, parsing, or page availability.
+Fetching Bible text from `jw.org` through Obsidian's built-in request path fails on desktop Electron with `ERR_HTTP2_PROTOCOL_ERROR`. This release switches the primary fetch target to `wol.jw.org`, which serves the same NWT Bible text at a directly constructible URL — no redirect chain, different CDN infrastructure, and the same `requestUrl` API that works on all platforms.
 
-This release keeps the existing direct request strategy for mobile, where it already works well, and introduces a desktop-only choice:
+On desktop, if `requestUrl` still fails against `wol.jw.org`, the plugin falls back to the existing curl or webviewer strategies. Mobile continues to use `requestUrl` directly, which already works well.
 
-- `Webviewer`: faster, because it uses Obsidian's working webviewer path to load the page and extract the text, but it briefly opens the website while the page is loaded.
-- `Background request`: slower, but stays in the editor while the page is fetched in the background.
-
-Desktop still falls back to the background fetch path if the selected mode fails, so quote insertion remains resilient even when the faster path cannot be used.
+The extraction logic now supports both the WOL HTML format (`id="v40-24-14-1"`) and the jw.org format (`id="v40024014"`), so fallback paths that may return jw.org HTML continue to work.
