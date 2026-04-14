@@ -149,6 +149,25 @@ describe('parseBibleReference', () => {
     expect(() => parseBibleReference(input, language)).toThrow(errorMessage);
   });
 
+  describe('rejects non-Bible-book words that match the regex pattern', () => {
+    const falsePositiveCases = [
+      { input: 'video12:34', description: 'timestamp-like pattern' },
+      { input: 'runtime3:45', description: 'duration-like pattern' },
+      { input: 'port8:80', description: 'technical notation' },
+      { input: 'section4:2', description: 'section reference' },
+      { input: 'page3:14', description: 'page reference' },
+      { input: 'step2:5', description: 'step reference' },
+      { input: 'release2:0', description: 'version-like pattern' },
+      { input: 'build12:1', description: 'build number' },
+      { input: 'item1:3', description: 'item reference' },
+      { input: 'chapter10:2', description: 'chapter reference without book' },
+    ];
+
+    test.each(falsePositiveCases)('rejects $description ($input)', ({ input }) => {
+      expect(() => parseBibleReference(input, language)).toThrow('errors.bookNotFound');
+    });
+  });
+
   test('throws error on out-of-range chapter', () => {
     expect(() => parseBibleReference('joh0:1', 'E')).toThrow('errors.invalidChapter');
     expect(() => parseBibleReference('joh100:1', 'E')).toThrow('errors.invalidChapter');
