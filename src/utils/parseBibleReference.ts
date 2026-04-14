@@ -95,7 +95,8 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   input = input
     .trim()
     .toLowerCase()
-    .replace(/[\.\s]/g, '');
+    .replace(/[\.\s]/g, '')
+    .replace(/(?<=\p{L})-(?=\p{L})/gu, '');
 
   // Match book, chapter, and verses part
   // Supports both "Book chapter:verse" and "Book verse" (for single-chapter books)
@@ -238,6 +239,33 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     chapter: chapter,
     verseRanges: result,
   };
+}
+
+/**
+ * Attempts to parse a Bible reference from a regex match that may contain leading words.
+ * Progressively trims leading words until a valid book name is found.
+ * Returns the parsed reference, the trimmed text, and the character offset from the original match.
+ */
+export function extractBibleReferenceFromMatch(
+  matchText: string,
+  language: Language,
+): { text: string; offset: number; reference: BibleReference } | null {
+  let text = matchText;
+  let offset = 0;
+
+  while (text) {
+    try {
+      const reference = parseBibleReference(text, language);
+      return { text, offset, reference };
+    } catch {
+      const spaceIdx = text.search(/\s/);
+      if (spaceIdx === -1) return null;
+      offset += spaceIdx + 1;
+      text = text.substring(spaceIdx + 1);
+    }
+  }
+
+  return null;
 }
 
 export const parseBibleReferenceFromUrl = (url: string, language: Language): BibleReference => {
