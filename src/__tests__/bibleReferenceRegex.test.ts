@@ -54,10 +54,40 @@ describe('Bible Reference Regex Pattern', () => {
   ];
 
   const validKoreanReferences = [
-    // Korean references
+    // Korean references (single-word book names)
     '신1:1',
     '신1:1-3',
     '수1:1-3,5,7',
+
+    // Korean references with spaces in book names
+    '솔로몬의 노래 1:1',
+    '고린도 전서 1:1',
+    '고린도 후서 1:1',
+    '요한 계시록 1:1',
+    // Note: "요한 1서 1:1", "요한 2서 1:1", "요한 3서 1:1" cannot be matched by regex
+    // because the embedded digit in the book name (1서/2서/3서) is indistinguishable
+    // from a chapter number. These require dictionary-based matching.
+    '디모데 전서 1:1',
+    '베드로 전서 1:1',
+    '데살로니가 전서 1:1',
+  ];
+
+  const validVietnameseReferences = [
+    // Vietnamese references with hyphens
+    'Lê-vi 1:1',
+    'Ru-tơ 1:1',
+    'Nê-hê-mi 1:1',
+    'Đa-ni-ên 1:1',
+    'Ha-ba-cúc 1:1',
+    'Ê-phê-sô 1:1',
+    'Phi-lê-môn 1:1',
+
+    // Vietnamese references with spaces and hyphens
+    '1 Sa-mu-ên 1:1',
+    '1 Phi-e-rơ 1:1',
+    '2 Phi-e-rơ 1:1',
+    'Giô-suê 1:1',
+    'Mi-chê 1:1',
   ];
 
   const validSpanishReferences = [
@@ -134,6 +164,16 @@ describe('Bible Reference Regex Pattern', () => {
 
   test('matches valid Spanish Bible references with accents', () => {
     validSpanishReferences.forEach((reference) => {
+      const testRegex = new RegExp(`^${BIBLE_REFERENCE_REGEX.source}$`, 'iu');
+      if (!testRegex.test(reference)) {
+        console.error('Should match', { reference });
+      }
+      expect(testRegex.test(reference)).toBe(true);
+    });
+  });
+
+  test('matches valid Vietnamese Bible references with hyphens', () => {
+    validVietnameseReferences.forEach((reference) => {
       const testRegex = new RegExp(`^${BIBLE_REFERENCE_REGEX.source}$`, 'iu');
       if (!testRegex.test(reference)) {
         console.error('Should match', { reference });

@@ -3,7 +3,7 @@ import { getBibleBooks } from '@/stores/bibleBooks';
 import { logger } from '@/utils/logger';
 
 const cleanTerm = (name: string): string => {
-  return name.toLowerCase().replace(/[/.\s]/g, '');
+  return name.toLowerCase().replace(/[/.\s\-]/g, '');
 };
 
 export const findBook = (bookQuery: string, language: Language): BibleBook | BibleBook[] => {

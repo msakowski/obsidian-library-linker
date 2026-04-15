@@ -1,5 +1,21 @@
 # obsidian-library-linker
 
+## 0.12.2
+
+### Patch Changes
+
+- [#237](https://github.com/msakowski/obsidian-library-linker/pull/237) [`2013dbe`](https://github.com/msakowski/obsidian-library-linker/commit/2013dbedb76f20731d4a1bd77f4c1724935e1d50) Thanks [@msakowski](https://github.com/msakowski)! - Add negative test cases for Bible reference recognition to verify false positives (timestamps, technical notation, version patterns) are correctly rejected.
+
+- [#226](https://github.com/msakowski/obsidian-library-linker/pull/226) [`b5cd542`](https://github.com/msakowski/obsidian-library-linker/commit/b5cd542b468e84954adfcf00c902540e26f52f34) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Whitelist native build scripts for @swc/core, esbuild, and unrs-resolver to prevent corrupted node_modules on fresh installs.
+
+- [#238](https://github.com/msakowski/obsidian-library-linker/pull/238) [`f826395`](https://github.com/msakowski/obsidian-library-linker/commit/f826395c960163786570c74f22c4adf3549c4e8d) Thanks [@RomaCZ](https://github.com/RomaCZ)! - Fix Windows compatibility: rename locale:all mock to locale-all and add moduleNameMapper entry. Also fixes a path resolution bug in the mock that prevented YAML files from being found.
+
+- [#240](https://github.com/msakowski/obsidian-library-linker/pull/240) [`ee902f6`](https://github.com/msakowski/obsidian-library-linker/commit/ee902f6b6b7717fa79a204c2be777aa1b6a7f79b) Thanks [@msakowski](https://github.com/msakowski)! - Fix inserting Bible quotes at the cursor when the caret lands on a line adjacent to the newly inserted JW Library link.
+
+- [#229](https://github.com/msakowski/obsidian-library-linker/pull/229) [`dc44b79`](https://github.com/msakowski/obsidian-library-linker/commit/dc44b79970f556d77b4da3e658d7688655c50c85) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add Github issue templates
+
+- [#232](https://github.com/msakowski/obsidian-library-linker/pull/232) [`8fda9e7`](https://github.com/msakowski/obsidian-library-linker/commit/8fda9e7a67e67f6a88bba3505cb0ff9e65e320fb) Thanks [@vangquan](https://github.com/vangquan)! - Add Vietnamese locale support to TranslationService
+
 ## 0.12.1
 
 ### Patch Changes

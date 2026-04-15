@@ -95,17 +95,47 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   input = input
     .trim()
     .toLowerCase()
-    .replace(/[\.\s]/g, '');
+    .replace(/[\.\s]/g, '')
+    .replace(/(?<=\p{L})-(?=\p{L})/gu, '');
 
   // Match book, chapter, and verses part
   // Supports both "Book chapter:verse" and "Book verse" (for single-chapter books)
-  const match = input.match(new RegExp(`^([\\p{L}0-9]+?)(\\d+.*)$`, 'iu'));
+  const greedyMatch = input.match(new RegExp(`^([\\p{L}0-9]+?)(\\d+.*)$`, 'iu'));
 
-  if (!match) {
+  if (!greedyMatch) {
     throw new Error('errors.invalidFormat');
   }
 
-  const [, bookName, remainder] = match;
+  let bookName = greedyMatch[1];
+  let remainder = greedyMatch[2];
+
+  // Try extending the book name to resolve digit-boundary ambiguity.
+  // e.g., for "요한1서1:1", the non-greedy regex captures "요한" + "1서1:1",
+  // but we need "요한1서" + "1:1" to correctly identify 1 John.
+  const fullPrefix = bookName + remainder;
+  const colonIdx = fullPrefix.indexOf(':');
+  if (colonIdx > 0) {
+    const beforeColon = fullPrefix.substring(0, colonIdx);
+    // Try progressively longer book names (from longest to the greedy minimum)
+    for (let i = beforeColon.length - 1; i > bookName.length - 1; i--) {
+      const candidateBook = beforeColon.substring(0, i);
+      const candidateRemainder = fullPrefix.substring(i);
+      // Only consider if remainder starts with a digit (valid chapter start)
+      if (/^\d/.test(candidateRemainder)) {
+        try {
+          const result = findBook(candidateBook, language);
+          if (result && !Array.isArray(result)) {
+            bookName = candidateBook;
+            remainder = candidateRemainder;
+            break;
+          }
+        } catch {
+          // Book not found with this prefix length, try shorter
+          continue;
+        }
+      }
+    }
+  }
 
   // Check if remainder contains a colon (chapter:verse format)
   const colonIndex = remainder.indexOf(':');
@@ -238,6 +268,33 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     chapter: chapter,
     verseRanges: result,
   };
+}
+
+/**
+ * Attempts to parse a Bible reference from a regex match that may contain leading words.
+ * Progressively trims leading words until a valid book name is found.
+ * Returns the parsed reference, the trimmed text, and the character offset from the original match.
+ */
+export function extractBibleReferenceFromMatch(
+  matchText: string,
+  language: Language,
+): { text: string; offset: number; reference: BibleReference } | null {
+  let text = matchText;
+  let offset = 0;
+
+  while (text) {
+    try {
+      const reference = parseBibleReference(text, language);
+      return { text, offset, reference };
+    } catch {
+      const spaceIdx = text.search(/\s/);
+      if (spaceIdx === -1) return null;
+      offset += spaceIdx + 1;
+      text = text.substring(spaceIdx + 1);
+    }
+  }
+
+  return null;
 }
 
 export const parseBibleReferenceFromUrl = (url: string, language: Language): BibleReference => {
