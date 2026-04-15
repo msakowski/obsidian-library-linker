@@ -8,6 +8,7 @@ import type {
   UpdatedLinkStructure,
 } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
+import { LANGUAGES } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { loadBibleBooks } from '@/stores/bibleBooks';
@@ -127,18 +128,11 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       .setDesc(this.t('settings.language.description'))
       .addDropdown((dropdown) =>
         dropdown
-          .addOptions({
-            E: 'English',
-            X: 'Deutsch',
-            FI: 'Suomi',
-            S: 'Español',
-            O: 'Nederlands',
-            KO: '한국어',
-            TPO: 'Português (Portugal)',
-            F: 'Français',
-            CR: 'Hrvatski',
-            VT: 'Việt',
-          } satisfies Record<Language, string>)
+          .addOptions(
+            Object.fromEntries(
+              Object.entries(LANGUAGES).map(([key, { label }]) => [key, label]),
+            ) as Record<Language, string>,
+          )
           .setValue(this.plugin.settings.language)
           .onChange(async (value) => {
             const newLanguage = value as Language;
