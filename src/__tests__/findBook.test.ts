@@ -81,4 +81,17 @@ describe('findBook', () => {
     expect(findBook(' gen ', 'E')).toEqual(expect.objectContaining({ id: 1 }));
     expect(findBook(' 1 moo ', 'FI')).toEqual(expect.objectContaining({ id: 1 }));
   });
+
+  test('finds Vietnamese books with hyphens stripped from query', () => {
+    expect(findBook('lêvi', 'VT')).toEqual(expect.objectContaining({ id: 3 }));
+    expect(findBook('rutơ', 'VT')).toEqual(expect.objectContaining({ id: 8 }));
+    expect(findBook('1samuên', 'VT')).toEqual(expect.objectContaining({ id: 9 }));
+    expect(findBook('giôsuê', 'VT')).toEqual(expect.objectContaining({ id: 6 }));
+  });
+
+  test('finds Vietnamese books with hyphens in query', () => {
+    expect(findBook('lê-vi', 'VT')).toEqual(expect.objectContaining({ id: 3 }));
+    expect(findBook('ru-tơ', 'VT')).toEqual(expect.objectContaining({ id: 8 }));
+    expect(findBook('1 sa-mu-ên', 'VT')).toEqual(expect.objectContaining({ id: 9 }));
+  });
 });
