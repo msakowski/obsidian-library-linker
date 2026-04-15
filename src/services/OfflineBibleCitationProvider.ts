@@ -3,8 +3,13 @@ import type { OfflineBibleRepository } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { getLanguageLabel } from '@/utils/languageMetadata';
 
+type TranslateFn = (key: string, variables?: Record<string, string>) => string;
+
 export class OfflineBibleCitationProvider implements BibleCitationProvider {
-  constructor(private readonly repository: OfflineBibleRepository) {}
+  constructor(
+    private readonly repository: OfflineBibleRepository,
+    private readonly t: TranslateFn,
+  ) {}
 
   async getCitation(reference: BibleReference, language: Language): Promise<BibleCitationResult> {
     const metadata = await this.repository.getMetadata(language);
@@ -15,7 +20,7 @@ export class OfflineBibleCitationProvider implements BibleCitationProvider {
         source: 'offline',
         text: '',
         citation: '',
-        error: `No offline Bible is installed for ${getLanguageLabel(language)}. Import a Bible EPUB in settings to enable offline quotes.`,
+        error: this.t('errors.offlineBibleNotInstalled', { language: getLanguageLabel(language) }),
       };
     }
 
@@ -27,7 +32,7 @@ export class OfflineBibleCitationProvider implements BibleCitationProvider {
         source: 'offline',
         text: '',
         citation: '',
-        error: `The requested verses are missing or unreadable in the offline Bible for ${getLanguageLabel(language)}.`,
+        error: this.t('errors.offlineBibleVerseMissing', { language: getLanguageLabel(language) }),
       };
     }
 

@@ -129,3 +129,7 @@ errors:
   invalidVerseFormat: Nevažeći format retka
   invalidReferenceFormat: Nevažeći format reference
   unsupportedLanguage: Nepodržani jezik
+  offlineBibleNotInstalled: Nije instalirana izvanmrežna Biblija za {{language}}. Uvezite EPUB Biblije u postavkama kako biste omogućili izvanmrežne citate.
+  offlineBibleVerseMissing: Traženi retci nedostaju ili su nečitljivi u izvanmrežnoj Bibliji za {{language}}.
+  offlineBibleLookupFailed: Pretraživanje izvanmrežne Biblije nije uspjelo.
+  onlineFallbackDisabled: Mrežna zamjena je onemogućena.

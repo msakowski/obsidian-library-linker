@@ -129,3 +129,7 @@ errors:
   invalidVerseFormat: Định dạng câu không hợp lệ
   invalidReferenceFormat: Định dạng tham chiếu không hợp lệ
   unsupportedLanguage: Ngôn ngữ không được hỗ trợ
+  offlineBibleNotInstalled: Chưa cài đặt Kinh Thánh ngoại tuyến cho {{language}}. Nhập tệp EPUB Kinh Thánh trong cài đặt để bật trích dẫn ngoại tuyến.
+  offlineBibleVerseMissing: Các câu được yêu cầu bị thiếu hoặc không thể đọc được trong Kinh Thánh ngoại tuyến cho {{language}}.
+  offlineBibleLookupFailed: Tra cứu Kinh Thánh ngoại tuyến thất bại.
+  onlineFallbackDisabled: Phương án trực tuyến dự phòng đã bị tắt.

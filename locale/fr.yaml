@@ -129,3 +129,7 @@ errors:
   invalidVerseFormat: Format de verset invalide
   invalidReferenceFormat: Format de référence invalide
   unsupportedLanguage: Langue non prise en charge
+  offlineBibleNotInstalled: Aucune Bible hors ligne n'est installée pour {{language}}. Importez un EPUB de la Bible dans les paramètres pour activer les citations hors ligne.
+  offlineBibleVerseMissing: Les versets demandés sont manquants ou illisibles dans la Bible hors ligne pour {{language}}.
+  offlineBibleLookupFailed: La recherche dans la Bible hors ligne a échoué.
+  onlineFallbackDisabled: Le recours en ligne est désactivé.

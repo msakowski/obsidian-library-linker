@@ -707,7 +707,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     const result = await this.plugin.getEpubImportService().importBible({
       fileData: new Uint8Array(await selectedFile.arrayBuffer()),
       sourceFileName: selectedFile.name,
-      language: this.plugin.settings.language,
       overwriteExisting: existing,
     });
 
@@ -751,6 +750,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       input.addEventListener('change', () => {
         resolve(input.files?.[0] ?? null);
       });
+      input.addEventListener('cancel', () => resolve(null));
 
       input.click();
     });

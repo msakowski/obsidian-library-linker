@@ -129,3 +129,7 @@ errors:
   invalidVerseFormat: Formato de versículo inválido
   invalidReferenceFormat: Formato de referência inválido
   unsupportedLanguage: Idioma não suportado para referências bíblicas
+  offlineBibleNotInstalled: Nenhuma Bíblia offline está instalada para {{language}}. Importe um EPUB da Bíblia nas configurações para habilitar citações offline.
+  offlineBibleVerseMissing: Os versículos solicitados estão ausentes ou ilegíveis na Bíblia offline para {{language}}.
+  offlineBibleLookupFailed: A pesquisa na Bíblia offline falhou.
+  onlineFallbackDisabled: A alternativa online está desativada.

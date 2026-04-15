@@ -326,8 +326,10 @@ export class BibleEpubImportService implements EpubImportService {
     return normalized || null;
   }
 
+  private readonly domParser = new DOMParser();
+
   private parseXml(content: string): Document {
-    const doc = new DOMParser().parseFromString(content, 'application/xhtml+xml');
+    const doc = this.domParser.parseFromString(content, 'application/xhtml+xml');
     const parserError = doc.querySelector('parsererror');
 
     if (parserError) {

@@ -129,3 +129,7 @@ errors:
   invalidVerseFormat: Formato de versículo no válido
   invalidReferenceFormat: Formato de referencia no válido
   unsupportedLanguage: Idioma no compatible
+  offlineBibleNotInstalled: No hay una Biblia sin conexión instalada para {{language}}. Importe un EPUB de la Biblia en los ajustes para habilitar las citas sin conexión.
+  offlineBibleVerseMissing: Los versículos solicitados faltan o no se pueden leer en la Biblia sin conexión para {{language}}.
+  offlineBibleLookupFailed: La búsqueda en la Biblia sin conexión falló.
+  onlineFallbackDisabled: La alternativa en línea está desactivada.

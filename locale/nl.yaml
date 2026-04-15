@@ -129,3 +129,7 @@ errors:
   invalidVerseFormat: Ongeldig versformaat
   invalidReferenceFormat: Ongeldig referentieformaat
   unsupportedLanguage: Niet ondersteunde taal
+  offlineBibleNotInstalled: Er is geen offline Bijbel geïnstalleerd voor {{language}}. Importeer een Bijbel-EPUB in de instellingen om offline citaten in te schakelen.
+  offlineBibleVerseMissing: De gevraagde verzen ontbreken of zijn onleesbaar in de offline Bijbel voor {{language}}.
+  offlineBibleLookupFailed: Offline Bijbel-zoekopdracht mislukt.
+  onlineFallbackDisabled: Online terugval is uitgeschakeld.

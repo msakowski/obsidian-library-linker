@@ -1,5 +1,4 @@
 import { Editor } from 'obsidian';
-import { OnlineBibleCitationProvider } from '@/services/OnlineBibleCitationProvider';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import { formatBibleText } from '@/utils/formatBibleText';
 import type { BibleCitationProvider, LinkReplacerSettings } from '@/types';
@@ -66,7 +65,7 @@ async function generateBibleQuoteText(
 export async function insertAllBibleQuotes(
   editor: Editor,
   settings: LinkReplacerSettings,
-  provider: BibleCitationProvider = new OnlineBibleCitationProvider(),
+  provider: BibleCitationProvider,
   selection?: ContentSelection,
 ): Promise<number> {
   const links = findJWLibraryLinks(editor, selection);
@@ -133,7 +132,7 @@ export async function insertAllBibleQuotes(
 export async function insertBibleQuoteAtCursor(
   editor: Editor,
   settings: LinkReplacerSettings,
-  provider: BibleCitationProvider = new OnlineBibleCitationProvider(),
+  provider: BibleCitationProvider,
 ): Promise<{ inserted: boolean; alreadyExists: boolean }> {
   const cursor = editor.getCursor();
   const cursorLine = cursor.line;

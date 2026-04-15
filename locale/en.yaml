@@ -129,3 +129,7 @@ errors:
   invalidVerseFormat: Invalid verse format
   invalidReferenceFormat: Invalid reference format
   unsupportedLanguage: Unsupported language
+  offlineBibleNotInstalled: No offline Bible is installed for {{language}}. Import a Bible EPUB in settings to enable offline quotes.
+  offlineBibleVerseMissing: The requested verses are missing or unreadable in the offline Bible for {{language}}.
+  offlineBibleLookupFailed: Offline Bible lookup failed.
+  onlineFallbackDisabled: Online fallback is disabled.

@@ -16,7 +16,7 @@ describe('offline Bible citation flow', () => {
     const tempDir = await mkdtemp(join(tmpdir(), 'librarylinker-offline-'));
     const repository = new FileSystemOfflineBibleRepository(join(tempDir, 'offline-bible'));
     const importer = new BibleEpubImportService(repository);
-    const provider = new OfflineBibleCitationProvider(repository);
+    const provider = new OfflineBibleCitationProvider(repository, (key) => key);
     const epubPath = join(tempDir, 'nwt_X.epub');
 
     const archive = zipSync({

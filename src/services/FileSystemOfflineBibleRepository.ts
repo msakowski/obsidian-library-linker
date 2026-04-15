@@ -16,13 +16,20 @@ interface SchemaFile {
 const SCHEMA_VERSION = 1;
 
 export class FileSystemOfflineBibleRepository implements OfflineBibleRepository {
+  private schemaReady: Promise<void> | null = null;
+
   constructor(private readonly rootPath: string) {}
+
+  private ensureSchemaOnce(): Promise<void> {
+    this.schemaReady ??= this.ensureSchema();
+    return this.schemaReady;
+  }
 
   async getInstalledLanguages(): Promise<Language[]> {
     const languagesPath = this.getLanguagesPath();
 
     try {
-      await this.ensureSchema();
+      await this.ensureSchemaOnce();
       const entries = await readdir(languagesPath, { withFileTypes: true });
       return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name as Language);
     } catch {
@@ -32,7 +39,7 @@ export class FileSystemOfflineBibleRepository implements OfflineBibleRepository 
 
   async getMetadata(language: Language): Promise<OfflineBibleCorpusMetadata | null> {
     try {
-      await this.ensureSchema();
+      await this.ensureSchemaOnce();
       return await this.readJsonFile<OfflineBibleCorpusMetadata>(
         join(this.getLanguagePath(language), 'metadata.json'),
       );
@@ -47,7 +54,7 @@ export class FileSystemOfflineBibleRepository implements OfflineBibleRepository 
     chapter: number,
   ): Promise<OfflineBibleChapter | null> {
     try {
-      await this.ensureSchema();
+      await this.ensureSchemaOnce();
       return await this.readJsonFile<OfflineBibleChapter>(
         this.getChapterJsonPath(language, book, chapter),
       );

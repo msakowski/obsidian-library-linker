@@ -64,28 +64,28 @@ settings:
     preview:
       name: Bibelzitat-Vorschau
   offlineBible:
-    name: Offline Bible
-    description: Import a Bible EPUB once and use local chapter data for offline citation lookup.
+    name: Offline-Bibel
+    description: Eine Bibel-EPUB einmal importieren und lokale Kapiteldaten für die Offline-Zitatsuche verwenden.
     enabled:
-      name: Enable offline Bible
-      description: Allow the citation pipeline to use imported local Bible data.
+      name: Offline-Bibel aktivieren
+      description: Ermöglicht der Zitatfunktion, importierte lokale Bibeldaten zu verwenden.
     preferOffline:
-      name: Prefer offline quotes
-      description: Check the imported offline Bible before attempting online retrieval.
+      name: Offline-Zitate bevorzugen
+      description: Zuerst die importierte Offline-Bibel prüfen, bevor eine Online-Abfrage versucht wird.
     allowOnlineFallback:
-      name: Allow online fallback
-      description: If offline data is missing, allow the plugin to try the online citation provider.
+      name: Online-Rückfall erlauben
+      description: Falls Offline-Daten fehlen, kann das Plugin den Online-Zitatanbieter verwenden.
     status:
-      name: Installed language status
-      notInstalled: No offline Bible is installed for {{language}}.
-      installed: Offline Bible for {{language}} installed from {{sourceFileName}} on {{importedAt}} with {{chapterCount}} chapters.
+      name: Installierte Sprachversionen
+      notInstalled: Für {{language}} ist keine Offline-Bibel installiert.
+      installed: Offline-Bibel für {{language}} installiert aus {{sourceFileName}} am {{importedAt}} mit {{chapterCount}} Kapiteln.
     actions:
-      name: Offline Bible actions
-      description: Import, replace, remove, or inspect the offline Bible corpus for the selected language.
-      import: Import Bible EPUB
-      reimport: Re-import Bible EPUB
-      remove: Remove Offline Bible
-      openFolder: Open Offline Bible Folder
+      name: Offline-Bibel-Aktionen
+      description: Offline-Bibelkorpus für die ausgewählte Sprache importieren, ersetzen, entfernen oder anzeigen.
+      import: Bibel-EPUB importieren
+      reimport: Bibel-EPUB erneut importieren
+      remove: Offline-Bibel entfernen
+      openFolder: Offline-Bibel-Ordner öffnen
 commands:
   linkUnlinkedBibleReferences: Unverlinkte Bibeltexte verlinken
   convertToJWLibraryLinks: Links in Auswahl in JW Library-Links umwandeln
@@ -110,11 +110,11 @@ notices:
   noBibleLinkAtCursor: Kein JW Library-Link an Cursor gefunden
   bibleQuoteAlreadyExists: Bibelzitat existiert bereits
   errorInsertingQuotes: Fehler beim Einfügen der Bibelzitate
-  offlineBibleImported: Offline Bible imported for {{language}}
-  offlineBibleReimported: Offline Bible re-imported for {{language}}
-  offlineBibleRemoved: Offline Bible removed for {{language}}
-  offlineBibleImportFailed: Failed to import the offline Bible EPUB
-  offlineBibleOpenFolderFailed: Could not open the offline Bible folder
+  offlineBibleImported: Offline-Bibel für {{language}} importiert
+  offlineBibleReimported: Offline-Bibel für {{language}} erneut importiert
+  offlineBibleRemoved: Offline-Bibel für {{language}} entfernt
+  offlineBibleImportFailed: Bibel-EPUB konnte nicht importiert werden
+  offlineBibleOpenFolderFailed: Offline-Bibel-Ordner konnte nicht geöffnet werden
 suggestions:
   createLink: 'Link erstellen: {{text}}'
   createLinks: 'Links erstellen: {{text}}'
@@ -129,3 +129,7 @@ errors:
   invalidVerseFormat: Ungültiges Versformat
   invalidReferenceFormat: Ungültiges Referenzformat
   unsupportedLanguage: Nicht unterstützte Sprache
+  offlineBibleNotInstalled: Für {{language}} ist keine Offline-Bibel installiert. Eine Bibel-EPUB kann in den Einstellungen importiert werden, um Offline-Zitate zu aktivieren.
+  offlineBibleVerseMissing: Die angeforderten Verse fehlen oder sind in der Offline-Bibel für {{language}} nicht lesbar.
+  offlineBibleLookupFailed: Offline-Bibel-Suche fehlgeschlagen.
+  onlineFallbackDisabled: Online-Rückfall ist deaktiviert.

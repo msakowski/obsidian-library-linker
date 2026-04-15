@@ -6,11 +6,14 @@ import type {
   LinkReplacerSettings,
 } from '@/types';
 
+type TranslateFn = (key: string, variables?: Record<string, string>) => string;
+
 export class ConfiguredBibleCitationProvider implements BibleCitationProvider {
   constructor(
     private readonly getSettings: () => LinkReplacerSettings,
     private readonly offlineProvider: BibleCitationProvider,
     private readonly onlineProvider: BibleCitationProvider,
+    private readonly t: TranslateFn,
   ) {}
 
   async getCitation(reference: BibleReference, language: Language): Promise<BibleCitationResult> {
@@ -26,7 +29,7 @@ export class ConfiguredBibleCitationProvider implements BibleCitationProvider {
       if (!offlineBible.allowOnlineFallback) {
         return {
           ...offlineResult,
-          error: `${offlineResult.error ?? 'Offline Bible lookup failed.'} Online fallback is disabled.`,
+          error: `${offlineResult.error ?? this.t('errors.offlineBibleLookupFailed')} ${this.t('errors.onlineFallbackDisabled')}`,
         };
       }
     }
@@ -57,9 +60,21 @@ export class ConfiguredBibleCitationProvider implements BibleCitationProvider {
     const settings = this.getSettings();
 
     if (settings.offlineBible.enabled && settings.offlineBible.preferOffline) {
+      const offlineAvailable = await this.offlineProvider.isLanguageAvailable(language);
+      if (offlineAvailable || !settings.offlineBible.allowOnlineFallback) {
+        return offlineAvailable;
+      }
+    }
+
+    const onlineAvailable = await this.onlineProvider.isLanguageAvailable(language);
+    if (onlineAvailable) {
+      return true;
+    }
+
+    if (settings.offlineBible.enabled && !settings.offlineBible.preferOffline) {
       return this.offlineProvider.isLanguageAvailable(language);
     }
 
-    return this.onlineProvider.isLanguageAvailable(language);
+    return false;
   }
 }

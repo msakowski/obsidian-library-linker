@@ -42,7 +42,7 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
   offlineBible: {
     enabled: true,
     preferOffline: true,
-    allowOnlineFallback: false,
+    allowOnlineFallback: true,
   },
   ...DEFAULT_STYLES,
 };
@@ -87,8 +87,9 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     this.epubImportService = new BibleEpubImportService(this.offlineBibleRepository);
     this.bibleCitationProvider = new ConfiguredBibleCitationProvider(
       () => this.settings,
-      new OfflineBibleCitationProvider(this.offlineBibleRepository),
+      new OfflineBibleCitationProvider(this.offlineBibleRepository, this.t),
       new OnlineBibleCitationProvider(),
+      this.t,
     );
 
     // Load bible books for saved language

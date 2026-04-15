@@ -129,3 +129,7 @@ errors:
   invalidVerseFormat: Virheellinen jaeformaatti
   invalidReferenceFormat: Virheellinen viiteformaatti
   unsupportedLanguage: Ei tuettu kieli
+  offlineBibleNotInstalled: Offline-Raamattua ei ole asennettu kielelle {{language}}. Tuo Raamattu-EPUB asetuksissa ottaaksesi offline-lainaukset käyttöön.
+  offlineBibleVerseMissing: Pyydetyt jakeet puuttuvat tai ovat lukukelvottomia offline-Raamatussa kielelle {{language}}.
+  offlineBibleLookupFailed: Offline-Raamatun haku epäonnistui.
+  onlineFallbackDisabled: Online-vaihtoehto on poistettu käytöstä.
