@@ -1,4 +1,5 @@
 import type { BibleReference, Language } from '@/types';
+import { getWtlocale } from '@/types';
 import { padBook, padChapter, padVerse } from '@/utils/padNumber';
 import { requestUrl } from 'obsidian';
 import { cleanHtmlText } from '@/utils/cleanHtmlText';
@@ -93,12 +94,14 @@ export class BibleTextFetcher {
   }
 
   private static buildJWOrgUrl(bibleCode: string, language: Language): string {
-    const langParam = language !== 'E' ? `&wtlocale=${language}` : '';
+    const wtlocale = getWtlocale(language);
+    const langParam = wtlocale !== 'E' ? `&wtlocale=${wtlocale}` : '';
     return `${this.JW_ORG_BASE}${bibleCode}${langParam}`;
   }
 
   private static buildWOLUrl(bibleCode: string, language: Language): string {
-    const langCode = `lp-${language.toLowerCase()}`;
+    const wtlocale = getWtlocale(language);
+    const langCode = `lp-${wtlocale.toLowerCase()}`;
     return `${this.WOL_BASE}${langCode}/nwt/${bibleCode}`;
   }
 

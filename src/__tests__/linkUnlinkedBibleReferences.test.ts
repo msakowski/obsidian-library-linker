@@ -132,6 +132,68 @@ describe('linkUnlinkedBibleReferences', () => {
     });
   });
 
+  test('should find and create links for Korean multi-word references', () => {
+    const koreanSettings: LinkReplacerSettings = {
+      ...TEST_DEFAULT_SETTINGS,
+      language: 'KO',
+    };
+
+    const koreanText = '요한 1서 1:1을 읽어보세요.';
+
+    linkUnlinkedBibleReferences(koreanText, koreanSettings, callbackMock);
+
+    const callbackArgs = callbackMock.mock.calls[0][0];
+    expect(callbackArgs.error).toBeUndefined();
+    expect(callbackArgs.changes.length).toBe(1);
+    expect(callbackArgs.changes[0].text).toContain('jwlibrary:///finder?bible=');
+  });
+
+  test('should find and create links for Korean digit-suffixed references', () => {
+    const koreanSettings: LinkReplacerSettings = {
+      ...TEST_DEFAULT_SETTINGS,
+      language: 'KO',
+    };
+
+    const koreanText = '요1 1:1을 읽어보세요.';
+
+    linkUnlinkedBibleReferences(koreanText, koreanSettings, callbackMock);
+
+    const callbackArgs = callbackMock.mock.calls[0][0];
+    expect(callbackArgs.error).toBeUndefined();
+    expect(callbackArgs.changes.length).toBe(1);
+    expect(callbackArgs.changes[0].text).toContain('jwlibrary:///finder?bible=');
+  });
+
+  test('should find and create links for Vietnamese hyphenated references', () => {
+    const vietnameseSettings: LinkReplacerSettings = {
+      ...TEST_DEFAULT_SETTINGS,
+      language: 'VT',
+    };
+
+    const vietnameseText = 'Hãy đọc Lê-vi 25:1 và Ru-tơ 1:1.';
+
+    linkUnlinkedBibleReferences(vietnameseText, vietnameseSettings, callbackMock);
+
+    const callbackArgs = callbackMock.mock.calls[0][0];
+    expect(callbackArgs.error).toBeUndefined();
+    expect(callbackArgs.changes.length).toBe(2);
+  });
+
+  test('should find and create links for Vietnamese multi-word references', () => {
+    const vietnameseSettings: LinkReplacerSettings = {
+      ...TEST_DEFAULT_SETTINGS,
+      language: 'VT',
+    };
+
+    const vietnameseText = 'Sáng thế 1:1 là câu đầu tiên.';
+
+    linkUnlinkedBibleReferences(vietnameseText, vietnameseSettings, callbackMock);
+
+    const callbackArgs = callbackMock.mock.calls[0][0];
+    expect(callbackArgs.error).toBeUndefined();
+    expect(callbackArgs.changes.length).toBe(1);
+  });
+
   test('should preserve spaces around Bible references when converting to links', () => {
     // Arrange
     const textWithSpaces = `Some text before John 3:16 and some text after.`;
