@@ -1,7 +1,8 @@
 import { insertAllBibleQuotes, insertBibleQuoteAtCursor } from '@/utils/insertBibleQuotes';
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
+import { OnlineBibleCitationProvider } from '@/services/OnlineBibleCitationProvider';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
-import type { LinkReplacerSettings } from '@/types';
+import type { BibleCitationProvider, LinkReplacerSettings } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { TEST_DEFAULT_SETTINGS } from 'mocks/plugin';
 import type { Editor } from 'obsidian';
@@ -26,6 +27,7 @@ beforeAll(() => {
 describe('insertAllBibleQuotes', () => {
   let mockEditor: jest.Mocked<Editor>;
   let settings: LinkReplacerSettings;
+  let provider: BibleCitationProvider;
   let mockGetLine: jest.Mock;
   let mockLastLine: jest.Mock;
   let mockTransaction: jest.Mock;
@@ -40,6 +42,8 @@ describe('insertAllBibleQuotes', () => {
       lastLine: mockLastLine,
       transaction: mockTransaction,
     } as unknown as jest.Mocked<Editor>;
+
+    provider = new OnlineBibleCitationProvider();
 
     settings = {
       ...TEST_DEFAULT_SETTINGS,
@@ -77,7 +81,7 @@ describe('insertAllBibleQuotes', () => {
       },
     ]);
 
-    const result = await insertAllBibleQuotes(mockEditor, settings);
+    const result = await insertAllBibleQuotes(mockEditor, settings, provider);
 
     expect(result.inserted).toBe(1);
     expect(mockTransaction).toHaveBeenCalledWith({
@@ -106,7 +110,7 @@ describe('insertAllBibleQuotes', () => {
       },
     ]);
 
-    await insertAllBibleQuotes(mockEditor, settings);
+    await insertAllBibleQuotes(mockEditor, settings, provider);
 
     expect(mockTransaction).toHaveBeenCalledWith({
       changes: [
@@ -134,7 +138,7 @@ describe('insertAllBibleQuotes', () => {
       },
     ]);
 
-    await insertAllBibleQuotes(mockEditor, settings);
+    await insertAllBibleQuotes(mockEditor, settings, provider);
 
     expect(mockTransaction).toHaveBeenCalledWith({
       changes: [
@@ -161,7 +165,7 @@ describe('insertAllBibleQuotes', () => {
       },
     ]);
 
-    const result = await insertAllBibleQuotes(mockEditor, settings);
+    const result = await insertAllBibleQuotes(mockEditor, settings, provider);
 
     expect(result.inserted).toBe(0);
     expect(mockTransaction).not.toHaveBeenCalled();
@@ -195,7 +199,7 @@ describe('insertAllBibleQuotes', () => {
       .mockReturnValueOnce('[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)')
       .mockReturnValueOnce('[Matt. 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)');
 
-    const result = await insertAllBibleQuotes(mockEditor, settings);
+    const result = await insertAllBibleQuotes(mockEditor, settings, provider);
 
     expect(result.inserted).toBe(2);
     expect(mockTransaction).toHaveBeenCalledTimes(1);
@@ -207,7 +211,7 @@ describe('insertAllBibleQuotes', () => {
 
     (findJWLibraryLinks as jest.Mock).mockReturnValue([]);
 
-    const result = await insertAllBibleQuotes(mockEditor, settings);
+    const result = await insertAllBibleQuotes(mockEditor, settings, provider);
 
     expect(result).toEqual({ inserted: 0, linksFound: 0, fetchFailed: 0 });
     expect(mockTransaction).not.toHaveBeenCalled();
@@ -231,7 +235,7 @@ describe('insertAllBibleQuotes', () => {
       text: null,
     });
 
-    const result = await insertAllBibleQuotes(mockEditor, settings);
+    const result = await insertAllBibleQuotes(mockEditor, settings, provider);
 
     expect(result).toEqual({ inserted: 0, linksFound: 1, fetchFailed: 1 });
     expect(mockTransaction).not.toHaveBeenCalled();
@@ -263,7 +267,7 @@ describe('insertAllBibleQuotes', () => {
       text: 'For God loved the world so much that he gave his only-begotten Son. ',
     });
 
-    await insertAllBibleQuotes(mockEditor, settings);
+    await insertAllBibleQuotes(mockEditor, settings, provider);
 
     // Verify that whitespace is trimmed and markdown formatting is preserved
     expect(mockTransaction).toHaveBeenCalledWith({
@@ -281,6 +285,7 @@ describe('insertAllBibleQuotes', () => {
 describe('insertBibleQuoteAtCursor', () => {
   let mockEditor: jest.Mocked<Editor>;
   let settings: LinkReplacerSettings;
+  let provider: BibleCitationProvider;
   let mockGetCursor: jest.Mock;
   let mockGetLine: jest.Mock;
   let mockLastLine: jest.Mock;
@@ -298,6 +303,8 @@ describe('insertBibleQuoteAtCursor', () => {
       lastLine: mockLastLine,
       transaction: mockTransaction,
     } as unknown as jest.Mocked<Editor>;
+
+    provider = new OnlineBibleCitationProvider();
 
     settings = {
       ...TEST_DEFAULT_SETTINGS,
@@ -325,7 +332,7 @@ describe('insertBibleQuoteAtCursor', () => {
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue('jwlibrary:///finder?bible=43003016');
 
-    const result = await insertBibleQuoteAtCursor(mockEditor, settings);
+    const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
     expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
     expect(mockTransaction).toHaveBeenCalledWith({
@@ -345,7 +352,7 @@ describe('insertBibleQuoteAtCursor', () => {
     const lines = ['> [!quote] [John 3:16](jwlibrary:///finder?bible=43003016)', '> Quote text'];
     mockGetLine.mockImplementation((line: number) => lines[line]);
 
-    const result = await insertBibleQuoteAtCursor(mockEditor, settings);
+    const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
     expect(result).toEqual({ inserted: false, alreadyExists: true, fetchFailed: false });
     expect(mockTransaction).not.toHaveBeenCalled();
@@ -356,7 +363,7 @@ describe('insertBibleQuoteAtCursor', () => {
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue('No link here');
 
-    const result = await insertBibleQuoteAtCursor(mockEditor, settings);
+    const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
     expect(result).toEqual({ inserted: false, alreadyExists: false, fetchFailed: false });
     expect(mockTransaction).not.toHaveBeenCalled();
@@ -366,7 +373,7 @@ describe('insertBibleQuoteAtCursor', () => {
     mockGetCursor.mockReturnValue({ line: 10, ch: 0 });
     mockLastLine.mockReturnValue(5);
 
-    const result = await insertBibleQuoteAtCursor(mockEditor, settings);
+    const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
     expect(result).toEqual({ inserted: false, alreadyExists: false, fetchFailed: false });
     expect(mockTransaction).not.toHaveBeenCalled();
@@ -393,7 +400,7 @@ describe('insertBibleQuoteAtCursor', () => {
       .mockReturnValueOnce('[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)')
       .mockReturnValueOnce('[Matt. 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)');
 
-    const result = await insertBibleQuoteAtCursor(mockEditor, settings);
+    const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
     expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
     expect(mockTransaction).toHaveBeenCalledWith({
@@ -429,7 +436,7 @@ describe('insertBibleQuoteAtCursor', () => {
       '[Matt. 24:14](jwlibrary:///finder?bible=40024014&wtlocale=E)',
     );
 
-    const result = await insertBibleQuoteAtCursor(mockEditor, settings);
+    const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
     expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
     expect(mockTransaction).toHaveBeenCalledWith({

@@ -63,6 +63,29 @@ settings:
       description: 'Customize the quote format using variables: {bibleRef}, {bibleRefLinked}, {quote}'
     preview:
       name: Bible quote preview
+  offlineBible:
+    name: Offline Bible
+    description: Import a Bible EPUB once and use local chapter data for offline citation lookup.
+    enabled:
+      name: Enable offline Bible
+      description: Allow the citation pipeline to use imported local Bible data.
+    preferOffline:
+      name: Prefer offline quotes
+      description: Check the imported offline Bible before attempting online retrieval.
+    allowOnlineFallback:
+      name: Allow online fallback
+      description: If offline data is missing, allow the plugin to try the online citation provider.
+    status:
+      name: Installed language status
+      notInstalled: No offline Bible is installed for {{language}}.
+      installed: Offline Bible for {{language}} installed from {{sourceFileName}} on {{importedAt}} with {{chapterCount}} chapters.
+    actions:
+      name: Offline Bible actions
+      description: Import, replace, remove, or inspect the offline Bible corpus for the selected language.
+      import: Import Bible EPUB
+      reimport: Re-import Bible EPUB
+      remove: Remove Offline Bible
+      openFolder: Open Offline Bible Folder
 commands:
   linkUnlinkedBibleReferences: Link unlinked Bible references
   convertToJWLibraryLinks: Convert links in selection to JW Library links
@@ -88,6 +111,11 @@ notices:
   bibleQuoteAlreadyExists: Bible quote already exists
   errorInsertingQuotes: Error inserting Bible quotes
   bibleQuoteFetchFailed: Could not fetch Bible text — please try again
+  offlineBibleImported: Offline Bible imported for {{language}}
+  offlineBibleReimported: Offline Bible re-imported for {{language}}
+  offlineBibleRemoved: Offline Bible removed for {{language}}
+  offlineBibleImportFailed: Failed to import the offline Bible EPUB
+  offlineBibleOpenFolderFailed: Could not open the offline Bible folder
 suggestions:
   createLink: 'Create link: {{text}}'
   createLinks: 'Create links: {{text}}'
@@ -102,3 +130,7 @@ errors:
   invalidVerseFormat: Invalid verse format
   invalidReferenceFormat: Invalid reference format
   unsupportedLanguage: Unsupported language
+  offlineBibleNotInstalled: No offline Bible is installed for {{language}}. Import a Bible EPUB in settings to enable offline quotes.
+  offlineBibleVerseMissing: The requested verses are missing or unreadable in the offline Bible for {{language}}.
+  offlineBibleLookupFailed: Offline Bible lookup failed.
+  onlineFallbackDisabled: Online fallback is disabled.

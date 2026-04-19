@@ -36,15 +36,35 @@ export type Translation = {
     bibleQuote: {
       name: string;
       description: string;
-      format: {
+      presets: {
+        name: string;
+        short: string;
+        plain: string;
+        foldable: string;
+        expanded: string;
+      };
+      template: { name: string; description: string };
+      preview: { name: string };
+    };
+    offlineBible: {
+      name: string;
+      description: string;
+      enabled: { name: string; description: string };
+      preferOffline: { name: string; description: string };
+      allowOnlineFallback: { name: string; description: string };
+      status: {
+        name: string;
+        notInstalled: string;
+        installed: string;
+      };
+      actions: {
         name: string;
         description: string;
-        short: string;
-        longFoldable: string;
-        longExpanded: string;
+        import: string;
+        reimport: string;
+        remove: string;
+        openFolder: string;
       };
-      calloutType: { name: string; description: string };
-      preview: { name: string };
     };
   };
   commands: {
@@ -69,6 +89,11 @@ export type Translation = {
     noBibleLinkAtCursor: string;
     bibleQuoteAlreadyExists: string;
     errorInsertingQuotes: string;
+    offlineBibleImported: string;
+    offlineBibleReimported: string;
+    offlineBibleRemoved: string;
+    offlineBibleImportFailed: string;
+    offlineBibleOpenFolderFailed: string;
   };
   suggestions: {
     createLink: string;
