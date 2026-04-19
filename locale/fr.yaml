@@ -63,6 +63,29 @@ settings:
       description: 'Personnalisez le format de citation avec les variables : {bibleRef}, {bibleRefLinked}, {quote}'
     preview:
       name: Aperçu de la citation biblique
+  offlineBible:
+    name: Offline Bible
+    description: Import a Bible EPUB once and use local chapter data for offline citation lookup.
+    enabled:
+      name: Enable offline Bible
+      description: Allow the citation pipeline to use imported local Bible data.
+    preferOffline:
+      name: Prefer offline quotes
+      description: Check the imported offline Bible before attempting online retrieval.
+    allowOnlineFallback:
+      name: Allow online fallback
+      description: If offline data is missing, allow the plugin to try the online citation provider.
+    status:
+      name: Installed language status
+      notInstalled: No offline Bible is installed for {{language}}.
+      installed: Offline Bible for {{language}} installed from {{sourceFileName}} on {{importedAt}} with {{chapterCount}} chapters.
+    actions:
+      name: Offline Bible actions
+      description: Import, replace, remove, or inspect the offline Bible corpus for the selected language.
+      import: Import Bible EPUB
+      reimport: Re-import Bible EPUB
+      remove: Remove Offline Bible
+      openFolder: Open Offline Bible Folder
 commands:
   linkUnlinkedBibleReferences: Lier les références bibliques non liées
   convertToJWLibraryLinks: Convertir les liens dans la sélection en liens JW Library
@@ -88,6 +111,11 @@ notices:
   bibleQuoteAlreadyExists: La citation biblique existe déjà
   errorInsertingQuotes: Erreur lors de l'insertion des citations bibliques
   bibleQuoteFetchFailed: Impossible de récupérer le texte biblique — veuillez réessayer
+  offlineBibleImported: Offline Bible imported for {{language}}
+  offlineBibleReimported: Offline Bible re-imported for {{language}}
+  offlineBibleRemoved: Offline Bible removed for {{language}}
+  offlineBibleImportFailed: Failed to import the offline Bible EPUB
+  offlineBibleOpenFolderFailed: Could not open the offline Bible folder
 suggestions:
   createLink: 'Créer un lien : {{text}}'
   createLinks: 'Créer des liens : {{text}}'
@@ -102,3 +130,7 @@ errors:
   invalidVerseFormat: Format de verset invalide
   invalidReferenceFormat: Format de référence invalide
   unsupportedLanguage: Langue non prise en charge
+  offlineBibleNotInstalled: Aucune Bible hors ligne n'est installée pour {{language}}. Importez un EPUB de la Bible dans les paramètres pour activer les citations hors ligne.
+  offlineBibleVerseMissing: Les versets demandés sont manquants ou illisibles dans la Bible hors ligne pour {{language}}.
+  offlineBibleLookupFailed: La recherche dans la Bible hors ligne a échoué.
+  onlineFallbackDisabled: Le recours en ligne est désactivé.

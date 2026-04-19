@@ -63,6 +63,29 @@ settings:
       description: 'Pas het citaatformaat aan met variabelen: {bibleRef}, {bibleRefLinked}, {quote}'
     preview:
       name: Bijbelcitaat Voorbeeld
+  offlineBible:
+    name: Offline Bible
+    description: Import a Bible EPUB once and use local chapter data for offline citation lookup.
+    enabled:
+      name: Enable offline Bible
+      description: Allow the citation pipeline to use imported local Bible data.
+    preferOffline:
+      name: Prefer offline quotes
+      description: Check the imported offline Bible before attempting online retrieval.
+    allowOnlineFallback:
+      name: Allow online fallback
+      description: If offline data is missing, allow the plugin to try the online citation provider.
+    status:
+      name: Installed language status
+      notInstalled: No offline Bible is installed for {{language}}.
+      installed: Offline Bible for {{language}} installed from {{sourceFileName}} on {{importedAt}} with {{chapterCount}} chapters.
+    actions:
+      name: Offline Bible actions
+      description: Import, replace, remove, or inspect the offline Bible corpus for the selected language.
+      import: Import Bible EPUB
+      reimport: Re-import Bible EPUB
+      remove: Remove Offline Bible
+      openFolder: Open Offline Bible Folder
 commands:
   linkUnlinkedBibleReferences: Link niet gelinkte Bijbeltekst verwijzingen
   convertToJWLibraryLinks: Converteer geselecteerde links naar JW Library links
@@ -88,6 +111,11 @@ notices:
   bibleQuoteAlreadyExists: Bijbelcitaat bestaat al
   errorInsertingQuotes: Fout bij het toevoegen van bijbelcitaten
   bibleQuoteFetchFailed: Bijbeltekst kon niet worden opgehaald — probeer het opnieuw
+  offlineBibleImported: Offline Bible imported for {{language}}
+  offlineBibleReimported: Offline Bible re-imported for {{language}}
+  offlineBibleRemoved: Offline Bible removed for {{language}}
+  offlineBibleImportFailed: Failed to import the offline Bible EPUB
+  offlineBibleOpenFolderFailed: Could not open the offline Bible folder
 suggestions:
   createLink: 'Link maken: {{text}}'
   createLinks: 'Links maken: {{text}}'
@@ -102,3 +130,7 @@ errors:
   invalidVerseFormat: Ongeldig versformaat
   invalidReferenceFormat: Ongeldig referentieformaat
   unsupportedLanguage: Niet ondersteunde taal
+  offlineBibleNotInstalled: Er is geen offline Bijbel geïnstalleerd voor {{language}}. Importeer een Bijbel-EPUB in de instellingen om offline citaten in te schakelen.
+  offlineBibleVerseMissing: De gevraagde verzen ontbreken of zijn onleesbaar in de offline Bijbel voor {{language}}.
+  offlineBibleLookupFailed: Offline Bijbel-zoekopdracht mislukt.
+  onlineFallbackDisabled: Online terugval is uitgeschakeld.

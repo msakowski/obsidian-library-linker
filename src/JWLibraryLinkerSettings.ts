@@ -1,4 +1,6 @@
-import { PluginSettingTab, App, Setting, MarkdownRenderer, Component } from 'obsidian';
+import { PluginSettingTab, App, Setting, MarkdownRenderer, Component, Notice } from 'obsidian';
+import { shell } from 'electron';
+import { mkdir } from 'fs/promises';
 import JWLibraryLinkerPlugin, { DEFAULT_SETTINGS, DEFAULT_STYLES } from '@/main';
 import type {
   Language,
@@ -6,12 +8,14 @@ import type {
   LinkStyles,
   BookLength,
   UpdatedLinkStructure,
+  OfflineBibleCorpusMetadata,
 } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
-import { LANGUAGES } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { loadBibleBooks } from '@/stores/bibleBooks';
+import { getOfflineBibleRootPath } from '@/services/PluginDataPathService';
+import { LANGUAGE_LABELS } from '@/utils/languageMetadata';
 import { logger } from '@/utils/logger';
 
 class MarkdownComponent extends Component {
@@ -128,11 +132,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       .setDesc(this.t('settings.language.description'))
       .addDropdown((dropdown) =>
         dropdown
-          .addOptions(
-            Object.fromEntries(
-              Object.entries(LANGUAGES).map(([key, { label }]) => [key, label]),
-            ) as Record<Language, string>,
-          )
+          .addOptions(LANGUAGE_LABELS satisfies Record<Language, string>)
           .setValue(this.plugin.settings.language)
           .onChange(async (value) => {
             const newLanguage = value as Language;
@@ -517,6 +517,12 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
     // Initialize bible quote preview
     this.updateBibleQuotePreview();
+
+    const offlineBibleContainer = settingsContainer.createDiv({
+      cls: 'setting-item setting-item--column setting-item--offlineBible',
+    });
+
+    void this.renderOfflineBibleSection(offlineBibleContainer);
   }
 
   /**
@@ -583,6 +589,170 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         this.display(); // Refresh to show new template in textarea
         this.updateBibleQuotePreview();
       })();
+    });
+  }
+
+  private async renderOfflineBibleSection(container: HTMLElement): Promise<void> {
+    container.empty();
+
+    const language = this.plugin.settings.language;
+    const metadata = await this.plugin.getOfflineBibleRepository().getMetadata(language);
+
+    container.createDiv({
+      text: this.t('settings.offlineBible.name'),
+      cls: 'setting-item-h1',
+    });
+
+    container.createDiv({
+      text: this.t('settings.offlineBible.description'),
+      cls: 'setting-item-description',
+    });
+
+    new Setting(container)
+      .setName(this.t('settings.offlineBible.enabled.name'))
+      .setDesc(this.t('settings.offlineBible.enabled.description'))
+      .addToggle((toggle) =>
+        toggle.setValue(this.plugin.settings.offlineBible.enabled).onChange(async (value) => {
+          this.plugin.settings.offlineBible.enabled = value;
+          await this.plugin.saveSettings();
+          void this.renderOfflineBibleSection(container);
+        }),
+      );
+
+    new Setting(container)
+      .setName(this.t('settings.offlineBible.preferOffline.name'))
+      .setDesc(this.t('settings.offlineBible.preferOffline.description'))
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.offlineBible.preferOffline)
+          .setDisabled(!this.plugin.settings.offlineBible.enabled)
+          .onChange(async (value) => {
+            this.plugin.settings.offlineBible.preferOffline = value;
+            await this.plugin.saveSettings();
+            void this.renderOfflineBibleSection(container);
+          }),
+      );
+
+    new Setting(container)
+      .setName(this.t('settings.offlineBible.allowOnlineFallback.name'))
+      .setDesc(this.t('settings.offlineBible.allowOnlineFallback.description'))
+      .addToggle((toggle) =>
+        toggle
+          .setValue(this.plugin.settings.offlineBible.allowOnlineFallback)
+          .setDisabled(!this.plugin.settings.offlineBible.enabled)
+          .onChange(async (value) => {
+            this.plugin.settings.offlineBible.allowOnlineFallback = value;
+            await this.plugin.saveSettings();
+          }),
+      );
+
+    new Setting(container)
+      .setName(this.t('settings.offlineBible.status.name'))
+      .setDesc(this.describeOfflineBibleStatus(metadata, language));
+
+    new Setting(container)
+      .setName(this.t('settings.offlineBible.actions.name'))
+      .setDesc(this.t('settings.offlineBible.actions.description'))
+      .addButton((button) =>
+        button
+          .setButtonText(
+            metadata
+              ? this.t('settings.offlineBible.actions.reimport')
+              : this.t('settings.offlineBible.actions.import'),
+          )
+          .setCta()
+          .onClick(() => {
+            void this.handleBibleImport(Boolean(metadata), container);
+          }),
+      )
+      .addButton((button) =>
+        button
+          .setButtonText(this.t('settings.offlineBible.actions.remove'))
+          .setDisabled(!metadata)
+          .onClick(() => {
+            void this.handleBibleRemoval(language, container);
+          }),
+      )
+      .addButton((button) =>
+        button.setButtonText(this.t('settings.offlineBible.actions.openFolder')).onClick(() => {
+          void this.openOfflineBibleFolder();
+        }),
+      );
+  }
+
+  private describeOfflineBibleStatus(
+    metadata: OfflineBibleCorpusMetadata | null,
+    language: Language,
+  ): string {
+    if (!metadata) {
+      return this.t('settings.offlineBible.status.notInstalled', {
+        language: LANGUAGE_LABELS[language],
+      });
+    }
+
+    return this.t('settings.offlineBible.status.installed', {
+      language: LANGUAGE_LABELS[language],
+      importedAt: new Date(metadata.importedAt).toLocaleString(),
+      sourceFileName: metadata.sourceFileName,
+      chapterCount: String(metadata.chapterCount),
+    });
+  }
+
+  private async handleBibleImport(existing: boolean, container: HTMLElement): Promise<void> {
+    const selectedFile = await this.selectEpubFile();
+    if (!selectedFile) {
+      return;
+    }
+
+    const result = await this.plugin.getEpubImportService().importBible({
+      fileData: new Uint8Array(await selectedFile.arrayBuffer()),
+      sourceFileName: selectedFile.name,
+      overwriteExisting: existing,
+    });
+
+    if (!result.success) {
+      new Notice(result.error ?? this.t('notices.offlineBibleImportFailed'));
+      return;
+    }
+
+    new Notice(
+      this.t(existing ? 'notices.offlineBibleReimported' : 'notices.offlineBibleImported', {
+        language: LANGUAGE_LABELS[result.language ?? this.plugin.settings.language],
+      }),
+    );
+
+    void this.renderOfflineBibleSection(container);
+  }
+
+  private async handleBibleRemoval(language: Language, container: HTMLElement): Promise<void> {
+    await this.plugin.getOfflineBibleRepository().removeLanguage(language);
+    new Notice(this.t('notices.offlineBibleRemoved', { language: LANGUAGE_LABELS[language] }));
+    void this.renderOfflineBibleSection(container);
+  }
+
+  private async openOfflineBibleFolder(): Promise<void> {
+    const folderPath = getOfflineBibleRootPath(this.app, this.plugin.manifest.id);
+    await mkdir(folderPath, { recursive: true });
+    const error = await shell.openPath(folderPath);
+
+    if (error) {
+      logger.error(error);
+      new Notice(this.t('notices.offlineBibleOpenFolderFailed'));
+    }
+  }
+
+  private async selectEpubFile(): Promise<File | null> {
+    return await new Promise((resolve) => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.epub,application/epub+zip';
+
+      input.addEventListener('change', () => {
+        resolve(input.files?.[0] ?? null);
+      });
+      input.addEventListener('cancel', () => resolve(null));
+
+      input.click();
     });
   }
 

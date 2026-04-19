@@ -63,6 +63,29 @@ settings:
       description: 'Tùy chỉnh định dạng trích dẫn bằng các biến: {bibleRef}, {bibleRefLinked}, {quote}'
     preview:
       name: Xem trước trích dẫn Kinh Thánh
+  offlineBible:
+    name: Offline Bible
+    description: Import a Bible EPUB once and use local chapter data for offline citation lookup.
+    enabled:
+      name: Enable offline Bible
+      description: Allow the citation pipeline to use imported local Bible data.
+    preferOffline:
+      name: Prefer offline quotes
+      description: Check the imported offline Bible before attempting online retrieval.
+    allowOnlineFallback:
+      name: Allow online fallback
+      description: If offline data is missing, allow the plugin to try the online citation provider.
+    status:
+      name: Installed language status
+      notInstalled: No offline Bible is installed for {{language}}.
+      installed: Offline Bible for {{language}} installed from {{sourceFileName}} on {{importedAt}} with {{chapterCount}} chapters.
+    actions:
+      name: Offline Bible actions
+      description: Import, replace, remove, or inspect the offline Bible corpus for the selected language.
+      import: Import Bible EPUB
+      reimport: Re-import Bible EPUB
+      remove: Remove Offline Bible
+      openFolder: Open Offline Bible Folder
 commands:
   linkUnlinkedBibleReferences: Tạo liên kết cho các tham chiếu Kinh Thánh chưa có liên kết
   convertToJWLibraryLinks: Chuyển các liên kết trong vùng chọn sang liên kết JW Library
@@ -88,6 +111,11 @@ notices:
   bibleQuoteAlreadyExists: Câu trích Kinh Thánh đã tồn tại
   errorInsertingQuotes: Lỗi khi chèn câu trích Kinh Thánh
   bibleQuoteFetchFailed: Không thể tải văn bản Kinh Thánh — vui lòng thử lại
+  offlineBibleImported: Offline Bible imported for {{language}}
+  offlineBibleReimported: Offline Bible re-imported for {{language}}
+  offlineBibleRemoved: Offline Bible removed for {{language}}
+  offlineBibleImportFailed: Failed to import the offline Bible EPUB
+  offlineBibleOpenFolderFailed: Could not open the offline Bible folder
 suggestions:
   createLink: 'Tạo liên kết: {{text}}'
   createLinks: 'Tạo các liên kết: {{text}}'
@@ -102,3 +130,7 @@ errors:
   invalidVerseFormat: Định dạng câu không hợp lệ
   invalidReferenceFormat: Định dạng tham chiếu không hợp lệ
   unsupportedLanguage: Ngôn ngữ không được hỗ trợ
+  offlineBibleNotInstalled: Chưa cài đặt Kinh Thánh ngoại tuyến cho {{language}}. Nhập tệp EPUB Kinh Thánh trong cài đặt để bật trích dẫn ngoại tuyến.
+  offlineBibleVerseMissing: Các câu được yêu cầu bị thiếu hoặc không thể đọc được trong Kinh Thánh ngoại tuyến cho {{language}}.
+  offlineBibleLookupFailed: Tra cứu Kinh Thánh ngoại tuyến thất bại.
+  onlineFallbackDisabled: Phương án trực tuyến dự phòng đã bị tắt.

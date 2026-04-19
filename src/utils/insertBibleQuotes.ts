@@ -1,8 +1,7 @@
 import { Editor } from 'obsidian';
-import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import { formatBibleText } from '@/utils/formatBibleText';
-import type { LinkReplacerSettings } from '@/types';
+import type { BibleCitationProvider, LinkReplacerSettings } from '@/types';
 import {
   findJWLibraryLinks,
   findJWLibraryLinksInLine,
@@ -31,10 +30,11 @@ function processTemplate(
 async function generateBibleQuoteText(
   linkInfo: JWLibraryLinkInfo,
   settings: LinkReplacerSettings,
+  provider: BibleCitationProvider,
 ): Promise<string | null> {
   try {
     logger.log('generateBibleQuoteText: fetching text for', linkInfo.reference);
-    const result = await BibleTextFetcher.fetchBibleText(linkInfo.reference, settings.language);
+    const result = await provider.getCitation(linkInfo.reference, settings.language);
 
     if (!result.success || !result.text) {
       logger.warn(
@@ -81,7 +81,7 @@ export interface InsertQuotesResult {
 export async function insertAllBibleQuotes(
   editor: Editor,
   settings: LinkReplacerSettings,
-  _useWOL = false,
+  provider: BibleCitationProvider,
   selection?: ContentSelection,
 ): Promise<InsertQuotesResult> {
   const links = findJWLibraryLinks(editor, selection);
@@ -140,7 +140,7 @@ export async function insertAllBibleQuotes(
     }
 
     try {
-      const quoteText = await generateBibleQuoteText(linkInfo, settings);
+      const quoteText = await generateBibleQuoteText(linkInfo, settings, provider);
       if (quoteText) {
         changes.push({
           from: { line: linkInfo.lineNumber, ch: 0 },
@@ -177,6 +177,7 @@ export async function insertAllBibleQuotes(
 export async function insertBibleQuoteAtCursor(
   editor: Editor,
   settings: LinkReplacerSettings,
+  provider: BibleCitationProvider,
 ): Promise<{ inserted: boolean; alreadyExists: boolean; fetchFailed: boolean }> {
   const cursor = editor.getCursor();
   const cursorLine = cursor.line;
@@ -236,6 +237,7 @@ export async function insertBibleQuoteAtCursor(
           reference,
         },
         settings,
+        provider,
       );
       if (quoteText) {
         quoteTexts.push(quoteText);
