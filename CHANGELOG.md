@@ -1,5 +1,35 @@
 # obsidian-library-linker
 
+## 0.13.0
+
+### Minor Changes
+
+- [#244](https://github.com/msakowski/obsidian-library-linker/pull/244) [`87a8042`](https://github.com/msakowski/obsidian-library-linker/commit/87a80423b2bfd389f4742c8e59aac4d9a247929b) Thanks [@msakowski](https://github.com/msakowski)! - Improve Bible book name matching for Korean, Vietnamese, and other languages with spaces, hyphens, or embedded digits in book names.
+  - Explicit `/b` mode now matches all book name formats directly without regex pre-filtering
+  - Bulk convert uses data-driven regex built from actual book names for accurate detection
+  - Silent mode now supports hyphenated book names (e.g., Vietnamese Lê-vi, Ru-tơ)
+  - Book name normalization now strips hyphens for consistent matching
+
+- [#246](https://github.com/msakowski/obsidian-library-linker/pull/246) [`c8313db`](https://github.com/msakowski/obsidian-library-linker/commit/c8313db302bfd189cfc1908c648d9dd86de7a040) Thanks [@msakowski](https://github.com/msakowski)! - Switch Bible quote fetching from jw.org to wol.jw.org as the primary source.
+
+  Fetching Bible text from `jw.org` through Obsidian's built-in request path fails on desktop Electron with `ERR_HTTP2_PROTOCOL_ERROR`. This release switches the primary fetch target to `wol.jw.org`, which serves the same NWT Bible text at a directly constructible URL — no redirect chain, different CDN infrastructure, and the same `requestUrl` API that works on all platforms.
+
+  On desktop, if `requestUrl` still fails against `wol.jw.org`, the plugin falls back to the existing curl or webviewer strategies. Mobile continues to use `requestUrl` directly, which already works well.
+
+  The extraction logic now supports both the WOL HTML format (`id="v40-24-14-1"`) and the jw.org format (`id="v40024014"`), so fallback paths that may return jw.org HTML continue to work.
+
+### Patch Changes
+
+- [#234](https://github.com/msakowski/obsidian-library-linker/pull/234) [`39770ee`](https://github.com/msakowski/obsidian-library-linker/commit/39770ee5e6cfc9fe1da33f5f5daa31769e5d5b31) Thanks [@msakowski](https://github.com/msakowski)! - Fix Croatian Bible text fetched in Haitian Creole instead of Croatian
+
+  The plugin used `CR` as the wtlocale parameter when fetching Bible text from jw.org, but `CR` maps to Haitian Creole on jw.org. The correct code for Croatian is `C`. Added a central `LANGUAGES` config in types.ts with an optional `wtlocale` override field, and updated BibleTextFetcher and settings to use it.
+
+- [#235](https://github.com/msakowski/obsidian-library-linker/pull/235) [`fecf28f`](https://github.com/msakowski/obsidian-library-linker/commit/fecf28fbc3b8a218e401c1fe92ce65f6c93da17b) Thanks [@msakowski](https://github.com/msakowski)! - Support Bible book names containing spaces and hyphens in silent mode, /b explicit mode, and bulk convert. This fixes matching for Korean multi-word names (e.g. "고린도 전서", "요한 계시록") and Vietnamese hyphenated names (e.g. "Lê-vi", "Sa-mu-ên"). Fixes [#220](https://github.com/msakowski/obsidian-library-linker/issues/220).
+
+- [#247](https://github.com/msakowski/obsidian-library-linker/pull/247) [`71b567b`](https://github.com/msakowski/obsidian-library-linker/commit/71b567be47bd203cae9d389238a125f3ac0bb0a9) Thanks [@dependabot](https://github.com/apps/dependabot)! - Update tsconfig for TypeScript 6 compatibility: switch `moduleResolution` to `"bundler"`, drop the deprecated `baseUrl`, and explicitly declare `types: ["jest", "node"]` so tests type-check and lint cleanly.
+
+- [#248](https://github.com/msakowski/obsidian-library-linker/pull/248) [`f9ce694`](https://github.com/msakowski/obsidian-library-linker/commit/f9ce6941cd5b6ea9dc5697f477a2465aee3ddca1) Thanks [@msakowski](https://github.com/msakowski)! - Add offline Bible citation import and local runtime lookup from user-imported EPUB files, with settings-managed fallback to the existing online provider.
+
 ## 0.12.2
 
 ### Patch Changes
