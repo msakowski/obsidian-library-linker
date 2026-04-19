@@ -55,4 +55,13 @@ export class MarkdownRenderer {
 // Mock requestUrl function
 export const requestUrl = jest.fn();
 
+// Mock request function (older API, returns string directly)
+export const request = jest.fn();
+
+// Mock Platform
+export const Platform = {
+  isMobileApp: true,
+  isDesktopApp: false,
+};
+
 // Add any other Obsidian classes/types you need to mock

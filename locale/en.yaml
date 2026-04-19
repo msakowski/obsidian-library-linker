@@ -87,6 +87,7 @@ notices:
   noBibleLinkAtCursor: No JW Library link found at cursor
   bibleQuoteAlreadyExists: Bible quote already exists
   errorInsertingQuotes: Error inserting Bible quotes
+  bibleQuoteFetchFailed: Could not fetch Bible text — please try again
 suggestions:
   createLink: 'Create link: {{text}}'
   createLinks: 'Create links: {{text}}'

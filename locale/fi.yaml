@@ -87,6 +87,7 @@ notices:
   noBibleLinkAtCursor: JW-kirjastolinkkiä ei löytynyt kursorista
   bibleQuoteAlreadyExists: Raamatunlainaus on jo olemassa
   errorInsertingQuotes: Virhe raamatunlainausten lisäämisessä
+  bibleQuoteFetchFailed: Raamatuntekstiä ei voitu hakea — yritä uudelleen
 suggestions:
   createLink: 'Luo linkki: {{text}}'
   createLinks: 'Luo linkit: {{text}}'
