@@ -110,6 +110,7 @@ notices:
   noBibleLinkAtCursor: No se encontró enlace de Biblioteca JW en el cursor
   bibleQuoteAlreadyExists: La cita bíblica ya existe
   errorInsertingQuotes: Error al insertar citas bíblicas
+  bibleQuoteFetchFailed: No se pudo obtener el texto bíblico — inténtelo de nuevo
   offlineBibleImported: Offline Bible imported for {{language}}
   offlineBibleReimported: Offline Bible re-imported for {{language}}
   offlineBibleRemoved: Offline Bible removed for {{language}}

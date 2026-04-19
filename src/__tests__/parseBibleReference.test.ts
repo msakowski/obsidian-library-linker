@@ -66,11 +66,61 @@ describe('parseBibleReference', () => {
         ],
       },
     },
+    {
+      description: 'parses Vietnamese hyphenated book name',
+      input: 'Lê-vi 25:1',
+      language: 'VT' as Language,
+      expected: {
+        book: 3,
+        chapter: 25,
+        verseRanges: [{ start: 1, end: 1 }],
+      },
+    },
+    {
+      description: 'parses Vietnamese hyphenated book name with prefix',
+      input: '1 Sa-mu-ên 3:1',
+      language: 'VT' as Language,
+      expected: {
+        book: 9,
+        chapter: 3,
+        verseRanges: [{ start: 1, end: 1 }],
+      },
+    },
+    {
+      description: 'parses Korean multi-word book name (Revelation)',
+      input: '요한 계시록 1:1',
+      language: 'KO' as Language,
+      expected: {
+        book: 66,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 1 }],
+      },
+    },
+    {
+      description: 'parses Korean multi-word book name (1 John)',
+      input: '요한 1서 1:1',
+      language: 'KO' as Language,
+      expected: {
+        book: 62,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 1 }],
+      },
+    },
+    {
+      description: 'parses Korean digit-suffixed short name (1 John)',
+      input: '요1 1:1',
+      language: 'KO' as Language,
+      expected: {
+        book: 62,
+        chapter: 1,
+        verseRanges: [{ start: 1, end: 1 }],
+      },
+    },
   ];
 
   // Run the successful parsing tests
-  test.each(successTestCases)('$description', ({ input, expected }) => {
-    const parseResult = parseBibleReference(input, language);
+  test.each(successTestCases)('$description', ({ input, expected, language: testLanguage }) => {
+    const parseResult = parseBibleReference(input, testLanguage ?? language);
     expect(parseResult).toEqual(expected);
   });
 

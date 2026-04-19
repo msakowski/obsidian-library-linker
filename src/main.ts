@@ -9,6 +9,7 @@ import { OnlineBibleCitationProvider } from '@/services/OnlineBibleCitationProvi
 import { ConfiguredBibleCitationProvider } from '@/services/ConfiguredBibleCitationProvider';
 import { BibleEpubImportService } from '@/services/BibleEpubImportService';
 import { getOfflineBibleRootPath } from '@/services/PluginDataPathService';
+import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { loadBibleBooks } from '@/stores/bibleBooks';
 import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
@@ -78,6 +79,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     this.translationService = new TranslationService();
     await this.translationService.initialize();
     this.t = this.translationService.t.bind(this.translationService);
+    BibleTextFetcher.initialize(this.app);
 
     // Load settings (may update language)
     await this.loadSettings();
@@ -184,17 +186,19 @@ export default class JWLibraryLinkerPlugin extends Plugin {
         }
 
         try {
-          const count = await insertAllBibleQuotes(
+          const result = await insertAllBibleQuotes(
             editor,
             this.settings,
             this.bibleCitationProvider,
             contentSelection,
           );
-          if (count > 0) {
+          if (result.inserted > 0) {
             const notice = contentSelection
               ? this.t('notices.bibleQuotesInsertedSelection')
               : this.t('notices.bibleQuotesInserted');
             new Notice(notice);
+          } else if (result.fetchFailed > 0) {
+            new Notice(this.t('notices.bibleQuoteFetchFailed'));
           } else {
             new Notice(this.t('notices.noBibleLinksFound'));
           }
@@ -223,6 +227,8 @@ export default class JWLibraryLinkerPlugin extends Plugin {
             new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
           } else if (result.alreadyExists) {
             new Notice(this.t('notices.bibleQuoteAlreadyExists'));
+          } else if (result.fetchFailed) {
+            new Notice(this.t('notices.bibleQuoteFetchFailed'));
           } else {
             new Notice(this.t('notices.noBibleLinkAtCursor'));
           }
@@ -263,6 +269,8 @@ export default class JWLibraryLinkerPlugin extends Plugin {
                     new Notice(this.t('notices.bibleQuoteInsertedAtCursor'));
                   } else if (result.alreadyExists) {
                     new Notice(this.t('notices.bibleQuoteAlreadyExists'));
+                  } else if (result.fetchFailed) {
+                    new Notice(this.t('notices.bibleQuoteFetchFailed'));
                   } else {
                     new Notice(this.t('notices.noBibleLinkAtCursor'));
                   }
@@ -299,10 +307,6 @@ export default class JWLibraryLinkerPlugin extends Plugin {
 
   getEpubImportService(): BibleEpubImportService {
     return this.epubImportService;
-  }
-
-  onunload() {
-    // Clean up plugin resources if needed
   }
 
   async loadSettings() {

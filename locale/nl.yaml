@@ -110,6 +110,7 @@ notices:
   noBibleLinkAtCursor: Geen JW Library link gevonden bij cursor
   bibleQuoteAlreadyExists: Bijbelcitaat bestaat al
   errorInsertingQuotes: Fout bij het toevoegen van bijbelcitaten
+  bibleQuoteFetchFailed: Bijbeltekst kon niet worden opgehaald — probeer het opnieuw
   offlineBibleImported: Offline Bible imported for {{language}}
   offlineBibleReimported: Offline Bible re-imported for {{language}}
   offlineBibleRemoved: Offline Bible removed for {{language}}

@@ -3,21 +3,81 @@ jest.unmock('@/services/BibleTextFetcher');
 
 // Mock obsidian module (uses __mocks__/obsidian.ts)
 jest.mock('obsidian');
+jest.mock('child_process', () => ({
+  execFile: jest.fn(),
+}));
 
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
-import { requestUrl } from 'obsidian';
+import { Platform, requestUrl } from 'obsidian';
+import { execFile } from 'child_process';
 
 const mockedRequestUrl = requestUrl as jest.Mock;
+const mockedExecFile = execFile as unknown as jest.Mock;
+const mockedPlatform = Platform as { isDesktopApp: boolean; isMobileApp: boolean };
+
+jest.mock('util', () => {
+  const actual = jest.requireActual<typeof import('util')>('util');
+  return {
+    ...actual,
+    promisify: jest.fn((fn: (...args: unknown[]) => void) => {
+      return (...args: unknown[]) =>
+        new Promise((resolve, reject) => {
+          fn(...args, (error: Error | null, stdout: string) => {
+            if (error) {
+              reject(error);
+              return;
+            }
+            resolve({ stdout });
+          });
+        });
+    }),
+  };
+});
 
 describe('BibleTextFetcher', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Reset mock implementation
     mockedRequestUrl.mockReset();
+    mockedExecFile.mockReset();
+    mockedPlatform.isDesktopApp = false;
+    mockedPlatform.isMobileApp = true;
+    BibleTextFetcher.clearCache();
+  });
+
+  describe('buildWOLUrl', () => {
+    test('builds correct URL for English', () => {
+      expect(BibleTextFetcher.buildWOLUrl(40, 24, 'E')).toBe(
+        'https://wol.jw.org/en/wol/b/r1/lp-e/nwt/40/24',
+      );
+    });
+
+    test('builds correct URL for German', () => {
+      expect(BibleTextFetcher.buildWOLUrl(40, 24, 'X')).toBe(
+        'https://wol.jw.org/de/wol/b/r10/lp-x/nwt/40/24',
+      );
+    });
+
+    test('builds correct URL for Korean', () => {
+      expect(BibleTextFetcher.buildWOLUrl(1, 1, 'KO')).toBe(
+        'https://wol.jw.org/ko/wol/b/r8/lp-ko/nwt/1/1',
+      );
+    });
+
+    test('builds correct URL for Portuguese', () => {
+      expect(BibleTextFetcher.buildWOLUrl(66, 21, 'TPO')).toBe(
+        'https://wol.jw.org/pt/wol/b/r5/lp-t/nwt/66/21',
+      );
+    });
+
+    test('builds correct URL for Croatian', () => {
+      expect(BibleTextFetcher.buildWOLUrl(19, 23, 'CR')).toBe(
+        'https://wol.jw.org/hr/wol/b/r19/lp-c/nwt/19/23',
+      );
+    });
   });
 
   describe('fetchBibleText', () => {
-    describe('verse 1 extraction (chapter number displayed)', () => {
+    describe('jw.org HTML format (id="v{padded}")', () => {
       test('extracts Prediger 3:1 correctly', async () => {
         const html = `
           <div id="bibleText">
@@ -27,10 +87,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -57,10 +114,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -86,10 +140,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -113,10 +164,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -134,6 +182,61 @@ describe('BibleTextFetcher', () => {
       });
     });
 
+    describe('WOL HTML format (id="v{book}-{ch}-{v}-{seg}")', () => {
+      test('extracts Matt 24:14 from WOL format', async () => {
+        const html = `
+          <div class="section" data-key="40-24-14">
+            <span id="v40-24-14-1" class="v"><a href="#" class="vl vx vp">14 </a>And this good news of the Kingdom will be preached in all the inhabited earth for a witness to all the nations,<a class="b" href="#">+</a> and then the end will come.</span>
+          </div>
+          <div class="section" data-key="40-24-15">
+            <span id="v40-24-15-1" class="v"><a href="#" class="vl vx vp">15 </a>Therefore, when you catch sight of the disgusting thing</span>
+          </div>
+        `;
+
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
+
+        const result = await BibleTextFetcher.fetchBibleText(
+          {
+            book: 40,
+            chapter: 24,
+            verseRanges: [{ start: 14, end: 14 }],
+          },
+          'E',
+        );
+
+        expect(result.success).toBe(true);
+        expect(result.text).toContain('good news of the Kingdom');
+        expect(result.text).toContain('and then the end will come');
+        expect(result.text).not.toContain('disgusting thing');
+        // Footnote markers should be removed
+        expect(result.text).not.toContain('+');
+      });
+
+      test('extracts verse range from WOL format', async () => {
+        const html = `
+          <span id="v40-24-14-1" class="v"><a href="#" class="vl vx vp">14 </a>And this good news of the Kingdom will be preached.</span>
+          <span id="v40-24-15-1" class="v"><a href="#" class="vl vx vp">15 </a>Therefore, when you catch sight of the disgusting thing.</span>
+          <span id="v40-24-16-1" class="v"><a href="#" class="vl vx vp">16 </a>Then let those in Judea begin fleeing.</span>
+        `;
+
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
+
+        const result = await BibleTextFetcher.fetchBibleText(
+          {
+            book: 40,
+            chapter: 24,
+            verseRanges: [{ start: 14, end: 15 }],
+          },
+          'E',
+        );
+
+        expect(result.success).toBe(true);
+        expect(result.text).toContain('good news of the Kingdom');
+        expect(result.text).toContain('disgusting thing');
+        expect(result.text).not.toContain('Judea');
+      });
+    });
+
     describe('regular verse extraction (verse number displayed)', () => {
       test('extracts Prediger 3:2 correctly', async () => {
         const html = `
@@ -144,10 +247,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -177,10 +277,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -208,10 +305,7 @@ describe('BibleTextFetcher', () => {
           </div>
         `;
 
-        mockedRequestUrl.mockResolvedValue({
-          status: 200,
-          text: html,
-        });
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -229,6 +323,258 @@ describe('BibleTextFetcher', () => {
         expect(result.text).not.toContain('xrefLink');
         expect(result.text).not.toContain('footnoteLink');
       });
+    });
+
+    describe('network fallback behavior', () => {
+      test('falls back to curl when requestUrl fails on desktop', async () => {
+        const html = `
+          <span id="v40-24-14-1" class="v"><a href="#" class="vl vx vp">14 </a>And this good news of the Kingdom will be preached.</span>
+        `;
+        const curlStdout =
+          `${html}\n` +
+          '__JWLINKER_CURL_META__200\thttps://wol.jw.org/en/wol/b/r1/lp-e/nwt/40/24\ttext/html; charset=utf-8\t1.234';
+
+        mockedRequestUrl.mockRejectedValue(new Error('net::ERR_HTTP2_PROTOCOL_ERROR'));
+        mockedPlatform.isDesktopApp = true;
+        mockedPlatform.isMobileApp = false;
+        mockedExecFile.mockImplementation(
+          (
+            _file: string,
+            _args: string[],
+            _options: Record<string, unknown>,
+            callback: (error: Error | null, stdout: string) => void,
+          ) => callback(null, curlStdout),
+        );
+
+        const result = await BibleTextFetcher.fetchBibleText(
+          {
+            book: 40,
+            chapter: 24,
+            verseRanges: [{ start: 14, end: 14 }],
+          },
+          'E',
+        );
+
+        expect(result.success).toBe(true);
+        expect(result.text).toContain('good news of the Kingdom');
+        expect(mockedExecFile).toHaveBeenCalledWith(
+          'curl',
+          expect.arrayContaining([
+            '-sS',
+            '-L',
+            '--compressed',
+            '--max-time',
+            '30',
+            '--output',
+            '-',
+            '--write-out',
+          ]),
+          { maxBuffer: 1024 * 1024 },
+          expect.any(Function),
+        );
+      });
+
+      test('does not fall back to curl on mobile', async () => {
+        mockedRequestUrl.mockRejectedValue(new Error('net::ERR_HTTP2_PROTOCOL_ERROR'));
+        mockedPlatform.isDesktopApp = false;
+        mockedPlatform.isMobileApp = true;
+
+        const result = await BibleTextFetcher.fetchBibleText(
+          {
+            book: 40,
+            chapter: 24,
+            verseRanges: [{ start: 14, end: 14 }],
+          },
+          'E',
+        );
+
+        expect(result.success).toBe(false);
+        expect(result.error).toContain('ERR_HTTP2_PROTOCOL_ERROR');
+        expect(mockedExecFile).not.toHaveBeenCalled();
+      });
+
+      test('returns combined error when requestUrl and curl both fail', async () => {
+        mockedRequestUrl.mockRejectedValue(new Error('net::ERR_HTTP2_PROTOCOL_ERROR'));
+        mockedPlatform.isDesktopApp = true;
+        mockedPlatform.isMobileApp = false;
+        mockedExecFile.mockImplementation(
+          (
+            _file: string,
+            _args: string[],
+            _options: Record<string, unknown>,
+            callback: (error: Error | null, stdout: string) => void,
+          ) => callback(new Error('spawn curl ENOENT'), ''),
+        );
+
+        const result = await BibleTextFetcher.fetchBibleText(
+          {
+            book: 43,
+            chapter: 3,
+            verseRanges: [{ start: 16, end: 16 }],
+          },
+          'E',
+        );
+
+        expect(result.success).toBe(false);
+        expect(result.error).toContain('All fetch methods failed');
+      });
+
+      test('remembers curl unavailability across requests', async () => {
+        mockedRequestUrl.mockRejectedValue(new Error('net::ERR_HTTP2_PROTOCOL_ERROR'));
+        mockedPlatform.isDesktopApp = true;
+        mockedPlatform.isMobileApp = false;
+        mockedExecFile.mockImplementation(
+          (
+            _file: string,
+            _args: string[],
+            _options: Record<string, unknown>,
+            callback: (error: Error | null, stdout: string) => void,
+          ) => callback(new Error('spawn curl ENOENT'), ''),
+        );
+
+        // First call: curl is tried and fails with ENOENT
+        await BibleTextFetcher.fetchBibleText(
+          { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+          'E',
+        );
+        expect(mockedExecFile).toHaveBeenCalledTimes(1);
+
+        // Second call: curl should be skipped entirely
+        mockedExecFile.mockClear();
+        await BibleTextFetcher.fetchBibleText(
+          { book: 43, chapter: 4, verseRanges: [{ start: 1, end: 1 }] },
+          'E',
+        );
+        expect(mockedExecFile).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('chapter-level caching', () => {
+    test('makes only one HTTP request for two verses in the same chapter', async () => {
+      const chapterHtml = `
+        <span id="v40-24-14-1" class="v"><a href="#" class="vl">14 </a>And this good news of the Kingdom will be preached.</span>
+        <span id="v40-24-15-1" class="v"><a href="#" class="vl">15 </a>Therefore, when you catch sight of the disgusting thing.</span>
+      `;
+      mockedRequestUrl.mockResolvedValue({ status: 200, text: chapterHtml });
+
+      const r1 = await BibleTextFetcher.fetchBibleText(
+        { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
+        'E',
+      );
+      const r2 = await BibleTextFetcher.fetchBibleText(
+        { book: 40, chapter: 24, verseRanges: [{ start: 15, end: 15 }] },
+        'E',
+      );
+
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(1);
+      expect(r1.success).toBe(true);
+      expect(r2.success).toBe(true);
+      expect(r1.text).toContain('good news of the Kingdom');
+      expect(r2.text).toContain('disgusting thing');
+    });
+
+    test('fetches separately for different chapters', async () => {
+      const html1 = `<span id="v40-24-14-1" class="v"><a class="vl">14 </a>Good news</span>`;
+      const html2 = `<span id="v40-25-1-1" class="v"><a class="vl">1 </a>The kingdom of the heavens</span>`;
+      mockedRequestUrl
+        .mockResolvedValueOnce({ status: 200, text: html1 })
+        .mockResolvedValueOnce({ status: 200, text: html2 });
+
+      await BibleTextFetcher.fetchBibleText(
+        { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
+        'E',
+      );
+      await BibleTextFetcher.fetchBibleText(
+        { book: 40, chapter: 25, verseRanges: [{ start: 1, end: 1 }] },
+        'E',
+      );
+
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(2);
+    });
+
+    test('fetches separately for the same chapter in different languages', async () => {
+      const htmlE = `<span id="v40-24-14-1" class="v"><a class="vl">14 </a>Good news</span>`;
+      const htmlX = `<span id="v40-24-14-1" class="v"><a class="vl">14 </a>Gute Botschaft</span>`;
+      mockedRequestUrl
+        .mockResolvedValueOnce({ status: 200, text: htmlE })
+        .mockResolvedValueOnce({ status: 200, text: htmlX });
+
+      await BibleTextFetcher.fetchBibleText(
+        { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
+        'E',
+      );
+      await BibleTextFetcher.fetchBibleText(
+        { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
+        'X',
+      );
+
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('request throttling', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    test('throttles consecutive requests for different chapters', async () => {
+      const html1 = `<span id="v40-24-14-1" class="v"><a class="vl">14 </a>Good news</span>`;
+      const html2 = `<span id="v40-25-1-1" class="v"><a class="vl">1 </a>The kingdom</span>`;
+      mockedRequestUrl
+        .mockResolvedValueOnce({ status: 200, text: html1 })
+        .mockResolvedValueOnce({ status: 200, text: html2 });
+
+      const p1 = BibleTextFetcher.fetchBibleText(
+        { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
+        'E',
+      );
+      await jest.runAllTimersAsync();
+      const r1 = await p1;
+      expect(r1.success).toBe(true);
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(1);
+
+      // Second request immediately — throttle delay kicks in
+      const p2 = BibleTextFetcher.fetchBibleText(
+        { book: 40, chapter: 25, verseRanges: [{ start: 1, end: 1 }] },
+        'E',
+      );
+      // Before timers advance, second HTTP request has not been made
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(1);
+
+      await jest.runAllTimersAsync();
+      const r2 = await p2;
+      expect(r2.success).toBe(true);
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(2);
+    });
+
+    test('does not throttle cache hits', async () => {
+      const html = `
+        <span id="v40-24-14-1" class="v"><a class="vl">14 </a>Good news</span>
+        <span id="v40-24-15-1" class="v"><a class="vl">15 </a>Disgusting thing</span>
+      `;
+      mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
+
+      const p1 = BibleTextFetcher.fetchBibleText(
+        { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
+        'E',
+      );
+      await jest.runAllTimersAsync();
+      await p1;
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(1);
+
+      // Cache hit — resolves immediately without timers
+      const r2 = await BibleTextFetcher.fetchBibleText(
+        { book: 40, chapter: 24, verseRanges: [{ start: 15, end: 15 }] },
+        'E',
+      );
+
+      expect(r2.success).toBe(true);
+      expect(mockedRequestUrl).toHaveBeenCalledTimes(1);
     });
   });
 });

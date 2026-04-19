@@ -110,6 +110,7 @@ notices:
   noBibleLinkAtCursor: JW-kirjastolinkkiä ei löytynyt kursorista
   bibleQuoteAlreadyExists: Raamatunlainaus on jo olemassa
   errorInsertingQuotes: Virhe raamatunlainausten lisäämisessä
+  bibleQuoteFetchFailed: Raamatuntekstiä ei voitu hakea — yritä uudelleen
   offlineBibleImported: Offline Bible imported for {{language}}
   offlineBibleReimported: Offline Bible re-imported for {{language}}
   offlineBibleRemoved: Offline Bible removed for {{language}}

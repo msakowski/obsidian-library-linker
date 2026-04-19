@@ -110,6 +110,7 @@ notices:
   noBibleLinkAtCursor: JW Library link nije pronađen na položaju kursora
   bibleQuoteAlreadyExists: Biblijski citat već postoji
   errorInsertingQuotes: Greška prilikom umetanja biblijskih citata
+  bibleQuoteFetchFailed: Nije moguće dohvatiti biblijski tekst — pokušajte ponovo
   offlineBibleImported: Offline Bible imported for {{language}}
   offlineBibleReimported: Offline Bible re-imported for {{language}}
   offlineBibleRemoved: Offline Bible removed for {{language}}

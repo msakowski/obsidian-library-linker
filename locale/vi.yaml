@@ -110,6 +110,7 @@ notices:
   noBibleLinkAtCursor: Không tìm thấy liên kết JW Library tại vị trí con trỏ
   bibleQuoteAlreadyExists: Câu trích Kinh Thánh đã tồn tại
   errorInsertingQuotes: Lỗi khi chèn câu trích Kinh Thánh
+  bibleQuoteFetchFailed: Không thể tải văn bản Kinh Thánh — vui lòng thử lại
   offlineBibleImported: Offline Bible imported for {{language}}
   offlineBibleReimported: Offline Bible re-imported for {{language}}
   offlineBibleRemoved: Offline Bible removed for {{language}}

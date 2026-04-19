@@ -110,6 +110,7 @@ notices:
   noBibleLinkAtCursor: 커서에 JW Library 링크를 찾을 수 없음
   bibleQuoteAlreadyExists: 성경 인용문이 이미 존재함
   errorInsertingQuotes: 성경 인용문 삽입 오류
+  bibleQuoteFetchFailed: 성경 본문을 가져올 수 없습니다 — 다시 시도해 주세요
   offlineBibleImported: Offline Bible imported for {{language}}
   offlineBibleReimported: Offline Bible re-imported for {{language}}
   offlineBibleRemoved: Offline Bible removed for {{language}}

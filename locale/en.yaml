@@ -110,6 +110,7 @@ notices:
   noBibleLinkAtCursor: No JW Library link found at cursor
   bibleQuoteAlreadyExists: Bible quote already exists
   errorInsertingQuotes: Error inserting Bible quotes
+  bibleQuoteFetchFailed: Could not fetch Bible text — please try again
   offlineBibleImported: Offline Bible imported for {{language}}
   offlineBibleReimported: Offline Bible re-imported for {{language}}
   offlineBibleRemoved: Offline Bible removed for {{language}}
