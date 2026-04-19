@@ -18,7 +18,7 @@ const context = await esbuild.context({
   entryPoints: ['src/main.ts'],
   bundle: true,
   define: {
-    DEBUG: process.env.DEBUG || 'false',
+    DEBUG: JSON.stringify(process.env.DEBUG || 'false'),
   },
   plugins: [yamlPlugin()],
   external: [

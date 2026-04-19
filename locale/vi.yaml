@@ -87,6 +87,7 @@ notices:
   noBibleLinkAtCursor: Không tìm thấy liên kết JW Library tại vị trí con trỏ
   bibleQuoteAlreadyExists: Câu trích Kinh Thánh đã tồn tại
   errorInsertingQuotes: Lỗi khi chèn câu trích Kinh Thánh
+  bibleQuoteFetchFailed: Không thể tải văn bản Kinh Thánh — vui lòng thử lại
 suggestions:
   createLink: 'Tạo liên kết: {{text}}'
   createLinks: 'Tạo các liên kết: {{text}}'

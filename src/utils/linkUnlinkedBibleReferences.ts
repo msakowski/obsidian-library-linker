@@ -28,6 +28,7 @@ export function linkUnlinkedBibleReferences(
   // Scan each line for Bible references using the findBibleReferenceRegex
   lines.forEach((line, lineIndex) => {
     let match;
+    regex.lastIndex = 0;
     while ((match = regex.exec(line)) !== null) {
       // check if match is already a link
       if (line.includes(`[${match[0]}]`)) {

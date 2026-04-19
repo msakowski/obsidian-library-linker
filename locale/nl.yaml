@@ -87,6 +87,7 @@ notices:
   noBibleLinkAtCursor: Geen JW Library link gevonden bij cursor
   bibleQuoteAlreadyExists: Bijbelcitaat bestaat al
   errorInsertingQuotes: Fout bij het toevoegen van bijbelcitaten
+  bibleQuoteFetchFailed: Bijbeltekst kon niet worden opgehaald — probeer het opnieuw
 suggestions:
   createLink: 'Link maken: {{text}}'
   createLinks: 'Links maken: {{text}}'
