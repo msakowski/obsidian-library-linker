@@ -8,7 +8,7 @@ import type {
   OfflineBibleRepository,
 } from '@/types';
 import { unzipSync, strFromU8 } from 'fflate';
-import { mapEpubLanguageToPluginLanguage } from '@/utils/languageMetadata';
+import { LANGUAGE_ARRAY } from '@/consts/languages';
 
 // Node.js modules are lazy-required so this file can be imported on mobile
 // without crashing. All methods in this class are desktop-only.
@@ -230,7 +230,7 @@ export class BibleEpubImportService implements EpubImportService {
       return undefined;
     }
 
-    return mapEpubLanguageToPluginLanguage(languageValue) ?? undefined;
+    return LANGUAGE_ARRAY.find((i) => i.locale === languageValue)?.code ?? undefined;
   }
 
   private readModifiedAt(packageDoc: Document): string | undefined {

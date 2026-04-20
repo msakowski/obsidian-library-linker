@@ -1,0 +1,92 @@
+[
+  {
+    "code": "E",
+    "locale": "en",
+    "vernacular": "English",
+    "script": "ROMAN",
+    "name": "English",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "C",
+    "locale": "hr",
+    "vernacular": "hrvatski",
+    "script": "ROMAN",
+    "name": "Croatian",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "S",
+    "locale": "es",
+    "vernacular": "español",
+    "script": "ROMAN",
+    "name": "Spanish",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "F",
+    "locale": "fr",
+    "vernacular": "Français",
+    "script": "ROMAN",
+    "name": "French",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "FI",
+    "locale": "fi",
+    "vernacular": "suomi",
+    "script": "ROMAN",
+    "name": "Finnish",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "KO",
+    "locale": "ko",
+    "vernacular": "한국어",
+    "script": "KOREAN",
+    "name": "Korean",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "O",
+    "locale": "nl",
+    "vernacular": "Nederlands",
+    "script": "ROMAN",
+    "name": "Dutch",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "TPO",
+    "locale": "pt_pt",
+    "vernacular": "Português (Portugal)",
+    "script": "ROMAN",
+    "name": "Portuguese (Portugal)",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "VT",
+    "locale": "vi",
+    "vernacular": "Việt",
+    "script": "ROMAN",
+    "name": "Vietnamese",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "X",
+    "locale": "de",
+    "vernacular": "Deutsch",
+    "script": "ROMAN",
+    "name": "German",
+    "isSignLanguage": false,
+    "isRTL": false
+  }
+]

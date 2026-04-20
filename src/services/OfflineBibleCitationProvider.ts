@@ -1,7 +1,7 @@
+import { LANGUAGE_LABELS } from '@/consts/languages';
 import type { BibleCitationProvider, BibleCitationResult, BibleReference, Language } from '@/types';
 import type { OfflineBibleRepository } from '@/types';
 import { formatBibleText } from '@/utils/formatBibleText';
-import { getLanguageLabel } from '@/utils/languageMetadata';
 
 type TranslateFn = (key: string, variables?: Record<string, string>) => string;
 
@@ -20,7 +20,7 @@ export class OfflineBibleCitationProvider implements BibleCitationProvider {
         source: 'offline',
         text: '',
         citation: '',
-        error: this.t('errors.offlineBibleNotInstalled', { language: getLanguageLabel(language) }),
+        error: this.t('errors.offlineBibleNotInstalled', { language: LANGUAGE_LABELS[language] }),
       };
     }
 
@@ -32,7 +32,7 @@ export class OfflineBibleCitationProvider implements BibleCitationProvider {
         source: 'offline',
         text: '',
         citation: '',
-        error: this.t('errors.offlineBibleVerseMissing', { language: getLanguageLabel(language) }),
+        error: this.t('errors.offlineBibleVerseMissing', { language: LANGUAGE_LABELS[language] }),
       };
     }
 
