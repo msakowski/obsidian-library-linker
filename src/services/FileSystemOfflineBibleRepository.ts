@@ -5,9 +5,22 @@ import type {
   OfflineBibleCorpusMetadata,
   OfflineBibleRepository,
 } from '@/types';
-import { access, mkdir, readFile, readdir, rm, writeFile } from 'fs/promises';
-import { constants as fsConstants } from 'fs';
-import { join } from 'path';
+
+// Node.js modules are lazy-required so this file can be imported on mobile
+// without crashing. All methods in this class are desktop-only.
+function getFs(): typeof import('fs') {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require('fs') as typeof import('fs');
+}
+function getFsPromises(): typeof import('fs/promises') {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require('fs/promises') as typeof import('fs/promises');
+}
+function joinPath(...segments: string[]): string {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { join } = require('path') as typeof import('path');
+  return join(...segments);
+}
 
 interface SchemaFile {
   schemaVersion: number;
@@ -30,7 +43,7 @@ export class FileSystemOfflineBibleRepository implements OfflineBibleRepository 
 
     try {
       await this.ensureSchemaOnce();
-      const entries = await readdir(languagesPath, { withFileTypes: true });
+      const entries = await getFsPromises().readdir(languagesPath, { withFileTypes: true });
       return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name as Language);
     } catch {
       return [];
@@ -41,7 +54,7 @@ export class FileSystemOfflineBibleRepository implements OfflineBibleRepository 
     try {
       await this.ensureSchemaOnce();
       return await this.readJsonFile<OfflineBibleCorpusMetadata>(
-        join(this.getLanguagePath(language), 'metadata.json'),
+        joinPath(this.getLanguagePath(language), 'metadata.json'),
       );
     } catch {
       return null;
@@ -95,21 +108,25 @@ export class FileSystemOfflineBibleRepository implements OfflineBibleRepository 
     await this.ensureSchema();
 
     const languagePath = this.getLanguagePath(metadata.language);
-    await rm(languagePath, { recursive: true, force: true });
-    await mkdir(join(languagePath, 'books'), { recursive: true });
+    await getFsPromises().rm(languagePath, { recursive: true, force: true });
+    await getFsPromises().mkdir(joinPath(languagePath, 'books'), { recursive: true });
 
-    await writeFile(join(languagePath, 'metadata.json'), JSON.stringify(metadata, null, 2), 'utf8');
+    await getFsPromises().writeFile(
+      joinPath(languagePath, 'metadata.json'),
+      JSON.stringify(metadata, null, 2),
+      'utf8',
+    );
 
     for (const chapter of chapters) {
-      const bookPath = join(languagePath, 'books', this.padBook(chapter.book));
-      await mkdir(bookPath, { recursive: true });
-      await writeFile(
+      const bookPath = joinPath(languagePath, 'books', this.padBook(chapter.book));
+      await getFsPromises().mkdir(bookPath, { recursive: true });
+      await getFsPromises().writeFile(
         this.getChapterJsonPath(metadata.language, chapter.book, chapter.chapter),
         JSON.stringify(chapter, null, 2),
         'utf8',
       );
-      await writeFile(
-        join(bookPath, `${this.padChapter(chapter.chapter)}.md`),
+      await getFsPromises().writeFile(
+        joinPath(bookPath, `${this.padChapter(chapter.chapter)}.md`),
         this.toMarkdown(chapter),
         'utf8',
       );
@@ -117,16 +134,16 @@ export class FileSystemOfflineBibleRepository implements OfflineBibleRepository 
   }
 
   async removeLanguage(language: Language): Promise<void> {
-    await rm(this.getLanguagePath(language), { recursive: true, force: true });
+    await getFsPromises().rm(this.getLanguagePath(language), { recursive: true, force: true });
   }
 
   private async ensureSchema(): Promise<void> {
-    await mkdir(this.getLanguagesPath(), { recursive: true });
+    await getFsPromises().mkdir(this.getLanguagesPath(), { recursive: true });
 
-    const schemaPath = join(this.rootPath, 'schema.json');
+    const schemaPath = joinPath(this.rootPath, 'schema.json');
 
     try {
-      await access(schemaPath, fsConstants.F_OK);
+      await getFsPromises().access(schemaPath, getFs().constants.F_OK);
       const schema = await this.readJsonFile<SchemaFile>(schemaPath);
       if (schema.schemaVersion !== SCHEMA_VERSION) {
         throw new Error('Unsupported offline Bible schema version.');
@@ -138,12 +155,12 @@ export class FileSystemOfflineBibleRepository implements OfflineBibleRepository 
       }
 
       const schema: SchemaFile = { schemaVersion: SCHEMA_VERSION };
-      await writeFile(schemaPath, JSON.stringify(schema, null, 2), 'utf8');
+      await getFsPromises().writeFile(schemaPath, JSON.stringify(schema, null, 2), 'utf8');
     }
   }
 
   private async readJsonFile<T>(filePath: string): Promise<T> {
-    const content = await readFile(filePath, 'utf8');
+    const content = await getFsPromises().readFile(filePath, 'utf8');
     return JSON.parse(content) as T;
   }
 
@@ -164,15 +181,15 @@ export class FileSystemOfflineBibleRepository implements OfflineBibleRepository 
   }
 
   private getLanguagesPath(): string {
-    return join(this.rootPath, 'languages');
+    return joinPath(this.rootPath, 'languages');
   }
 
   private getLanguagePath(language: Language): string {
-    return join(this.getLanguagesPath(), language);
+    return joinPath(this.getLanguagesPath(), language);
   }
 
   private getChapterJsonPath(language: Language, book: number, chapter: number): string {
-    return join(
+    return joinPath(
       this.getLanguagePath(language),
       'books',
       this.padBook(book),
