@@ -1,5 +1,11 @@
 # obsidian-library-linker
 
+## 0.13.1
+
+### Patch Changes
+
+- [#253](https://github.com/msakowski/obsidian-library-linker/pull/253) [`458906a`](https://github.com/msakowski/obsidian-library-linker/commit/458906ad3bd80559373bea7536d95a87b3f59b64) Thanks [@msakowski](https://github.com/msakowski)! - Fix plugin failing to load on iOS/iPadOS by converting top-level Node.js module imports to lazy requires.
+
 ## 0.13.0
 
 ### Minor Changes
