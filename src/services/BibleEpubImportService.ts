@@ -8,10 +8,22 @@ import type {
   OfflineBibleRepository,
 } from '@/types';
 import { unzipSync, strFromU8 } from 'fflate';
-import { createHash } from 'crypto';
-import { readFile } from 'fs/promises';
-import { basename, posix } from 'path';
 import { mapEpubLanguageToPluginLanguage } from '@/utils/languageMetadata';
+
+// Node.js modules are lazy-required so this file can be imported on mobile
+// without crashing. All methods in this class are desktop-only.
+function lazyReadFile(): typeof import('fs/promises').readFile {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return (require('fs/promises') as typeof import('fs/promises')).readFile;
+}
+function lazyCreateHash(): typeof import('crypto').createHash {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return (require('crypto') as typeof import('crypto')).createHash;
+}
+function lazyPath(): typeof import('path') {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require('path') as typeof import('path');
+}
 
 interface VerseTarget {
   book: number;
@@ -38,15 +50,15 @@ export class BibleEpubImportService implements EpubImportService {
       const fileBuffer =
         request.fileData !== undefined
           ? Buffer.from(request.fileData)
-          : await readFile(request.filePath ?? '');
-      const checksum = `sha256:${createHash('sha256').update(fileBuffer).digest('hex')}`;
+          : await lazyReadFile()(request.filePath ?? '');
+      const checksum = `sha256:${lazyCreateHash()('sha256').update(fileBuffer).digest('hex')}`;
       const archive = unzipSync(new Uint8Array(fileBuffer));
       const archiveEntries = new Map(
         Object.entries(archive).map(([path, bytes]) => [path, strFromU8(bytes)]),
       );
 
       const rootFilePath = this.getRootFilePath(archiveEntries);
-      const rootDir = posix.dirname(rootFilePath);
+      const rootDir = lazyPath().posix.dirname(rootFilePath);
       const packageDoc = this.parseXml(this.getArchiveEntry(archiveEntries, rootFilePath));
       const detectedLanguage = this.detectLanguage(packageDoc);
       const language = request.language ?? detectedLanguage;
@@ -73,7 +85,8 @@ export class BibleEpubImportService implements EpubImportService {
       const metadata = this.buildMetadata({
         language,
         checksum,
-        fileName: request.sourceFileName ?? basename(request.filePath ?? 'imported.epub'),
+        fileName:
+          request.sourceFileName ?? lazyPath().basename(request.filePath ?? 'imported.epub'),
         modifiedAt: this.readModifiedAt(packageDoc),
         chapters,
       });
@@ -105,7 +118,7 @@ export class BibleEpubImportService implements EpubImportService {
 
     for (let book = 1; book <= 66; book++) {
       for (let chapter = 1; ; chapter++) {
-        const navPath = posix.join(rootDir, `bibleversenav${book}_${chapter}.xhtml`);
+        const navPath = lazyPath().posix.join(rootDir, `bibleversenav${book}_${chapter}.xhtml`);
         const navContent = archiveEntries.get(navPath);
 
         if (!navContent) {
@@ -256,7 +269,7 @@ export class BibleEpubImportService implements EpubImportService {
           chapter,
           verse,
           title,
-          filePath: posix.join(rootDir, relativePath),
+          filePath: lazyPath().posix.join(rootDir, relativePath),
           anchor,
         } satisfies VerseTarget;
       })

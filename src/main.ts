@@ -1,4 +1,4 @@
-import { Editor, Notice, Plugin, Menu } from 'obsidian';
+import { Editor, Notice, Plugin, Menu, Platform } from 'obsidian';
 import { ConversionType, convertLinks } from '@/utils/convertLinks';
 import type { LinkReplacerSettings, LinkStyles, BibleQuoteFormat } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
@@ -67,9 +67,9 @@ export default class JWLibraryLinkerPlugin extends Plugin {
   // Services
   private translationService!: TranslationService;
   private bibleSuggester!: BibleReferenceSuggester;
-  private offlineBibleRepository!: FileSystemOfflineBibleRepository;
+  private offlineBibleRepository: FileSystemOfflineBibleRepository | null = null;
   private bibleCitationProvider!: ConfiguredBibleCitationProvider;
-  private epubImportService!: BibleEpubImportService;
+  private epubImportService: BibleEpubImportService | null = null;
 
   // Convenience binding for backward compatibility
   private t!: (key: string, variables?: Record<string, string>) => string;
@@ -84,12 +84,17 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     // Load settings (may update language)
     await this.loadSettings();
 
-    const offlineBibleRootPath = getOfflineBibleRootPath(this.app, this.manifest.id);
-    this.offlineBibleRepository = new FileSystemOfflineBibleRepository(offlineBibleRootPath);
-    this.epubImportService = new BibleEpubImportService(this.offlineBibleRepository);
+    if (Platform.isDesktopApp) {
+      const offlineBibleRootPath = getOfflineBibleRootPath(this.app, this.manifest.id);
+      this.offlineBibleRepository = new FileSystemOfflineBibleRepository(offlineBibleRootPath);
+      this.epubImportService = new BibleEpubImportService(this.offlineBibleRepository);
+    }
+
     this.bibleCitationProvider = new ConfiguredBibleCitationProvider(
       () => this.settings,
-      new OfflineBibleCitationProvider(this.offlineBibleRepository, this.t),
+      this.offlineBibleRepository
+        ? new OfflineBibleCitationProvider(this.offlineBibleRepository, this.t)
+        : new OnlineBibleCitationProvider(),
       new OnlineBibleCitationProvider(),
       this.t,
     );
@@ -301,11 +306,11 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     return this.bibleCitationProvider;
   }
 
-  getOfflineBibleRepository(): FileSystemOfflineBibleRepository {
+  getOfflineBibleRepository(): FileSystemOfflineBibleRepository | null {
     return this.offlineBibleRepository;
   }
 
-  getEpubImportService(): BibleEpubImportService {
+  getEpubImportService(): BibleEpubImportService | null {
     return this.epubImportService;
   }
 

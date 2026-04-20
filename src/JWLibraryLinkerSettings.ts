@@ -1,6 +1,12 @@
-import { PluginSettingTab, App, Setting, MarkdownRenderer, Component, Notice } from 'obsidian';
-import { shell } from 'electron';
-import { mkdir } from 'fs/promises';
+import {
+  PluginSettingTab,
+  App,
+  Setting,
+  MarkdownRenderer,
+  Component,
+  Notice,
+  Platform,
+} from 'obsidian';
 import JWLibraryLinkerPlugin, { DEFAULT_SETTINGS, DEFAULT_STYLES } from '@/main';
 import type {
   Language,
@@ -518,11 +524,13 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     // Initialize bible quote preview
     this.updateBibleQuotePreview();
 
-    const offlineBibleContainer = settingsContainer.createDiv({
-      cls: 'setting-item setting-item--column setting-item--offlineBible',
-    });
+    if (Platform.isDesktopApp) {
+      const offlineBibleContainer = settingsContainer.createDiv({
+        cls: 'setting-item setting-item--column setting-item--offlineBible',
+      });
 
-    void this.renderOfflineBibleSection(offlineBibleContainer);
+      void this.renderOfflineBibleSection(offlineBibleContainer);
+    }
   }
 
   /**
@@ -596,7 +604,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     container.empty();
 
     const language = this.plugin.settings.language;
-    const metadata = await this.plugin.getOfflineBibleRepository().getMetadata(language);
+    const metadata = (await this.plugin.getOfflineBibleRepository()?.getMetadata(language)) ?? null;
 
     container.createDiv({
       text: this.t('settings.offlineBible.name'),
@@ -704,7 +712,10 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       return;
     }
 
-    const result = await this.plugin.getEpubImportService().importBible({
+    const importService = this.plugin.getEpubImportService();
+    if (!importService) return;
+
+    const result = await importService.importBible({
       fileData: new Uint8Array(await selectedFile.arrayBuffer()),
       sourceFileName: selectedFile.name,
       overwriteExisting: existing,
@@ -725,14 +736,18 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
   }
 
   private async handleBibleRemoval(language: Language, container: HTMLElement): Promise<void> {
-    await this.plugin.getOfflineBibleRepository().removeLanguage(language);
+    await this.plugin.getOfflineBibleRepository()?.removeLanguage(language);
     new Notice(this.t('notices.offlineBibleRemoved', { language: LANGUAGE_LABELS[language] }));
     void this.renderOfflineBibleSection(container);
   }
 
   private async openOfflineBibleFolder(): Promise<void> {
     const folderPath = getOfflineBibleRootPath(this.app, this.plugin.manifest.id);
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { mkdir } = require('fs/promises') as typeof import('fs/promises');
     await mkdir(folderPath, { recursive: true });
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { shell } = require('electron') as typeof import('electron');
     const error = await shell.openPath(folderPath);
 
     if (error) {
