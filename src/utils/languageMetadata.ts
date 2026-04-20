@@ -9,7 +9,7 @@ export const LANGUAGE_LABELS: Record<Language, string> = {
   KO: '한국어',
   TPO: 'Português (Portugal)',
   F: 'Français',
-  CR: 'Hrvatski',
+  C: 'Hrvatski',
   VT: 'Việt',
 };
 
@@ -23,7 +23,7 @@ const EPUB_LANGUAGE_TO_PLUGIN_LANGUAGE: Record<string, Language> = {
   fr: 'F',
   pt: 'TPO',
   'pt-pt': 'TPO',
-  hr: 'CR',
+  hr: 'C',
   vi: 'VT',
 };
 

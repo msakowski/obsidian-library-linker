@@ -70,7 +70,7 @@ describe('BibleTextFetcher', () => {
     });
 
     test('builds correct URL for Croatian', () => {
-      expect(BibleTextFetcher.buildWOLUrl(19, 23, 'CR')).toBe(
+      expect(BibleTextFetcher.buildWOLUrl(19, 23, 'C')).toBe(
         'https://wol.jw.org/hr/wol/b/r19/lp-c/nwt/19/23',
       );
     });
