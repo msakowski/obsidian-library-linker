@@ -1,6 +1,58 @@
-export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko' | 'fr' | 'pt' | 'hr' | 'vi'; // obsidian language
+// obsidian language
+export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko' | 'fr' | 'pt' | 'hr' | 'vi';
 
-export type Language = 'E' | 'X' | 'FI' | 'S' | 'O' | 'KO' | 'F' | 'TPO' | 'C' | 'VT'; // plugin language
+// plugin language
+export type Language =
+  | 'E'
+  | 'X'
+  | 'FI'
+  | 'S'
+  | 'O'
+  | 'KO'
+  | 'F'
+  | 'TPO'
+  | 'C'
+  | 'VT'
+  // Sign languages
+  | 'ASL'
+  | 'LSA'
+  | 'AUS'
+  | 'OGS'
+  | 'SBF'
+  | 'BVL'
+  | 'BSL'
+  | 'BFL'
+  | 'CRS'
+  | 'SCH'
+  | 'LSC'
+  | 'SCR'
+  | 'HZJ'
+  | 'CBS'
+  | 'NGT'
+  | 'SEC'
+  | 'FID'
+  | 'LSF'
+  | 'DGS'
+  | 'LSG'
+  | 'SHO'
+  | 'ISG'
+  | 'LSI'
+  | 'JML'
+  | 'KSL'
+  | 'CML'
+  | 'LSM'
+  | 'NZS'
+  | 'LSN'
+  | 'PSL'
+  | 'LSP'
+  | 'SPE'
+  | 'LGP'
+  | 'LSQ'
+  | 'LSS'
+  | 'LSE'
+  | 'LSU'
+  | 'LSV'
+  | 'SLV';
 
 export interface LanguageInfo {
   code: string;
