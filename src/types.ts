@@ -1,6 +1,6 @@
 export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko' | 'fr' | 'pt' | 'hr' | 'vi'; // obsidian language
 
-export type Language = 'E' | 'X' | 'FI' | 'S' | 'O' | 'KO' | 'F' | 'TPO' | 'CR' | 'VT'; // plugin language
+export type Language = 'E' | 'X' | 'FI' | 'S' | 'O' | 'KO' | 'F' | 'TPO' | 'C' | 'VT'; // plugin language
 
 export interface LanguageInfo {
   label: string;
@@ -10,7 +10,6 @@ export interface LanguageInfo {
 
 /**
  * Central language configuration.
- * `wtlocale` only needs to be set when it differs from the Language key.
  */
 export const LANGUAGES: Record<Language, LanguageInfo> = {
   E: { label: 'English' },
@@ -21,14 +20,9 @@ export const LANGUAGES: Record<Language, LanguageInfo> = {
   KO: { label: '한국어' },
   TPO: { label: 'Português (Portugal)' },
   F: { label: 'Français' },
-  CR: { label: 'Hrvatski', wtlocale: 'C' },
+  C: { label: 'Hrvatski' },
   VT: { label: 'Việt' },
 };
-
-/** Resolve the jw.org wtlocale code for a given Language */
-export function getWtlocale(language: Language): string {
-  return LANGUAGES[language].wtlocale ?? language;
-}
 
 export type BookLength = 'short' | 'medium' | 'long';
 

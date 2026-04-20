@@ -3,7 +3,7 @@ import type { Language } from '@/types';
 import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
 
 beforeAll(() => {
-  initializeTestBibleBooks(['E', 'X', 'FI', 'O', 'S', 'F', 'KO', 'TPO', 'CR', 'VT']);
+  initializeTestBibleBooks(['E', 'X', 'FI', 'O', 'S', 'F', 'KO', 'TPO', 'C', 'VT']); // TODO: needs single point of truth
 });
 
 describe('parseBibleReference', () => {
