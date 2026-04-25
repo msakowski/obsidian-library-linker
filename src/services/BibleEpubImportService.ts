@@ -406,9 +406,7 @@ export class BibleEpubImportService implements EpubImportService {
 
   private normalizeText(html: string): string | null {
     const normalized = cleanHtmlText(
-      html
-        .replace(/\u00a0/g, ' ')
-        .replace(/[\u200b-\u200d\ufeff]/g, ''),
+      html.replace(/\u00a0/g, ' ').replace(/[\u200b-\u200d\ufeff]/g, ''),
       { removeFootnoteMarkers: false },
     );
 
