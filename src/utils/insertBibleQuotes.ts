@@ -10,6 +10,7 @@ import {
   type ContentSelection,
 } from '@/utils/findJWLibraryLinks';
 import { logger } from '@/utils/logger';
+import { getBookLanguage } from './signLanguage';
 
 export type { JWLibraryLinkInfo, ContentSelection };
 
@@ -34,7 +35,10 @@ async function generateBibleQuoteText(
 ): Promise<string | null> {
   try {
     logger.log('generateBibleQuoteText: fetching text for', linkInfo.reference);
-    const result = await provider.getCitation(linkInfo.reference, settings.language);
+    const result = await provider.getCitation(
+      linkInfo.reference,
+      getBookLanguage(settings.language),
+    );
 
     if (!result.success || !result.text) {
       logger.warn(

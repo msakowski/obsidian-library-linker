@@ -3,6 +3,7 @@ import { join, resolve } from 'path';
 import { __getCache } from '@/stores/bibleBooks';
 import type { BibleBook, Language } from '@/types';
 import yaml from 'js-yaml';
+import { LANGUAGES } from '@/consts/languages';
 
 const PROJECT_ROOT = resolve(__dirname, '../../..');
 const LOCALE_DIR = join(PROJECT_ROOT, 'locale');
@@ -12,7 +13,7 @@ const LOCALE_DIR = join(PROJECT_ROOT, 'locale');
  * @param languages Languages to pre-load (defaults to common test languages)
  */
 export function initializeTestBibleBooks(
-  languages: Language[] = ['E', 'X', 'FI', 'O', 'S', 'F', 'KO', 'TPO', 'C', 'VT'], // TODO: needs single point of truth
+  languages: Language[] = Object.keys(LANGUAGES) as Language[],
 ): void {
   const booksCache = __getCache();
 
