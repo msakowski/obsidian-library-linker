@@ -57,6 +57,7 @@ export type Language =
 export interface LanguageInfo {
   code: string;
   locale: string;
+  importAliases?: string[];
   vernacular: string;
   script: string;
   name: string;
