@@ -235,6 +235,36 @@ describe('BibleTextFetcher', () => {
         expect(result.text).toContain('disgusting thing');
         expect(result.text).not.toContain('Judea');
       });
+
+      test('extracts all WOL segments for verse ranges', async () => {
+        const html = `
+          <span id="v23-55-1-1" class="v"><a href="#" class="vl vx vp">55 </a>Kommt, all ihr Durstigen, kommt zum Wasser!</span>
+          <span id="v23-55-1-2" class="v">Ihr, die ihr kein Geld habt, kommt, kauft und esst!</span>
+          <span id="v23-55-1-3" class="v">Ja kommt her, kauft Wein und Milch ohne Geld und ohne Kosten.</span>
+          <span id="v23-55-2-1" class="v"><a href="#" class="vl vx vp">2 </a>Warum bezahlt ihr ständig Geld für etwas, was kein Brot ist,</span>
+          <span id="v23-55-2-2" class="v">und warum gebt ihr euren Verdienst für etwas aus, was nicht satt macht?</span>
+          <span id="v23-55-2-3" class="v">Hört mir aufmerksam zu und esst Gutes,</span>
+          <span id="v23-55-2-4" class="v">und ihr werdet großen Genuss finden an dem, was wirklich gehaltvoll ist.</span>
+          <span id="v23-55-3-1" class="v"><a href="#" class="vl vx vp">3 </a>Neigt euer Ohr und kommt zu mir.</span>
+        `;
+
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
+
+        const result = await BibleTextFetcher.fetchBibleText(
+          {
+            book: 23,
+            chapter: 55,
+            verseRanges: [{ start: 1, end: 2 }],
+          },
+          'X',
+        );
+
+        expect(result.success).toBe(true);
+        expect(result.text).toBe(
+          'Kommt, all ihr Durstigen, kommt zum Wasser! Ihr, die ihr kein Geld habt, kommt, kauft und esst! Ja kommt her, kauft Wein und Milch ohne Geld und ohne Kosten. Warum bezahlt ihr ständig Geld für etwas, was kein Brot ist, und warum gebt ihr euren Verdienst für etwas aus, was nicht satt macht? Hört mir aufmerksam zu und esst Gutes, und ihr werdet großen Genuss finden an dem, was wirklich gehaltvoll ist.',
+        );
+        expect(result.text).not.toContain('Neigt euer Ohr');
+      });
     });
 
     describe('regular verse extraction (verse number displayed)', () => {
