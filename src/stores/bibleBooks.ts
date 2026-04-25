@@ -1,5 +1,6 @@
 import { chapterCounts } from '@/consts/chapterCounts';
 import type { BibleBook, Language } from '@/types';
+import { getBookLanguage } from '@/utils/signLanguage';
 import BUNDLED_LOCALES from 'locale:all';
 import { logger } from '@/utils/logger';
 
@@ -27,20 +28,22 @@ export function __getCache(): Map<Language, readonly BibleBookWithoutChapters[]>
  * @throws Error if loading fails
  */
 export function loadBibleBooks(language: Language): void {
+  const bookLanguage = getBookLanguage(language);
+
   // Return early if already loaded
-  if (booksCache.has(language)) {
+  if (booksCache.has(bookLanguage)) {
     return;
   }
 
-  const bibleFile = `locale/bibleBooks/${language}.yaml`;
+  const bibleFile = `locale/bibleBooks/${bookLanguage}.yaml`;
 
   if (!(bibleFile in BUNDLED_LOCALES)) {
-    logger.error(`Bible books for language ${language} not found in bundle`);
+    logger.error(`Bible books for language ${bookLanguage} not found in bundle`);
     throw new Error('errors.unsupportedLanguage');
   }
 
   const books = BUNDLED_LOCALES[bibleFile] as readonly BibleBookWithoutChapters[];
-  booksCache.set(language, books);
+  booksCache.set(bookLanguage, books);
 }
 
 /**
@@ -52,13 +55,17 @@ export function loadBibleBooks(language: Language): void {
  * @throws Error if language not loaded
  */
 export function getBibleBooks(language: Language): readonly BibleBook[] {
-  const cached = enrichedBooksCache.get(language);
+  const bookLanguage = getBookLanguage(language);
+
+  const cached = enrichedBooksCache.get(bookLanguage);
   if (cached) return cached;
 
-  const books = booksCache.get(language);
+  const books = booksCache.get(bookLanguage);
 
   if (!books) {
-    logger.error(`Bible books for language ${language} not loaded. Call loadBibleBooks() first.`);
+    logger.error(
+      `Bible books for language ${bookLanguage} not loaded. Call loadBibleBooks() first.`,
+    );
     throw new Error('errors.unsupportedLanguage');
   }
 
@@ -66,7 +73,7 @@ export function getBibleBooks(language: Language): readonly BibleBook[] {
     ...book,
     chapters: chapterCounts[book.id],
   }));
-  enrichedBooksCache.set(language, enriched);
+  enrichedBooksCache.set(bookLanguage, enriched);
   return enriched;
 }
 

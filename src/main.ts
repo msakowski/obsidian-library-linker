@@ -21,6 +21,7 @@ import {
   type ContentSelection,
 } from '@/utils/insertBibleQuotes';
 import { logger } from '@/utils/logger';
+import { getBookLanguage } from './utils/signLanguage';
 
 export const DEFAULT_STYLES: LinkStyles = {
   bookLength: 'medium',
@@ -100,7 +101,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     );
 
     // Load bible books for saved language
-    loadBibleBooks(this.settings.language);
+    loadBibleBooks(getBookLanguage(this.settings.language));
 
     // Add settings tab
     this.addSettingTab(new JWLibraryLinkerSettings(this.app, this));

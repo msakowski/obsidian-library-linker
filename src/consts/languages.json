@@ -88,5 +88,356 @@
     "name": "German",
     "isSignLanguage": false,
     "isRTL": false
+  },
+  {
+    "code": "ASL",
+    "locale": "ase",
+    "vernacular": "American Sign Language",
+    "script": "ROMAN",
+    "name": "American Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSA",
+    "locale": "aed",
+    "vernacular": "lengua de señas argentina",
+    "script": "ROMAN",
+    "name": "Argentinean Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "AUS",
+    "locale": "asf",
+    "vernacular": "Auslan (Australian Sign Language)",
+    "script": "ROMAN",
+    "name": "Australian Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "OGS",
+    "locale": "asq",
+    "vernacular": "Österreichische Gebärdensprache",
+    "script": "ROMAN",
+    "name": "Austrian Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "SBF",
+    "locale": "sfb",
+    "vernacular": "Langue des signes de Belgique francophone",
+    "script": "ROMAN",
+    "name": "Belgian French Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "BVL",
+    "locale": "bvl",
+    "vernacular": "lengua de señas boliviana",
+    "script": "ROMAN",
+    "name": "Bolivian Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "BSL",
+    "locale": "bfi",
+    "vernacular": "British Sign Language",
+    "script": "ROMAN",
+    "name": "British Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "BFL",
+    "locale": "sgn_bf",
+    "vernacular": "Burkina Faso Sign Language",
+    "script": "ROMAN",
+    "name": "Burkina Faso Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "CRS",
+    "locale": "sgn_cf",
+    "vernacular": "Langue des signes centrafricaine",
+    "script": "ROMAN",
+    "name": "Central African Republic Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "SCH",
+    "locale": "csg",
+    "vernacular": "lengua de señas chilena",
+    "script": "ROMAN",
+    "name": "Chilean Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSC",
+    "locale": "csn",
+    "vernacular": "lengua de señas colombiana",
+    "script": "ROMAN",
+    "name": "Colombian Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "SCR",
+    "locale": "csr",
+    "vernacular": "lengua de señas costarricense",
+    "script": "ROMAN",
+    "name": "Costa Rican Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "HZJ",
+    "locale": "csq",
+    "vernacular": "hrvatski znakovni jezik",
+    "script": "ROMAN",
+    "name": "Croatian Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "CBS",
+    "locale": "csf",
+    "vernacular": "lengua de señas cubana",
+    "script": "ROMAN",
+    "name": "Cuban Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "NGT",
+    "locale": "dse",
+    "vernacular": "Nederlandse Gebarentaal",
+    "script": "ROMAN",
+    "name": "Dutch Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "SEC",
+    "locale": "ecs",
+    "vernacular": "lengua de señas ecuatoriana",
+    "script": "ROMAN",
+    "name": "Ecuadorian Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "FID",
+    "locale": "fse",
+    "vernacular": "suomalainen viittomakieli",
+    "script": "ROMAN",
+    "name": "Finnish Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSF",
+    "locale": "fsl",
+    "vernacular": "Langue des signes française",
+    "script": "ROMAN",
+    "name": "French Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "DGS",
+    "locale": "gsg",
+    "vernacular": "Deutsche Gebärdensprache",
+    "script": "ROMAN",
+    "name": "German Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSG",
+    "locale": "gsm",
+    "vernacular": "lengua de señas de Guatemala",
+    "script": "ROMAN",
+    "name": "Guatemalan Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "SHO",
+    "locale": "hds",
+    "vernacular": "lengua de señas hondureña",
+    "script": "ROMAN",
+    "name": "Honduras Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "ISG",
+    "locale": "isg",
+    "vernacular": "Irish Sign Language",
+    "script": "ROMAN",
+    "name": "Irish Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSI",
+    "locale": "sgn_ci",
+    "vernacular": "Langue des signes ivoirienne",
+    "script": "ROMAN",
+    "name": "Ivorian Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "JML",
+    "locale": "jls",
+    "vernacular": "Jamaican Sign Language",
+    "script": "ROMAN",
+    "name": "Jamaican Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "KSL",
+    "locale": "kvk",
+    "vernacular": "한국 수어",
+    "script": "KOREAN",
+    "name": "Korean Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "CML",
+    "locale": "sgn_cm",
+    "vernacular": "Langue des signes camerounaise",
+    "script": "ROMAN",
+    "name": "Langue des signes camerounaise",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSM",
+    "locale": "mfs",
+    "vernacular": "lengua de señas mexicana",
+    "script": "ROMAN",
+    "name": "Mexican Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "NZS",
+    "locale": "nzs",
+    "vernacular": "New Zealand Sign Language",
+    "script": "ROMAN",
+    "name": "New Zealand Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSN",
+    "locale": "ncs",
+    "vernacular": "lenguaje de señas nicaragüense",
+    "script": "ROMAN",
+    "name": "Nicaraguan Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "PSL",
+    "locale": "lsp",
+    "vernacular": "lengua de señas panameñas",
+    "script": "ROMAN",
+    "name": "Panamanian Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSP",
+    "locale": "pys",
+    "vernacular": "lengua de señas paraguaya",
+    "script": "ROMAN",
+    "name": "Paraguayan Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "SPE",
+    "locale": "prl",
+    "vernacular": "lengua de señas peruana",
+    "script": "ROMAN",
+    "name": "Peruvian Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LGP",
+    "locale": "psr",
+    "vernacular": "Língua Gestual Portuguesa",
+    "script": "ROMAN",
+    "name": "Portuguese Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSQ",
+    "locale": "fcs",
+    "vernacular": "Langue des signes québécoise",
+    "script": "ROMAN",
+    "name": "Quebec Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSS",
+    "locale": "esn",
+    "vernacular": "lengua de señas salvadoreña",
+    "script": "ROMAN",
+    "name": "Salvadoran Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSE",
+    "locale": "ssp",
+    "vernacular": "lengua de signos española",
+    "script": "ROMAN",
+    "name": "Spanish Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSU",
+    "locale": "ugy",
+    "vernacular": "lengua de señas uruguaya",
+    "script": "ROMAN",
+    "name": "Uruguayan Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "LSV",
+    "locale": "vsl",
+    "vernacular": "lengua de señas venezolana",
+    "script": "ROMAN",
+    "name": "Venezuelan Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "SLV",
+    "locale": "hab",
+    "vernacular": "Việt Nam (Ngôn ngữ ký hiệu)",
+    "script": "ROMAN",
+    "name": "Vietnamese Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
   }
 ]
