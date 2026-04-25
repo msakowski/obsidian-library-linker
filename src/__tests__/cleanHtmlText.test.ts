@@ -73,6 +73,11 @@ describe('cleanHtmlText', () => {
       const html = '<p>Hello+ <span>world*</span></p>';
       expect(cleanHtmlText(html)).toBe('Hello world');
     });
+
+    it('can preserve plus and asterisk characters when requested', () => {
+      const html = '<p>C++ and *</p>';
+      expect(cleanHtmlText(html, { removeFootnoteMarkers: false })).toBe('C++ and *');
+    });
   });
 
   describe('Whitespace normalization', () => {
