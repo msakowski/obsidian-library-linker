@@ -63,6 +63,29 @@ settings:
       description: 'Přizpůsobte formát citace pomocí proměnných: {bibleRef}, {bibleRefLinked}, {quote}'
     preview:
       name: Náhled biblické citace
+  offlineBible:
+    name: Offline Bible
+    description: Naimportujte jednou biblické EPUB a používejte místní data kapitol pro offline vyhledávání citací.
+    enabled:
+      name: Povolit offline Bibli
+      description: Umožní citačnímu procesu používat importovaná místní biblická data.
+    preferOffline:
+      name: Upřednostnit offline citace
+      description: Nejprve zkontroluje importovanou offline Bibli, než se pokusí o online načtení.
+    allowOnlineFallback:
+      name: Povolit online zálohu
+      description: Pokud offline data chybí, plugin se může pokusit použít online poskytovatele citací.
+    status:
+      name: Stav nainstalovaného jazyka
+      notInstalled: Pro jazyk {{language}} není nainstalována žádná offline Bible.
+      installed: Offline Bible pro jazyk {{language}} byla nainstalována ze souboru {{sourceFileName}} dne {{importedAt}} a obsahuje {{chapterCount}} kapitol.
+    actions:
+      name: Akce offline Bible
+      description: Importujte, nahraďte, odstraňte nebo zkontrolujte offline biblický korpus pro vybraný jazyk.
+      import: Importovat biblické EPUB
+      reimport: Znovu importovat biblické EPUB
+      remove: Odstranit offline Bibli
+      openFolder: Otevřít složku offline Bible
 commands:
   linkUnlinkedBibleReferences: Propojit neodkazované biblické reference
   convertToJWLibraryLinks: Převést odkazy ve výběru na JW Library odkazy
@@ -87,6 +110,12 @@ notices:
   noBibleLinkAtCursor: Na pozici kurzoru nebyl nalezen žádný JW Library odkaz
   bibleQuoteAlreadyExists: Biblická citace již existuje
   errorInsertingQuotes: Chyba při vkládání biblických citací
+  bibleQuoteFetchFailed: Biblický text se nepodařilo načíst, zkuste to prosím znovu
+  offlineBibleImported: Offline Bible byla importována pro jazyk {{language}}
+  offlineBibleReimported: Offline Bible byla znovu importována pro jazyk {{language}}
+  offlineBibleRemoved: Offline Bible byla odstraněna pro jazyk {{language}}
+  offlineBibleImportFailed: Import offline biblického EPUB se nezdařil
+  offlineBibleOpenFolderFailed: Nepodařilo se otevřít složku offline Bible
 suggestions:
   createLink: 'Vytvořit odkaz: {{text}}'
   createLinks: 'Vytvořit odkazy: {{text}}'
@@ -101,3 +130,7 @@ errors:
   invalidVerseFormat: Neplatný formát verše
   invalidReferenceFormat: Neplatný formát reference
   unsupportedLanguage: Nepodporovaný jazyk
+  offlineBibleNotInstalled: Pro jazyk {{language}} není nainstalována žádná offline Bible. Pro povolení offline citací naimportujte v nastavení biblické EPUB.
+  offlineBibleVerseMissing: Požadované verše v offline Bibli pro jazyk {{language}} chybí nebo je nelze přečíst.
+  offlineBibleLookupFailed: Vyhledání v offline Bibli se nezdařilo.
+  onlineFallbackDisabled: Online záloha je vypnuta.
