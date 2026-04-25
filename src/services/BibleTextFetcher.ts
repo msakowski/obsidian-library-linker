@@ -4,6 +4,7 @@ import { padChapter, padVerse } from '@/utils/padNumber';
 import { Platform, requestUrl } from 'obsidian';
 import { cleanHtmlText } from '@/utils/cleanHtmlText';
 import { logger } from '@/utils/logger';
+import { LANGUAGES } from '@/consts/languages';
 
 export interface BibleTextResult {
   text: string;
@@ -29,22 +30,21 @@ interface WebviewElement extends HTMLElement {
 }
 
 interface WOLLangConfig {
-  locale: string;
   region: string;
   lp: string;
 }
 
 const WOL_LANG_CONFIG: Record<string, WOLLangConfig> = {
-  E: { locale: 'en', region: 'r1', lp: 'lp-e' },
-  X: { locale: 'de', region: 'r10', lp: 'lp-x' },
-  FI: { locale: 'fi', region: 'r16', lp: 'lp-fi' },
-  O: { locale: 'nl', region: 'r18', lp: 'lp-o' },
-  S: { locale: 'es', region: 'r4', lp: 'lp-s' },
-  F: { locale: 'fr', region: 'r30', lp: 'lp-f' },
-  KO: { locale: 'ko', region: 'r8', lp: 'lp-ko' },
-  TPO: { locale: 'pt', region: 'r5', lp: 'lp-t' },
-  C: { locale: 'hr', region: 'r19', lp: 'lp-c' },
-  VT: { locale: 'vi', region: 'r47', lp: 'lp-vt' },
+  E: { region: 'r1', lp: 'lp-e' },
+  X: { region: 'r10', lp: 'lp-x' },
+  FI: { region: 'r16', lp: 'lp-fi' },
+  O: { region: 'r18', lp: 'lp-o' },
+  S: { region: 'r4', lp: 'lp-s' },
+  F: { region: 'r30', lp: 'lp-f' },
+  KO: { region: 'r8', lp: 'lp-ko' },
+  TPO: { region: 'r5', lp: 'lp-t' },
+  C: { region: 'r19', lp: 'lp-c' },
+  VT: { region: 'r47', lp: 'lp-vt' },
 };
 
 export class BibleTextFetcher {
@@ -400,10 +400,11 @@ export class BibleTextFetcher {
 
   static buildWOLUrl(book: number, chapter: number, language: Language): string {
     const config = WOL_LANG_CONFIG[language];
+    const locale = LANGUAGES[language]?.locale;
     if (!config) {
       throw new Error(`Unsupported language for WOL: ${language}`);
     }
-    return `${this.WOL_BASE}/${config.locale}/wol/b/${config.region}/${config.lp}/nwt/${book}/${chapter}`;
+    return `${this.WOL_BASE}/${locale}/wol/b/${config.region}/${config.lp}/nwt/${book}/${chapter}`;
   }
 
   /**

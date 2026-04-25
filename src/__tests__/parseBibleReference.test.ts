@@ -1,9 +1,10 @@
 import { parseBibleReference, extractBibleReferenceFromMatch } from '@/utils/parseBibleReference';
 import type { Language } from '@/types';
 import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
+import { LANGUAGES } from '@/consts/languages';
 
 beforeAll(() => {
-  initializeTestBibleBooks(['E', 'X', 'FI', 'O', 'S', 'F', 'KO', 'TPO', 'C', 'VT']); // TODO: needs single point of truth
+  initializeTestBibleBooks(Object.keys(LANGUAGES) as Language[]);
 });
 
 describe('parseBibleReference', () => {

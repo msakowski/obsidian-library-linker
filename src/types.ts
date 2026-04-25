@@ -3,26 +3,14 @@ export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko' | 'fr' | 'pt' | 'hr
 export type Language = 'E' | 'X' | 'FI' | 'S' | 'O' | 'KO' | 'F' | 'TPO' | 'C' | 'VT'; // plugin language
 
 export interface LanguageInfo {
-  label: string;
-  /** jw.org wtlocale code — defaults to the Language key when omitted */
-  wtlocale?: string;
+  code: string;
+  locale: string;
+  vernacular: string;
+  script: string;
+  name: string;
+  isSignLanguage: boolean;
+  isRTL: boolean;
 }
-
-/**
- * Central language configuration.
- */
-export const LANGUAGES: Record<Language, LanguageInfo> = {
-  E: { label: 'English' },
-  X: { label: 'Deutsch' },
-  FI: { label: 'Suomi' },
-  S: { label: 'Español' },
-  O: { label: 'Nederlands' },
-  KO: { label: '한국어' },
-  TPO: { label: 'Português (Portugal)' },
-  F: { label: 'Français' },
-  C: { label: 'Hrvatski' },
-  VT: { label: 'Việt' },
-};
 
 export type BookLength = 'short' | 'medium' | 'long';
 

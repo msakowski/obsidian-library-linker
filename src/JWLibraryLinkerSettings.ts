@@ -21,8 +21,8 @@ import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdo
 import { formatBibleText } from '@/utils/formatBibleText';
 import { loadBibleBooks } from '@/stores/bibleBooks';
 import { getOfflineBibleRootPath } from '@/services/PluginDataPathService';
-import { LANGUAGE_LABELS } from '@/utils/languageMetadata';
 import { logger } from '@/utils/logger';
+import { LANGUAGE_LABELS } from '@/consts/languages';
 
 class MarkdownComponent extends Component {
   constructor() {
@@ -138,7 +138,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       .setDesc(this.t('settings.language.description'))
       .addDropdown((dropdown) =>
         dropdown
-          .addOptions(LANGUAGE_LABELS satisfies Record<Language, string>)
+          .addOptions(LANGUAGE_LABELS)
           .setValue(this.plugin.settings.language)
           .onChange(async (value) => {
             const newLanguage = value as Language;
