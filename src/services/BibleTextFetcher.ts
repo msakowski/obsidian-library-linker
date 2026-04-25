@@ -273,7 +273,7 @@ export class BibleTextFetcher {
     while (Date.now() < deadline) {
       const webview = leaf.view.containerEl.querySelector('webview');
       if (webview instanceof HTMLElement) {
-        return webview as WebviewElement;
+        return webview;
       }
       await this.delay(100);
     }
@@ -330,10 +330,10 @@ export class BibleTextFetcher {
 
       const cleanup = () => {
         window.clearTimeout(timeoutId);
-        webview.removeEventListener('dom-ready', onDomReady as EventListener);
+        webview.removeEventListener('dom-ready', onDomReady);
       };
 
-      webview.addEventListener('dom-ready', onDomReady as EventListener, { once: true });
+      webview.addEventListener('dom-ready', onDomReady, { once: true });
     });
   }
 
