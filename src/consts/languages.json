@@ -65,6 +65,7 @@
   {
     "code": "TPO",
     "locale": "pt_pt",
+    "importAliases": ["pt"],
     "vernacular": "Português (Portugal)",
     "script": "ROMAN",
     "name": "Portuguese (Portugal)",
