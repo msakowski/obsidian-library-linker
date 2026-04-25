@@ -5,7 +5,7 @@ import languageJson from '@/consts/languages.json';
  * Central language configuration.
  */
 export const LANGUAGES: Record<Language, LanguageInfo> = Object.fromEntries(
-  languageJson.map((lang) => [lang.code as Language, lang]),
+  languageJson.map((lang) => [lang.code, lang]),
 ) as Record<Language, LanguageInfo>;
 
 type LanguageInfoPlus = Omit<LanguageInfo, 'code'> & { code: Language };
