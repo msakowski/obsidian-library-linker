@@ -434,36 +434,36 @@ export class BibleTextFetcher {
     const textParts: string[] = [];
 
     for (let v = start; v <= end; v++) {
-      let verseEl: Element | null = null;
+      const verseElements = isWOL
+        ? Array.from(doc.querySelectorAll(`span[id^="v${book}-${chapter}-${v}-"]`)).sort((a, b) => {
+            const aSegment = Number(a.id.split('-').pop()) || 0;
+            const bSegment = Number(b.id.split('-').pop()) || 0;
+            return aSegment - bSegment;
+          })
+        : (() => {
+            const verseId = `v${book}${padChapter(chapter)}${padVerse(v)}`;
+            const verseEl = doc.getElementById(verseId);
+            return verseEl ? [verseEl] : [];
+          })();
 
-      if (isWOL) {
-        // WOL: verse spans have id="v{book}-{chapter}-{verse}-{segment}"
-        // There may be multiple segments per verse (e.g. v40-24-14-1, v40-24-14-2)
-        verseEl = doc.querySelector(`span[id="v${book}-${chapter}-${v}-1"]`);
-      } else {
-        // jw.org: verse spans have id="v{paddedBook}{paddedChapter}{paddedVerse}"
-        const verseId = `v${book}${padChapter(chapter)}${padVerse(v)}`;
-        verseEl = doc.getElementById(verseId);
-      }
+      for (const verseEl of verseElements) {
+        const clone = verseEl.cloneNode(true) as HTMLElement;
 
-      if (!verseEl) continue;
+        // Remove footnote/cross-reference links (both jw.org and WOL formats)
+        clone.querySelectorAll('a.footnoteLink, a.xrefLink, a.b').forEach((el) => el.remove());
 
-      const clone = verseEl.cloneNode(true) as HTMLElement;
+        // Remove study note sections
+        clone.querySelectorAll('.studyBible, .study-notes, .notes').forEach((el) => el.remove());
 
-      // Remove footnote/cross-reference links (both jw.org and WOL formats)
-      clone.querySelectorAll('a.footnoteLink, a.xrefLink, a.b').forEach((el) => el.remove());
+        // Remove verse number elements
+        clone.querySelectorAll('.chapterNum, .verseNum').forEach((el) => el.remove());
+        // WOL: verse number links have class "vl"
+        clone.querySelectorAll('a.vl').forEach((el) => el.remove());
 
-      // Remove study note sections
-      clone.querySelectorAll('.studyBible, .study-notes, .notes').forEach((el) => el.remove());
-
-      // Remove verse number elements
-      clone.querySelectorAll('.chapterNum, .verseNum').forEach((el) => el.remove());
-      // WOL: verse number links have class "vl"
-      clone.querySelectorAll('a.vl').forEach((el) => el.remove());
-
-      const rawText = cleanHtmlText(clone.innerHTML).trim();
-      if (rawText) {
-        textParts.push(rawText);
+        const rawText = cleanHtmlText(clone.innerHTML).trim();
+        if (rawText) {
+          textParts.push(rawText);
+        }
       }
     }
 
