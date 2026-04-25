@@ -1,3 +1,7 @@
+interface CleanHtmlTextOptions {
+  removeFootnoteMarkers?: boolean;
+}
+
 /**
  * Removes HTML tags and decodes HTML entities from a string.
  * This function uses native browser APIs to safely clean HTML content
@@ -6,7 +10,9 @@
  * @param html - The HTML string to clean
  * @returns The cleaned text with HTML tags removed and entities decoded
  */
-export function cleanHtmlText(html: string): string {
+export function cleanHtmlText(html: string, options: CleanHtmlTextOptions = {}): string {
+  const { removeFootnoteMarkers = true } = options;
+
   // Strip HTML tags and decode entities without external dependencies
   // Replace all HTML tags with spaces to ensure words don't concatenate
   // (double spaces will be normalized later)
@@ -17,10 +23,13 @@ export function cleanHtmlText(html: string): string {
   text = parsed.body.textContent || '';
 
   // Remove footnote markers and normalize whitespace
-  text = text
-    .replace(/\+/g, '') // Remove + symbols
-    .replace(/\*/g, '') // Remove * symbols
-    .replace(/\s+/g, ' '); // Normalize whitespace
+  if (removeFootnoteMarkers) {
+    text = text
+      .replace(/\+/g, '') // Remove + symbols
+      .replace(/\*/g, ''); // Remove * symbols
+  }
+
+  text = text.replace(/\s+/g, ' '); // Normalize whitespace
 
   // Fix spacing issues where sentences are concatenated without spaces after periods
   const result = text

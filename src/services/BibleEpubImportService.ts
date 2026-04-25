@@ -9,6 +9,7 @@ import type {
 } from '@/types';
 import { unzipSync, strFromU8 } from 'fflate';
 import { mapEpubLanguageToPluginLanguage } from '@/utils/languageMetadata';
+import { cleanHtmlText } from '@/utils/cleanHtmlText';
 
 // Node.js modules are lazy-required so this file can be imported on mobile
 // without crashing. All methods in this class are desktop-only.
@@ -116,53 +117,42 @@ export class BibleEpubImportService implements EpubImportService {
     const contentDocs = new Map<string, Document>();
     const chapters: OfflineBibleChapter[] = [];
 
-    for (let book = 1; book <= 66; book++) {
-      for (let chapter = 1; ; chapter++) {
-        const navPath = lazyPath().posix.join(rootDir, `bibleversenav${book}_${chapter}.xhtml`);
-        const navContent = archiveEntries.get(navPath);
-
-        if (!navContent) {
-          break;
-        }
-
-        const verseTargets = this.parseVerseTargets(navContent, rootDir, book, chapter);
-        if (!verseTargets.length) {
-          continue;
-        }
-
-        const verses: Record<string, string> = {};
-        for (const target of verseTargets) {
-          const chapterDoc = this.getChapterDoc(archiveEntries, contentDocs, target.filePath);
-          const text = this.extractVerseText(
-            chapterDoc,
-            target.anchor,
-            target.chapter,
-            target.verse,
-          );
-
-          if (text) {
-            verses[String(target.verse)] = text;
-          }
-        }
-
-        if (Object.keys(verses).length === 0) {
-          throw new Error(
-            `Unsupported EPUB structure: could not extract text for ${book}:${chapter}.`,
-          );
-        }
-
-        chapters.push({
-          language,
-          book,
-          chapter,
-          title: verseTargets[0].title,
-          verses,
-          source: {
-            sourceFileChecksum: '',
-            importedAt: '',
-          },
-        });
+    for (const entry of this.getNavEntries(archiveEntries, rootDir)) {
+      const navContent = this.getArchiveEntry(archiveEntries, entry.path);
+      const verseTargets = this.parseVerseTargets(navContent, rootDir, entry.book, entry.chapter);
+      if (!verseTargets.length) {
+        continue;
       }
+
+      const verses: Record<string, string> = {};
+      for (let index = 0; index < verseTargets.length; index++) {
+        const target = verseTargets[index];
+        const nextTarget = verseTargets[index + 1];
+        const chapterDoc = this.getChapterDoc(archiveEntries, contentDocs, target.filePath);
+        const text = this.extractVerseText(chapterDoc, target.anchor, nextTarget?.anchor);
+
+        if (text) {
+          verses[String(target.verse)] = text;
+        }
+      }
+
+      if (Object.keys(verses).length === 0) {
+        throw new Error(
+          `Unsupported EPUB structure: could not extract text for ${entry.book}:${entry.chapter}.`,
+        );
+      }
+
+      chapters.push({
+        language,
+        book: entry.book,
+        chapter: entry.chapter,
+        title: verseTargets[0].title,
+        verses,
+        source: {
+          sourceFileChecksum: '',
+          importedAt: '',
+        },
+      });
     }
 
     if (!chapters.length) {
@@ -170,6 +160,28 @@ export class BibleEpubImportService implements EpubImportService {
     }
 
     return chapters;
+  }
+
+  private getNavEntries(archiveEntries: Map<string, string>, rootDir: string) {
+    const navFilePattern = new RegExp(
+      `^${this.escapeRegex(rootDir)}/bibleversenav(\\d+)_(\\d+)\\.xhtml$`,
+    );
+
+    return Array.from(archiveEntries.keys())
+      .map((path) => {
+        const match = path.match(navFilePattern);
+        if (!match) {
+          return null;
+        }
+
+        return {
+          path,
+          book: Number(match[1]),
+          chapter: Number(match[2]),
+        };
+      })
+      .filter((entry): entry is { path: string; book: number; chapter: number } => entry !== null)
+      .sort((a, b) => a.book - b.book || a.chapter - b.chapter);
   }
 
   private buildMetadata(params: {
@@ -249,18 +261,15 @@ export class BibleEpubImportService implements EpubImportService {
     const navDoc = this.parseXml(navContent);
     const heading = navDoc.querySelector('h2');
     const title = heading?.textContent?.replace(/\s+/g, ' ').trim() ?? `Book ${book} ${chapter}`;
+    const verseNavContainer = this.findVerseNavContainer(navDoc, chapter);
 
-    return Array.from(navDoc.querySelectorAll('a[href*="#chapter"]'))
+    return Array.from(verseNavContainer.querySelectorAll('a[href*="#"]'))
       .map((link) => {
         const href = link.getAttribute('href');
-        const verse = Number(link.textContent?.trim());
+        const [relativePath, anchor] = href?.split('#') ?? [];
+        const verse = this.parseVerseNumber(link.textContent ?? '', anchor, chapter);
 
-        if (!href || !Number.isInteger(verse)) {
-          return null;
-        }
-
-        const [relativePath, anchor] = href.split('#');
-        if (!relativePath || !anchor) {
+        if (!href || !relativePath || !anchor || !Number.isInteger(verse)) {
           return null;
         }
 
@@ -274,6 +283,50 @@ export class BibleEpubImportService implements EpubImportService {
         } satisfies VerseTarget;
       })
       .filter((target): target is VerseTarget => target !== null);
+  }
+
+  private findVerseNavContainer(navDoc: Document, chapter: number): ParentNode {
+    const body = navDoc.body;
+    if (!body) {
+      return navDoc;
+    }
+
+    const candidates = [
+      body,
+      ...Array.from(body.querySelectorAll('nav, ol, ul, section, div, main, article')),
+    ];
+
+    let bestContainer: ParentNode = body;
+    let bestScore = -1;
+
+    for (const candidate of candidates) {
+      const links = Array.from(candidate.querySelectorAll('a[href*="#"]'));
+      if (links.length === 0) {
+        continue;
+      }
+
+      const validVerseLinks = links.filter((link) => {
+        const href = link.getAttribute('href');
+        const [relativePath, anchor] = href?.split('#') ?? [];
+        const verse = this.parseVerseNumber(link.textContent ?? '', anchor, chapter);
+        return Boolean(relativePath && anchor && Number.isInteger(verse));
+      });
+
+      if (validVerseLinks.length === 0) {
+        continue;
+      }
+
+      const score = validVerseLinks.length / links.length;
+      if (
+        score > bestScore ||
+        (score === bestScore && validVerseLinks.length > this.countLinks(bestContainer))
+      ) {
+        bestContainer = candidate;
+        bestScore = score;
+      }
+    }
+
+    return bestContainer;
   }
 
   private getChapterDoc(
@@ -295,8 +348,7 @@ export class BibleEpubImportService implements EpubImportService {
   private extractVerseText(
     chapterDoc: Document,
     anchor: string,
-    chapter: number,
-    verse: number,
+    nextAnchor?: string,
   ): string | null {
     const start = chapterDoc.getElementById(anchor);
     if (!start) {
@@ -308,14 +360,16 @@ export class BibleEpubImportService implements EpubImportService {
       return null;
     }
 
-    const nextVerse = chapterDoc.getElementById(`chapter${chapter}_verse${verse + 1}`);
     const range = chapterDoc.createRange();
     range.setStartAfter(start);
 
-    if (nextVerse) {
+    const nextVerse = nextAnchor ? chapterDoc.getElementById(nextAnchor) : null;
+
+    if (nextVerse && nextVerse !== start) {
       range.setEndBefore(nextVerse);
     } else {
-      range.setEndAfter(body.lastChild ?? body);
+      const verseContainer = this.findVerseContentContainer(start, body);
+      range.setEndAfter(verseContainer);
     }
 
     const wrapper = chapterDoc.createElement('div');
@@ -326,17 +380,70 @@ export class BibleEpubImportService implements EpubImportService {
       )
       .forEach((node) => node.remove());
 
-    return this.normalizeText(wrapper.textContent ?? '');
+    return this.normalizeText(wrapper.innerHTML);
   }
 
-  private normalizeText(text: string): string | null {
-    const normalized = text
-      .replace(/\u00a0/g, ' ')
-      .replace(/[\u200b-\u200d\ufeff]/g, '')
-      .replace(/\s+/g, ' ')
-      .trim();
+  private findVerseContentContainer(start: Element, body: HTMLElement): Node {
+    let current: Element | null = start;
+
+    while (current && current.parentElement && current.parentElement !== body) {
+      if (this.isBlockContentContainer(current)) {
+        return current;
+      }
+      current = current.parentElement;
+    }
+
+    if (current && current !== body) {
+      return current;
+    }
+
+    return body.lastChild ?? body;
+  }
+
+  private isBlockContentContainer(element: Element): boolean {
+    return ['P', 'DIV', 'LI', 'SECTION', 'ARTICLE', 'BLOCKQUOTE'].includes(element.tagName);
+  }
+
+  private normalizeText(html: string): string | null {
+    const normalized = cleanHtmlText(
+      html
+        .replace(/\u00a0/g, ' ')
+        .replace(/[\u200b-\u200d\ufeff]/g, ''),
+      { removeFootnoteMarkers: false },
+    );
 
     return normalized || null;
+  }
+
+  private parseVerseNumber(linkText: string, anchor: string | undefined, chapter: number): number {
+    const numericText = linkText.trim().match(/\d+/)?.[0];
+    if (numericText) {
+      return Number(numericText);
+    }
+
+    if (!anchor) {
+      return Number.NaN;
+    }
+
+    const chapterAnchorMatch = anchor.match(new RegExp(`^chapter${chapter}_verse(\\d+)$`));
+    if (chapterAnchorMatch) {
+      return Number(chapterAnchorMatch[1]);
+    }
+
+    const genericAnchorMatch = anchor.match(/verse(\d+)$/);
+    if (genericAnchorMatch) {
+      return Number(genericAnchorMatch[1]);
+    }
+
+    return Number.NaN;
+  }
+
+  private escapeRegex(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  private countLinks(node: ParentNode): number {
+    return node instanceof Element ? node.querySelectorAll('a[href*="#"]').length : 0;
   }
 
   private readonly domParser = new DOMParser();
