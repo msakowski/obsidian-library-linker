@@ -87,13 +87,3 @@ export function getBibleBooks(language: Language): readonly BibleBook[] {
 export function getBibleBookById(id: number, language: Language): BibleBook | undefined {
   return getBibleBooks(language).find((book) => book.id === id);
 }
-
-/**
- * Check if a bible book ID is valid
- *
- * @param id - The book ID to check
- * @returns True if ID is between 1 and 66
- */
-export function bibleBookExists(id: number): boolean {
-  return id >= 1 && id <= 66;
-}

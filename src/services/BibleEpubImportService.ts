@@ -11,20 +11,7 @@ import { unzipSync, strFromU8 } from 'fflate';
 import { getLanguageByLocale } from '@/consts/languages';
 import { cleanHtmlText } from '@/utils/cleanHtmlText';
 
-// Node.js modules are lazy-required so this file can be imported on mobile
-// without crashing. All methods in this class are desktop-only.
-function lazyReadFile(): typeof import('fs/promises').readFile {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  return (require('fs/promises') as typeof import('fs/promises')).readFile;
-}
-function lazyCreateHash(): typeof import('crypto').createHash {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  return (require('crypto') as typeof import('crypto')).createHash;
-}
-function lazyPath(): typeof import('path') {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  return require('path') as typeof import('path');
-}
+import { lazyReadFile, lazyCreateHash, lazyPath } from '@/utils/lazyNodeModules';
 
 interface VerseTarget {
   book: number;

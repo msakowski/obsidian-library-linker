@@ -5,22 +5,7 @@ import type {
   OfflineBibleCorpusMetadata,
   OfflineBibleRepository,
 } from '@/types';
-
-// Node.js modules are lazy-required so this file can be imported on mobile
-// without crashing. All methods in this class are desktop-only.
-function getFs(): typeof import('fs') {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  return require('fs') as typeof import('fs');
-}
-function getFsPromises(): typeof import('fs/promises') {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  return require('fs/promises') as typeof import('fs/promises');
-}
-function joinPath(...segments: string[]): string {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { join } = require('path') as typeof import('path');
-  return join(...segments);
-}
+import { getFs, getFsPromises, joinPath } from '@/utils/lazyNodeModules';
 
 interface SchemaFile {
   schemaVersion: number;
