@@ -1800,15 +1800,6 @@
     "isRTL": false
   },
   {
-    "code": "B",
-    "locale": "cs",
-    "vernacular": "čeština",
-    "script": "ROMAN",
-    "name": "Czech",
-    "isSignLanguage": false,
-    "isRTL": false
-  },
-  {
     "code": "CSE",
     "locale": "cse",
     "vernacular": "český znakový jazyk",
