@@ -1,0 +1,418 @@
+- id: 1
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Mojžíšova
+    medium: 1. Mo.
+    short: 1Mo
+- id: 2
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Mojžíšova
+    medium: 2. Mo.
+    short: 2Mo
+- id: 3
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3. Mojžíšova
+    medium: 3. Mo.
+    short: 3Mo
+- id: 4
+  prefix: '4'
+  aliases: []
+  name:
+    long: 4. Mojžíšova
+    medium: 4. Mo.
+    short: 4Mo
+- id: 5
+  prefix: '5'
+  aliases: []
+  name:
+    long: 5. Mojžíšova
+    medium: 5. Mo.
+    short: 5Mo
+- id: 6
+  aliases: []
+  name:
+    long: Jozue
+    medium: Joz.
+    short: Joz
+- id: 7
+  aliases: []
+  name:
+    long: Soudci
+    medium: Sou.
+    short: Sd
+- id: 8
+  aliases: []
+  name:
+    long: Rut
+    medium: Rut
+    short: Rut
+- id: 9
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Samuelova
+    medium: 1. Sa.
+    short: 1Sa
+- id: 10
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Samuelova
+    medium: 2. Sa.
+    short: 2Sa
+- id: 11
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Královská
+    medium: 1. Kr.
+    short: 1Kr
+- id: 12
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Královská
+    medium: 2. Kr.
+    short: 2Kr
+- id: 13
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Paralipomenon
+    medium: 1. Pa.
+    short: 1Pa
+- id: 14
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Paralipomenon
+    medium: 2. Pa.
+    short: 2Pa
+- id: 15
+  aliases: []
+  name:
+    long: Ezra
+    medium: Ezra
+    short: Ezr
+- id: 16
+  aliases: []
+  name:
+    long: Nehemjáš
+    medium: Neh.
+    short: Ne
+- id: 17
+  aliases: []
+  name:
+    long: Ester
+    medium: Est.
+    short: Es
+- id: 18
+  aliases: []
+  name:
+    long: Job
+    medium: Job
+    short: Job
+- id: 19
+  aliases: []
+  name:
+    long: Žalmy
+    medium: Ža.
+    short: Ža
+- id: 20
+  aliases: []
+  name:
+    long: Přísloví
+    medium: Přís.
+    short: Př
+- id: 21
+  aliases: []
+  name:
+    long: Kazatel
+    medium: Kaz.
+    short: Ka
+- id: 22
+  aliases: []
+  name:
+    long: Šalomounova píseň
+    medium: Pís.
+    short: Pís
+- id: 23
+  aliases: []
+  name:
+    long: Izajáš
+    medium: Iz.
+    short: Iz
+- id: 24
+  aliases: []
+  name:
+    long: Jeremjáš
+    medium: Jer.
+    short: Jer
+- id: 25
+  aliases: []
+  name:
+    long: Nářky
+    medium: Nář.
+    short: Ná
+- id: 26
+  aliases: []
+  name:
+    long: Ezekiel
+    medium: Eze.
+    short: Ez
+- id: 27
+  aliases: []
+  name:
+    long: Daniel
+    medium: Dan.
+    short: Da
+- id: 28
+  aliases: []
+  name:
+    long: Ozeáš
+    medium: Oz.
+    short: Oz
+- id: 29
+  aliases: []
+  name:
+    long: Joel
+    medium: Joel
+    short: Joe
+- id: 30
+  aliases: []
+  name:
+    long: Amos
+    medium: Amos
+    short: Am
+- id: 31
+  aliases: []
+  name:
+    long: Obadjáš
+    medium: Obj.
+    short: Ob
+- id: 32
+  aliases: []
+  name:
+    long: Jonáš
+    medium: Jon.
+    short: Jon
+- id: 33
+  aliases: []
+  name:
+    long: Micheáš
+    medium: Mi.
+    short: Mi
+- id: 34
+  aliases: []
+  name:
+    long: Nahum
+    medium: Nah.
+    short: Na
+- id: 35
+  aliases: []
+  name:
+    long: Habakuk
+    medium: Hab.
+    short: Hab
+- id: 36
+  aliases: []
+  name:
+    long: Sefanjáš
+    medium: Sef.
+    short: Sef
+- id: 37
+  aliases: []
+  name:
+    long: Ageus
+    medium: Ag.
+    short: Ag
+- id: 38
+  aliases: []
+  name:
+    long: Zecharjáš
+    medium: Zach.
+    short: Ze
+- id: 39
+  aliases: []
+  name:
+    long: Malachiáš
+    medium: Mal.
+    short: Mal
+- id: 40
+  aliases: []
+  name:
+    long: Matouš
+    medium: Mt.
+    short: Mt
+- id: 41
+  aliases: []
+  name:
+    long: Marek
+    medium: Mr.
+    short: Mr
+- id: 42
+  aliases: []
+  name:
+    long: Lukáš
+    medium: Lk.
+    short: Lk
+- id: 43
+  aliases: []
+  name:
+    long: Jan
+    medium: Jan
+    short: Jan
+- id: 44
+  aliases: []
+  name:
+    long: Skutky
+    medium: Sk.
+    short: Sk
+- id: 45
+  aliases: []
+  name:
+    long: Římanům
+    medium: Řím.
+    short: Ří
+- id: 46
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Korinťanům
+    medium: 1. Ko.
+    short: 1Ko
+- id: 47
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Korinťanům
+    medium: 2. Ko.
+    short: 2Ko
+- id: 48
+  aliases: []
+  name:
+    long: Galaťanům
+    medium: Ga.
+    short: Ga
+- id: 49
+  aliases: []
+  name:
+    long: Efezanům
+    medium: Ef.
+    short: Ef
+- id: 50
+  aliases: []
+  name:
+    long: Filipanům
+    medium: Fil.
+    short: Fil
+- id: 51
+  aliases: []
+  name:
+    long: Kolosanům
+    medium: Kol.
+    short: Kol
+- id: 52
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Tesaloničanům
+    medium: 1. Te.
+    short: 1Te
+- id: 53
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Tesaloničanům
+    medium: 2. Te.
+    short: 2Te
+- id: 54
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Timoteovi
+    medium: 1. Ti.
+    short: 1Ti
+- id: 55
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Timoteovi
+    medium: 2. Ti.
+    short: 2Ti
+- id: 56
+  aliases: []
+  name:
+    long: Titovi
+    medium: Tit.
+    short: Tit
+- id: 57
+  aliases: []
+  name:
+    long: Filemonovi
+    medium: Fm.
+    short: Fm
+- id: 58
+  aliases: []
+  name:
+    long: Hebrejcům
+    medium: Heb.
+    short: Heb
+- id: 59
+  aliases: []
+  name:
+    long: Jakub
+    medium: Jak.
+    short: Jk
+- id: 60
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Petra
+    medium: 1. Pe.
+    short: 1Pe
+- id: 61
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Petra
+    medium: 2. Pe.
+    short: 2Pe
+- id: 62
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1. Jana
+    medium: 1. Ja.
+    short: 1Ja
+- id: 63
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2. Jana
+    medium: 2. Ja.
+    short: 2Ja
+- id: 64
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3. Jana
+    medium: 3. Ja.
+    short: 3Ja
+- id: 65
+  aliases: []
+  name:
+    long: Juda
+    medium: Juda
+    short: Juda
+- id: 66
+  aliases: []
+  name:
+    long: Zjevení
+    medium: Zj.
+    short: Zj

@@ -16,6 +16,7 @@ Instantly create, convert, and enrich Bible references with direct links to [JW 
 | Português (Portugal) | TPO  |
 | Hrvatski (Croatian)  | C    |
 | Việt (Vietnamese)    | VT   |
+| Čeština (Czech) | B |
 
 The plugin UI automatically adapts to your Obsidian language setting, and Bible book names are fully translated for each language.
 
