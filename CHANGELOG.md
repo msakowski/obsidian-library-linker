@@ -1,5 +1,31 @@
 # obsidian-library-linker
 
+## 0.14.0
+
+### Minor Changes
+
+- [#258](https://github.com/msakowski/obsidian-library-linker/pull/258) [`ef6ca19`](https://github.com/msakowski/obsidian-library-linker/commit/ef6ca19490a192057d53153631836932d59bd4e6) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add sign language support: 43 sign languages (ASL, BSL, DGS, SLV, and more) are now available in the language settings. Sign languages reuse Bible book names from their related spoken language while using their own wtlocale code in generated links (e.g. `jwlibrary:///finder?bible=40024014&wtlocale=ASL`).
+
+- [#265](https://github.com/msakowski/obsidian-library-linker/pull/265) [`285bba5`](https://github.com/msakowski/obsidian-library-linker/commit/285bba558fa1af5108b117589314000d758ced32) Thanks [@msakowski](https://github.com/msakowski)! - Add Czech language support (JW Library code `B`). Includes Czech Bible book names, abbreviations, and UI translations.
+
+### Patch Changes
+
+- [#257](https://github.com/msakowski/obsidian-library-linker/pull/257) [`fe93b40`](https://github.com/msakowski/obsidian-library-linker/commit/fe93b40670f859ac5f76ceb5f7495243d9a855c6) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - refactor language metadata into centralized JSON config
+
+- [#268](https://github.com/msakowski/obsidian-library-linker/pull/268) [`e5d5de2`](https://github.com/msakowski/obsidian-library-linker/commit/e5d5de2584c98f382fe2ed6aa24fe10d0e78aed3) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Remove unused `convertBibleReference` util and its test. Replace duplicate private `padBook`/`padChapter` methods in `FileSystemOfflineBibleRepository` with the shared `padNumber` utils.
+
+- [#267](https://github.com/msakowski/obsidian-library-linker/pull/267) [`be0977c`](https://github.com/msakowski/obsidian-library-linker/commit/be0977c2b68840ee168ecab575e572b0f0d843bd) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Extract shared lazy Node.js module helpers into `src/utils/lazyNodeModules.ts`, removing duplicated lazy-require wrappers from `BibleEpubImportService` and `FileSystemOfflineBibleRepository`.
+
+- [#255](https://github.com/msakowski/obsidian-library-linker/pull/255) [`b4faad6`](https://github.com/msakowski/obsidian-library-linker/commit/b4faad6860318c53ddf1ea6f5af8cc833bd72d62) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - rename Croatian language code from CR to C
+
+- [#265](https://github.com/msakowski/obsidian-library-linker/pull/265) [`454e89f`](https://github.com/msakowski/obsidian-library-linker/commit/454e89f938b2fd79898cc64d7a58f26893aa658a) Thanks [@msakowski](https://github.com/msakowski)! - Fix `pnpm dev` on Windows by using `cross-env` for the `DEBUG` environment variable.
+
+- [#264](https://github.com/msakowski/obsidian-library-linker/pull/264) [`aafb22b`](https://github.com/msakowski/obsidian-library-linker/commit/aafb22bcec7f3341a1b971ef345892ca570f04cf) Thanks [@msakowski](https://github.com/msakowski)! - Fix offline Bible EPUB language detection for locale aliases such as Portuguese `pt`, `pt-pt`, and `pt_PT`.
+
+- [#263](https://github.com/msakowski/obsidian-library-linker/pull/263) [`33def8c`](https://github.com/msakowski/obsidian-library-linker/commit/33def8ca710807a364ed377295d997ac4da856bd) Thanks [@msakowski](https://github.com/msakowski)! - Harden offline EPUB Bible imports by preserving spacing across inline markup, improving nav parsing, and preventing trailing non-verse content from being included in extracted verses.
+
+- [#262](https://github.com/msakowski/obsidian-library-linker/pull/262) [`d1e2be6`](https://github.com/msakowski/obsidian-library-linker/commit/d1e2be60645983eaaa512bf9e1ff2b7d30d1900e) Thanks [@msakowski](https://github.com/msakowski)! - fix truncated Bible quote insertion for WOL verses split across multiple HTML segments
+
 ## 0.13.1
 
 ### Patch Changes
