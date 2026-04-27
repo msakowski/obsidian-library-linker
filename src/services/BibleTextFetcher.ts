@@ -4,7 +4,7 @@ import { padChapter, padVerse } from '@/utils/padNumber';
 import { Platform, requestUrl } from 'obsidian';
 import { cleanHtmlText } from '@/utils/cleanHtmlText';
 import { logger } from '@/utils/logger';
-import { LANGUAGES } from '@/consts/languages';
+import { getLocaleFromLanguage } from '@/utils/getLocaleFromLanguage';
 
 export interface BibleTextResult {
   text: string;
@@ -401,7 +401,7 @@ export class BibleTextFetcher {
 
   static buildWOLUrl(book: number, chapter: number, language: Language): string {
     const config = WOL_LANG_CONFIG[language];
-    const locale = LANGUAGES[language]?.locale;
+    const locale = getLocaleFromLanguage(language);
     if (!config) {
       throw new Error(`Unsupported language for WOL: ${language}`);
     }

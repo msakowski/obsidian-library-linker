@@ -1,64 +1,14 @@
+import { LANGUAGE_CODES, LOCALES } from '@/consts/languages';
+
 // obsidian language
-export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko' | 'fr' | 'pt' | 'hr' | 'vi' | 'cs';
+export type Locale = (typeof LOCALES)[number];
 
 // plugin language
-export type Language =
-  | 'E'
-  | 'X'
-  | 'FI'
-  | 'S'
-  | 'O'
-  | 'KO'
-  | 'F'
-  | 'TPO'
-  | 'C'
-  | 'VT'
-  | 'B'
-  // Sign languages
-  | 'ASL'
-  | 'LSA'
-  | 'AUS'
-  | 'OGS'
-  | 'SBF'
-  | 'BVL'
-  | 'BSL'
-  | 'BFL'
-  | 'CRS'
-  | 'SCH'
-  | 'LSC'
-  | 'SCR'
-  | 'HZJ'
-  | 'CBS'
-  | 'NGT'
-  | 'SEC'
-  | 'FID'
-  | 'LSF'
-  | 'DGS'
-  | 'LSG'
-  | 'SHO'
-  | 'ISG'
-  | 'LSI'
-  | 'JML'
-  | 'KSL'
-  | 'CML'
-  | 'LSM'
-  | 'NZS'
-  | 'LSN'
-  | 'PSL'
-  | 'LSP'
-  | 'SPE'
-  | 'LGP'
-  | 'LSQ'
-  | 'LSS'
-  | 'LSE'
-  | 'LSU'
-  | 'LSV'
-  | 'SLV';
+export type Language = (typeof LANGUAGE_CODES)[number];
 
 export interface LanguageInfo {
   code: string;
   locale: string;
-  importAliases?: string[];
   vernacular: string;
   script: string;
   name: string;
