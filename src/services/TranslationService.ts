@@ -220,6 +220,7 @@ export class TranslationService {
     return (
       locale === 'en' ||
       locale === 'de' ||
+      locale === 'da' ||
       locale === 'fi' ||
       locale === 'es' ||
       locale === 'nl' ||
