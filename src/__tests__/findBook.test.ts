@@ -14,6 +14,9 @@ describe('findBook', () => {
     expect(findBook('Joosua', 'FI')).toEqual(expect.objectContaining({ id: 6 }));
     expect(findBook('Ilmestys', 'FI')).toEqual(expect.objectContaining({ id: 66 }));
     expect(findBook('Psalmit', 'FI')).toEqual(expect.objectContaining({ id: 19 }));
+    expect(findBook('Josva', 'D')).toEqual(expect.objectContaining({ id: 6 }));
+    expect(findBook('Åbenbaringen', 'D')).toEqual(expect.objectContaining({ id: 66 }));
+    expect(findBook('Salmerne', 'D')).toEqual(expect.objectContaining({ id: 19 }));
     expect(findBook('Jozua', 'O')).toEqual(expect.objectContaining({ id: 6 }));
     expect(findBook('Openbaring', 'O')).toEqual(expect.objectContaining({ id: 66 }));
     expect(findBook('psalm', 'O')).toEqual(expect.objectContaining({ id: 19 }));
@@ -37,6 +40,8 @@ describe('findBook', () => {
     expect(findBook('mi', 'X')).toEqual(expect.objectContaining({ id: 33 }));
     expect(findBook('san', 'FI')).toEqual(expect.objectContaining({ id: 20 }));
     expect(findBook('laul', 'FI')).toEqual(expect.objectContaining({ id: 22 }));
+    expect(findBook('åb', 'D')).toEqual(expect.objectContaining({ id: 66 }));
+    expect(findBook('ord', 'D')).toEqual(expect.objectContaining({ id: 20 }));
     expect(findBook('ju', 'O')).toEqual(expect.objectContaining({ id: 65 }));
     expect(findBook('ps', 'O')).toEqual(expect.objectContaining({ id: 19 }));
     expect(findBook('mt', 'S')).toEqual(expect.objectContaining({ id: 40 }));
@@ -47,6 +52,8 @@ describe('findBook', () => {
     expect(findBook('1mo', 'X')).toEqual(expect.objectContaining({ id: 1 }));
     expect(findBook('2mo', 'X')).toEqual(expect.objectContaining({ id: 2 }));
     expect(findBook('1pe', 'X')).toEqual(expect.objectContaining({ id: 60 }));
+    expect(findBook('1mo', 'D')).toEqual(expect.objectContaining({ id: 1 }));
+    expect(findBook('2kor', 'D')).toEqual(expect.objectContaining({ id: 47 }));
     expect(findBook('1kor', 'FI')).toEqual(expect.objectContaining({ id: 46 }));
     expect(findBook('1Kor', 'O')).toEqual(expect.objectContaining({ id: 46 }));
   });
@@ -55,6 +62,8 @@ describe('findBook', () => {
     expect(findBook('PSALM', 'X')).toEqual(expect.objectContaining({ id: 19 }));
     expect(findBook('Offb', 'X')).toEqual(expect.objectContaining({ id: 66 }));
     expect(findBook('1Mo', 'X')).toEqual(expect.objectContaining({ id: 1 }));
+    expect(findBook('ÅB', 'D')).toEqual(expect.objectContaining({ id: 66 }));
+    expect(findBook('1Mo', 'D')).toEqual(expect.objectContaining({ id: 1 }));
     expect(findBook('JOH', 'E')).toEqual(expect.objectContaining({ id: 43 }));
     expect(findBook('REV', 'E')).toEqual(expect.objectContaining({ id: 66 }));
     expect(findBook('EX', 'E')).toEqual(expect.objectContaining({ id: 2 }));
@@ -63,6 +72,8 @@ describe('findBook', () => {
   test('handles special characters', () => {
     expect(findBook('röm', 'X')).toEqual(expect.objectContaining({ id: 45 }));
     expect(findBook('römer', 'X')).toEqual(expect.objectContaining({ id: 45 }));
+    expect(findBook('præd', 'D')).toEqual(expect.objectContaining({ id: 21 }));
+    expect(findBook('matthæus', 'D')).toEqual(expect.objectContaining({ id: 40 }));
   });
 
   test('throws error for unknown books', () => {

@@ -18,6 +18,15 @@
     "isRTL": false
   },
   {
+    "code": "D",
+    "locale": "da",
+    "vernacular": "Dansk",
+    "script": "ROMAN",
+    "name": "Danish",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
     "code": "S",
     "locale": "es",
     "vernacular": "español",
