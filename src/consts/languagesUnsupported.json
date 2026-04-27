@@ -1854,15 +1854,6 @@
     "isRTL": false
   },
   {
-    "code": "D",
-    "locale": "da",
-    "vernacular": "Dansk",
-    "script": "ROMAN",
-    "name": "Danish",
-    "isSignLanguage": false,
-    "isRTL": false
-  },
-  {
     "code": "DSL",
     "locale": "dsl",
     "vernacular": "Dansk tegnsprog",
