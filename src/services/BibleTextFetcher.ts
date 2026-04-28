@@ -6,7 +6,7 @@ import { cleanHtmlText } from '@/utils/cleanHtmlText';
 import { logger } from '@/utils/logger';
 import { getLocaleFromLanguage } from '@/utils/getLocaleFromLanguage';
 
-export interface BibleTextResult {
+interface BibleTextResult {
   text: string;
   citation: string;
   success: boolean;

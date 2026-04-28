@@ -12,8 +12,6 @@ import {
 import { logger } from '@/utils/logger';
 import { getBookLanguage } from './signLanguage';
 
-export type { JWLibraryLinkInfo, ContentSelection };
-
 function processTemplate(
   template: string,
   variables: {
@@ -76,7 +74,7 @@ async function generateBibleQuoteText(
   }
 }
 
-export interface InsertQuotesResult {
+interface InsertQuotesResult {
   inserted: number;
   linksFound: number;
   fetchFailed: number;

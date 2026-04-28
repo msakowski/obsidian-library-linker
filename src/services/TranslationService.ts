@@ -3,7 +3,7 @@ import { LOCALES } from '@/consts/languages';
 import BUNDLED_LOCALES from 'locale:all';
 import { logger } from '@/utils/logger';
 
-export type Translation = {
+type Translation = {
   settings: {
     language: { name: string; description: string };
     openAutomatically: { name: string; description: string };

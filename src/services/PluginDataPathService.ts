@@ -6,7 +6,7 @@ function joinPath(...segments: string[]): string {
   return join(...segments);
 }
 
-export function getPluginDataPath(app: App, pluginId: string): string {
+function getPluginDataPath(app: App, pluginId: string): string {
   const adapter = app.vault.adapter;
 
   if (!(adapter instanceof FileSystemAdapter)) {
