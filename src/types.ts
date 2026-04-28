@@ -101,11 +101,11 @@ export const BIBLE_QUOTE_TEMPLATES = {
   expanded: '> [!quote] {bibleRefLinked}\n> {quote}',
 } as const;
 
-export interface BibleQuoteSettings {
+interface BibleQuoteSettings {
   template: string; // Template for quote formatting
 }
 
-export interface OfflineBibleSettings {
+interface OfflineBibleSettings {
   enabled: boolean;
   preferOffline: boolean;
   allowOnlineFallback: boolean;
@@ -129,19 +129,13 @@ export interface BibleBook {
   chapters: number;
 }
 
-export type BibleBookAbbreviations = readonly string[];
-export type BibleBooks = readonly BibleBookAbbreviations[];
-
-// Bible book IDs range from 1 (Genesis) to 66 (Revelation)
-export type BibleBookId = number;
-
 export interface VerseRange {
   start: number;
   end: number;
 }
 
 export interface BibleReference {
-  book: BibleBookId;
+  book: number;
   chapter: number;
   endChapter?: number; // For multi-chapter references (e.g., "Matt. 3:1-4:11")
   verseRanges?: VerseRange[]; // For complex verse references with multiple ranges
@@ -186,7 +180,7 @@ export interface BibleImportResult {
   metadata?: OfflineBibleCorpusMetadata;
 }
 
-export type CitationSource = 'offline' | 'online';
+type CitationSource = 'offline' | 'online';
 
 export interface BibleCitationResult {
   success: boolean;

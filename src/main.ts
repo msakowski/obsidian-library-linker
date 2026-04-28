@@ -14,14 +14,11 @@ import { loadBibleBooks } from '@/stores/bibleBooks';
 import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
 import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
-import { ConvertSuggester } from './ConvertSuggester';
-import {
-  insertAllBibleQuotes,
-  insertBibleQuoteAtCursor,
-  type ContentSelection,
-} from '@/utils/insertBibleQuotes';
+import { ConvertSuggester } from '@/ConvertSuggester';
+import { insertAllBibleQuotes, insertBibleQuoteAtCursor } from '@/utils/insertBibleQuotes';
 import { logger } from '@/utils/logger';
-import { getBookLanguage } from './utils/signLanguage';
+import { getBookLanguage } from '@/utils/signLanguage';
+import { ContentSelection } from '@/utils/findJWLibraryLinks';
 
 export const DEFAULT_STYLES: LinkStyles = {
   bookLength: 'medium',

@@ -10,7 +10,7 @@ export const LANGUAGES: Record<Language, LanguageInfo> = Object.fromEntries(
 
 type LanguageInfoPlus = Omit<LanguageInfo, 'code'> & { code: Language };
 
-export const LANGUAGE_ARRAY = languageJson as LanguageInfoPlus[];
+const LANGUAGE_ARRAY = languageJson as LanguageInfoPlus[];
 
 export const LANGUAGE_LABELS: Record<Language, string> = Object.fromEntries(
   languageJson.map((lang) => [lang.code as Language, lang.vernacular]),
