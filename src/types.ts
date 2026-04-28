@@ -1,10 +1,23 @@
 // obsidian language
-export type Locale = 'en' | 'de' | 'fi' | 'es' | 'nl' | 'ko' | 'fr' | 'pt' | 'hr' | 'vi' | 'cs';
+export type Locale =
+  | 'en'
+  | 'de'
+  | 'da'
+  | 'fi'
+  | 'es'
+  | 'nl'
+  | 'ko'
+  | 'fr'
+  | 'pt'
+  | 'hr'
+  | 'vi'
+  | 'cs';
 
 // plugin language
 export type Language =
   | 'E'
   | 'X'
+  | 'D'
   | 'FI'
   | 'S'
   | 'O'
