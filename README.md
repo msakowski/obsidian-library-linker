@@ -4,7 +4,17 @@ Instantly create, convert, and enrich Bible references with direct links to [JW 
 
 ## Supported Languages
 
-The plugin supports written languages and sign languages. See [LOCALIZATION.md](LOCALIZATION.md) for the full list and instructions on adding a new language.
+| Code | Language                          |
+| ---- | --------------------------------- |
+| E    | English / English                 |
+| S    | español / Spanish                 |
+| F    | français / French                 |
+| TPO  | português / Portuguese (Portugal) |
+| X    | Deutsch / German                  |
+| VT   | Tiếng Việt / Vietnamese           |
+| KO   | 한국어 / Korean                   |
+
+… and many more. See [LOCALIZATION.md](LOCALIZATION.md) for the full list and instructions on adding a new language.
 
 ## Features
 
@@ -48,6 +58,7 @@ Fetch actual Bible text from jw.org and insert it directly into your notes.
 <!-- Link + quote -->
 
 [Matthew 6:33](jwlibrary:///finder?bible=40006033)
+
 > But keep on seeking first the Kingdom...
 
 <!-- Foldable callout (collapsed by default) -->
