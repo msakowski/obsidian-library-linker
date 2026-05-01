@@ -4,66 +4,7 @@ Instantly create, convert, and enrich Bible references with direct links to [JW 
 
 ## Supported Languages
 
-| Code | Language                          |
-| ---- | --------------------------------- |
-| B    | čeština / Czech                   |
-| C    | hrvatski / Croatian               |
-| D    | Dansk / Danish                    |
-| E    | English / English                 |
-| F    | français / French                 |
-| FI   | suomi / Finnish                   |
-| KO   | 한국어 / Korean                   |
-| O    | Nederlands / Dutch                |
-| S    | español / Spanish                 |
-| TPO  | português / Portuguese (Portugal) |
-| VT   | Tiếng Việt / Vietnamese           |
-| X    | Deutsch / German                  |
-
-### Sign Languages
-
-| Code | Language                                                                  |
-| ---- | ------------------------------------------------------------------------- |
-| ASL  | American Sign Language / American Sign Language                           |
-| AUS  | Auslan (Australian Sign Language) / Australian Sign Language              |
-| BFL  | Burkina Faso Sign Language / Burkina Faso Sign Language                   |
-| BSL  | British Sign Language / British Sign Language                             |
-| BVL  | lengua de señas boliviana / Bolivian Sign Language                        |
-| CBS  | lengua de señas cubana / Cuban Sign Language                              |
-| CML  | Langue des signes camerounaise / Langue des signes camerounaise           |
-| CRS  | Langue des signes centrafricaine / Central African Republic Sign Language |
-| DGS  | Deutsche Gebärdensprache / German Sign Language                           |
-| FID  | suomalainen viittomakieli / Finnish Sign Language                         |
-| HZJ  | hrvatski znakovni jezik / Croatian Sign Language                          |
-| ISG  | Irish Sign Language / Irish Sign Language                                 |
-| JML  | Jamaican Sign Language / Jamaican Sign Language                           |
-| KSL  | 한국 수어 / Korean Sign Language                                          |
-| LGP  | Língua Gestual Portuguesa / Portuguese Sign Language                      |
-| LSA  | lengua de señas argentina / Argentinean Sign Language                     |
-| LSC  | lengua de señas colombiana / Colombian Sign Language                      |
-| LSE  | lengua de signos española / Spanish Sign Language                         |
-| LSF  | Langue des signes française / French Sign Language                        |
-| LSG  | lengua de señas de Guatemala / Guatemalan Sign Language                   |
-| LSI  | Langue des signes ivoirienne / Ivorian Sign Language                      |
-| LSM  | lengua de señas mexicana / Mexican Sign Language                          |
-| LSN  | lenguaje de señas nicaragüense / Nicaraguan Sign Language                 |
-| LSP  | lengua de señas paraguaya / Paraguayan Sign Language                      |
-| LSQ  | Langue des signes québécoise / Quebec Sign Language                       |
-| LSS  | lengua de señas salvadoreña / Salvadoran Sign Language                    |
-| LSU  | lengua de señas uruguaya / Uruguayan Sign Language                        |
-| LSV  | lengua de señas venezolana / Venezuelan Sign Language                     |
-| NGT  | Nederlandse Gebarentaal / Dutch Sign Language                             |
-| NZS  | New Zealand Sign Language / New Zealand Sign Language                     |
-| OGS  | Österreichische Gebärdensprache / Austrian Sign Language                  |
-| PSL  | lengua de señas panameñas / Panamanian Sign Language                      |
-| SBF  | Langue des signes de Belgique francophone / Belgian French Sign Language  |
-| SCH  | lengua de señas chilena / Chilean Sign Language                           |
-| SCR  | lengua de señas costarricense / Costa Rican Sign Language                 |
-| SEC  | lengua de señas ecuatoriana / Ecuadorian Sign Language                    |
-| SHO  | lengua de señas hondureña / Honduras Sign Language                        |
-| SLV  | Việt Nam (Ngôn ngữ ký hiệu) / Vietnamese Sign Language                    |
-| SPE  | lengua de señas peruana / Peruvian Sign Language                          |
-
-The plugin UI automatically adapts to your Obsidian language setting, and Bible book names are fully translated for each language.
+The plugin supports written languages and sign languages. See [LOCALIZATION.md](LOCALIZATION.md) for the full list and instructions on adding a new language.
 
 ## Features
 
