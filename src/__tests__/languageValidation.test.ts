@@ -6,15 +6,15 @@ import languageJson from '@/consts/languages.json';
 
 const PROJECT_ROOT = resolve(__dirname, '../..');
 const BIBLE_BOOKS_DIR = join(PROJECT_ROOT, 'locale', 'bibleBooks');
-const README_PATH = join(PROJECT_ROOT, 'README.md');
+const LOCALIZATION_PATH = join(PROJECT_ROOT, 'LOCALIZATION.md');
 
-const readmeCodes = (() => {
-  const readme = readFileSync(README_PATH, 'utf8');
+const documentedCodes = (() => {
+  const localization = readFileSync(LOCALIZATION_PATH, 'utf8');
   const codes = new Set<string>();
   // Match table rows like "| E | English / English |"
   const rowRegex = /^\|\s*([A-Z]+)\s*\|\s*[^|]+\|\s*$/gm;
   let match: RegExpExecArray | null;
-  while ((match = rowRegex.exec(readme)) !== null) {
+  while ((match = rowRegex.exec(localization)) !== null) {
     codes.add(match[1]);
   }
   return codes;
@@ -28,8 +28,8 @@ describe('Language configuration validation', () => {
       expect(entry).toBeDefined();
     });
 
-    test('is listed in the README language table', () => {
-      expect(readmeCodes.has(code)).toBe(true);
+    test('is listed in the LOCALIZATION.md language table', () => {
+      expect(documentedCodes.has(code)).toBe(true);
     });
 
     if (entry?.isSignLanguage) return;
