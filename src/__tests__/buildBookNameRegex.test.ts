@@ -87,4 +87,42 @@ describe('buildBookNameRegex', () => {
     expect('Hello world'.match(regex)).toBeNull();
     expect('The number 3:16 is interesting'.match(regex)).toBeNull();
   });
+
+  describe('single-chapter books', () => {
+    test('matches single-chapter books without colon (English)', () => {
+      const regex = buildBookNameRegex('E');
+      expect('Jude 3'.match(regex)).toBeTruthy();
+      expect('Jude 1-5'.match(regex)).toBeTruthy();
+      expect('Jude 1,3,5-7'.match(regex)).toBeTruthy();
+      expect('Obadiah 4'.match(regex)).toBeTruthy();
+      expect('Philemon 5'.match(regex)).toBeTruthy();
+      expect('2 John 1'.match(regex)).toBeTruthy();
+      expect('3 John 14'.match(regex)).toBeTruthy();
+    });
+
+    test('matches single-chapter books without colon (German)', () => {
+      const regex = buildBookNameRegex('X');
+      expect('Judas 3'.match(regex)).toBeTruthy();
+      expect('Jud 3'.match(regex)).toBeTruthy();
+      expect('Obadja 4'.match(regex)).toBeTruthy();
+      expect('Philemon 5'.match(regex)).toBeTruthy();
+      expect('3. Johannes 14'.match(regex)).toBeTruthy();
+      expect('3. Joh. 14'.match(regex)).toBeTruthy();
+      expect('2. Johannes 1'.match(regex)).toBeTruthy();
+    });
+
+    test('still matches single-chapter books with colon', () => {
+      const regex = buildBookNameRegex('E');
+      expect('Jude 1:3'.match(regex)).toBeTruthy();
+      expect('Philemon 1:1'.match(regex)).toBeTruthy();
+      expect('3 John 1:14'.match(regex)).toBeTruthy();
+    });
+
+    test('prefers chapter:verse match over verse-only for single-chapter books', () => {
+      const regex = buildBookNameRegex('E');
+      const match = 'Jude 1:3'.match(regex);
+      expect(match).toBeTruthy();
+      expect(match![0]).toBe('Jude 1:3');
+    });
+  });
 });

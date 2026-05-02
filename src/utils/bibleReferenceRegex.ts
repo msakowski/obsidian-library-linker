@@ -8,4 +8,4 @@ export const BIBLE_REFERENCE_REGEX = new RegExp(
 // - Then up to 29 more letters, spaces, or hyphens (supports multi-word names like Korean "요한 계시록" and hyphenated Vietnamese "Lê-vi")
 // - The chapter:verse anchor (\d+:\d+) prevents false positives from loose space matching
 // For automatic detection, requires "chapter:verse" format to avoid false positives
-// Single-chapter books are supported in manual parsing (parseBibleReference) with "Book verse" format
+// Single-chapter books are matched via the language-aware buildBookNameRegex fallback in BibleReferenceSuggester
