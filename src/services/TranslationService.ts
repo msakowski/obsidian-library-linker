@@ -2,7 +2,7 @@ import type { Locale } from '@/types';
 import BUNDLED_LOCALES from 'locale:all';
 import { logger } from '@/utils/logger';
 
-export type Translation = {
+type Translation = {
   settings: {
     language: { name: string; description: string };
     openAutomatically: { name: string; description: string };
@@ -220,6 +220,7 @@ export class TranslationService {
     return (
       locale === 'en' ||
       locale === 'de' ||
+      locale === 'da' ||
       locale === 'fi' ||
       locale === 'es' ||
       locale === 'nl' ||

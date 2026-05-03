@@ -6,7 +6,7 @@ import { cleanHtmlText } from '@/utils/cleanHtmlText';
 import { logger } from '@/utils/logger';
 import { LANGUAGES } from '@/consts/languages';
 
-export interface BibleTextResult {
+interface BibleTextResult {
   text: string;
   citation: string;
   success: boolean;
@@ -34,6 +34,7 @@ interface WOLLangConfig {
   lp: string;
 }
 
+// TODO: move region/lp into LanguageInfo (languages.json) so adding a language requires one less change
 const WOL_LANG_CONFIG: Record<string, WOLLangConfig> = {
   E: { region: 'r1', lp: 'lp-e' },
   X: { region: 'r10', lp: 'lp-x' },

@@ -5,22 +5,8 @@ import type {
   OfflineBibleCorpusMetadata,
   OfflineBibleRepository,
 } from '@/types';
-
-// Node.js modules are lazy-required so this file can be imported on mobile
-// without crashing. All methods in this class are desktop-only.
-function getFs(): typeof import('fs') {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  return require('fs') as typeof import('fs');
-}
-function getFsPromises(): typeof import('fs/promises') {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  return require('fs/promises') as typeof import('fs/promises');
-}
-function joinPath(...segments: string[]): string {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { join } = require('path') as typeof import('path');
-  return join(...segments);
-}
+import { getFs, getFsPromises, joinPath } from '@/utils/lazyNodeModules';
+import { padBook, padChapter } from '@/utils/padNumber';
 
 interface SchemaFile {
   schemaVersion: number;
@@ -118,7 +104,7 @@ export class FileSystemOfflineBibleRepository implements OfflineBibleRepository 
     );
 
     for (const chapter of chapters) {
-      const bookPath = joinPath(languagePath, 'books', this.padBook(chapter.book));
+      const bookPath = joinPath(languagePath, 'books', padBook(chapter.book));
       await getFsPromises().mkdir(bookPath, { recursive: true });
       await getFsPromises().writeFile(
         this.getChapterJsonPath(metadata.language, chapter.book, chapter.chapter),
@@ -126,7 +112,7 @@ export class FileSystemOfflineBibleRepository implements OfflineBibleRepository 
         'utf8',
       );
       await getFsPromises().writeFile(
-        joinPath(bookPath, `${this.padChapter(chapter.chapter)}.md`),
+        joinPath(bookPath, `${padChapter(chapter.chapter)}.md`),
         this.toMarkdown(chapter),
         'utf8',
       );
@@ -192,16 +178,8 @@ export class FileSystemOfflineBibleRepository implements OfflineBibleRepository 
     return joinPath(
       this.getLanguagePath(language),
       'books',
-      this.padBook(book),
-      `${this.padChapter(chapter)}.json`,
+      padBook(book),
+      `${padChapter(chapter)}.json`,
     );
-  }
-
-  private padBook(book: number): string {
-    return String(book).padStart(2, '0');
-  }
-
-  private padChapter(chapter: number): string {
-    return String(chapter).padStart(3, '0');
   }
 }
