@@ -1,0 +1,1 @@
+{"nodes": [{"id": "version_bump_mjs", "label": "version-bump.mjs", "file_type": "code", "source_file": "version-bump.mjs", "source_location": "L1"}], "edges": [{"source": "version_bump_mjs", "target": "fs", "relation": "imports_from", "confidence": "EXTRACTED", "source_file": "version-bump.mjs", "source_location": "L1", "weight": 1.0}], "raw_calls": []}
