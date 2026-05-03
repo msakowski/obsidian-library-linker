@@ -75,17 +75,17 @@ settings:
     allowOnlineFallback:
       name: Allow online fallback
       description: If offline data is missing, allow the plugin to try the online citation provider.
-    status:
-      name: Installed language status
-      notInstalled: No offline Bible is installed for {{language}}.
-      installed: Offline Bible for {{language}} installed from {{sourceFileName}} on {{importedAt}} with {{chapterCount}} chapters.
+    installedList:
+      name: Kinh Thánh ngoại tuyến đã cài đặt
+      description: Mỗi ngôn ngữ có thể cài đặt một bản Kinh Thánh ngoại tuyến. Ngôn ngữ được phát hiện từ siêu dữ liệu EPUB.
+      empty: Chưa có bản Kinh Thánh ngoại tuyến nào được cài đặt.
+      entry: '{{sourceFileName}} — {{chapterCount}} chương, đã nhập vào {{importedAt}}'
     actions:
-      name: Offline Bible actions
-      description: Import, replace, remove, or inspect the offline Bible corpus for the selected language.
-      import: Import Bible EPUB
-      reimport: Re-import Bible EPUB
-      remove: Remove Offline Bible
-      openFolder: Open Offline Bible Folder
+      name: Hành động Kinh Thánh ngoại tuyến
+      description: Nhập một tệp EPUB để thêm một ngôn ngữ mới. Để thay thế bản hiện có, hãy xóa bản đó trước.
+      import: Nhập tệp EPUB Kinh Thánh
+      remove: Xóa
+      openFolder: Mở thư mục Kinh Thánh ngoại tuyến
 commands:
   linkUnlinkedBibleReferences: Tạo liên kết cho các tham chiếu Kinh Thánh chưa có liên kết
   convertToJWLibraryLinks: Chuyển các liên kết trong vùng chọn sang liên kết JW Library
@@ -111,11 +111,11 @@ notices:
   bibleQuoteAlreadyExists: Câu trích Kinh Thánh đã tồn tại
   errorInsertingQuotes: Lỗi khi chèn câu trích Kinh Thánh
   bibleQuoteFetchFailed: Không thể tải văn bản Kinh Thánh — vui lòng thử lại
-  offlineBibleImported: Offline Bible imported for {{language}}
-  offlineBibleReimported: Offline Bible re-imported for {{language}}
-  offlineBibleRemoved: Offline Bible removed for {{language}}
-  offlineBibleImportFailed: Failed to import the offline Bible EPUB
-  offlineBibleOpenFolderFailed: Could not open the offline Bible folder
+  offlineBibleImported: Đã nhập Kinh Thánh ngoại tuyến cho {{language}}
+  offlineBibleRemoved: Đã xóa Kinh Thánh ngoại tuyến cho {{language}}
+  offlineBibleAlreadyInstalled: Đã có Kinh Thánh ngoại tuyến được cài đặt cho {{language}}. Hãy xóa nó trước để nhập lại.
+  offlineBibleImportFailed: Không thể nhập tệp EPUB Kinh Thánh ngoại tuyến
+  offlineBibleOpenFolderFailed: Không thể mở thư mục Kinh Thánh ngoại tuyến
 suggestions:
   createLink: 'Tạo liên kết: {{text}}'
   createLinks: 'Tạo các liên kết: {{text}}'

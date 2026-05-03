@@ -75,16 +75,16 @@ settings:
     allowOnlineFallback:
       name: Allow online fallback
       description: If offline data is missing, allow the plugin to try the online citation provider.
-    status:
-      name: Installed language status
-      notInstalled: No offline Bible is installed for {{language}}.
-      installed: Offline Bible for {{language}} installed from {{sourceFileName}} on {{importedAt}} with {{chapterCount}} chapters.
+    installedList:
+      name: Installed offline Bibles
+      description: One offline Bible can be installed per language. The language is detected from the EPUB metadata.
+      empty: No offline Bibles installed yet.
+      entry: '{{sourceFileName}} — {{chapterCount}} chapters, imported {{importedAt}}'
     actions:
       name: Offline Bible actions
-      description: Import, replace, remove, or inspect the offline Bible corpus for the selected language.
+      description: Import an EPUB to add a new language. To replace an existing one, remove it first.
       import: Import Bible EPUB
-      reimport: Re-import Bible EPUB
-      remove: Remove Offline Bible
+      remove: Remove
       openFolder: Open Offline Bible Folder
 commands:
   linkUnlinkedBibleReferences: Link unlinked Bible references
@@ -112,8 +112,8 @@ notices:
   errorInsertingQuotes: Error inserting Bible quotes
   bibleQuoteFetchFailed: Could not fetch Bible text — please try again
   offlineBibleImported: Offline Bible imported for {{language}}
-  offlineBibleReimported: Offline Bible re-imported for {{language}}
   offlineBibleRemoved: Offline Bible removed for {{language}}
+  offlineBibleAlreadyInstalled: An offline Bible for {{language}} is already installed. Remove it first to re-import.
   offlineBibleImportFailed: Failed to import the offline Bible EPUB
   offlineBibleOpenFolderFailed: Could not open the offline Bible folder
 suggestions:

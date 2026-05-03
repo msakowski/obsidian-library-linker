@@ -75,16 +75,16 @@ settings:
     allowOnlineFallback:
       name: Povolit online zálohu
       description: Pokud offline data chybí, plugin se může pokusit použít online poskytovatele citací.
-    status:
-      name: Stav nainstalovaného jazyka
-      notInstalled: Pro jazyk {{language}} není nainstalována žádná offline Bible.
-      installed: Offline Bible pro jazyk {{language}} byla nainstalována ze souboru {{sourceFileName}} dne {{importedAt}} a obsahuje {{chapterCount}} kapitol.
+    installedList:
+      name: Nainstalované offline Bible
+      description: Pro každý jazyk lze nainstalovat jednu offline Bibli. Jazyk se zjistí z metadat souboru EPUB.
+      empty: Zatím nejsou nainstalovány žádné offline Bible.
+      entry: '{{sourceFileName}} — {{chapterCount}} kapitol, importováno {{importedAt}}'
     actions:
       name: Akce offline Bible
-      description: Importujte, nahraďte, odstraňte nebo zkontrolujte offline biblický korpus pro vybraný jazyk.
+      description: Importujte EPUB pro přidání nového jazyka. Pro nahrazení existující ji nejprve odstraňte.
       import: Importovat biblické EPUB
-      reimport: Znovu importovat biblické EPUB
-      remove: Odstranit offline Bibli
+      remove: Odstranit
       openFolder: Otevřít složku offline Bible
 commands:
   linkUnlinkedBibleReferences: Propojit neodkazované biblické reference
@@ -112,8 +112,8 @@ notices:
   errorInsertingQuotes: Chyba při vkládání biblických citací
   bibleQuoteFetchFailed: Biblický text se nepodařilo načíst, zkuste to prosím znovu
   offlineBibleImported: Offline Bible byla importována pro jazyk {{language}}
-  offlineBibleReimported: Offline Bible byla znovu importována pro jazyk {{language}}
   offlineBibleRemoved: Offline Bible byla odstraněna pro jazyk {{language}}
+  offlineBibleAlreadyInstalled: Offline Bible pro jazyk {{language}} je již nainstalována. Pro opětovný import ji nejprve odstraňte.
   offlineBibleImportFailed: Import offline biblického EPUB se nezdařil
   offlineBibleOpenFolderFailed: Nepodařilo se otevřít složku offline Bible
 suggestions:

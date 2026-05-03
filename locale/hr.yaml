@@ -75,17 +75,17 @@ settings:
     allowOnlineFallback:
       name: Allow online fallback
       description: If offline data is missing, allow the plugin to try the online citation provider.
-    status:
-      name: Installed language status
-      notInstalled: No offline Bible is installed for {{language}}.
-      installed: Offline Bible for {{language}} installed from {{sourceFileName}} on {{importedAt}} with {{chapterCount}} chapters.
+    installedList:
+      name: Instalirane izvanmrežne Biblije
+      description: Po jeziku se može instalirati jedna izvanmrežna Biblija. Jezik se otkriva iz EPUB metapodataka.
+      empty: Još nije instalirana nijedna izvanmrežna Biblija.
+      entry: '{{sourceFileName}} — {{chapterCount}} poglavlja, uvezeno {{importedAt}}'
     actions:
-      name: Offline Bible actions
-      description: Import, replace, remove, or inspect the offline Bible corpus for the selected language.
-      import: Import Bible EPUB
-      reimport: Re-import Bible EPUB
-      remove: Remove Offline Bible
-      openFolder: Open Offline Bible Folder
+      name: Radnje izvanmrežne Biblije
+      description: Uvezite EPUB kako biste dodali novi jezik. Za zamjenu postojećeg, prvo ga uklonite.
+      import: Uvezi EPUB Biblije
+      remove: Ukloni
+      openFolder: Otvori mapu izvanmrežne Biblije
 commands:
   linkUnlinkedBibleReferences: Poveži nepovezane biblijske reference
   convertToJWLibraryLinks: Pretvori linkove u odabiru u JW Library linkove
@@ -111,11 +111,11 @@ notices:
   bibleQuoteAlreadyExists: Biblijski citat već postoji
   errorInsertingQuotes: Greška prilikom umetanja biblijskih citata
   bibleQuoteFetchFailed: Nije moguće dohvatiti biblijski tekst — pokušajte ponovo
-  offlineBibleImported: Offline Bible imported for {{language}}
-  offlineBibleReimported: Offline Bible re-imported for {{language}}
-  offlineBibleRemoved: Offline Bible removed for {{language}}
-  offlineBibleImportFailed: Failed to import the offline Bible EPUB
-  offlineBibleOpenFolderFailed: Could not open the offline Bible folder
+  offlineBibleImported: Izvanmrežna Biblija uvezena za {{language}}
+  offlineBibleRemoved: Izvanmrežna Biblija uklonjena za {{language}}
+  offlineBibleAlreadyInstalled: Izvanmrežna Biblija za {{language}} je već instalirana. Uklonite je prvo da biste je ponovno uvezli.
+  offlineBibleImportFailed: Uvoz EPUB-a izvanmrežne Biblije nije uspio
+  offlineBibleOpenFolderFailed: Nije moguće otvoriti mapu izvanmrežne Biblije
 suggestions:
   createLink: 'Izradi link: {{text}}'
   createLinks: 'Izradi linkove: {{text}}'

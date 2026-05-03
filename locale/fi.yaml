@@ -75,17 +75,17 @@ settings:
     allowOnlineFallback:
       name: Allow online fallback
       description: If offline data is missing, allow the plugin to try the online citation provider.
-    status:
-      name: Installed language status
-      notInstalled: No offline Bible is installed for {{language}}.
-      installed: Offline Bible for {{language}} installed from {{sourceFileName}} on {{importedAt}} with {{chapterCount}} chapters.
+    installedList:
+      name: Asennetut offline-Raamatut
+      description: Yksi offline-Raamattu voidaan asentaa kieltä kohden. Kieli tunnistetaan EPUB-metatiedoista.
+      empty: Offline-Raamattuja ei ole vielä asennettu.
+      entry: '{{sourceFileName}} — {{chapterCount}} lukua, tuotu {{importedAt}}'
     actions:
-      name: Offline Bible actions
-      description: Import, replace, remove, or inspect the offline Bible corpus for the selected language.
-      import: Import Bible EPUB
-      reimport: Re-import Bible EPUB
-      remove: Remove Offline Bible
-      openFolder: Open Offline Bible Folder
+      name: Offline-Raamatun toiminnot
+      description: Tuo EPUB lisätäksesi uuden kielen. Korvataksesi olemassa olevan poista se ensin.
+      import: Tuo Raamattu-EPUB
+      remove: Poista
+      openFolder: Avaa offline-Raamatun kansio
 commands:
   linkUnlinkedBibleReferences: Linkitä linkittömät raamatunviitteet
   convertToJWLibraryLinks: Muunna valitun tekstin linkit JW-kirjastolinkkiksi
@@ -111,11 +111,11 @@ notices:
   bibleQuoteAlreadyExists: Raamatunlainaus on jo olemassa
   errorInsertingQuotes: Virhe raamatunlainausten lisäämisessä
   bibleQuoteFetchFailed: Raamatuntekstiä ei voitu hakea — yritä uudelleen
-  offlineBibleImported: Offline Bible imported for {{language}}
-  offlineBibleReimported: Offline Bible re-imported for {{language}}
-  offlineBibleRemoved: Offline Bible removed for {{language}}
-  offlineBibleImportFailed: Failed to import the offline Bible EPUB
-  offlineBibleOpenFolderFailed: Could not open the offline Bible folder
+  offlineBibleImported: Offline-Raamattu tuotu kielelle {{language}}
+  offlineBibleRemoved: Offline-Raamattu poistettu kieleltä {{language}}
+  offlineBibleAlreadyInstalled: Kielelle {{language}} on jo asennettu offline-Raamattu. Poista se ensin tuodaksesi uudelleen.
+  offlineBibleImportFailed: Raamattu-EPUBin tuonti epäonnistui
+  offlineBibleOpenFolderFailed: Offline-Raamatun kansiota ei voitu avata
 suggestions:
   createLink: 'Luo linkki: {{text}}'
   createLinks: 'Luo linkit: {{text}}'

@@ -75,17 +75,17 @@ settings:
     allowOnlineFallback:
       name: Allow online fallback
       description: If offline data is missing, allow the plugin to try the online citation provider.
-    status:
-      name: Installed language status
-      notInstalled: No offline Bible is installed for {{language}}.
-      installed: Offline Bible for {{language}} installed from {{sourceFileName}} on {{importedAt}} with {{chapterCount}} chapters.
+    installedList:
+      name: 설치된 오프라인 성경
+      description: 언어당 하나의 오프라인 성경을 설치할 수 있습니다. 언어는 EPUB 메타데이터에서 감지됩니다.
+      empty: 아직 설치된 오프라인 성경이 없습니다.
+      entry: '{{sourceFileName}} — {{chapterCount}}장, {{importedAt}}에 가져옴'
     actions:
-      name: Offline Bible actions
-      description: Import, replace, remove, or inspect the offline Bible corpus for the selected language.
-      import: Import Bible EPUB
-      reimport: Re-import Bible EPUB
-      remove: Remove Offline Bible
-      openFolder: Open Offline Bible Folder
+      name: 오프라인 성경 작업
+      description: 새 언어를 추가하려면 EPUB를 가져오세요. 기존 언어를 교체하려면 먼저 제거하세요.
+      import: 성경 EPUB 가져오기
+      remove: 제거
+      openFolder: 오프라인 성경 폴더 열기
 commands:
   linkUnlinkedBibleReferences: 링크되지 않은 성경 참조 링크
   convertToJWLibraryLinks: 선택 항목의 링크를 JW Library 링크로 변환
@@ -111,11 +111,11 @@ notices:
   bibleQuoteAlreadyExists: 성경 인용문이 이미 존재함
   errorInsertingQuotes: 성경 인용문 삽입 오류
   bibleQuoteFetchFailed: 성경 본문을 가져올 수 없습니다 — 다시 시도해 주세요
-  offlineBibleImported: Offline Bible imported for {{language}}
-  offlineBibleReimported: Offline Bible re-imported for {{language}}
-  offlineBibleRemoved: Offline Bible removed for {{language}}
-  offlineBibleImportFailed: Failed to import the offline Bible EPUB
-  offlineBibleOpenFolderFailed: Could not open the offline Bible folder
+  offlineBibleImported: '{{language}}용 오프라인 성경을 가져왔습니다'
+  offlineBibleRemoved: '{{language}}용 오프라인 성경을 제거했습니다'
+  offlineBibleAlreadyInstalled: '{{language}}용 오프라인 성경이 이미 설치되어 있습니다. 다시 가져오려면 먼저 제거하세요.'
+  offlineBibleImportFailed: 오프라인 성경 EPUB를 가져오지 못했습니다
+  offlineBibleOpenFolderFailed: 오프라인 성경 폴더를 열 수 없습니다
 suggestions:
   createLink: '링크 생성: {{text}}'
   createLinks: '링크 생성: {{text}}'

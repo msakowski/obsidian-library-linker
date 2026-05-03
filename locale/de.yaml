@@ -75,16 +75,16 @@ settings:
     allowOnlineFallback:
       name: Online-Rückfall erlauben
       description: Falls Offline-Daten fehlen, kann das Plugin den Online-Zitatanbieter verwenden.
-    status:
-      name: Installierte Sprachversionen
-      notInstalled: Für {{language}} ist keine Offline-Bibel installiert.
-      installed: Offline-Bibel für {{language}} installiert aus {{sourceFileName}} am {{importedAt}} mit {{chapterCount}} Kapiteln.
+    installedList:
+      name: Installierte Offline-Bibeln
+      description: Pro Sprache kann eine Offline-Bibel installiert werden. Die Sprache wird aus den EPUB-Metadaten erkannt.
+      empty: Es ist noch keine Offline-Bibel installiert.
+      entry: '{{sourceFileName}} — {{chapterCount}} Kapitel, importiert am {{importedAt}}'
     actions:
       name: Offline-Bibel-Aktionen
-      description: Offline-Bibelkorpus für die ausgewählte Sprache importieren, ersetzen, entfernen oder anzeigen.
+      description: Eine EPUB-Datei importieren, um eine neue Sprache hinzuzufügen. Um eine vorhandene zu ersetzen, zuerst entfernen.
       import: Bibel-EPUB importieren
-      reimport: Bibel-EPUB erneut importieren
-      remove: Offline-Bibel entfernen
+      remove: Entfernen
       openFolder: Offline-Bibel-Ordner öffnen
 commands:
   linkUnlinkedBibleReferences: Unverlinkte Bibeltexte verlinken
@@ -112,8 +112,8 @@ notices:
   errorInsertingQuotes: Fehler beim Einfügen der Bibelzitate
   bibleQuoteFetchFailed: Bibeltext konnte nicht abgerufen werden — bitte erneut versuchen
   offlineBibleImported: Offline-Bibel für {{language}} importiert
-  offlineBibleReimported: Offline-Bibel für {{language}} erneut importiert
   offlineBibleRemoved: Offline-Bibel für {{language}} entfernt
+  offlineBibleAlreadyInstalled: Für {{language}} ist bereits eine Offline-Bibel installiert. Zuerst entfernen, um sie erneut zu importieren.
   offlineBibleImportFailed: Bibel-EPUB konnte nicht importiert werden
   offlineBibleOpenFolderFailed: Offline-Bibel-Ordner konnte nicht geöffnet werden
 suggestions:
