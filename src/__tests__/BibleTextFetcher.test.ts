@@ -65,7 +65,7 @@ describe('BibleTextFetcher', () => {
 
     test('builds correct URL for Portuguese', () => {
       expect(BibleTextFetcher.buildWOLUrl(66, 21, 'TPO')).toBe(
-        'https://wol.jw.org/pt_pt/wol/b/r5/lp-t/nwt/66/21',
+        'https://wol.jw.org/pt_pt/wol/b/r296/lp-tpo/nwt/66/21',
       );
     });
 

@@ -43,7 +43,7 @@ const WOL_LANG_CONFIG: Record<string, WOLLangConfig> = {
   S: { region: 'r4', lp: 'lp-s' },
   F: { region: 'r30', lp: 'lp-f' },
   KO: { region: 'r8', lp: 'lp-ko' },
-  TPO: { region: 'r5', lp: 'lp-t' },
+  TPO: { region: 'r296', lp: 'lp-tpo' },
   C: { region: 'r19', lp: 'lp-c' },
   VT: { region: 'r47', lp: 'lp-vt' },
 };
