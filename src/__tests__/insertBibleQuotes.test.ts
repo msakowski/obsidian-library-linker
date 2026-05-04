@@ -235,7 +235,9 @@ describe('insertAllBibleQuotes', () => {
       text: null,
     });
 
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     const result = await insertAllBibleQuotes(mockEditor, settings, provider);
+    warnSpy.mockRestore();
 
     expect(result).toEqual({ inserted: 0, linksFound: 1, fetchFailed: 1 });
     expect(mockTransaction).not.toHaveBeenCalled();

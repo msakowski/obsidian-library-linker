@@ -4,22 +4,17 @@ Instantly create, convert, and enrich Bible references with direct links to [JW 
 
 ## Supported Languages
 
-| Language             | Code |
-| -------------------- | ---- |
-| English              | E    |
-| Deutsch (German)     | X    |
-| Dansk (Danish)       | D    |
-| Suomi (Finnish)      | FI   |
-| Español (Spanish)    | S    |
-| Nederlands (Dutch)   | O    |
-| 한국어 (Korean)      | KO   |
-| Français (French)    | F    |
-| Português (Portugal) | TPO  |
-| Hrvatski (Croatian)  | C    |
-| Việt (Vietnamese)    | VT   |
-| Čeština (Czech)      | B    |
+| Code | Language                          |
+| ---- | --------------------------------- |
+| E    | English / English                 |
+| S    | español / Spanish                 |
+| F    | français / French                 |
+| TPO  | português / Portuguese (Portugal) |
+| X    | Deutsch / German                  |
+| VT   | Tiếng Việt / Vietnamese           |
+| KO   | 한국어 / Korean                   |
 
-The plugin UI automatically adapts to your Obsidian language setting, and Bible book names are fully translated for each language.
+… and many more. See [LOCALIZATION.md](LOCALIZATION.md) for the full list and instructions on adding a new language.
 
 ## Features
 
@@ -63,6 +58,7 @@ Fetch actual Bible text from jw.org and insert it directly into your notes.
 <!-- Link + quote -->
 
 [Matthew 6:33](jwlibrary:///finder?bible=40006033)
+
 > But keep on seeking first the Kingdom...
 
 <!-- Foldable callout (collapsed by default) -->

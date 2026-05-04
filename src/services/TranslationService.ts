@@ -1,4 +1,5 @@
 import type { Locale } from '@/types';
+import { LOCALES } from '@/consts/languages';
 import BUNDLED_LOCALES from 'locale:all';
 import { logger } from '@/utils/logger';
 
@@ -146,7 +147,7 @@ export class TranslationService {
       this.currentLocale = locale;
     } else if (locale !== 'en') {
       // Fallback to English
-      logger.warn(`Locale ${locale} not found, falling back to English`);
+      logger.warn(`Locale "${locale}" translation bundle not found, falling back to English`);
       await this.loadLocale('en');
     } else {
       throw new Error('English locale not found in bundle');
@@ -203,33 +204,26 @@ export class TranslationService {
   private detectObsidianLocale(): Locale {
     try {
       // Only try to access localStorage in a browser environment
-      if (typeof window !== 'undefined' && window.localStorage) {
-        const obsidianLocale = window.localStorage.getItem('language');
-        if (this.isValidLocale(obsidianLocale)) {
-          return obsidianLocale as Locale;
-        }
+      if (typeof window === 'undefined' || !window.localStorage) {
+        throw new Error('Could not access localStorage.');
       }
+
+      const obsidianLocale = window.localStorage.getItem('language');
+
+      if (!this.isValidLocale(obsidianLocale)) {
+        throw new Error(`LocalStorage locale "${obsidianLocale}" not supported`);
+      }
+
+      return obsidianLocale satisfies Locale;
     } catch (error) {
       // Fallback to default 'en' if localStorage is not available
-      logger.info('Could not access localStorage, using default locale', error);
+      logger.info(error, 'Using default locale "en"');
     }
+
     return 'en';
   }
 
-  private isValidLocale(locale: string | null): boolean {
-    return (
-      locale === 'en' ||
-      locale === 'de' ||
-      locale === 'da' ||
-      locale === 'fi' ||
-      locale === 'es' ||
-      locale === 'nl' ||
-      locale === 'ko' ||
-      locale === 'pt' ||
-      locale === 'fr' ||
-      locale === 'hr' ||
-      locale === 'vi' ||
-      locale === 'cs'
-    );
+  private isValidLocale(locale: string | null): locale is Locale {
+    return (LOCALES as readonly string[]).includes(locale ?? '');
   }
 }

@@ -4,6 +4,10 @@ Thank you for your interest in contributing to this project!
 
 Before getting started, please take a moment to familiarize yourself with our guiding principles and contribution process.
 
+## Adding a Language
+
+Want to add support for a new language? Head straight to [LOCALIZATION.md](LOCALIZATION.md) for a step-by-step guide on how to do that.
+
 ## Development Principles
 
 Our development approach is driven by the following core principles:
