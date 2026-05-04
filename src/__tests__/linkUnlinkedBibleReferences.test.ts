@@ -194,6 +194,35 @@ describe('linkUnlinkedBibleReferences', () => {
     expect(callbackArgs.changes.length).toBe(1);
   });
 
+  test('should find and link single-chapter books without colon (English)', () => {
+    const text = 'Read Jude 3 and Philemon 5 for encouragement.';
+
+    linkUnlinkedBibleReferences(text, settings, callbackMock);
+
+    const callbackArgs = callbackMock.mock.calls[0][0];
+    expect(callbackArgs.error).toBeUndefined();
+    expect(callbackArgs.changes.length).toBe(2);
+    expect(callbackArgs.changes[0].text).toContain('jwlibrary:///finder?bible=65001003');
+    expect(callbackArgs.changes[1].text).toContain('jwlibrary:///finder?bible=57001005');
+  });
+
+  test('should find and link single-chapter books without colon (German)', () => {
+    const germanSettings: LinkReplacerSettings = {
+      ...TEST_DEFAULT_SETTINGS,
+      language: 'X',
+    };
+
+    const text = 'Lies Judas 3 und 3. Johannes 14.';
+
+    linkUnlinkedBibleReferences(text, germanSettings, callbackMock);
+
+    const callbackArgs = callbackMock.mock.calls[0][0];
+    expect(callbackArgs.error).toBeUndefined();
+    expect(callbackArgs.changes.length).toBe(2);
+    expect(callbackArgs.changes[0].text).toContain('jwlibrary:///finder?bible=65001003');
+    expect(callbackArgs.changes[1].text).toContain('jwlibrary:///finder?bible=64001014');
+  });
+
   test('should preserve spaces around Bible references when converting to links', () => {
     // Arrange
     const textWithSpaces = `Some text before John 3:16 and some text after.`;
