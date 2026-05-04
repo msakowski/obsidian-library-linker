@@ -75,17 +75,17 @@ settings:
     allowOnlineFallback:
       name: Allow online fallback
       description: If offline data is missing, allow the plugin to try the online citation provider.
-    status:
-      name: Installed language status
-      notInstalled: No offline Bible is installed for {{language}}.
-      installed: Offline Bible for {{language}} installed from {{sourceFileName}} on {{importedAt}} with {{chapterCount}} chapters.
+    installedList:
+      name: Bibles hors ligne installées
+      description: Une Bible hors ligne peut être installée par langue. La langue est détectée à partir des métadonnées EPUB.
+      empty: Aucune Bible hors ligne n'est encore installée.
+      entry: '{{sourceFileName}} — {{chapterCount}} chapitres, importée le {{importedAt}}'
     actions:
-      name: Offline Bible actions
-      description: Import, replace, remove, or inspect the offline Bible corpus for the selected language.
-      import: Import Bible EPUB
-      reimport: Re-import Bible EPUB
-      remove: Remove Offline Bible
-      openFolder: Open Offline Bible Folder
+      name: Actions de la Bible hors ligne
+      description: Importez un EPUB pour ajouter une nouvelle langue. Pour remplacer une langue existante, supprimez-la d'abord.
+      import: Importer l'EPUB de la Bible
+      remove: Supprimer
+      openFolder: Ouvrir le dossier de la Bible hors ligne
 commands:
   linkUnlinkedBibleReferences: Lier les références bibliques non liées
   convertToJWLibraryLinks: Convertir les liens dans la sélection en liens JW Library
@@ -111,11 +111,11 @@ notices:
   bibleQuoteAlreadyExists: La citation biblique existe déjà
   errorInsertingQuotes: Erreur lors de l'insertion des citations bibliques
   bibleQuoteFetchFailed: Impossible de récupérer le texte biblique — veuillez réessayer
-  offlineBibleImported: Offline Bible imported for {{language}}
-  offlineBibleReimported: Offline Bible re-imported for {{language}}
-  offlineBibleRemoved: Offline Bible removed for {{language}}
-  offlineBibleImportFailed: Failed to import the offline Bible EPUB
-  offlineBibleOpenFolderFailed: Could not open the offline Bible folder
+  offlineBibleImported: Bible hors ligne importée pour {{language}}
+  offlineBibleRemoved: Bible hors ligne supprimée pour {{language}}
+  offlineBibleAlreadyInstalled: Une Bible hors ligne pour {{language}} est déjà installée. Supprimez-la d'abord pour la réimporter.
+  offlineBibleImportFailed: Échec de l'importation de l'EPUB de la Bible hors ligne
+  offlineBibleOpenFolderFailed: Impossible d'ouvrir le dossier de la Bible hors ligne
 suggestions:
   createLink: 'Créer un lien : {{text}}'
   createLinks: 'Créer des liens : {{text}}'

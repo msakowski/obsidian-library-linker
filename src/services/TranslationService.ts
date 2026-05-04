@@ -52,16 +52,16 @@ type Translation = {
       enabled: { name: string; description: string };
       preferOffline: { name: string; description: string };
       allowOnlineFallback: { name: string; description: string };
-      status: {
+      installedList: {
         name: string;
-        notInstalled: string;
-        installed: string;
+        description: string;
+        empty: string;
+        entry: string;
       };
       actions: {
         name: string;
         description: string;
         import: string;
-        reimport: string;
         remove: string;
         openFolder: string;
       };
@@ -90,8 +90,8 @@ type Translation = {
     bibleQuoteAlreadyExists: string;
     errorInsertingQuotes: string;
     offlineBibleImported: string;
-    offlineBibleReimported: string;
     offlineBibleRemoved: string;
+    offlineBibleAlreadyInstalled: string;
     offlineBibleImportFailed: string;
     offlineBibleOpenFolderFailed: string;
   };

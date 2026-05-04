@@ -14,7 +14,6 @@ import type {
   LinkStyles,
   BookLength,
   UpdatedLinkStructure,
-  OfflineBibleCorpusMetadata,
 } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
@@ -603,9 +602,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
   private async renderOfflineBibleSection(container: HTMLElement): Promise<void> {
     container.empty();
 
-    const language = this.plugin.settings.language;
-    const metadata = (await this.plugin.getOfflineBibleRepository()?.getMetadata(language)) ?? null;
-
     container.createDiv({
       text: this.t('settings.offlineBible.name'),
       cls: 'setting-item-h1',
@@ -654,31 +650,17 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           }),
       );
 
-    new Setting(container)
-      .setName(this.t('settings.offlineBible.status.name'))
-      .setDesc(this.describeOfflineBibleStatus(metadata, language));
+    await this.renderInstalledBibleList(container);
 
     new Setting(container)
       .setName(this.t('settings.offlineBible.actions.name'))
       .setDesc(this.t('settings.offlineBible.actions.description'))
       .addButton((button) =>
         button
-          .setButtonText(
-            metadata
-              ? this.t('settings.offlineBible.actions.reimport')
-              : this.t('settings.offlineBible.actions.import'),
-          )
+          .setButtonText(this.t('settings.offlineBible.actions.import'))
           .setCta()
           .onClick(() => {
-            void this.handleBibleImport(Boolean(metadata), container);
-          }),
-      )
-      .addButton((button) =>
-        button
-          .setButtonText(this.t('settings.offlineBible.actions.remove'))
-          .setDisabled(!metadata)
-          .onClick(() => {
-            void this.handleBibleRemoval(language, container);
+            void this.handleBibleImport(container);
           }),
       )
       .addButton((button) =>
@@ -688,25 +670,53 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       );
   }
 
-  private describeOfflineBibleStatus(
-    metadata: OfflineBibleCorpusMetadata | null,
-    language: Language,
-  ): string {
-    if (!metadata) {
-      return this.t('settings.offlineBible.status.notInstalled', {
-        language: LANGUAGE_LABELS[language],
+  private async renderInstalledBibleList(container: HTMLElement): Promise<void> {
+    const repository = this.plugin.getOfflineBibleRepository();
+    const installedLanguages = (await repository?.getInstalledLanguages()) ?? [];
+    const entries = await Promise.all(
+      installedLanguages.map(async (language) => ({
+        language,
+        metadata: (await repository?.getMetadata(language)) ?? null,
+      })),
+    );
+
+    const listSetting = new Setting(container)
+      .setName(this.t('settings.offlineBible.installedList.name'))
+      .setDesc(this.t('settings.offlineBible.installedList.description'));
+    listSetting.settingEl.addClass('setting-item--column');
+
+    if (entries.length === 0) {
+      container.createDiv({
+        text: this.t('settings.offlineBible.installedList.empty'),
+        cls: 'setting-item-description',
       });
+      return;
     }
 
-    return this.t('settings.offlineBible.status.installed', {
-      language: LANGUAGE_LABELS[language],
-      importedAt: new Date(metadata.importedAt).toLocaleString(),
-      sourceFileName: metadata.sourceFileName,
-      chapterCount: String(metadata.chapterCount),
-    });
+    for (const { language, metadata } of entries) {
+      if (!metadata) continue;
+
+      new Setting(container)
+        .setName(LANGUAGE_LABELS[language])
+        .setDesc(
+          this.t('settings.offlineBible.installedList.entry', {
+            sourceFileName: metadata.sourceFileName,
+            chapterCount: String(metadata.chapterCount),
+            importedAt: new Date(metadata.importedAt).toLocaleString(),
+          }),
+        )
+        .addButton((button) =>
+          button
+            .setButtonText(this.t('settings.offlineBible.actions.remove'))
+            .setWarning()
+            .onClick(() => {
+              void this.handleBibleRemoval(language, container);
+            }),
+        );
+    }
   }
 
-  private async handleBibleImport(existing: boolean, container: HTMLElement): Promise<void> {
+  private async handleBibleImport(container: HTMLElement): Promise<void> {
     const selectedFile = await this.selectEpubFile();
     if (!selectedFile) {
       return;
@@ -718,16 +728,24 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     const result = await importService.importBible({
       fileData: new Uint8Array(await selectedFile.arrayBuffer()),
       sourceFileName: selectedFile.name,
-      overwriteExisting: existing,
+      overwriteExisting: false,
     });
 
     if (!result.success) {
-      new Notice(result.error ?? this.t('notices.offlineBibleImportFailed'));
+      if (result.language) {
+        new Notice(
+          this.t('notices.offlineBibleAlreadyInstalled', {
+            language: LANGUAGE_LABELS[result.language],
+          }),
+        );
+      } else {
+        new Notice(result.error ?? this.t('notices.offlineBibleImportFailed'));
+      }
       return;
     }
 
     new Notice(
-      this.t(existing ? 'notices.offlineBibleReimported' : 'notices.offlineBibleImported', {
+      this.t('notices.offlineBibleImported', {
         language: LANGUAGE_LABELS[result.language ?? this.plugin.settings.language],
       }),
     );

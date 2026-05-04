@@ -75,16 +75,16 @@ settings:
     allowOnlineFallback:
       name: Tillad online reserve
       description: Hvis offline-data mangler, må pluginet forsøge den online citeringskilde.
-    status:
-      name: Status for installerede sprog
-      notInstalled: Der er ikke installeret nogen offline-bibel for {{language}}.
-      installed: Offline-bibel for {{language}} installeret fra {{sourceFileName}} den {{importedAt}} med {{chapterCount}} kapitler.
+    installedList:
+      name: Installerede offline-bibler
+      description: Der kan installeres én offline-bibel pr. sprog. Sproget registreres ud fra EPUB-metadata.
+      empty: Der er endnu ikke installeret nogen offline-bibler.
+      entry: '{{sourceFileName}} — {{chapterCount}} kapitler, importeret {{importedAt}}'
     actions:
       name: Handlinger for offline-bibel
-      description: Importér, erstat, fjern eller gennemse offline-bibelkorpuset for det valgte sprog.
+      description: Importér en EPUB for at tilføje et nyt sprog. For at erstatte en eksisterende skal du fjerne den først.
       import: Importér bibel-EPUB
-      reimport: Importér bibel-EPUB igen
-      remove: Fjern offline-bibel
+      remove: Fjern
       openFolder: Åbn mappe til offline-bibel
 commands:
   linkUnlinkedBibleReferences: Link ikke-linkede bibelhenvisninger
@@ -112,8 +112,8 @@ notices:
   errorInsertingQuotes: Fejl ved indsættelse af bibelcitater
   bibleQuoteFetchFailed: Kunne ikke hente bibeltekst — prøv igen
   offlineBibleImported: Offline-bibel importeret for {{language}}
-  offlineBibleReimported: Offline-bibel importeret igen for {{language}}
   offlineBibleRemoved: Offline-bibel fjernet for {{language}}
+  offlineBibleAlreadyInstalled: Der er allerede installeret en offline-bibel for {{language}}. Fjern den først for at importere igen.
   offlineBibleImportFailed: Kunne ikke importere offline-bibelens EPUB
   offlineBibleOpenFolderFailed: Kunne ikke åbne mappen til offline-bibel
 suggestions:
