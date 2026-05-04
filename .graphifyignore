@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+main.js
+*.js.map
+.hotreload
+
+# Obsidian plugin data (user settings)
+data.json
+
+# Development
+.idea/
+.vscode/
+.claude/
+.cursor/
+.kiro/
+*.log
+
+# Sync software metadata
+_gsdata_/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Optional: Obsidian workspace files
+.obsidian/
+.worktrees
+docs/superpowers/
+offline-bible
+
+# graphify specific
+.git
+.github
+pub-parser
+graphify-out/
