@@ -84,6 +84,7 @@ settings:
       name: Offline-Raamatun toiminnot
       description: Tuo EPUB lisätäksesi uuden kielen. Korvataksesi olemassa olevan poista se ensin.
       import: Tuo Raamattu-EPUB
+      importing: Tuodaan ...
       remove: Poista
       openFolder: Avaa offline-Raamatun kansio
 commands:

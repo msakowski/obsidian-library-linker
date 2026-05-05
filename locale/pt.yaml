@@ -84,6 +84,7 @@ settings:
       name: Ações da Bíblia offline
       description: Importe um EPUB para adicionar um novo idioma. Para substituir um existente, remova-o primeiro.
       import: Importar EPUB da Bíblia
+      importing: A importar ...
       remove: Remover
       openFolder: Abrir pasta da Bíblia offline
 commands:

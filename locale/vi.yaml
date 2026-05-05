@@ -84,6 +84,7 @@ settings:
       name: Hành động Kinh Thánh ngoại tuyến
       description: Nhập một tệp EPUB để thêm một ngôn ngữ mới. Để thay thế bản hiện có, hãy xóa bản đó trước.
       import: Nhập tệp EPUB Kinh Thánh
+      importing: Đang nhập ...
       remove: Xóa
       openFolder: Mở thư mục Kinh Thánh ngoại tuyến
 commands:

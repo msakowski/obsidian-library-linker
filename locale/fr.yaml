@@ -84,6 +84,7 @@ settings:
       name: Actions de la Bible hors ligne
       description: Importez un EPUB pour ajouter une nouvelle langue. Pour remplacer une langue existante, supprimez-la d'abord.
       import: Importer l'EPUB de la Bible
+      importing: Importation en cours ...
       remove: Supprimer
       openFolder: Ouvrir le dossier de la Bible hors ligne
 commands:

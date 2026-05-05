@@ -84,6 +84,7 @@ settings:
       name: 오프라인 성경 작업
       description: 새 언어를 추가하려면 EPUB를 가져오세요. 기존 언어를 교체하려면 먼저 제거하세요.
       import: 성경 EPUB 가져오기
+      importing: 가져오는 중 ...
       remove: 제거
       openFolder: 오프라인 성경 폴더 열기
 commands:

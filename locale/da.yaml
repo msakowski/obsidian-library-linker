@@ -84,6 +84,7 @@ settings:
       name: Handlinger for offline-bibel
       description: Importér en EPUB for at tilføje et nyt sprog. For at erstatte en eksisterende skal du fjerne den først.
       import: Importér bibel-EPUB
+      importing: Importerer ...
       remove: Fjern
       openFolder: Åbn mappe til offline-bibel
 commands:

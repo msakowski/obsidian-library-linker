@@ -84,6 +84,7 @@ settings:
       name: Akce offline Bible
       description: Importujte EPUB pro přidání nového jazyka. Pro nahrazení existující ji nejprve odstraňte.
       import: Importovat biblické EPUB
+      importing: Importuji ...
       remove: Odstranit
       openFolder: Otevřít složku offline Bible
 commands:
