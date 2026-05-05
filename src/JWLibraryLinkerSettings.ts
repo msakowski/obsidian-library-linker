@@ -19,7 +19,7 @@ import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { loadBibleBooks } from '@/stores/bibleBooks';
-import { getOfflineBibleRootPath } from '@/services/PluginDataPathService';
+import { getOfflineBibleAbsolutePath } from '@/services/PluginDataPathService';
 import { logger } from '@/utils/logger';
 import { LANGUAGE_LABELS } from '@/consts/languages';
 
@@ -90,6 +90,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       this.updatePreview();
     });
   };
+
+  private importInFlight = false;
 
   // Sample Bible references for preview
   private previewReferences: BibleReference[] = [
@@ -523,13 +525,11 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     // Initialize bible quote preview
     this.updateBibleQuotePreview();
 
-    if (Platform.isDesktopApp) {
-      const offlineBibleContainer = settingsContainer.createDiv({
-        cls: 'setting-item setting-item--column setting-item--offlineBible',
-      });
+    const offlineBibleContainer = settingsContainer.createDiv({
+      cls: 'setting-item setting-item--column setting-item--offlineBible',
+    });
 
-      void this.renderOfflineBibleSection(offlineBibleContainer);
-    }
+    void this.renderOfflineBibleSection(offlineBibleContainer);
   }
 
   /**
@@ -652,22 +652,29 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
     await this.renderInstalledBibleList(container);
 
-    new Setting(container)
+    const actionsSetting = new Setting(container)
       .setName(this.t('settings.offlineBible.actions.name'))
       .setDesc(this.t('settings.offlineBible.actions.description'))
-      .addButton((button) =>
-        button
-          .setButtonText(this.t('settings.offlineBible.actions.import'))
-          .setCta()
-          .onClick(() => {
-            void this.handleBibleImport(container);
-          }),
-      )
-      .addButton((button) =>
+      .addButton((button) => {
+        if (this.importInFlight) {
+          button.setButtonText(this.t('settings.offlineBible.actions.importing')).setDisabled(true);
+        } else {
+          button
+            .setButtonText(this.t('settings.offlineBible.actions.import'))
+            .setCta()
+            .onClick(() => {
+              void this.handleBibleImport(container);
+            });
+        }
+      });
+
+    if (Platform.isDesktopApp) {
+      actionsSetting.addButton((button) =>
         button.setButtonText(this.t('settings.offlineBible.actions.openFolder')).onClick(() => {
           void this.openOfflineBibleFolder();
         }),
       );
+    }
   }
 
   private async renderInstalledBibleList(container: HTMLElement): Promise<void> {
@@ -723,34 +730,38 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     }
 
     const importService = this.plugin.getEpubImportService();
-    if (!importService) return;
-
-    const result = await importService.importBible({
-      fileData: new Uint8Array(await selectedFile.arrayBuffer()),
-      sourceFileName: selectedFile.name,
-      overwriteExisting: false,
-    });
-
-    if (!result.success) {
-      if (result.language) {
-        new Notice(
-          this.t('notices.offlineBibleAlreadyInstalled', {
-            language: LANGUAGE_LABELS[result.language],
-          }),
-        );
-      } else {
-        new Notice(result.error ?? this.t('notices.offlineBibleImportFailed'));
-      }
-      return;
-    }
-
-    new Notice(
-      this.t('notices.offlineBibleImported', {
-        language: LANGUAGE_LABELS[result.language ?? this.plugin.settings.language],
-      }),
-    );
-
+    this.importInFlight = true;
     void this.renderOfflineBibleSection(container);
+
+    try {
+      const result = await importService.importBible({
+        fileData: new Uint8Array(await selectedFile.arrayBuffer()),
+        sourceFileName: selectedFile.name,
+        overwriteExisting: false,
+      });
+
+      if (!result.success) {
+        if (result.language) {
+          new Notice(
+            this.t('notices.offlineBibleAlreadyInstalled', {
+              language: LANGUAGE_LABELS[result.language],
+            }),
+          );
+        } else {
+          new Notice(result.error ?? this.t('notices.offlineBibleImportFailed'));
+        }
+        return;
+      }
+
+      new Notice(
+        this.t('notices.offlineBibleImported', {
+          language: LANGUAGE_LABELS[result.language ?? this.plugin.settings.language],
+        }),
+      );
+    } finally {
+      this.importInFlight = false;
+      void this.renderOfflineBibleSection(container);
+    }
   }
 
   private async handleBibleRemoval(language: Language, container: HTMLElement): Promise<void> {
@@ -760,7 +771,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
   }
 
   private async openOfflineBibleFolder(): Promise<void> {
-    const folderPath = getOfflineBibleRootPath(this.app, this.plugin.manifest.id);
+    const folderPath = getOfflineBibleAbsolutePath(this.app, this.plugin.manifest.id);
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { mkdir } = require('fs/promises') as typeof import('fs/promises');
     await mkdir(folderPath, { recursive: true });

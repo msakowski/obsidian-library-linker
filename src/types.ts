@@ -165,8 +165,7 @@ export interface OfflineBibleChapter {
 }
 
 export interface BibleImportRequest {
-  filePath?: string;
-  fileData?: Uint8Array;
+  fileData: Uint8Array;
   sourceFileName?: string;
   language?: Language;
   overwriteExisting: boolean;

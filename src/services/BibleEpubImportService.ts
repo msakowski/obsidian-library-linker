@@ -10,8 +10,7 @@ import type {
 import { unzipSync, strFromU8 } from 'fflate';
 import { getLanguageByLocale } from '@/consts/languages';
 import { cleanHtmlText } from '@/utils/cleanHtmlText';
-
-import { lazyReadFile, lazyCreateHash, lazyPath } from '@/utils/lazyNodeModules';
+import { webCryptoSha256 } from '@/utils/webCryptoSha256';
 
 interface VerseTarget {
   book: number;
@@ -27,7 +26,7 @@ export class BibleEpubImportService implements EpubImportService {
 
   async importBible(request: BibleImportRequest): Promise<BibleImportResult> {
     try {
-      if (!request.fileData && !request.filePath) {
+      if (!request.fileData) {
         return {
           success: false,
           warnings: [],
@@ -35,18 +34,15 @@ export class BibleEpubImportService implements EpubImportService {
         };
       }
 
-      const fileBuffer =
-        request.fileData !== undefined
-          ? Buffer.from(request.fileData)
-          : await lazyReadFile()(request.filePath ?? '');
-      const checksum = `sha256:${lazyCreateHash()('sha256').update(fileBuffer).digest('hex')}`;
-      const archive = unzipSync(new Uint8Array(fileBuffer));
+      const fileBytes = request.fileData;
+      const checksum = `sha256:${await webCryptoSha256(fileBytes)}`;
+      const archive = unzipSync(fileBytes);
       const archiveEntries = new Map(
         Object.entries(archive).map(([path, bytes]) => [path, strFromU8(bytes)]),
       );
 
       const rootFilePath = this.getRootFilePath(archiveEntries);
-      const rootDir = lazyPath().posix.dirname(rootFilePath);
+      const rootDir = posixDirname(rootFilePath);
       const packageDoc = this.parseXml(this.getArchiveEntry(archiveEntries, rootFilePath));
       const detectedLanguage = this.detectLanguage(packageDoc);
       const language = request.language ?? detectedLanguage;
@@ -73,8 +69,7 @@ export class BibleEpubImportService implements EpubImportService {
       const metadata = this.buildMetadata({
         language,
         checksum,
-        fileName:
-          request.sourceFileName ?? lazyPath().basename(request.filePath ?? 'imported.epub'),
+        fileName: request.sourceFileName ?? 'imported.epub',
         modifiedAt: this.readModifiedAt(packageDoc),
         chapters,
       });
@@ -265,7 +260,7 @@ export class BibleEpubImportService implements EpubImportService {
           chapter,
           verse,
           title,
-          filePath: lazyPath().posix.join(rootDir, relativePath),
+          filePath: posixJoin(rootDir, relativePath),
           anchor,
         } satisfies VerseTarget;
       })
@@ -452,4 +447,17 @@ export class BibleEpubImportService implements EpubImportService {
 
     return entry;
   }
+}
+
+function posixDirname(path: string): string {
+  const idx = path.lastIndexOf('/');
+  if (idx < 0) return '';
+  return path.slice(0, idx);
+}
+
+function posixJoin(...segments: string[]): string {
+  return segments
+    .filter((segment) => segment !== '')
+    .join('/')
+    .replace(/\/+/g, '/');
 }
