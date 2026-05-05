@@ -6,16 +6,14 @@ function joinPath(...segments: string[]): string {
   return join(...segments);
 }
 
-function getPluginDataPath(app: App, pluginId: string): string {
-  const adapter = app.vault.adapter;
-
-  if (!(adapter instanceof FileSystemAdapter)) {
-    throw new Error('Offline Bible storage requires the desktop file system adapter.');
-  }
-
-  return joinPath(adapter.getBasePath(), app.vault.configDir, 'plugins', pluginId);
+export function getOfflineBibleVaultPath(app: App, pluginId: string): string {
+  return `${app.vault.configDir}/plugins/${pluginId}/offline-bible`;
 }
 
-export function getOfflineBibleRootPath(app: App, pluginId: string): string {
-  return joinPath(getPluginDataPath(app, pluginId), 'offline-bible');
+export function getOfflineBibleAbsolutePath(app: App, pluginId: string): string {
+  const adapter = app.vault.adapter;
+  if (!(adapter instanceof FileSystemAdapter)) {
+    throw new Error('Absolute path is only available on the desktop file system adapter.');
+  }
+  return joinPath(adapter.getBasePath(), getOfflineBibleVaultPath(app, pluginId));
 }
