@@ -33,3 +33,4 @@ jobs:
           publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
+          SKIP_SIMPLE_GIT_HOOKS: 1
