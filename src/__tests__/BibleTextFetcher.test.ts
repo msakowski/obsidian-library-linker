@@ -65,7 +65,7 @@ describe('BibleTextFetcher', () => {
 
     test('builds correct URL for Portuguese', () => {
       expect(BibleTextFetcher.buildWOLUrl(66, 21, 'TPO')).toBe(
-        'https://wol.jw.org/pt_pt/wol/b/r296/lp-tpo/nwt/66/21',
+        'https://wol.jw.org/pt-PT/wol/b/r296/lp-tpo/nwt/66/21',
       );
     });
 
@@ -356,6 +356,16 @@ describe('BibleTextFetcher', () => {
     });
 
     describe('network fallback behavior', () => {
+      let warnSpy: jest.SpyInstance;
+
+      beforeEach(() => {
+        warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      });
+
+      afterEach(() => {
+        warnSpy.mockRestore();
+      });
+
       test('falls back to curl when requestUrl fails on desktop', async () => {
         const html = `
           <span id="v40-24-14-1" class="v"><a href="#" class="vl vx vp">14 </a>And this good news of the Kingdom will be preached.</span>

@@ -46,7 +46,7 @@
   },
   {
     "code": "ACD",
-    "locale": "fr_x_acd",
+    "locale": "fr-x-acd",
     "vernacular": "Acadien",
     "script": "ROMAN",
     "name": "Acadian",
@@ -64,7 +64,7 @@
   },
   {
     "code": "ACC",
-    "locale": "acr_x_acc",
+    "locale": "acr-x-acc",
     "vernacular": "achí de cubulco",
     "script": "ROMAN",
     "name": "Achi (Cubulco)",
@@ -73,7 +73,7 @@
   },
   {
     "code": "ACR",
-    "locale": "acr_x_acr",
+    "locale": "acr-x-acr",
     "vernacular": "achí de rabinal",
     "script": "ROMAN",
     "name": "Achi (Rabinal)",
@@ -208,7 +208,7 @@
   },
   {
     "code": "LTN",
-    "locale": "gsw_x_ltn",
+    "locale": "gsw-x-ltn",
     "vernacular": "Elsässisch",
     "script": "ROMAN",
     "name": "Alsatian",
@@ -280,7 +280,7 @@
   },
   {
     "code": "LAS",
-    "locale": "sgn_ao",
+    "locale": "sgn-AO",
     "vernacular": "Língua angolana de sinais",
     "script": "ROMAN",
     "name": "Angolan Sign Language",
@@ -289,7 +289,7 @@
   },
   {
     "code": "AYI",
-    "locale": "any_ci",
+    "locale": "any-CI",
     "vernacular": "anyin (indenie)",
     "script": "ROMAN",
     "name": "Anyin (Indenie)",
@@ -388,7 +388,7 @@
   },
   {
     "code": "ASR",
-    "locale": "apc_sy",
+    "locale": "apc-SY",
     "vernacular": "العربية (اللهجة‏ السورية)‏",
     "script": "ARABIC",
     "name": "Arabic (Syria)",
@@ -424,7 +424,7 @@
   },
   {
     "code": "KRB",
-    "locale": "hy_x_krb",
+    "locale": "hy-x-krb",
     "vernacular": "Հայերեն (արևելյան բարբառ)",
     "script": "ARMENIAN",
     "name": "Armenian (Eastern dialect)",
@@ -595,7 +595,7 @@
   },
   {
     "code": "AJ",
-    "locale": "az_cyrl",
+    "locale": "az-Cyrl",
     "vernacular": "Aзәрбајҹан (кирил әлифбасы)",
     "script": "CYRILLIC",
     "name": "Azerbaijani (Cyrillic)",
@@ -604,7 +604,7 @@
   },
   {
     "code": "FNB",
-    "locale": "wyy_x_fnb",
+    "locale": "wyy-x-fnb",
     "vernacular": "Ba",
     "script": "ROMAN",
     "name": "Ba",
@@ -829,7 +829,7 @@
   },
   {
     "code": "BEA",
-    "locale": "ron_x_bea",
+    "locale": "ron-x-bea",
     "vernacular": "Beas",
     "script": "ROMAN",
     "name": "Beas",
@@ -883,7 +883,7 @@
   },
   {
     "code": "BNL",
-    "locale": "sgn_bj",
+    "locale": "sgn-BJ",
     "vernacular": "Benin Sign Language",
     "script": "ROMAN",
     "name": "Benin Sign Language",
@@ -901,7 +901,7 @@
   },
   {
     "code": "BTO",
-    "locale": "plt_x_bto",
+    "locale": "plt-x-bto",
     "vernacular": "Betsileo",
     "script": "ROMAN",
     "name": "Betsileo",
@@ -937,7 +937,7 @@
   },
   {
     "code": "BHM",
-    "locale": "bho_mu",
+    "locale": "bho-MU",
     "vernacular": "Bhojpuri (Mauritius)",
     "script": "ROMAN",
     "name": "Bhojpuri (Mauritius)",
@@ -1036,7 +1036,7 @@
   },
   {
     "code": "WSL",
-    "locale": "sgn_bw",
+    "locale": "sgn-BW",
     "vernacular": "Botswana Sign Language",
     "script": "ROMAN",
     "name": "Botswana Sign Language",
@@ -1171,7 +1171,7 @@
   },
   {
     "code": "CQC",
-    "locale": "cak_x_cqc",
+    "locale": "cak-x-cqc",
     "vernacular": "Kaqchikel central",
     "script": "ROMAN",
     "name": "Cakchiquel (Central)",
@@ -1180,7 +1180,7 @@
   },
   {
     "code": "CQE",
-    "locale": "cak_x_cqe",
+    "locale": "cak-x-cqe",
     "vernacular": "Kaqchikel oriental",
     "script": "ROMAN",
     "name": "Cakchiquel (Eastern)",
@@ -1207,7 +1207,7 @@
   },
   {
     "code": "CBL",
-    "locale": "sgn_kh",
+    "locale": "sgn-KH",
     "vernacular": "ភាសាសញ្ញាខ្មែរ",
     "script": "CAMBODIAN",
     "name": "Cambodian Sign Language",
@@ -1216,7 +1216,7 @@
   },
   {
     "code": "CRB",
-    "locale": "car_x_crb",
+    "locale": "car-x-crb",
     "vernacular": "Kariʼnia",
     "script": "ROMAN",
     "name": "Carib",
@@ -1261,7 +1261,7 @@
   },
   {
     "code": "CGM",
-    "locale": "tso_mz",
+    "locale": "tso-MZ",
     "vernacular": "xiChangana (Moçambique)",
     "script": "ROMAN",
     "name": "Changana (Mozambique)",
@@ -1270,7 +1270,7 @@
   },
   {
     "code": "CGA",
-    "locale": "tso_zw",
+    "locale": "tso-ZW",
     "vernacular": "Xichangana (Zimbabwe)",
     "script": "ROMAN",
     "name": "Changana (Zimbabwe)",
@@ -1306,7 +1306,7 @@
   },
   {
     "code": "CDG",
-    "locale": "arn_x_cdg",
+    "locale": "arn-x-cdg",
     "vernacular": "Chedungun labquenche",
     "script": "ROMAN",
     "name": "Chedungun (Coast)",
@@ -1324,7 +1324,7 @@
   },
   {
     "code": "CGD",
-    "locale": "hne_deva",
+    "locale": "hne-Deva",
     "vernacular": "छत्तीसगढ़ी (देवनागरी)",
     "script": "DEVANAGARI",
     "name": "Chhattisgarhi (Devanagari)",
@@ -1423,7 +1423,7 @@
   },
   {
     "code": "CHG",
-    "locale": "wuu_x_chg",
+    "locale": "wuu-x-chg",
     "vernacular": "中文（上海话）",
     "script": "CHINESE",
     "name": "Chinese (Shanghainese)",
@@ -1432,7 +1432,7 @@
   },
   {
     "code": "CSN",
-    "locale": "cmn_x_csn",
+    "locale": "cmn-x-csn",
     "vernacular": "中文（四川话）",
     "script": "CHINESE",
     "name": "Chinese (Sichuanese)",
@@ -1441,7 +1441,7 @@
   },
   {
     "code": "WNZ",
-    "locale": "wuu_x_wnz",
+    "locale": "wuu-x-wnz",
     "vernacular": "中文（温州话）",
     "script": "CHINESE",
     "name": "Chinese (Wenzhounese)",
@@ -1450,7 +1450,7 @@
   },
   {
     "code": "CHK",
-    "locale": "cmn_x_chk",
+    "locale": "cmn-x-chk",
     "vernacular": "中文（云南话）",
     "script": "CHINESE",
     "name": "Chinese (Yunnanese)",
@@ -1459,7 +1459,7 @@
   },
   {
     "code": "CNS",
-    "locale": "yue_hans",
+    "locale": "yue-Hans",
     "vernacular": "中文简体（广东话）",
     "script": "CHINESE",
     "name": "Chinese Cantonese (Simplified)",
@@ -1468,7 +1468,7 @@
   },
   {
     "code": "CHC",
-    "locale": "yue_hant",
+    "locale": "yue-Hant",
     "vernacular": "中文繁體（廣東話）",
     "script": "CHINESE",
     "name": "Chinese Cantonese (Traditional)",
@@ -1477,7 +1477,7 @@
   },
   {
     "code": "CHS",
-    "locale": "cmn_hans",
+    "locale": "cmn-Hans",
     "vernacular": "中文简体（普通话）",
     "script": "CHINESE",
     "name": "Chinese Mandarin (Simplified)",
@@ -1486,7 +1486,7 @@
   },
   {
     "code": "CH",
-    "locale": "cmn_hant",
+    "locale": "cmn-Hant",
     "vernacular": "中文繁體（國語）",
     "script": "CHINESE",
     "name": "Chinese Mandarin (Traditional)",
@@ -1531,7 +1531,7 @@
   },
   {
     "code": "CGW",
-    "locale": "toi_zw",
+    "locale": "toi-ZW",
     "vernacular": "Chitonga (Zimbabwe)",
     "script": "ROMAN",
     "name": "Chitonga (Zimbabwe)",
@@ -1720,7 +1720,7 @@
   },
   {
     "code": "CY",
-    "locale": "crk_latn",
+    "locale": "crk-Latn",
     "vernacular": "nēhiyawēwin",
     "script": "ROMAN",
     "name": "Cree Plains (Roman)",
@@ -1729,7 +1729,7 @@
   },
   {
     "code": "CYS",
-    "locale": "crk_x_cys",
+    "locale": "crk-x-cys",
     "vernacular": "ᓀᐦᐃᔭᐁᐧᐃᐧᐣ",
     "script": "CANADIAN_SY",
     "name": "Cree Plains (Syllabics)",
@@ -1738,7 +1738,7 @@
   },
   {
     "code": "CSR",
-    "locale": "crj_latn",
+    "locale": "crj-Latn",
     "vernacular": "Iinuuayimuwin",
     "script": "ROMAN",
     "name": "Cree Southern East (Roman)",
@@ -1747,7 +1747,7 @@
   },
   {
     "code": "YC",
-    "locale": "csw_x_yc",
+    "locale": "csw-x-yc",
     "vernacular": "Ininîmowin",
     "script": "ROMAN",
     "name": "Cree West Swampy (Roman)",
@@ -1756,7 +1756,7 @@
   },
   {
     "code": "YCS",
-    "locale": "csw_x_ycs",
+    "locale": "csw-x-ycs",
     "vernacular": "ᐃᓂᓃᒧᐏᐣ",
     "script": "CANADIAN_SY",
     "name": "Cree West Swampy (Syllabics)",
@@ -1765,7 +1765,7 @@
   },
   {
     "code": "CTR",
-    "locale": "crh_x_ctr",
+    "locale": "crh-x-ctr",
     "vernacular": "Қрим-тотор",
     "script": "ROMAN",
     "name": "Crimean Tatar",
@@ -1774,7 +1774,7 @@
   },
   {
     "code": "CTC",
-    "locale": "crh_x_ctc",
+    "locale": "crh-x-ctc",
     "vernacular": "къырымтатар (кирилл)",
     "script": "CYRILLIC",
     "name": "Crimean Tatar (Cyrillic)",
@@ -1837,7 +1837,7 @@
   },
   {
     "code": "DMR",
-    "locale": "naq_x_dmr",
+    "locale": "naq-x-dmr",
     "vernacular": "Damara",
     "script": "ROMAN",
     "name": "Damara",
@@ -1945,7 +1945,7 @@
   },
   {
     "code": "DGR",
-    "locale": "os_x_dgr",
+    "locale": "os-x-dgr",
     "vernacular": "дигорон",
     "script": "CYRILLIC",
     "name": "Digor",
@@ -2026,7 +2026,7 @@
   },
   {
     "code": "OBG",
-    "locale": "nl_be",
+    "locale": "nl-BE",
     "vernacular": "Nederlands (België)",
     "script": "ROMAN",
     "name": "Dutch (Belgium)",
@@ -2035,7 +2035,7 @@
   },
   {
     "code": "OSR",
-    "locale": "nl_sr",
+    "locale": "nl-SR",
     "vernacular": "Nederlands (Suriname)",
     "script": "ROMAN",
     "name": "Dutch (Suriname)",
@@ -2044,7 +2044,7 @@
   },
   {
     "code": "DZR",
-    "locale": "dzo_latn",
+    "locale": "dzo-Latn",
     "vernacular": "Dzongkha (Roman)",
     "script": "ROMAN",
     "name": "Dzongkha (Roman)",
@@ -2053,7 +2053,7 @@
   },
   {
     "code": "DZ",
-    "locale": "dzo_tibt",
+    "locale": "dzo-Tibt",
     "vernacular": "Dzongkha (Tibetan)",
     "script": "TIBETAN",
     "name": "Dzongkha (Tibetan)",
@@ -2134,7 +2134,7 @@
   },
   {
     "code": "ENG",
-    "locale": "en_ng",
+    "locale": "en-NG",
     "vernacular": "English (Nigeria)",
     "script": "ROMAN",
     "name": "English (Nigeria)",
@@ -2260,7 +2260,7 @@
   },
   {
     "code": "FJS",
-    "locale": "sgn_fj",
+    "locale": "sgn-FJ",
     "vernacular": "Fiji Sign Language",
     "script": "ROMAN",
     "name": "Fiji Sign Language",
@@ -2314,7 +2314,7 @@
   },
   {
     "code": "FCD",
-    "locale": "fr_cl",
+    "locale": "fr-CL",
     "vernacular": "Français Ivoirien",
     "script": "ROMAN",
     "name": "Français Ivoirien",
@@ -2323,7 +2323,7 @@
   },
   {
     "code": "FBN",
-    "locale": "fr_bj",
+    "locale": "fr-BJ",
     "vernacular": "Français (Bénin)",
     "script": "ROMAN",
     "name": "French (Benin)",
@@ -2332,7 +2332,7 @@
   },
   {
     "code": "FCA",
-    "locale": "fr_ca",
+    "locale": "fr-CA",
     "vernacular": "Français (Canada)",
     "script": "ROMAN",
     "name": "French (Canada)",
@@ -2395,7 +2395,7 @@
   },
   {
     "code": "GZ",
-    "locale": "gag_x_gz",
+    "locale": "gag-x-gz",
     "vernacular": "гaгaуз",
     "script": "CYRILLIC",
     "name": "Gagauz",
@@ -2404,7 +2404,7 @@
   },
   {
     "code": "GZR",
-    "locale": "gag_x_gzr",
+    "locale": "gag-x-gzr",
     "vernacular": "gagauz (latin)",
     "script": "ROMAN",
     "name": "Gagauz (Roman)",
@@ -2440,7 +2440,7 @@
   },
   {
     "code": "GAR",
-    "locale": "grt_x_gar",
+    "locale": "grt-x-gar",
     "vernacular": "গারো (আবেং)",
     "script": "BENGALI",
     "name": "Garo (Abeng)",
@@ -2458,7 +2458,7 @@
   },
   {
     "code": "GDE",
-    "locale": "jw_gde",
+    "locale": "jw-gde",
     "vernacular": "Gede'uffa",
     "script": "ROMAN",
     "name": "Gedeo",
@@ -2476,7 +2476,7 @@
   },
   {
     "code": "GGS",
-    "locale": "sgn_ge",
+    "locale": "sgn-GE",
     "vernacular": "ქართული ჟესტური ენა",
     "script": "GEORGIAN",
     "name": "Georgian Sign Language",
@@ -2593,7 +2593,7 @@
   },
   {
     "code": "GLE",
-    "locale": "kl_x_gle",
+    "locale": "kl-x-gle",
     "vernacular": "Tunumiisut",
     "script": "ROMAN",
     "name": "Greenlandic (East)",
@@ -2755,7 +2755,7 @@
   },
   {
     "code": "HKI",
-    "locale": "hak_id",
+    "locale": "hak-ID",
     "vernacular": "Cina Khek (Indonesia)",
     "script": "ROMAN",
     "name": "Hakka (Indonesia)",
@@ -2782,7 +2782,7 @@
   },
   {
     "code": "HMA",
-    "locale": "hyw_x_hma",
+    "locale": "hyw-x-hma",
     "vernacular": "համշեներեն (հայերեն)",
     "script": "ARMENIAN",
     "name": "Hamshen (Armenian)",
@@ -2791,7 +2791,7 @@
   },
   {
     "code": "HMS",
-    "locale": "hyw_x_hms",
+    "locale": "hyw-x-hms",
     "vernacular": "һамшенерен (кирилица)",
     "script": "CYRILLIC",
     "name": "Hamshen (Cyrillic)",
@@ -2926,7 +2926,7 @@
   },
   {
     "code": "HRM",
-    "locale": "hi_latn",
+    "locale": "hi-Latn",
     "vernacular": "Hindi (Roman)",
     "script": "ROMAN",
     "name": "Hindi (Roman)",
@@ -2998,7 +2998,7 @@
   },
   {
     "code": "HSV",
-    "locale": "hus_x_hsv",
+    "locale": "hus-x-hsv",
     "vernacular": "tének de Veracruz",
     "script": "ROMAN",
     "name": "Huastec (Veracruz)",
@@ -3097,7 +3097,7 @@
   },
   {
     "code": "IBI",
-    "locale": "yom_x_ibi",
+    "locale": "yom-x-ibi",
     "vernacular": "Ibinda",
     "script": "ROMAN",
     "name": "Ibinda",
@@ -3223,7 +3223,7 @@
   },
   {
     "code": "IUR",
-    "locale": "iu_latn",
+    "locale": "iu-Latn",
     "vernacular": "Inuktitut",
     "script": "ROMAN",
     "name": "Inuktitut (Roman)",
@@ -3331,7 +3331,7 @@
   },
   {
     "code": "JCR",
-    "locale": "jam_x_jcr",
+    "locale": "jam-x-jcr",
     "vernacular": "Patwa",
     "script": "ROMAN",
     "name": "Jamaican Creole",
@@ -3439,7 +3439,7 @@
   },
   {
     "code": "KBT",
-    "locale": "kea_x_kbt",
+    "locale": "kea-x-kbt",
     "vernacular": "Kabuverdianu (Barlaventu)",
     "script": "ROMAN",
     "name": "Kabuverdianu (Barlaventu)",
@@ -3466,7 +3466,7 @@
   },
   {
     "code": "KDV",
-    "locale": "fij_x_kdv",
+    "locale": "fij-x-kdv",
     "vernacular": "Kadavu",
     "script": "ROMAN",
     "name": "Kadavu",
@@ -3502,7 +3502,7 @@
   },
   {
     "code": "KL",
-    "locale": "kck_x_kl",
+    "locale": "kck-x-kl",
     "vernacular": "Kalanga (Botswana)",
     "script": "ROMAN",
     "name": "Kalanga (Botswana)",
@@ -3511,7 +3511,7 @@
   },
   {
     "code": "KLZ",
-    "locale": "kck_x_klz",
+    "locale": "kck-x-klz",
     "vernacular": "Kalanga (Zimbabwe)",
     "script": "ROMAN",
     "name": "Kalanga (Zimbabwe)",
@@ -3682,7 +3682,7 @@
   },
   {
     "code": "AZA",
-    "locale": "kk_arab",
+    "locale": "kk-Arab",
     "vernacular": "قازاق ٴتىلى (ارابشا جازۋى)",
     "script": "ARABIC",
     "name": "Kazakh (Arabic)",
@@ -3736,7 +3736,7 @@
   },
   {
     "code": "KHL",
-    "locale": "hin_x_khl",
+    "locale": "hin-x-khl",
     "vernacular": "Khari Boli",
     "script": "ROMAN",
     "name": "Khari Boli",
@@ -3808,7 +3808,7 @@
   },
   {
     "code": "KGL",
-    "locale": "ktu_x_kgl",
+    "locale": "ktu-x-kgl",
     "vernacular": "Kikongo ya leta",
     "script": "ROMAN",
     "name": "Kikongo ya Leta",
@@ -3835,7 +3835,7 @@
   },
   {
     "code": "MNN",
-    "locale": "kg_x_mnn",
+    "locale": "kg-x-mnn",
     "vernacular": "Kimanianga",
     "script": "ROMAN",
     "name": "Kimanyanga",
@@ -3871,7 +3871,7 @@
   },
   {
     "code": "KK",
-    "locale": "nyy_x_kk",
+    "locale": "nyy-x-kk",
     "vernacular": "Kinyakyusa",
     "script": "ROMAN",
     "name": "Kinyakyusa",
@@ -3952,7 +3952,7 @@
   },
   {
     "code": "KIT",
-    "locale": "ktu_x_kit",
+    "locale": "ktu-x-kit",
     "vernacular": "Kituba",
     "script": "ROMAN",
     "name": "Kituba",
@@ -4006,7 +4006,7 @@
   },
   {
     "code": "BRS",
-    "locale": "sgn_bi",
+    "locale": "sgn-BI",
     "vernacular": "Langue des signes burundaise",
     "script": "ROMAN",
     "name": "Burundi Sign Language",
@@ -4015,7 +4015,7 @@
   },
   {
     "code": "CGS",
-    "locale": "sgn_cd",
+    "locale": "sgn-CD",
     "vernacular": "Langue des signes congolaise",
     "script": "ROMAN",
     "name": "Congolese Sign Language",
@@ -4069,7 +4069,7 @@
   },
   {
     "code": "KOC",
-    "locale": "ko_cn",
+    "locale": "ko-CN",
     "vernacular": "조선어",
     "script": "KOREAN",
     "name": "Korean (China)",
@@ -4114,7 +4114,7 @@
   },
   {
     "code": "KRY",
-    "locale": "tt_x_kry",
+    "locale": "tt-x-kry",
     "vernacular": "керәшен татар",
     "script": "CYRILLIC",
     "name": "Kryashen",
@@ -4168,7 +4168,7 @@
   },
   {
     "code": "RD",
-    "locale": "kmr_x_rd",
+    "locale": "kmr-x-rd",
     "vernacular": "Kurdî (Kurmancî)",
     "script": "ROMAN",
     "name": "Kurdish Kurmanji",
@@ -4177,7 +4177,7 @@
   },
   {
     "code": "RDU",
-    "locale": "kmr_x_rdu",
+    "locale": "kmr-x-rdu",
     "vernacular": "Kurdî Kurmancî (Kavkazûs)",
     "script": "ROMAN",
     "name": "Kurdish Kurmanji (Caucasus)",
@@ -4186,7 +4186,7 @@
   },
   {
     "code": "RDC",
-    "locale": "kmr_cyrl",
+    "locale": "kmr-Cyrl",
     "vernacular": "К′öрди Кöрманщи (Кирили)",
     "script": "CYRILLIC",
     "name": "Kurdish Kurmanji (Cyrillic)",
@@ -4294,7 +4294,7 @@
   },
   {
     "code": "NKN",
-    "locale": "nyy_x_nkn",
+    "locale": "nyy-x-nkn",
     "vernacular": "Kyangonde",
     "script": "ROMAN",
     "name": "Kyangonde",
@@ -4303,7 +4303,7 @@
   },
   {
     "code": "LAD",
-    "locale": "lld_x_lad",
+    "locale": "lld-x-lad",
     "vernacular": "Ladin de Gherdëina",
     "script": "ROMAN",
     "name": "Ladin (Gardenese)",
@@ -4420,7 +4420,7 @@
   },
   {
     "code": "LBS",
-    "locale": "sgn_lb",
+    "locale": "sgn-LB",
     "vernacular": "لغة الإشارات اللبنانية",
     "script": "ARABIC",
     "name": "Lebanese Sign Language",
@@ -4708,7 +4708,7 @@
   },
   {
     "code": "MCT",
-    "locale": "fij_x_mct",
+    "locale": "fij-x-mct",
     "vernacular": "Macuata",
     "script": "ROMAN",
     "name": "Macuata",
@@ -4771,7 +4771,7 @@
   },
   {
     "code": "ORR",
-    "locale": "swb_x_orr",
+    "locale": "swb-x-orr",
     "vernacular": "Shimaore (Alifuɓe)",
     "script": "ROMAN",
     "name": "Mahorian (Roman)",
@@ -4798,7 +4798,7 @@
   },
   {
     "code": "MKS",
-    "locale": "mkz_x_mks",
+    "locale": "mkz-x-mks",
     "vernacular": "Makasae",
     "script": "ROMAN",
     "name": "Makasae",
@@ -4861,7 +4861,7 @@
   },
   {
     "code": "MSL",
-    "locale": "sgn_mw",
+    "locale": "sgn-MW",
     "vernacular": "Chinenero Chamanja cha ku Malawi",
     "script": "ROMAN",
     "name": "Malawi Sign Language",
@@ -4951,7 +4951,7 @@
   },
   {
     "code": "MME",
-    "locale": "mgm_x_mme",
+    "locale": "mgm-x-mme",
     "vernacular": "Mambae (Ermera)",
     "script": "ROMAN",
     "name": "Mambae (Ermera)",
@@ -5041,7 +5041,7 @@
   },
   {
     "code": "MIR",
-    "locale": "mni_latn",
+    "locale": "mni-Latn",
     "vernacular": "Manipuri (Roman)",
     "script": "ROMAN",
     "name": "Manipuri (Roman)",
@@ -5158,7 +5158,7 @@
   },
   {
     "code": "MTC",
-    "locale": "gcf_x_mtc",
+    "locale": "gcf-x-mtc",
     "vernacular": "Kréyol Matinik",
     "script": "ROMAN",
     "name": "Martiniquan Creole",
@@ -5329,7 +5329,7 @@
   },
   {
     "code": "MDH",
-    "locale": "nan_x_mdh",
+    "locale": "nan-x-mdh",
     "vernacular": "Hokkien Medan",
     "script": "ROMAN",
     "name": "Medan Hokkien",
@@ -5347,7 +5347,7 @@
   },
   {
     "code": "MNS",
-    "locale": "sgn_pg",
+    "locale": "sgn-PG",
     "vernacular": "Melanesian Sign Language",
     "script": "ROMAN",
     "name": "Melanesian Sign Language",
@@ -5410,7 +5410,7 @@
   },
   {
     "code": "CHN",
-    "locale": "nan_x_chn",
+    "locale": "nan-x-chn",
     "vernacular": "闽南语（泉州）",
     "script": "CHINESE",
     "name": "Min Nan (Quanzhou)",
@@ -5419,7 +5419,7 @@
   },
   {
     "code": "CHW",
-    "locale": "nan_x_chw",
+    "locale": "nan-x-chw",
     "vernacular": "閩南語（台灣）",
     "script": "CHINESE",
     "name": "Min Nan (Taiwan)",
@@ -5653,7 +5653,7 @@
   },
   {
     "code": "BUS",
-    "locale": "sgn_mm",
+    "locale": "sgn-MM",
     "vernacular": "မြန်မာ လက်သင်္ကေတပြဘာသာစကား",
     "script": "MYANMAR",
     "name": "Myanmar Sign Language",
@@ -5662,7 +5662,7 @@
   },
   {
     "code": "NDI",
-    "locale": "fij_x_ndi",
+    "locale": "fij-x-ndi",
     "vernacular": "Nadi",
     "script": "ROMAN",
     "name": "Nadi",
@@ -5671,7 +5671,7 @@
   },
   {
     "code": "NDR",
-    "locale": "wyy_x_ndr",
+    "locale": "wyy-x-ndr",
     "vernacular": "Nadroga",
     "script": "ROMAN",
     "name": "Nadroga",
@@ -5761,7 +5761,7 @@
   },
   {
     "code": "NA",
-    "locale": "naq_x_na",
+    "locale": "naq-x-na",
     "vernacular": "ǀApakhoen gowab",
     "script": "ROMAN",
     "name": "Nama",
@@ -5842,7 +5842,7 @@
   },
   {
     "code": "NDW",
-    "locale": "ndc_x_ndw",
+    "locale": "ndc-x-ndw",
     "vernacular": "Ndau (Western)",
     "script": "ROMAN",
     "name": "Ndau (Western)",
@@ -6076,7 +6076,7 @@
   },
   {
     "code": "NOR",
-    "locale": "ojb_x_nor",
+    "locale": "ojb-x-nor",
     "vernacular": "Anishinaabemowin",
     "script": "ROMAN",
     "name": "Northern Ojibwe (Roman)",
@@ -6085,7 +6085,7 @@
   },
   {
     "code": "NOS",
-    "locale": "ojb_x_nos",
+    "locale": "ojb-x-nos",
     "vernacular": "ᐊᓂᔑᓈᐯᒧᐎᓐ",
     "script": "CANADIAN_SY",
     "name": "Northern Ojibwe (Syllabics)",
@@ -6112,7 +6112,7 @@
   },
   {
     "code": "NSM",
-    "locale": "nse_mz",
+    "locale": "nse-MZ",
     "vernacular": "Chinsenga (Mozambique)",
     "script": "ROMAN",
     "name": "Nsenga (Mozambique)",
@@ -6292,7 +6292,7 @@
   },
   {
     "code": "OSC",
-    "locale": "os_x_osc",
+    "locale": "os-x-osc",
     "vernacular": "Ирон (чысайнаг)",
     "script": "CYRILLIC",
     "name": "Ossetian (Chsan)",
@@ -6301,7 +6301,7 @@
   },
   {
     "code": "OSK",
-    "locale": "os_x_osk",
+    "locale": "os-x-osk",
     "vernacular": "Ирон (къуыдайраг)",
     "script": "CYRILLIC",
     "name": "Ossetian (Kudar)",
@@ -6436,7 +6436,7 @@
   },
   {
     "code": "PAA",
-    "locale": "pap_x_paa",
+    "locale": "pap-x-paa",
     "vernacular": "Papiamento (Aruba)",
     "script": "ROMAN",
     "name": "Papiamento (Aruba)",
@@ -6463,7 +6463,7 @@
   },
   {
     "code": "PHN",
-    "locale": "arn_x_phn",
+    "locale": "arn-x-phn",
     "vernacular": "chedungun (pewenche)",
     "script": "ROMAN",
     "name": "Pehuenche",
@@ -6535,7 +6535,7 @@
   },
   {
     "code": "PGW",
-    "locale": "wes_x_pgw",
+    "locale": "wes-x-pgw",
     "vernacular": "Pidgin (West Africa)",
     "script": "ROMAN",
     "name": "Pidgin (West Africa)",
@@ -6607,7 +6607,7 @@
   },
   {
     "code": "JC",
-    "locale": "jac_x_jc",
+    "locale": "jac-x-jc",
     "vernacular": "poptí",
     "script": "ROMAN",
     "name": "Popti'",
@@ -6625,7 +6625,7 @@
   },
   {
     "code": "TNG",
-    "locale": "pt_ao",
+    "locale": "pt-AO",
     "vernacular": "Português (Angola)",
     "script": "ROMAN",
     "name": "Portuguese (Angola)",
@@ -6652,7 +6652,7 @@
   },
   {
     "code": "TMM",
-    "locale": "pt_mz",
+    "locale": "pt-MZ",
     "vernacular": "Português (Moçambique)",
     "script": "ROMAN",
     "name": "Portuguese (Mozambique)",
@@ -6805,7 +6805,7 @@
   },
   {
     "code": "QIB",
-    "locale": "qu_x_qib",
+    "locale": "qu-x-qib",
     "vernacular": "quichua (chibuleo)",
     "script": "ROMAN",
     "name": "Quichua (Chibuleo)",
@@ -6823,7 +6823,7 @@
   },
   {
     "code": "QIX",
-    "locale": "qug_x_qix",
+    "locale": "qug-x-qix",
     "vernacular": "quichua (cotopaxi)",
     "script": "ROMAN",
     "name": "Quichua (Cotopaxi)",
@@ -6850,7 +6850,7 @@
   },
   {
     "code": "QCS",
-    "locale": "qu_x_qxl",
+    "locale": "qu-x-qxl",
     "vernacular": "quichua (salasaca)",
     "script": "ROMAN",
     "name": "Quichua (Salasaca)",
@@ -6877,7 +6877,7 @@
   },
   {
     "code": "FNR",
-    "locale": "fij_x_fnr",
+    "locale": "fij-x-fnr",
     "vernacular": "Ra",
     "script": "ROMAN",
     "name": "Ra",
@@ -6913,7 +6913,7 @@
   },
   {
     "code": "RNN",
-    "locale": "ro_x_rnn",
+    "locale": "ro-x-rnn",
     "vernacular": "rumunski (vlaški)",
     "script": "ROMAN",
     "name": "Romanian (Vlach)",
@@ -6922,7 +6922,7 @@
   },
   {
     "code": "RNK",
-    "locale": "ro_x_rnk",
+    "locale": "ro-x-rnk",
     "vernacular": "rumunski (vlaški, Bačka)",
     "script": "ROMAN",
     "name": "Romanian (Vlach, Bačka)",
@@ -6940,7 +6940,7 @@
   },
   {
     "code": "RH",
-    "locale": "rm_x_rh",
+    "locale": "rm-x-rh",
     "vernacular": "Rumantsch (Ladin)",
     "script": "ROMAN",
     "name": "Romansh (Ladin)",
@@ -6949,7 +6949,7 @@
   },
   {
     "code": "RHS",
-    "locale": "rm_x_rhs",
+    "locale": "rm-x-rhs",
     "vernacular": "romontsch (sursilvan)",
     "script": "ROMAN",
     "name": "Romansh (Sursilvan)",
@@ -6958,7 +6958,7 @@
   },
   {
     "code": "RML",
-    "locale": "rmy_al",
+    "locale": "rmy-AL",
     "vernacular": "rome (shqipëri)",
     "script": "ROMAN",
     "name": "Romany (Albania)",
@@ -6967,7 +6967,7 @@
   },
   {
     "code": "RMA",
-    "locale": "rmy_ar",
+    "locale": "rmy-AR",
     "vernacular": "Romanes Kalderash",
     "script": "ROMAN",
     "name": "Romany (Argentina)",
@@ -6976,7 +6976,7 @@
   },
   {
     "code": "RRL",
-    "locale": "rmn_x_rrl",
+    "locale": "rmn-x-rrl",
     "vernacular": "Romany (Arli)",
     "script": "ROMAN",
     "name": "Romany (Arli)",
@@ -6985,7 +6985,7 @@
   },
   {
     "code": "RBH",
-    "locale": "rmn_x_rbh",
+    "locale": "rmn-x-rbh",
     "vernacular": "Romany (Bosnia and Herzegovina)",
     "script": "ROMAN",
     "name": "Romany (Bosnia and Herzegovina)",
@@ -6994,7 +6994,7 @@
   },
   {
     "code": "RMY",
-    "locale": "rmn_x_rmy",
+    "locale": "rmn-x-rmy",
     "vernacular": "ромски (централна България)",
     "script": "ROMAN",
     "name": "Romany (Central Bulgaria)",
@@ -7003,7 +7003,7 @@
   },
   {
     "code": "RMH",
-    "locale": "rmy_cl",
+    "locale": "rmy-CL",
     "vernacular": "Romane Jorajane",
     "script": "ROMAN",
     "name": "Romany (Chile)",
@@ -7012,7 +7012,7 @@
   },
   {
     "code": "RNC",
-    "locale": "rmn_x_rnc",
+    "locale": "rmn-x-rnc",
     "vernacular": "Романи (крымски)",
     "script": "CYRILLIC",
     "name": "Romany (Crimea)",
@@ -7021,7 +7021,7 @@
   },
   {
     "code": "RMS",
-    "locale": "rmc_sk",
+    "locale": "rmc-SK",
     "vernacular": "romanes (vichodno Slovačiko)",
     "script": "ROMAN",
     "name": "Romany (Eastern Slovakia)",
@@ -7030,7 +7030,7 @@
   },
   {
     "code": "RMF",
-    "locale": "rmo_fr",
+    "locale": "rmo-FR",
     "vernacular": "Romanes (Manouche)",
     "script": "ROMAN",
     "name": "Romany (France)",
@@ -7048,7 +7048,7 @@
   },
   {
     "code": "RMK",
-    "locale": "rmy_x_rmk",
+    "locale": "rmy-x-rmk",
     "vernacular": "хомани (котлярско, Хусыя)",
     "script": "CYRILLIC",
     "name": "Romany (Kalderash, Russia)",
@@ -7057,7 +7057,7 @@
   },
   {
     "code": "RVK",
-    "locale": "rmy_x_rvk",
+    "locale": "rmy-x-rvk",
     "vernacular": "Романі (ловарі, чокещі)",
     "script": "CYRILLIC",
     "name": "Romany (Lovari, Chokeshi)",
@@ -7066,7 +7066,7 @@
   },
   {
     "code": "LVA",
-    "locale": "rmy_x_lva",
+    "locale": "rmy-x-lva",
     "vernacular": "romani (lovári, Ungriko Them)",
     "script": "ROMAN",
     "name": "Romany (Lovari, Hungary)",
@@ -7075,7 +7075,7 @@
   },
   {
     "code": "RM",
-    "locale": "rmn_x_rm",
+    "locale": "rmn-x-rm",
     "vernacular": "romane (Makedonija)",
     "script": "ROMAN",
     "name": "Romany (Macedonia)",
@@ -7084,7 +7084,7 @@
   },
   {
     "code": "RMC",
-    "locale": "rmn_cyrl",
+    "locale": "rmn-Cyrl",
     "vernacular": "романе (Македонија) кирилица",
     "script": "CYRILLIC",
     "name": "Romany (Macedonia) Cyrillic",
@@ -7093,7 +7093,7 @@
   },
   {
     "code": "RCK",
-    "locale": "rmy_x_rck",
+    "locale": "rmy-x-rck",
     "vernacular": "Romany (Meçkar)",
     "script": "ROMAN",
     "name": "Romany (Meçkar)",
@@ -7102,7 +7102,7 @@
   },
   {
     "code": "RVC",
-    "locale": "rmy_x_rvc",
+    "locale": "rmy-x-rvc",
     "vernacular": "Романи (Молдова) кирилик",
     "script": "CYRILLIC",
     "name": "Romany (Moldova) Cyrillic",
@@ -7111,7 +7111,7 @@
   },
   {
     "code": "RMN",
-    "locale": "rmn_x_rmn",
+    "locale": "rmn-x-rmn",
     "vernacular": "Ρομανί (Βόρεια Ελλάδα)",
     "script": "GREEK",
     "name": "Romany (Northern Greece)",
@@ -7120,7 +7120,7 @@
   },
   {
     "code": "RMP",
-    "locale": "rml_ru",
+    "locale": "rml-RU",
     "vernacular": "романы (русска рома)",
     "script": "CYRILLIC",
     "name": "Romany (Northern Russia)",
@@ -7147,7 +7147,7 @@
   },
   {
     "code": "RME",
-    "locale": "rmn_x_rme",
+    "locale": "rmn-x-rme",
     "vernacular": "Romane (Srbija)",
     "script": "ROMAN",
     "name": "Romany (Serbia)",
@@ -7156,7 +7156,7 @@
   },
   {
     "code": "RMG",
-    "locale": "rmn_x_rmg",
+    "locale": "rmn-x-rmg",
     "vernacular": "Ρομανί (Νότια Ελλάδα)",
     "script": "GREEK",
     "name": "Romany (Southern Greece)",
@@ -7165,7 +7165,7 @@
   },
   {
     "code": "RSP",
-    "locale": "rmn_x_rsp",
+    "locale": "rmn-x-rsp",
     "vernacular": "Romany (Spoitori)",
     "script": "ROMAN",
     "name": "Romany (Spoitori)",
@@ -7174,7 +7174,7 @@
   },
   {
     "code": "RMU",
-    "locale": "rmy_ua",
+    "locale": "rmy-UA",
     "vernacular": "Романі (ромунгри, Україна)",
     "script": "CYRILLIC",
     "name": "Romany (Ukraine)",
@@ -7183,7 +7183,7 @@
   },
   {
     "code": "RMV",
-    "locale": "rmy_x_rmv",
+    "locale": "rmy-x-rmv",
     "vernacular": "романи (влахитско, Россия)",
     "script": "CYRILLIC",
     "name": "Romany (Vlax, Russia)",
@@ -7192,7 +7192,7 @@
   },
   {
     "code": "RMB",
-    "locale": "rmn_x_rmb",
+    "locale": "rmn-x-rmb",
     "vernacular": "ромски (западна България)",
     "script": "CYRILLIC",
     "name": "Romany (Western Bulgaria)",
@@ -7300,7 +7300,7 @@
   },
   {
     "code": "RWS",
-    "locale": "sgn_rw",
+    "locale": "sgn-RW",
     "vernacular": "Ururimi rw'amarenga yo mu Rwanda",
     "script": "ROMAN",
     "name": "Rwandan Sign Language",
@@ -7327,7 +7327,7 @@
   },
   {
     "code": "SDD",
-    "locale": "sck_deva",
+    "locale": "sck-Deva",
     "vernacular": "सादरी (देवनागरी)",
     "script": "DEVANAGARI",
     "name": "Sadri (Devanagari)",
@@ -7381,7 +7381,7 @@
   },
   {
     "code": "SMS",
-    "locale": "sgn_ws",
+    "locale": "sgn-WS",
     "vernacular": "Samoan Sign Language",
     "script": "ROMAN",
     "name": "Samoan Sign Language",
@@ -7417,7 +7417,7 @@
   },
   {
     "code": "SHD",
-    "locale": "sat_deva",
+    "locale": "sat-Deva",
     "vernacular": "Santhali (Devanagari)",
     "script": "DEVANAGARI",
     "name": "Santhali (Devanagari)",
@@ -7489,7 +7489,7 @@
   },
   {
     "code": "SDQ",
-    "locale": "trv_x_sdq",
+    "locale": "trv-x-sdq",
     "vernacular": "Seediq",
     "script": "ROMAN",
     "name": "Seediq",
@@ -7534,7 +7534,7 @@
   },
   {
     "code": "SPL",
-    "locale": "nso_x_spl",
+    "locale": "nso-x-spl",
     "vernacular": "Sepulana",
     "script": "ROMAN",
     "name": "Sepulana",
@@ -7543,7 +7543,7 @@
   },
   {
     "code": "SB",
-    "locale": "sr_cyrl",
+    "locale": "sr-Cyrl",
     "vernacular": "српски (ћирилица)",
     "script": "CYRILLIC",
     "name": "Serbian (Cyrillic)",
@@ -7552,7 +7552,7 @@
   },
   {
     "code": "SBO",
-    "locale": "sr_latn",
+    "locale": "sr-Latn",
     "vernacular": "srpski (latinica)",
     "script": "ROMAN",
     "name": "Serbian (Roman)",
@@ -7561,7 +7561,7 @@
   },
   {
     "code": "SBS",
-    "locale": "sgn_rs",
+    "locale": "sgn-RS",
     "vernacular": "srpski znakovni jezik",
     "script": "CYRILLIC",
     "name": "Serbian Sign Language",
@@ -7588,7 +7588,7 @@
   },
   {
     "code": "SSA",
-    "locale": "st_za",
+    "locale": "st-ZA",
     "vernacular": "Sesotho (South Africa)",
     "script": "ROMAN",
     "name": "Sesotho (South Africa)",
@@ -7705,7 +7705,7 @@
   },
   {
     "code": "NDV",
-    "locale": "sd_deva",
+    "locale": "sd-Deva",
     "vernacular": "Sindhi (Devanagari)",
     "script": "DEVANAGARI",
     "name": "Sindhi (Devanagari)",
@@ -7714,7 +7714,7 @@
   },
   {
     "code": "NDN",
-    "locale": "snd_x_ndn",
+    "locale": "snd-x-ndn",
     "vernacular": "Sindhi (Indonesia)",
     "script": "ROMAN",
     "name": "Sindhi (Indonesia)",
@@ -7768,7 +7768,7 @@
   },
   {
     "code": "SZJ",
-    "locale": "sgn_si",
+    "locale": "sgn-SI",
     "vernacular": "slovenski znakovni jezik",
     "script": "ROMAN",
     "name": "Slovenian Sign Language",
@@ -7840,7 +7840,7 @@
   },
   {
     "code": "SSP",
-    "locale": "es_es",
+    "locale": "es-ES",
     "vernacular": "español (de&nbsp;España)",
     "script": "ROMAN",
     "name": "Spanish (Spain)",
@@ -7885,7 +7885,7 @@
   },
   {
     "code": "ODN",
-    "locale": "ory_x_odn",
+    "locale": "ory-x-odn",
     "vernacular": "Sundargadi",
     "script": "ROMAN",
     "name": "Sundargadi",
@@ -7903,7 +7903,7 @@
   },
   {
     "code": "SSU",
-    "locale": "sgn_sr",
+    "locale": "sgn-SR",
     "vernacular": "Surinaamse Gebarentaal",
     "script": "ROMAN",
     "name": "Suriname Sign Language",
@@ -7921,7 +7921,7 @@
   },
   {
     "code": "SVL",
-    "locale": "sva_x_svl",
+    "locale": "sva-x-svl",
     "vernacular": "ჩუბე ლუშვანუ",
     "script": "GEORGIAN",
     "name": "Svan (Lower)",
@@ -7930,7 +7930,7 @@
   },
   {
     "code": "SVN",
-    "locale": "sva_x_svn",
+    "locale": "sva-x-svn",
     "vernacular": "ჟიბე ლუშნუ",
     "script": "GEORGIAN",
     "name": "Svan (Upper)",
@@ -7957,7 +7957,7 @@
   },
   {
     "code": "SWK",
-    "locale": "swc_x_swk",
+    "locale": "swc-x-swk",
     "vernacular": "Swahili (Katanga)",
     "script": "ROMAN",
     "name": "Swahili (Katanga)",
@@ -7975,7 +7975,7 @@
   },
   {
     "code": "SWS",
-    "locale": "sgn_sz",
+    "locale": "sgn-SZ",
     "vernacular": "Swazi Sign Language",
     "script": "ROMAN",
     "name": "Swazi Sign Language",
@@ -8020,7 +8020,7 @@
   },
   {
     "code": "SYL",
-    "locale": "syl_x_syl",
+    "locale": "syl-x-syl",
     "vernacular": "সেলেটি (বাংলা)",
     "script": "BENGALI",
     "name": "Sylheti (Bengali)",
@@ -8110,7 +8110,7 @@
   },
   {
     "code": "TJU",
-    "locale": "tg_uz",
+    "locale": "tg-UZ",
     "vernacular": "тоҷикӣ (Самарқанд)",
     "script": "CYRILLIC",
     "name": "Tajiki (Samarkand)",
@@ -8128,7 +8128,7 @@
   },
   {
     "code": "TLY",
-    "locale": "tly_x_tly",
+    "locale": "tly-x-tly",
     "vernacular": "Toloş",
     "script": "ROMAN",
     "name": "Talysh",
@@ -8164,7 +8164,7 @@
   },
   {
     "code": "TLR",
-    "locale": "ta_x_tlr",
+    "locale": "ta-x-tlr",
     "vernacular": "Thamil (Rōman)",
     "script": "ROMAN",
     "name": "Tamil (Roman)",
@@ -8245,7 +8245,7 @@
   },
   {
     "code": "TRK",
-    "locale": "trv_x_trk",
+    "locale": "trv-x-trk",
     "vernacular": "Truku",
     "script": "ROMAN",
     "name": "Taroko",
@@ -8290,7 +8290,7 @@
   },
   {
     "code": "CHD",
-    "locale": "nan_x_chd",
+    "locale": "nan-x-chd",
     "vernacular": "潮州",
     "script": "CHINESE",
     "name": "Teochew",
@@ -8299,7 +8299,7 @@
   },
   {
     "code": "TWD",
-    "locale": "nan_x_twd",
+    "locale": "nan-x-twd",
     "vernacular": "Teochew (Indonesia)",
     "script": "ROMAN",
     "name": "Teochew (Indonesia)",
@@ -8353,7 +8353,7 @@
   },
   {
     "code": "SIK",
-    "locale": "th_x_sik",
+    "locale": "th-x-sik",
     "vernacular": "ไทย (โคราช)",
     "script": "THAI",
     "name": "Thai (Korat)",
@@ -8497,7 +8497,7 @@
   },
   {
     "code": "TGS",
-    "locale": "sgn_tg",
+    "locale": "sgn-TG",
     "vernacular": "Togo Sign Language",
     "script": "ROMAN",
     "name": "Togo Sign Language",
@@ -8686,7 +8686,7 @@
   },
   {
     "code": "TKM",
-    "locale": "tur_x_tkm",
+    "locale": "tur-x-tkm",
     "vernacular": "ахыска",
     "script": "ROMAN",
     "name": "Turkish (Meskhetian)",
@@ -8713,7 +8713,7 @@
   },
   {
     "code": "TM",
-    "locale": "tk_cyrl",
+    "locale": "tk-Cyrl",
     "vernacular": "түркмен (кириллица)",
     "script": "CYRILLIC",
     "name": "Turkmen (Cyrillic)",
@@ -8749,7 +8749,7 @@
   },
   {
     "code": "TYW",
-    "locale": "car_x_tyw",
+    "locale": "car-x-tyw",
     "vernacular": "Tilewuyu",
     "script": "ROMAN",
     "name": "Tyrewuju",
@@ -8812,7 +8812,7 @@
   },
   {
     "code": "UGA",
-    "locale": "ug_x_uga",
+    "locale": "ug-x-uga",
     "vernacular": "ئۇيغۇر تىلى ‏(‏ئەرەب يېزىقى‏)‏‏‏‏",
     "script": "ARABIC",
     "name": "Uighur (Arabic)",
@@ -8821,7 +8821,7 @@
   },
   {
     "code": "UG",
-    "locale": "ug_cyrl",
+    "locale": "ug-Cyrl",
     "vernacular": "Уйғур (кирилл йезиғи)",
     "script": "CYRILLIC",
     "name": "Uighur (Cyrillic)",
@@ -8884,7 +8884,7 @@
   },
   {
     "code": "UZ",
-    "locale": "uz_cyrl",
+    "locale": "uz-Cyrl",
     "vernacular": "ўзбекча",
     "script": "CYRILLIC",
     "name": "Uzbek",
@@ -8893,7 +8893,7 @@
   },
   {
     "code": "UZH",
-    "locale": "uzn_x_uzh",
+    "locale": "uzn-x-uzh",
     "vernacular": "ўзбекча (хоразм шеваси)",
     "script": "CYRILLIC",
     "name": "Uzbek (Horezm)",
@@ -8902,7 +8902,7 @@
   },
   {
     "code": "UZR",
-    "locale": "uz_latn",
+    "locale": "uz-Latn",
     "vernacular": "o‘zbekcha (lotincha)",
     "script": "ROMAN",
     "name": "Uzbek (Roman)",
@@ -8911,7 +8911,7 @@
   },
   {
     "code": "VLC",
-    "locale": "ca_x_vlc",
+    "locale": "ca-x-vlc",
     "vernacular": "valencià",
     "script": "ROMAN",
     "name": "Valencian",
@@ -8929,7 +8929,7 @@
   },
   {
     "code": "VZ",
-    "locale": "skg_x_vz",
+    "locale": "skg-x-vz",
     "vernacular": "Vezo",
     "script": "ROMAN",
     "name": "Vezo",
@@ -9199,7 +9199,7 @@
   },
   {
     "code": "YMB",
-    "locale": "yom_x_ymb",
+    "locale": "yom-x-ymb",
     "vernacular": "Yombe",
     "script": "ROMAN",
     "name": "Yombe",
@@ -9379,7 +9379,7 @@
   },
   {
     "code": "CHX",
-    "locale": "nan_x_chx",
+    "locale": "nan-x-chx",
     "vernacular": "中文（海南话）",
     "script": "ROMAN",
     "name": "中文（海南话）",
