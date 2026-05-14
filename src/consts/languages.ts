@@ -13,7 +13,7 @@ export const LOCALES = [
   'hr',
   'ko',
   'nl',
-  'pt_pt',
+  'pt-PT',
   'vi',
 ] as const;
 

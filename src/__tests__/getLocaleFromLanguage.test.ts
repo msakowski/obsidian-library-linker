@@ -9,7 +9,7 @@ describe('getLocaleFromLanguage', () => {
     ['O', 'nl'],
     ['KO', 'ko'],
     ['F', 'fr'],
-    ['TPO', 'pt_pt'],
+    ['TPO', 'pt-PT'],
     ['C', 'hr'],
     ['VT', 'vi'],
     ['B', 'cs'],

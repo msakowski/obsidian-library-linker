@@ -1,5 +1,6 @@
 import type { Locale } from '@/types';
 import { LOCALES } from '@/consts/languages';
+import { getLanguage } from 'obsidian';
 import BUNDLED_LOCALES from 'locale:all';
 import { logger } from '@/utils/logger';
 
@@ -203,15 +204,14 @@ export class TranslationService {
 
   private detectObsidianLocale(): Locale {
     try {
-      // Only try to access localStorage in a browser environment
-      if (typeof window === 'undefined' || !window.localStorage) {
-        throw new Error('Could not access localStorage.');
+      const obsidianLocale = getLanguage();
+
+      if (!obsidianLocale) {
+        throw new Error('Obsidian getLanguage() returned no locale');
       }
 
-      const obsidianLocale = window.localStorage.getItem('language');
-
       if (!this.isValidLocale(obsidianLocale)) {
-        throw new Error(`LocalStorage locale "${obsidianLocale}" not supported`);
+        throw new Error(`Obsidian locale "${obsidianLocale}" not supported`);
       }
 
       return obsidianLocale satisfies Locale;

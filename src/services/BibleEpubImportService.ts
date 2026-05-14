@@ -13,6 +13,7 @@ import { getLanguageFromLocale } from '@/utils/getLanguageFromLocale';
 import type { Locale } from '@/types';
 
 import { lazyReadFile, lazyCreateHash, lazyPath } from '@/utils/lazyNodeModules';
+import { logger } from '@/utils/logger';
 
 interface VerseTarget {
   book: number;
@@ -226,6 +227,9 @@ export class BibleEpubImportService implements EpubImportService {
     const locale = Array.from(packageDoc.getElementsByTagName('*'))
       .find((node) => node.localName === 'language')
       ?.textContent?.trim();
+
+    logger.log({ locale }, 'Detected language', packageDoc);
+
     if (!locale) {
       return undefined;
     }
@@ -437,6 +441,8 @@ export class BibleEpubImportService implements EpubImportService {
   private parseXml(content: string): Document {
     const doc = this.domParser.parseFromString(content, 'application/xhtml+xml');
     const parserError = doc.querySelector('parsererror');
+
+    logger.log({ parserError }, 'Parser error', content);
 
     if (parserError) {
       throw new Error('Invalid EPUB: failed to parse XML content.');
