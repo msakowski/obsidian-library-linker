@@ -203,4 +203,7 @@ export const Platform = {
   isDesktopApp: false,
 };
 
+// Mock getLanguage
+export const getLanguage = jest.fn<string, []>(() => 'en');
+
 // Add any other Obsidian classes/types you need to mock
