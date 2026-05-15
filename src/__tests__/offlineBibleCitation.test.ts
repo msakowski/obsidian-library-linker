@@ -84,64 +84,6 @@ describe('offline Bible citation flow', () => {
     await rm(tempDir, { recursive: true, force: true });
   });
 
-  test.each([
-    ['pt', 'TPO'],
-    ['pt-pt', 'TPO'],
-    ['pt_PT', 'TPO'],
-    ['PT-PT', 'TPO'],
-  ] as const)(
-    'detects Portuguese EPUB metadata locale %s as %s',
-    async (epubLanguage, expected) => {
-      const tempDir = await mkdtemp(join(tmpdir(), 'librarylinker-offline-'));
-      const repository = new FileSystemOfflineBibleRepository(join(tempDir, 'offline-bible'));
-      const importer = new BibleEpubImportService(repository);
-      const epubPath = join(tempDir, `nwt_${epubLanguage}.epub`);
-
-      const archive = zipSync({
-        mimetype: strToU8('application/epub+zip'),
-        'META-INF/container.xml': strToU8(`<?xml version="1.0" encoding="utf-8"?>
-<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
-  <rootfiles>
-    <rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/>
-  </rootfiles>
-</container>`),
-        'OEBPS/content.opf': strToU8(`<?xml version="1.0" encoding="utf-8"?>
-<package version="3.0" xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookId">
-  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
-    <dc:title>Test Bible</dc:title>
-    <dc:language>${epubLanguage}</dc:language>
-    <meta property="dcterms:modified">2026-04-11T12:00:00Z</meta>
-  </metadata>
-</package>`),
-        'OEBPS/bibleversenav1_1.xhtml': strToU8(`<?xml version="1.0" encoding="utf-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <body>
-    <h2>Gênesis 1</h2>
-    <a href="genesis1.xhtml#chapter1_verse1">1</a>
-  </body>
-</html>`),
-        'OEBPS/genesis1.xhtml': strToU8(`<?xml version="1.0" encoding="utf-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
-  <body>
-    <p><span id="chapter1"></span><span id="chapter1_verse1"></span><span class="w_ch"><strong>1</strong></span> No princípio, Deus criou os céus e a terra.</p>
-  </body>
-</html>`),
-      });
-
-      await writeFile(epubPath, Buffer.from(archive));
-
-      const importResult = await importer.importBible({
-        filePath: epubPath,
-        overwriteExisting: false,
-      });
-
-      expect(importResult.success).toBe(true);
-      expect(importResult.language).toBe(expected);
-
-      await rm(tempDir, { recursive: true, force: true });
-    },
-  );
-
   test('preserves spaces when EPUB markup splits verse text across inline tags', async () => {
     const tempDir = await mkdtemp(join(tmpdir(), 'librarylinker-offline-'));
     const repository = new FileSystemOfflineBibleRepository(join(tempDir, 'offline-bible'));

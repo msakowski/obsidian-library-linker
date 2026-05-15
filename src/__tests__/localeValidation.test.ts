@@ -2,15 +2,15 @@ import { readdirSync, readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import yaml from 'js-yaml';
 
+import { LOCALES } from '@/consts/languages';
+
 type NestedObject = { [key: string]: string | NestedObject };
 
 const PROJECT_ROOT = resolve(__dirname, '../..');
 const LOCALE_DIR = join(PROJECT_ROOT, 'locale');
 
 // Load all YAML locale files from locale/
-const localeFiles = readdirSync(LOCALE_DIR).filter(
-  (file) => file.endsWith('.yaml') && file.length === 7,
-); // e.g., en.yaml
+const localeFiles = readdirSync(LOCALE_DIR).filter((file) => file.endsWith('.yaml')); // e.g., en.yaml
 
 const locales: Record<string, NestedObject> = {};
 for (const file of localeFiles) {
@@ -59,6 +59,19 @@ function findUnknownKeys(referenceKeys: string[], targetKeys: string[]): string[
 
 describe('Locale Translation Validation', () => {
   const englishKeys = getNestedKeys(en);
+
+  describe('LOCALES ↔ locale/*.yaml file consistency', () => {
+    const yamlLocales = localeFiles.map((file) => file.replace('.yaml', ''));
+
+    test.each(LOCALES)('locale %s has a locale/%s.yaml file', (locale) => {
+      expect(yamlLocales).toContain(locale);
+    });
+
+    test('every locale/*.yaml file is listed in LOCALES', () => {
+      const unknown = yamlLocales.filter((l) => !(LOCALES as readonly string[]).includes(l));
+      expect(unknown).toEqual([]);
+    });
+  });
 
   test('English locale should have keys (baseline check)', () => {
     expect(englishKeys.length).toBeGreaterThan(0);

@@ -8,10 +8,12 @@ import type {
   OfflineBibleRepository,
 } from '@/types';
 import { unzipSync, strFromU8 } from 'fflate';
-import { getLanguageByLocale } from '@/consts/languages';
 import { cleanHtmlText } from '@/utils/cleanHtmlText';
+import { getLanguageFromLocale } from '@/utils/getLanguageFromLocale';
+import type { Locale } from '@/types';
 
 import { lazyReadFile, lazyCreateHash, lazyPath } from '@/utils/lazyNodeModules';
+import { logger } from '@/utils/logger';
 
 interface VerseTarget {
   book: number;
@@ -222,14 +224,17 @@ export class BibleEpubImportService implements EpubImportService {
   }
 
   private detectLanguage(packageDoc: Document): Language | undefined {
-    const languageValue = Array.from(packageDoc.getElementsByTagName('*'))
+    const locale = Array.from(packageDoc.getElementsByTagName('*'))
       .find((node) => node.localName === 'language')
       ?.textContent?.trim();
-    if (!languageValue) {
+
+    logger.log({ locale }, 'Detected language', packageDoc);
+
+    if (!locale) {
       return undefined;
     }
 
-    return getLanguageByLocale(languageValue);
+    return getLanguageFromLocale(locale as Locale);
   }
 
   private readModifiedAt(packageDoc: Document): string | undefined {
@@ -436,6 +441,8 @@ export class BibleEpubImportService implements EpubImportService {
   private parseXml(content: string): Document {
     const doc = this.domParser.parseFromString(content, 'application/xhtml+xml');
     const parserError = doc.querySelector('parsererror');
+
+    logger.log({ parserError }, 'Parser error', content);
 
     if (parserError) {
       throw new Error('Invalid EPUB: failed to parse XML content.');
