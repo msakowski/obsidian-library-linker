@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+Also see [AGENTS.md](AGENTS.md) for general Obsidian plugin development guidelines and community catalog review rules.
+
 ## Pre-commit checklist
 
 Before every commit, you MUST:
