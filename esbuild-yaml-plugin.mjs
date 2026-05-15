@@ -1,7 +1,6 @@
 import fs from 'fs';
-import yaml from 'js-yaml';
+import YAML from 'yaml';
 import path from 'path';
-import { glob } from 'glob';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -20,7 +19,7 @@ export function yamlPlugin() {
 
       build.onLoad({ filter: /.*/, namespace: 'yaml-loader' }, args => {
         const yamlContent = fs.readFileSync(args.path, 'utf8');
-        const parsed = yaml.load(yamlContent, { schema: yaml.JSON_SCHEMA });
+        const parsed = YAML.parse(yamlContent);
         return {
           contents: JSON.stringify(parsed),
           loader: 'json'
@@ -33,16 +32,14 @@ export function yamlPlugin() {
         namespace: 'locale-all'
       }));
 
-      build.onLoad({ filter: /.*/, namespace: 'locale-all' }, async () => {
-        // Discover all locale files using glob
-        const localeFiles = await glob('locale/*.yaml', {
-          cwd: path.resolve(__dirname),
-          absolute: false
-        });
-        const bibleBookFiles = await glob('locale/bibleBooks/*.yaml', {
-          cwd: path.resolve(__dirname),
-          absolute: false
-        });
+      build.onLoad({ filter: /.*/, namespace: 'locale-all' }, () => {
+        const localeDir = path.resolve(__dirname, 'locale');
+        const localeFiles = fs.readdirSync(localeDir)
+          .filter(f => f.endsWith('.yaml'))
+          .map(f => `locale/${f}`);
+        const bibleBookFiles = fs.readdirSync(path.join(localeDir, 'bibleBooks'))
+          .filter(f => f.endsWith('.yaml'))
+          .map(f => `locale/bibleBooks/${f}`);
 
         const allFiles = [...localeFiles, ...bibleBookFiles].sort();
 
@@ -51,7 +48,7 @@ export function yamlPlugin() {
         for (const file of allFiles) {
           const fullPath = path.resolve(__dirname, file);
           const yamlContent = fs.readFileSync(fullPath, 'utf8');
-          const parsed = yaml.load(yamlContent, { schema: yaml.JSON_SCHEMA });
+          const parsed = YAML.parse(yamlContent);
           locales[file.replace(/\\/g, '/')] = parsed;
         }
 

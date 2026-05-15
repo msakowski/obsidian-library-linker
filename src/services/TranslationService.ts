@@ -216,8 +216,7 @@ export class TranslationService {
 
       return obsidianLocale satisfies Locale;
     } catch (error) {
-      // Fallback to default 'en' if localStorage is not available
-      logger.info(error, 'Using default locale "en"');
+      logger.info('Could not detect Obsidian language, using default locale', error);
     }
 
     return 'en';

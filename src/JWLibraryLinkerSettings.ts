@@ -35,7 +35,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
   private t: (key: string, variables?: Record<string, string>) => string;
 
   private markdownRenderer = async (containerId: string, markdown: string) => {
-    const container = document.getElementById(containerId);
+    const container = activeDocument.getElementById(containerId);
     if (container) {
       // Clear previous content
       container.empty();
@@ -537,7 +537,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
    * Updates the Bible quote preview with the selected template
    */
   updateBibleQuotePreview(): void {
-    const container = document.getElementById('bible-quote-preview-container');
+    const container = activeDocument.getElementById('bible-quote-preview-container');
     if (!container) return;
 
     // Sample Bible reference for preview
@@ -742,11 +742,12 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
   }
 
   private async openOfflineBibleFolder(): Promise<void> {
+    if (!Platform.isDesktop) return;
     const folderPath = getOfflineBibleRootPath(this.app, this.plugin.manifest.id);
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic require for desktop-only Node.js API
     const { mkdir } = require('fs/promises') as typeof import('fs/promises');
     await mkdir(folderPath, { recursive: true });
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic require for desktop-only Electron API
     const { shell } = require('electron') as typeof import('electron');
     const error = await shell.openPath(folderPath);
 
@@ -758,14 +759,19 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
   private async selectEpubFile(): Promise<File | null> {
     return await new Promise((resolve) => {
-      const input = document.createElement('input');
+      const input = this.containerEl.createEl('input');
       input.type = 'file';
       input.accept = '.epub,application/epub+zip';
+      input.style.display = 'none';
 
       input.addEventListener('change', () => {
         resolve(input.files?.[0] ?? null);
+        input.remove();
       });
-      input.addEventListener('cancel', () => resolve(null));
+      input.addEventListener('cancel', () => {
+        resolve(null);
+        input.remove();
+      });
 
       input.click();
     });
@@ -799,7 +805,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
       // Render each markdown paragraph in its container
       markdownParagraphs.forEach((markdown, index) => {
-        const container = document.getElementById(`preview-container-${index}`);
+        const container = activeDocument.getElementById(`preview-container-${index}`);
         if (container) {
           // Clear previous content
           container.empty();

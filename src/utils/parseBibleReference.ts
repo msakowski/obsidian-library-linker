@@ -95,8 +95,8 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   input = input
     .trim()
     .toLowerCase()
-    .replace(/[\.\s]/g, '')
-    .replace(/(?<=\p{L})-(?=\p{L})/gu, '');
+    .replace(/[.\s]/g, '')
+    .replace(/(\p{L})-(?=\p{L})/gu, '$1');
 
   // Match book, chapter, and verses part
   // Supports both "Book chapter:verse" and "Book verse" (for single-chapter books)
@@ -297,7 +297,7 @@ export function extractBibleReferenceFromMatch(
   return null;
 }
 
-export const parseBibleReferenceFromUrl = (url: string, language: Language): BibleReference => {
+export const parseBibleReferenceFromUrl = (url: string): BibleReference => {
   // Replace 'jwpub://' with 'jwlibrary://'
   url = url.replace('jwpub://', 'jwlibrary://');
   // Extract the Bible reference parts
