@@ -104,10 +104,13 @@ describe('buildBookNameRegex', () => {
       const regex = buildBookNameRegex('X');
       expect('Judas 3'.match(regex)).toBeTruthy();
       expect('Jud 3'.match(regex)).toBeTruthy();
+      expect('Jud3'.match(regex)).toBeTruthy();
       expect('Obadja 4'.match(regex)).toBeTruthy();
       expect('Philemon 5'.match(regex)).toBeTruthy();
       expect('3. Johannes 14'.match(regex)).toBeTruthy();
       expect('3. Joh. 14'.match(regex)).toBeTruthy();
+      expect('3Joh 14'.match(regex)).toBeTruthy();
+      expect('3Joh14'.match(regex)).toBeTruthy();
       expect('2. Johannes 1'.match(regex)).toBeTruthy();
     });
 
