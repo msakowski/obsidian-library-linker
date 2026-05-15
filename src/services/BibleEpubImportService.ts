@@ -433,7 +433,7 @@ export class BibleEpubImportService implements EpubImportService {
   }
 
   private countLinks(node: ParentNode): number {
-    return node instanceof Element ? node.querySelectorAll('a[href*="#"]').length : 0;
+    return 'querySelectorAll' in node ? node.querySelectorAll('a[href*="#"]').length : 0;
   }
 
   private readonly domParser = new DOMParser();

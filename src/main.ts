@@ -328,7 +328,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     };
 
     // Migrate old format to template
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any -- accessing removed property for migration from old settings format
     const oldFormat = (this.settings.bibleQuote as any).format as BibleQuoteFormat | undefined;
     if (oldFormat && !this.settings.bibleQuote.template) {
       this.settings.bibleQuote.template = migrateFormatToTemplate(oldFormat);
