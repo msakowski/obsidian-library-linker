@@ -149,7 +149,7 @@ export class BibleTextFetcher {
   private static async throttle(): Promise<void> {
     const wait = this.MIN_REQUEST_INTERVAL_MS - (Date.now() - this.lastRequestTime);
     if (wait > 0) {
-      await new Promise<void>((resolve) => setTimeout(resolve, wait));
+      await new Promise<void>((resolve) => window.setTimeout(resolve, wait));
     }
     this.lastRequestTime = Date.now();
   }
@@ -212,7 +212,7 @@ export class BibleTextFetcher {
   private static isWebviewerAvailable(): boolean {
     if (!this.app) return false;
     // Check if the webviewer view type is registered in Obsidian
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any -- accessing undocumented Obsidian internal API
     const viewByType = (this.app as any).viewRegistry?.viewByType as
       | Record<string, unknown>
       | undefined;
@@ -235,7 +235,7 @@ export class BibleTextFetcher {
       throw new Error('webviewer unavailable: app not initialized');
     }
 
-    const previousLeaf = this.app.workspace.activeLeaf;
+    const previousLeaf = this.app.workspace.getMostRecentLeaf();
     const leaf = this.app.workspace.getLeaf('tab');
 
     try {
@@ -343,10 +343,12 @@ export class BibleTextFetcher {
   }
 
   private static async fetchWithSystemCurl(url: string): Promise<CurlFetchResult> {
-    // Dynamic require to avoid breaking module loading if child_process is unavailable
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    if (!Platform.isDesktop) {
+      throw new Error('System curl is only available on desktop');
+    }
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic require for desktop-only Node.js API
     const { execFile } = require('child_process') as typeof import('child_process');
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic require for desktop-only Node.js API
     const { promisify } = require('util') as typeof import('util');
     const execFileAsync = promisify(execFile);
 

@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { __getCache } from '@/stores/bibleBooks';
 import type { BibleBook, Language } from '@/types';
-import yaml from 'js-yaml';
+import YAML from 'yaml';
 import { LANGUAGES } from '@/consts/languages';
 import { getBookLanguage } from '@/utils/signLanguage';
 
@@ -27,10 +27,7 @@ export function initializeTestBibleBooks(
       if (!books) {
         const filePath = join(LOCALE_DIR, 'bibleBooks', `${sourceLanguage}.yaml`);
         const content = readFileSync(filePath, 'utf8');
-        books = yaml.load(content, { schema: yaml.JSON_SCHEMA }) as readonly Omit<
-          BibleBook,
-          'chapters'
-        >[];
+        books = YAML.parse(content) as readonly Omit<BibleBook, 'chapters'>[];
         loadedBooks.set(sourceLanguage, books);
       }
 
