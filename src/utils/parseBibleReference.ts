@@ -297,7 +297,7 @@ export function extractBibleReferenceFromMatch(
   return null;
 }
 
-export const parseBibleReferenceFromUrl = (url: string, _language: Language): BibleReference => {
+export const parseBibleReferenceFromUrl = (url: string): BibleReference => {
   // Replace 'jwpub://' with 'jwlibrary://'
   url = url.replace('jwpub://', 'jwlibrary://');
   // Extract the Bible reference parts
