@@ -1,0 +1,413 @@
+- id: 1
+  aliases: []
+  name:
+    long: Genesi
+    medium: Gen.
+    short: Gen
+- id: 2
+  aliases: []
+  name:
+    long: Esodo
+    medium: Eso.
+    short: Eso
+- id: 3
+  aliases: []
+  name:
+    long: Levitico
+    medium: Lev.
+    short: Le
+- id: 4
+  aliases: []
+  name:
+    long: Numeri
+    medium: Num.
+    short: Nu
+- id: 5
+  aliases: []
+  name:
+    long: Deuteronomio
+    medium: Deut.
+    short: De
+- id: 6
+  aliases: []
+  name:
+    long: Giosuè
+    medium: Gios.
+    short: Gsè
+- id: 7
+  aliases: []
+  name:
+    long: Giudici
+    medium: Giud.
+    short: Gdc
+- id: 8
+  aliases: []
+  name:
+    long: Rut
+    medium: Rut
+    short: Ru
+- id: 9
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Samuele
+    medium: 1 Sam.
+    short: 1Sa
+- id: 10
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Samuele
+    medium: 2 Sam.
+    short: 2Sa
+- id: 11
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Re
+    medium: 1 Re
+    short: 1Re
+- id: 12
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Re
+    medium: 2 Re
+    short: 2Re
+- id: 13
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Cronache
+    medium: 1 Cron.
+    short: 1Cr
+- id: 14
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Cronache
+    medium: 2 Cron.
+    short: 2Cr
+- id: 15
+  aliases: []
+  name:
+    long: Esdra
+    medium: Esd.
+    short: Esd
+- id: 16
+  aliases: []
+  name:
+    long: Neemia
+    medium: Nee.
+    short: Ne
+- id: 17
+  aliases: []
+  name:
+    long: Ester
+    medium: Est.
+    short: Est
+- id: 18
+  aliases: []
+  name:
+    long: Giobbe
+    medium: Giob.
+    short: Gb
+- id: 19
+  aliases: []
+  name:
+    long: Salmi
+    medium: Sal.
+    short: Sl
+- id: 20
+  aliases: []
+  name:
+    long: Proverbi
+    medium: Prov.
+    short: Pr
+- id: 21
+  aliases: []
+  name:
+    long: Ecclesiaste
+    medium: Eccl.
+    short: Ec
+- id: 22
+  aliases: []
+  name:
+    long: Cantico dei Cantici
+    medium: Cant.
+    short: Ca
+- id: 23
+  aliases: []
+  name:
+    long: Isaia
+    medium: Isa.
+    short: Isa
+- id: 24
+  aliases: []
+  name:
+    long: Geremia
+    medium: Ger.
+    short: Ger
+- id: 25
+  aliases: []
+  name:
+    long: Lamentazioni
+    medium: Lam.
+    short: La
+- id: 26
+  aliases: []
+  name:
+    long: Ezechiele
+    medium: Ezec.
+    short: Ez
+- id: 27
+  aliases: []
+  name:
+    long: Daniele
+    medium: Dan.
+    short: Da
+- id: 28
+  aliases: []
+  name:
+    long: Osea
+    medium: Osea
+    short: Os
+- id: 29
+  aliases: []
+  name:
+    long: Gioele
+    medium: Gioe.
+    short: Gle
+- id: 30
+  aliases: []
+  name:
+    long: Amos
+    medium: Amos
+    short: Am
+- id: 31
+  aliases: []
+  name:
+    long: Abdia
+    medium: Abd.
+    short: Abd
+- id: 32
+  aliases: []
+  name:
+    long: Giona
+    medium: Giona
+    short: Gna
+- id: 33
+  aliases: []
+  name:
+    long: Michea
+    medium: Mic.
+    short: Mic
+- id: 34
+  aliases: []
+  name:
+    long: Naum
+    medium: Naum
+    short: Na
+- id: 35
+  aliases: []
+  name:
+    long: Abacuc
+    medium: Abac.
+    short: Aba
+- id: 36
+  aliases: []
+  name:
+    long: Sofonia
+    medium: Sof.
+    short: Sof
+- id: 37
+  aliases: []
+  name:
+    long: Aggeo
+    medium: Agg.
+    short: Ag
+- id: 38
+  aliases: []
+  name:
+    long: Zaccaria
+    medium: Zacc.
+    short: Zac
+- id: 39
+  aliases: []
+  name:
+    long: Malachia
+    medium: Mal.
+    short: Mal
+- id: 40
+  aliases: []
+  name:
+    long: Matteo
+    medium: Matt.
+    short: Mt
+- id: 41
+  aliases: []
+  name:
+    long: Marco
+    medium: Mar.
+    short: Mr
+- id: 42
+  aliases: []
+  name:
+    long: Luca
+    medium: Luca
+    short: Lu
+- id: 43
+  aliases: []
+  name:
+    long: Giovanni
+    medium: Giov.
+    short: Gv
+- id: 44
+  aliases: []
+  name:
+    long: Atti
+    medium: Atti
+    short: At
+- id: 45
+  aliases: []
+  name:
+    long: Romani
+    medium: Rom.
+    short: Ro
+- id: 46
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Corinti
+    medium: 1 Cor.
+    short: 1Co
+- id: 47
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Corinti
+    medium: 2 Cor.
+    short: 2Co
+- id: 48
+  aliases: []
+  name:
+    long: Galati
+    medium: Gal.
+    short: Gal
+- id: 49
+  aliases: []
+  name:
+    long: Efesini
+    medium: Efes.
+    short: Ef
+- id: 50
+  aliases: []
+  name:
+    long: Filippesi
+    medium: Filip.
+    short: Flp
+- id: 51
+  aliases: []
+  name:
+    long: Colossesi
+    medium: Col.
+    short: Col
+- id: 52
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Tessalonicesi
+    medium: 1 Tess.
+    short: 1Ts
+- id: 53
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Tessalonicesi
+    medium: 2 Tess.
+    short: 2Ts
+- id: 54
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Timoteo
+    medium: 1 Tim.
+    short: 1Tm
+- id: 55
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Timoteo
+    medium: 2 Tim.
+    short: 2Tm
+- id: 56
+  aliases: []
+  name:
+    long: Tito
+    medium: Tito
+    short: Tit
+- id: 57
+  aliases: []
+  name:
+    long: Filemone
+    medium: Filem.
+    short: Flm
+- id: 58
+  aliases: []
+  name:
+    long: Ebrei
+    medium: Ebr.
+    short: Eb
+- id: 59
+  aliases: []
+  name:
+    long: Giacomo
+    medium: Giac.
+    short: Gc
+- id: 60
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Pietro
+    medium: 1 Piet.
+    short: 1Pt
+- id: 61
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Pietro
+    medium: 2 Piet.
+    short: 2Pt
+- id: 62
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Giovanni
+    medium: 1 Giov.
+    short: 1Gv
+- id: 63
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Giovanni
+    medium: 2 Giov.
+    short: 2Gv
+- id: 64
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3 Giovanni
+    medium: 3 Giov.
+    short: 3Gv
+- id: 65
+  aliases: []
+  name:
+    long: Giuda
+    medium: Giuda
+    short: Gda
+- id: 66
+  aliases: []
+  name:
+    long: Rivelazione
+    medium: Riv.
+    short: Ri
