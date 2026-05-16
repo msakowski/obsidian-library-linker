@@ -1,0 +1,136 @@
+settings:
+  language:
+    name: Lingua
+    description: Seleziona la lingua per i riferimenti biblici
+  openAutomatically:
+    name: Apri i link automaticamente
+    description: Sposta il comando "Crea link e apri" in cima all'elenco
+  updatedLinkStructure:
+    name: Mantieni il testo del link
+    description: Se abilitato, il testo del link corrente verrà mantenuto durante la conversione del testo biblico
+    keepCurrentStructure: Mantieni la struttura attuale
+    usePluginSettings: Usa le impostazioni del plugin
+  noLanguageParameter:
+    name: Crea link indipendenti dalla lingua
+    description: Se abilitato, nessun parametro di lingua viene aggiunto al link. I link si apriranno nella lingua di JW Library
+  reconvertExistingLinks:
+    name: Riconverti i link esistenti
+    description: Se abilitato, i link jwlibrary:// già convertiti verranno riconvertiti in base alle impostazioni di formattazione attuali. Ciò consente di aggiornare tutti i link secondo le preferenze più recenti.
+  bookLength:
+    name: Lunghezza del testo del link
+    description: Scegli la lunghezza del testo del link
+    short: Breve
+    medium: Media
+    long: Lunga
+  linkStyling:
+    name: Stile del link
+    description: Scegli caratteri o emoji da aggiungere prima, dopo o all'interno del link, scegli lo stile del carattere
+    reset: 'Ripristina predefinito: "{{default}}"'
+    prefixOutsideLink:
+      name: Prefisso esterno al link
+      description: Testo da aggiungere prima del link
+    prefixInsideLink:
+      name: Prefisso interno al link
+      description: Testo da aggiungere all'inizio del testo del link
+    suffixInsideLink:
+      name: Suffisso interno al link
+      description: Testo da aggiungere alla fine del testo del link
+    suffixOutsideLink:
+      name: Suffisso esterno al link
+      description: Testo da aggiungere dopo il link
+    presets:
+      name: Preset di stile
+      description: Scegli uno stile predefinito per il link
+    fontStyle:
+      name: Stile del carattere
+      description: Scegli lo stile del carattere per il testo del link
+      normal: Normale
+      italic: Corsivo
+      bold: Grassetto
+    preview:
+      name: Anteprima del link
+  bibleQuote:
+    name: Formattazione della citazione biblica
+    description: Configura come vengono formattate le citazioni bibliche quando vengono inserite
+    presets:
+      name: Preset di modello
+      short: Link + citazione
+      plain: Link nella citazione
+      foldable: Callout pieghevole
+      expanded: Callout espanso
+    template:
+      name: Modello di citazione
+      description: 'Personalizza il formato della citazione usando le variabili: {bibleRef}, {bibleRefLinked}, {quote}'
+    preview:
+      name: Anteprima della citazione biblica
+  offlineBible:
+    name: Bibbia offline
+    description: Importa un EPUB della Bibbia una volta e usa i dati del capitolo locale per la ricerca di citazioni offline.
+    enabled:
+      name: Abilita la Bibbia offline
+      description: Consenti alla pipeline di citazioni di utilizzare i dati locali della Bibbia importata.
+    preferOffline:
+      name: Preferisci citazioni offline
+      description: Controlla la Bibbia offline importata prima di tentare il recupero online.
+    allowOnlineFallback:
+      name: Consenti fallback online
+      description: Se i dati offline non sono disponibili, consenti al plugin di provare il provider di citazioni online.
+    status:
+      name: Stato della lingua installata
+      notInstalled: Nessuna Bibbia offline è installata per {{language}}.
+      installed: Bibbia offline per {{language}} installata da {{sourceFileName}} il {{importedAt}} con {{chapterCount}} capitoli.
+    actions:
+      name: Azioni Bibbia offline
+      description: Importa, sostituisci, rimuovi o ispeziona il corpus della Bibbia offline per la lingua selezionata.
+      import: Importa EPUB della Bibbia
+      reimport: Reimporta EPUB della Bibbia
+      remove: Rimuovi Bibbia offline
+      openFolder: Apri cartella Bibbia offline
+commands:
+  linkUnlinkedBibleReferences: Collega i riferimenti biblici non collegati
+  convertToJWLibraryLinks: Converti i link nella selezione in link JW Library
+  insertBibleQuotes: Inserisci citazioni bibliche per i link JW Library
+  insertBibleQuoteAtCursor: Inserisci citazione biblica al cursore
+convertSuggester:
+  emptyStateText: Seleziona un tipo di conversione
+  options:
+    all: Tutto
+    bible: Riferimenti biblici
+    publication: Pubblicazioni
+contextMenu:
+  insertBibleQuote: Inserisci citazione biblica
+notices:
+  convertedBibleReferences: Convertiti {{count}} riferimenti biblici
+  pleaseSelectText: Seleziona del testo da convertire
+  noBibleReferencesFound: Nessun riferimento biblico trovato
+  bibleQuotesInserted: Citazioni bibliche inserite con successo
+  bibleQuotesInsertedSelection: Citazioni bibliche inserite per la selezione
+  bibleQuoteInsertedAtCursor: Citazione biblica inserita al cursore
+  noBibleLinksFound: Nessun link JW Library trovato
+  noBibleLinkAtCursor: Nessun link JW Library trovato al cursore
+  bibleQuoteAlreadyExists: La citazione biblica esiste già
+  errorInsertingQuotes: Errore durante l'inserimento delle citazioni bibliche
+  bibleQuoteFetchFailed: Impossibile recuperare il testo biblico — riprova
+  offlineBibleImported: Bibbia offline importata per {{language}}
+  offlineBibleReimported: Bibbia offline reimportata per {{language}}
+  offlineBibleRemoved: Bibbia offline rimossa per {{language}}
+  offlineBibleImportFailed: Importazione dell'EPUB della Bibbia offline non riuscita
+  offlineBibleOpenFolderFailed: Impossibile aprire la cartella della Bibbia offline
+suggestions:
+  createLink: 'Crea link: {{text}}'
+  createLinks: 'Crea link: {{text}}'
+  createAndOpen: 'Crea link e apri: {{text}}'
+  createMultipleAndOpenFirst: 'Crea link e apri il primo: {{text}}'
+  typing: 'Inserisci riferimento biblico: {{text}}'
+  typingEmpty: Inserisci riferimento biblico
+errors:
+  invalidVerseNumber: Numero di versetto non valido
+  versesAscendingOrder: I versetti devono essere in ordine crescente
+  chaptersAscendingOrder: I capitoli devono essere in ordine crescente
+  invalidVerseFormat: Formato del versetto non valido
+  invalidReferenceFormat: Formato del riferimento non valido
+  unsupportedLanguage: Lingua non supportata
+  offlineBibleNotInstalled: Nessuna Bibbia offline è installata per {{language}}. Importa un EPUB della Bibbia nelle impostazioni per abilitare le citazioni offline.
+  offlineBibleVerseMissing: I versetti richiesti sono mancanti o illeggibili nella Bibbia offline per {{language}}.
+  offlineBibleLookupFailed: Ricerca nella Bibbia offline non riuscita.
+  onlineFallbackDisabled: Il fallback online è disabilitato.

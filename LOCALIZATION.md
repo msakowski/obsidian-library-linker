@@ -10,6 +10,7 @@
 | E    | English / English                 |
 | F    | français / French                 |
 | FI   | suomi / Finnish                   |
+| I    | Italiano / Italian                |
 | KO   | 한국어 / Korean                   |
 | O    | Nederlands / Dutch                |
 | S    | español / Spanish                 |

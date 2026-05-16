@@ -10,6 +10,7 @@ Instantly create, convert, and enrich Bible references with direct links to [JW 
 | S    | español / Spanish                 |
 | F    | français / French                 |
 | TPO  | português / Portuguese (Portugal) |
+| I    | Italiano / Italian                |
 | X    | Deutsch / German                  |
 | VT   | Tiếng Việt / Vietnamese           |
 | KO   | 한국어 / Korean                   |
