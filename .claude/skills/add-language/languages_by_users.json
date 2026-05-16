@@ -1,0 +1,1308 @@
+[
+  {
+    "language": "Spanish",
+    "users": 2047875,
+    "supported": true,
+    "languageCode": "S"
+  },
+  {
+    "language": "English",
+    "users": 1979734,
+    "supported": true,
+    "languageCode": "E"
+  },
+  {
+    "language": "Portuguese",
+    "users": 1130811,
+    "supported": true,
+    "languageCode": "TPO"
+  },
+  {
+    "language": "French",
+    "users": 581410,
+    "supported": true,
+    "languageCode": "F"
+  },
+  {
+    "language": "Italian",
+    "users": 254334,
+    "supported": false
+  },
+  {
+    "language": "German",
+    "users": 221956,
+    "supported": true,
+    "languageCode": "X"
+  },
+  {
+    "language": "Japanese",
+    "users": 214118,
+    "supported": false
+  },
+  {
+    "language": "Tagalog",
+    "users": 133152,
+    "supported": false
+  },
+  {
+    "language": "Bemba",
+    "users": 123600,
+    "supported": false
+  },
+  {
+    "language": "Polish",
+    "users": 114171,
+    "supported": false
+  },
+  {
+    "language": "Korean",
+    "users": 105726,
+    "supported": true,
+    "languageCode": "KO"
+  },
+  {
+    "language": "Akan",
+    "users": 94622,
+    "supported": false
+  },
+  {
+    "language": "Cebuano",
+    "users": 77102,
+    "supported": false
+  },
+  {
+    "language": "Ukrainian",
+    "users": 74436,
+    "supported": false
+  },
+  {
+    "language": "Chichewa",
+    "users": 68409,
+    "supported": false
+  },
+  {
+    "language": "Nyanja",
+    "users": 52402,
+    "supported": false
+  },
+  {
+    "language": "Romanian",
+    "users": 49673,
+    "supported": false
+  },
+  {
+    "language": "Tonga",
+    "users": 44997,
+    "supported": false
+  },
+  {
+    "language": "Shona",
+    "users": 41804,
+    "supported": false
+  },
+  {
+    "language": "Emakhuwa",
+    "users": 41512,
+    "supported": false
+  },
+  {
+    "language": "Kinyarwanda",
+    "users": 39063,
+    "supported": false
+  },
+  {
+    "language": "Ewe",
+    "users": 38773,
+    "supported": false
+  },
+  {
+    "language": "Umbundu",
+    "users": 37322,
+    "supported": false
+  },
+  {
+    "language": "Malagasy",
+    "users": 37050,
+    "supported": false
+  },
+  {
+    "language": "Russian",
+    "users": 36794,
+    "supported": false
+  },
+  {
+    "language": "Kikuyu",
+    "users": 35011,
+    "supported": false
+  },
+  {
+    "language": "Hindi",
+    "users": 32745,
+    "supported": false
+  },
+  {
+    "language": "Greek",
+    "users": 30317,
+    "supported": false
+  },
+  {
+    "language": "Dutch",
+    "users": 30128,
+    "supported": true,
+    "languageCode": "O"
+  },
+  {
+    "language": "Lozi",
+    "users": 29903,
+    "supported": false
+  },
+  {
+    "language": "IsiZulu",
+    "users": 28122,
+    "supported": false
+  },
+  {
+    "language": "Chewa",
+    "users": 26201,
+    "supported": false
+  },
+  {
+    "language": "Quechua",
+    "users": 24907,
+    "supported": false
+  },
+  {
+    "language": "Hiligaynon",
+    "users": 24607,
+    "supported": false
+  },
+  {
+    "language": "Ilocano",
+    "users": 24607,
+    "supported": false
+  },
+  {
+    "language": "Swahili",
+    "users": 23789,
+    "supported": false
+  },
+  {
+    "language": "IsiXhosa",
+    "users": 21118,
+    "supported": false
+  },
+  {
+    "language": "Hungarian",
+    "users": 20588,
+    "supported": false
+  },
+  {
+    "language": "Indonesian",
+    "users": 20571,
+    "supported": false
+  },
+  {
+    "language": "Finnish",
+    "users": 17356,
+    "supported": true,
+    "languageCode": "FI"
+  },
+  {
+    "language": "Georgian",
+    "users": 17336,
+    "supported": false
+  },
+  {
+    "language": "Kirundi",
+    "users": 17239,
+    "supported": false
+  },
+  {
+    "language": "Xichangana",
+    "users": 16649,
+    "supported": false
+  },
+  {
+    "language": "Czech",
+    "users": 16201,
+    "supported": true,
+    "languageCode": "B"
+  },
+  {
+    "language": "Ga-Dangme",
+    "users": 16151,
+    "supported": false
+  },
+  {
+    "language": "Chiyao",
+    "users": 15640,
+    "supported": false
+  },
+  {
+    "language": "Afrikaans",
+    "users": 15562,
+    "supported": false
+  },
+  {
+    "language": "Danish",
+    "users": 14775,
+    "supported": true,
+    "languageCode": "D"
+  },
+  {
+    "language": "Bicolano",
+    "users": 13944,
+    "supported": false
+  },
+  {
+    "language": "Sesotho",
+    "users": 13725,
+    "supported": false
+  },
+  {
+    "language": "Cisena",
+    "users": 13253,
+    "supported": false
+  },
+  {
+    "language": "Kikongo",
+    "users": 12883,
+    "supported": false
+  },
+  {
+    "language": "Kimbundu",
+    "users": 12883,
+    "supported": false
+  },
+  {
+    "language": "Armenian",
+    "users": 12775,
+    "supported": false
+  },
+  {
+    "language": "Norwegian",
+    "users": 12096,
+    "supported": false
+  },
+  {
+    "language": "Chitumbuka",
+    "users": 11952,
+    "supported": false
+  },
+  {
+    "language": "Northern Ndebele",
+    "users": 11936,
+    "supported": false
+  },
+  {
+    "language": "Maya languages",
+    "users": 11828,
+    "supported": false
+  },
+  {
+    "language": "Setswana",
+    "users": 11706,
+    "supported": false
+  },
+  {
+    "language": "Elomwe",
+    "users": 11610,
+    "supported": false
+  },
+  {
+    "language": "Chokwe",
+    "users": 11367,
+    "supported": false
+  },
+  {
+    "language": "Kazakh",
+    "users": 11204,
+    "supported": false
+  },
+  {
+    "language": "Sepedi",
+    "users": 10559,
+    "supported": false
+  },
+  {
+    "language": "Slovak",
+    "users": 9960,
+    "supported": false
+  },
+  {
+    "language": "Castilian Spanish",
+    "users": 9652,
+    "supported": false
+  },
+  {
+    "language": "Echuwabo",
+    "users": 8324,
+    "supported": false
+  },
+  {
+    "language": "Javanese",
+    "users": 8229,
+    "supported": false
+  },
+  {
+    "language": "Mandarin",
+    "users": 8135,
+    "supported": false
+  },
+  {
+    "language": "Guarani",
+    "users": 8119,
+    "supported": false
+  },
+  {
+    "language": "Antillean Creole",
+    "users": 6779,
+    "supported": false
+  },
+  {
+    "language": "Albanian",
+    "users": 6009,
+    "supported": false
+  },
+  {
+    "language": "Bengali",
+    "users": 5976,
+    "supported": false
+  },
+  {
+    "language": "Tamil",
+    "users": 5856,
+    "supported": false
+  },
+  {
+    "language": "Sinhala",
+    "users": 5764,
+    "supported": false
+  },
+  {
+    "language": "Oromo",
+    "users": 5527,
+    "supported": false
+  },
+  {
+    "language": "Kabiye",
+    "users": 5493,
+    "supported": false
+  },
+  {
+    "language": "Cantonese",
+    "users": 5464,
+    "supported": false
+  },
+  {
+    "language": "Dioula",
+    "users": 5261,
+    "supported": false
+  },
+  {
+    "language": "Marathi",
+    "users": 5183,
+    "supported": false
+  },
+  {
+    "language": "Telugu",
+    "users": 5183,
+    "supported": false
+  },
+  {
+    "language": "Fon",
+    "users": 4805,
+    "supported": false
+  },
+  {
+    "language": "Croatian",
+    "users": 4740,
+    "supported": true,
+    "languageCode": "C"
+  },
+  {
+    "language": "Amharic",
+    "users": 4717,
+    "supported": false
+  },
+  {
+    "language": "Xitsonga",
+    "users": 4633,
+    "supported": false
+  },
+  {
+    "language": "Tok Pisin",
+    "users": 4563,
+    "supported": false
+  },
+  {
+    "language": "Fulfulde",
+    "users": 4471,
+    "supported": false
+  },
+  {
+    "language": "Turkish",
+    "users": 4442,
+    "supported": false
+  },
+  {
+    "language": "Burmese",
+    "users": 4160,
+    "supported": false
+  },
+  {
+    "language": "Sundanese",
+    "users": 4114,
+    "supported": false
+  },
+  {
+    "language": "Kyrgyz",
+    "users": 3958,
+    "supported": false
+  },
+  {
+    "language": "Lingala",
+    "users": 3892,
+    "supported": false
+  },
+  {
+    "language": "Urdu",
+    "users": 3732,
+    "supported": false
+  },
+  {
+    "language": "Gujarati",
+    "users": 3720,
+    "supported": false
+  },
+  {
+    "language": "Kituba",
+    "users": 3503,
+    "supported": false
+  },
+  {
+    "language": "SiSwati",
+    "users": 3301,
+    "supported": false
+  },
+  {
+    "language": "Swedish",
+    "users": 3255,
+    "supported": false
+  },
+  {
+    "language": "Hokkien",
+    "users": 2909,
+    "supported": false
+  },
+  {
+    "language": "Estonian",
+    "users": 2870,
+    "supported": false
+  },
+  {
+    "language": "Sangho",
+    "users": 2601,
+    "supported": false
+  },
+  {
+    "language": "Lithuanian",
+    "users": 2492,
+    "supported": false
+  },
+  {
+    "language": "Ewondo",
+    "users": 2468,
+    "supported": false
+  },
+  {
+    "language": "Haitian Creole",
+    "users": 2286,
+    "supported": false
+  },
+  {
+    "language": "Catalan",
+    "users": 2282,
+    "supported": false
+  },
+  {
+    "language": "Ganda",
+    "users": 2234,
+    "supported": false
+  },
+  {
+    "language": "Cape Verdean Creole",
+    "users": 2118,
+    "supported": false
+  },
+  {
+    "language": "Mauritian Creole",
+    "users": 1958,
+    "supported": false
+  },
+  {
+    "language": "Réunion Creole",
+    "users": 1892,
+    "supported": false
+  },
+  {
+    "language": "Nepali",
+    "users": 1825,
+    "supported": false
+  },
+  {
+    "language": "Azerbaijani",
+    "users": 1824,
+    "supported": false
+  },
+  {
+    "language": "Oshivambo",
+    "users": 1819,
+    "supported": false
+  },
+  {
+    "language": "Bariba",
+    "users": 1802,
+    "supported": false
+  },
+  {
+    "language": "Fijian",
+    "users": 1771,
+    "supported": false
+  },
+  {
+    "language": "Krio",
+    "users": 1710,
+    "supported": false
+  },
+  {
+    "language": "Tahitian",
+    "users": 1657,
+    "supported": false
+  },
+  {
+    "language": "Slovenian",
+    "users": 1645,
+    "supported": false
+  },
+  {
+    "language": "Moba",
+    "users": 1617,
+    "supported": false
+  },
+  {
+    "language": "Yoruba",
+    "users": 1607,
+    "supported": false
+  },
+  {
+    "language": "Pijin Creole",
+    "users": 1593,
+    "supported": false
+  },
+  {
+    "language": "Sranan Tongo",
+    "users": 1584,
+    "supported": false
+  },
+  {
+    "language": "Fula",
+    "users": 1533,
+    "supported": false
+  },
+  {
+    "language": "Baoulé",
+    "users": 1449,
+    "supported": false
+  },
+  {
+    "language": "Dinka",
+    "users": 1402,
+    "supported": false
+  },
+  {
+    "language": "Unspecified",
+    "users": 1328,
+    "supported": false
+  },
+  {
+    "language": "Latvian",
+    "users": 1323,
+    "supported": false
+  },
+  {
+    "language": "Hebrew",
+    "users": 1272,
+    "supported": false
+  },
+  {
+    "language": "Sangha languages",
+    "users": 1265,
+    "supported": false
+  },
+  {
+    "language": "Fang",
+    "users": 1218,
+    "supported": false
+  },
+  {
+    "language": "Dendi",
+    "users": 1201,
+    "supported": false
+  },
+  {
+    "language": "Azeri",
+    "users": 1191,
+    "supported": false
+  },
+  {
+    "language": "Fijian Hindi",
+    "users": 1181,
+    "supported": false
+  },
+  {
+    "language": "Hakka",
+    "users": 1121,
+    "supported": false
+  },
+  {
+    "language": "Nkole",
+    "users": 1111,
+    "supported": false
+  },
+  {
+    "language": "Soga",
+    "users": 1111,
+    "supported": false
+  },
+  {
+    "language": "Hiri Motu",
+    "users": 1098,
+    "supported": false
+  },
+  {
+    "language": "Papiamento",
+    "users": 1084,
+    "supported": false
+  },
+  {
+    "language": "Nuer",
+    "users": 1067,
+    "supported": false
+  },
+  {
+    "language": "Lango",
+    "users": 979,
+    "supported": false
+  },
+  {
+    "language": "Chiga",
+    "users": 979,
+    "supported": false
+  },
+  {
+    "language": "Somali",
+    "users": 977,
+    "supported": false
+  },
+  {
+    "language": "Tigrigna",
+    "users": 977,
+    "supported": false
+  },
+  {
+    "language": "Macedonian",
+    "users": 915,
+    "supported": false
+  },
+  {
+    "language": "Galician",
+    "users": 908,
+    "supported": false
+  },
+  {
+    "language": "Irish",
+    "users": 880,
+    "supported": false
+  },
+  {
+    "language": "Serbian",
+    "users": 863,
+    "supported": false
+  },
+  {
+    "language": "Samoan",
+    "users": 798,
+    "supported": false
+  },
+  {
+    "language": "Dan",
+    "users": 788,
+    "supported": false
+  },
+  {
+    "language": "Uzbek",
+    "users": 781,
+    "supported": false
+  },
+  {
+    "language": "Luxembourgish",
+    "users": 752,
+    "supported": false
+  },
+  {
+    "language": "Gagauz",
+    "users": 729,
+    "supported": false
+  },
+  {
+    "language": "Wolof",
+    "users": 708,
+    "supported": false
+  },
+  {
+    "language": "Acholi",
+    "users": 693,
+    "supported": false
+  },
+  {
+    "language": "Bislama",
+    "users": 690,
+    "supported": false
+  },
+  {
+    "language": "Sidamo",
+    "users": 656,
+    "supported": false
+  },
+  {
+    "language": "Creole",
+    "users": 648,
+    "supported": false
+  },
+  {
+    "language": "Kanak languages",
+    "users": 643,
+    "supported": false
+  },
+  {
+    "language": "Sara",
+    "users": 567,
+    "supported": false
+  },
+  {
+    "language": "Bosnian",
+    "users": 565,
+    "supported": false
+  },
+  {
+    "language": "Mende",
+    "users": 563,
+    "supported": false
+  },
+  {
+    "language": "Kurmanji (Northern Kurdish)",
+    "users": 554,
+    "supported": false
+  },
+  {
+    "language": "Shan",
+    "users": 549,
+    "supported": false
+  },
+  {
+    "language": "Thai",
+    "users": 541,
+    "supported": false
+  },
+  {
+    "language": "Pular",
+    "users": 539,
+    "supported": false
+  },
+  {
+    "language": "Themne",
+    "users": 530,
+    "supported": false
+  },
+  {
+    "language": "Arabic",
+    "users": 519,
+    "supported": false
+  },
+  {
+    "language": "Maltese",
+    "users": 509,
+    "supported": false
+  },
+  {
+    "language": "Maithali",
+    "users": 486,
+    "supported": false
+  },
+  {
+    "language": "Punu",
+    "users": 458,
+    "supported": false
+  },
+  {
+    "language": "Icelandic",
+    "users": 458,
+    "supported": false
+  },
+  {
+    "language": "Bangla",
+    "users": 449,
+    "supported": false
+  },
+  {
+    "language": "Mongolian",
+    "users": 446,
+    "supported": false
+  },
+  {
+    "language": "Trinidadian Hindustani",
+    "users": 434,
+    "supported": false
+  },
+  {
+    "language": "Karen",
+    "users": 431,
+    "supported": false
+  },
+  {
+    "language": "Saint Lucian Creole",
+    "users": 426,
+    "supported": false
+  },
+  {
+    "language": "Malay/Bumiputera",
+    "users": 400,
+    "supported": false
+  },
+  {
+    "language": "Mandingo",
+    "users": 378,
+    "supported": false
+  },
+  {
+    "language": "Seychellois Creole",
+    "users": 375,
+    "supported": false
+  },
+  {
+    "language": "Bhojpuri",
+    "users": 358,
+    "supported": false
+  },
+  {
+    "language": "Aymara",
+    "users": 353,
+    "supported": false
+  },
+  {
+    "language": "Rukavango",
+    "users": 333,
+    "supported": false
+  },
+  {
+    "language": "Nzebi",
+    "users": 307,
+    "supported": false
+  },
+  {
+    "language": "Amerindian languages",
+    "users": 306,
+    "supported": false
+  },
+  {
+    "language": "Otjiherero",
+    "users": 296,
+    "supported": false
+  },
+  {
+    "language": "Surinamese Javanese",
+    "users": 294,
+    "supported": false
+  },
+  {
+    "language": "Filipino",
+    "users": 292,
+    "supported": false
+  },
+  {
+    "language": "Mandinka",
+    "users": 286,
+    "supported": false
+  },
+  {
+    "language": "Susu",
+    "users": 269,
+    "supported": false
+  },
+  {
+    "language": "Chamorro",
+    "users": 266,
+    "supported": false
+  },
+  {
+    "language": "Nama/Damara",
+    "users": 259,
+    "supported": false
+  },
+  {
+    "language": "Tharu",
+    "users": 243,
+    "supported": false
+  },
+  {
+    "language": "Pulaar",
+    "users": 243,
+    "supported": false
+  },
+  {
+    "language": "Rakhine",
+    "users": 242,
+    "supported": false
+  },
+  {
+    "language": "Tongan",
+    "users": 236,
+    "supported": false
+  },
+  {
+    "language": "Bulgarian",
+    "users": 234,
+    "supported": false
+  },
+  {
+    "language": "Forro Creole",
+    "users": 216,
+    "supported": false
+  },
+  {
+    "language": "Sarnami Hindustani",
+    "users": 215,
+    "supported": false
+  },
+  {
+    "language": "Serer",
+    "users": 213,
+    "supported": false
+  },
+  {
+    "language": "Sekalanga",
+    "users": 211,
+    "supported": false
+  },
+  {
+    "language": "Bambara",
+    "users": 205,
+    "supported": false
+  },
+  {
+    "language": "Tamang",
+    "users": 204,
+    "supported": false
+  },
+  {
+    "language": "Mandjia",
+    "users": 196,
+    "supported": false
+  },
+  {
+    "language": "Hausa",
+    "users": 189,
+    "supported": false
+  },
+  {
+    "language": "Cook Islands Maori",
+    "users": 186,
+    "supported": false
+  },
+  {
+    "language": "Gilbertese",
+    "users": 180,
+    "supported": false
+  },
+  {
+    "language": "Chinese",
+    "users": 177,
+    "supported": false
+  },
+  {
+    "language": "Montenegrin",
+    "users": 171,
+    "supported": false
+  },
+  {
+    "language": "Tetun Prasa",
+    "users": 167,
+    "supported": false
+  },
+  {
+    "language": "Maya",
+    "users": 160,
+    "supported": false
+  },
+  {
+    "language": "Mossi",
+    "users": 152,
+    "supported": false
+  },
+  {
+    "language": "Marshallese",
+    "users": 151,
+    "supported": false
+  },
+  {
+    "language": "Chadian Arabic",
+    "users": 149,
+    "supported": false
+  },
+  {
+    "language": "Mayo-Kebbi",
+    "users": 138,
+    "supported": false
+  },
+  {
+    "language": "Greenlandic",
+    "users": 129,
+    "supported": false
+  },
+  {
+    "language": "Kwara'ae",
+    "users": 123,
+    "supported": false
+  },
+  {
+    "language": "Faroese",
+    "users": 120,
+    "supported": false
+  },
+  {
+    "language": "Diola",
+    "users": 107,
+    "supported": false
+  },
+  {
+    "language": "Guinean Creole",
+    "users": 106,
+    "supported": false
+  },
+  {
+    "language": "Shimaore",
+    "users": 105,
+    "supported": false
+  },
+  {
+    "language": "Are'are",
+    "users": 98,
+    "supported": false
+  },
+  {
+    "language": "Mambai",
+    "users": 92,
+    "supported": false
+  },
+  {
+    "language": "Serbo-Croatian",
+    "users": 90,
+    "supported": false
+  },
+  {
+    "language": "Tuvaluan",
+    "users": 77,
+    "supported": false
+  },
+  {
+    "language": "Zarma/Songhai",
+    "users": 75,
+    "supported": false
+  },
+  {
+    "language": "Punjabi",
+    "users": 72,
+    "supported": false
+  },
+  {
+    "language": "Arabic (Palestinian dialect)",
+    "users": 67,
+    "supported": false
+  },
+  {
+    "language": "Makasai",
+    "users": 60,
+    "supported": false
+  },
+  {
+    "language": "Palauan",
+    "users": 57,
+    "supported": false
+  },
+  {
+    "language": "Rodriguan Creole",
+    "users": 56,
+    "supported": false
+  },
+  {
+    "language": "Pohnpeian",
+    "users": 54,
+    "supported": false
+  },
+  {
+    "language": "Angolar",
+    "users": 54,
+    "supported": false
+  },
+  {
+    "language": "Wallisian",
+    "users": 51,
+    "supported": false
+  },
+  {
+    "language": "Indian",
+    "users": 41,
+    "supported": false
+  },
+  {
+    "language": "Tamasheq",
+    "users": 39,
+    "supported": false
+  },
+  {
+    "language": "Tetun Terik",
+    "users": 32,
+    "supported": false
+  },
+  {
+    "language": "Baikenu",
+    "users": 32,
+    "supported": false
+  },
+  {
+    "language": "Kemak",
+    "users": 32,
+    "supported": false
+  },
+  {
+    "language": "Bunak",
+    "users": 32,
+    "supported": false
+  },
+  {
+    "language": "Chuukese",
+    "users": 31,
+    "supported": false
+  },
+  {
+    "language": "Dogon",
+    "users": 31,
+    "supported": false
+  },
+  {
+    "language": "Malay",
+    "users": 30,
+    "supported": false
+  },
+  {
+    "language": "Soninke",
+    "users": 27,
+    "supported": false
+  },
+  {
+    "language": "Futunan",
+    "users": 26,
+    "supported": false
+  },
+  {
+    "language": "Turkic",
+    "users": 23,
+    "supported": false
+  },
+  {
+    "language": "French Creole",
+    "users": 23,
+    "supported": false
+  },
+  {
+    "language": "Yapese",
+    "users": 23,
+    "supported": false
+  },
+  {
+    "language": "Gourmantche",
+    "users": 20,
+    "supported": false
+  },
+  {
+    "language": "Nauruan",
+    "users": 20,
+    "supported": false
+  },
+  {
+    "language": "Sindhi",
+    "users": 18,
+    "supported": false
+  },
+  {
+    "language": "Dyula",
+    "users": 17,
+    "supported": false
+  },
+  {
+    "language": "Niuean",
+    "users": 17,
+    "supported": false
+  },
+  {
+    "language": "Saraiki",
+    "users": 15,
+    "supported": false
+  },
+  {
+    "language": "Khmer",
+    "users": 13,
+    "supported": false
+  },
+  {
+    "language": "Romani",
+    "users": 12,
+    "supported": false
+  },
+  {
+    "language": "Pashto",
+    "users": 12,
+    "supported": false
+  },
+  {
+    "language": "Kosraean",
+    "users": 11,
+    "supported": false
+  },
+  {
+    "language": "Monegasque",
+    "users": 11,
+    "supported": false
+  },
+  {
+    "language": "Carolinian",
+    "users": 11,
+    "supported": false
+  },
+  {
+    "language": "Nuba",
+    "users": 6,
+    "supported": false
+  },
+  {
+    "language": "Beja",
+    "users": 5,
+    "supported": false
+  },
+  {
+    "language": "Fur",
+    "users": 4,
+    "supported": false
+  }
+]
