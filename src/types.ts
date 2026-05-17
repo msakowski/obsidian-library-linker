@@ -31,6 +31,8 @@ export type UpdatedLinkStructure = 'keepCurrentStructure' | 'usePluginSettings';
 
 export type BibleQuoteFormat = 'short' | 'long-foldable' | 'long-expanded';
 
+export type LinkFormat = 'jwlibrary' | 'jworg-finder';
+
 export const BIBLE_QUOTE_TEMPLATES = {
   short: '{bibleRefLinked}\n> {quote}',
   plain: '> {bibleRefLinked}\n> {quote}',
@@ -39,7 +41,7 @@ export const BIBLE_QUOTE_TEMPLATES = {
 } as const;
 
 interface BibleQuoteSettings {
-  template: string; // Template for quote formatting
+  template: string;
 }
 
 interface OfflineBibleSettings {
@@ -54,6 +56,7 @@ export interface LinkReplacerSettings extends LinkStyles {
   updatedLinkStructure: UpdatedLinkStructure;
   noLanguageParameter: boolean;
   reconvertExistingLinks: boolean;
+  linkFormat: LinkFormat;
   bibleQuote: BibleQuoteSettings;
   offlineBible: OfflineBibleSettings;
 }
@@ -74,8 +77,8 @@ export interface VerseRange {
 export interface BibleReference {
   book: number;
   chapter: number;
-  endChapter?: number; // For multi-chapter references (e.g., "Matt. 3:1-4:11")
-  verseRanges?: VerseRange[]; // For complex verse references with multiple ranges
+  endChapter?: number;
+  verseRanges?: VerseRange[];
 }
 
 export interface OfflineBibleCorpusMetadata {
