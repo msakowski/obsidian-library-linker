@@ -1,10 +1,11 @@
 import { bibleBookExists } from '@/utils/bibleBookExists';
-import type { BibleReference, Language } from '@/types';
+import type { BibleReference, Language, LinkFormat } from '@/types';
 import { padBook, padChapter, padVerse } from '@/utils/padNumber';
 
 export function formatJWLibraryLink(
   reference: BibleReference,
   language?: Language,
+  linkFormat: LinkFormat = 'jwlibrary',
 ): string | string[] {
   const { book, chapter, endChapter, verseRanges } = reference;
 
@@ -16,11 +17,17 @@ export function formatJWLibraryLink(
     throw new Error('errors.invalidReferenceFormat');
   }
 
-  const link = (range: string) =>
-    `jwlibrary:///finder?bible=${range}${language ? `&wtlocale=${language}` : ''}`;
-
   const padRange = (book: number, chapter: number, start: number) =>
     `${padBook(book)}${padChapter(chapter)}${padVerse(start)}`;
+
+  const link = (range: string) => {
+    if (linkFormat === 'jworg-finder') {
+      const locale = language ?? 'E';
+      return `https://www.jw.org/finder?srcid=jwlshare&wtlocale=${locale}&prefer=lang&bible=${range}&pub=nwtsty`;
+    }
+    // Default: jwlibrary://
+    return `jwlibrary:///finder?bible=${range}${language ? `&wtlocale=${language}` : ''}`;
+  };
 
   // For a single range, return a single string
   if (verseRanges.length === 1) {
