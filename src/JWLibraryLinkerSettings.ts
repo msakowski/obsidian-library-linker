@@ -14,6 +14,7 @@ import type {
   LinkStyles,
   BookLength,
   UpdatedLinkStructure,
+  LinkFormat,
 } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
@@ -36,16 +37,9 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
   private markdownRenderer = async (containerId: string, markdown: string) => {
     const container = activeDocument.getElementById(containerId);
     if (container) {
-      // Clear previous content
       container.empty();
-
-      // Create a new component instance for this render
       const component = new MarkdownComponent();
-
-      // Render markdown to HTML
       await MarkdownRenderer.render(this.app, markdown, container, '.', component);
-
-      // Register the component to ensure proper cleanup
       this.plugin.addChild(component);
     }
   };
@@ -67,7 +61,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     });
     void this.markdownRenderer(`button-${name}-preset`, text || '');
 
-    // Add event listener to prevent default action of inner links
     const internalLinks = linkEl.querySelectorAll('a');
     internalLinks.forEach((link) => {
       link.href = '#';
@@ -76,7 +69,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         `Sets: "${styles.prefixOutsideLink}", "${styles.prefixInsideLink}", "${styles.suffixInsideLink}", "${styles.suffixOutsideLink}"`,
       );
       link.addEventListener('click', (e) => {
-        e.preventDefault(); // Prevent default link action
+        e.preventDefault();
       });
     });
 
@@ -93,15 +86,12 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
   private importInFlight = false;
 
-  // Sample Bible references for preview
   private previewReferences: BibleReference[] = [
-    // Simple reference (Revelation 21:4)
     {
       book: 66,
       chapter: 21,
       verseRanges: [{ start: 4, end: 4 }],
     },
-    // Complex reference with multiple ranges (Psalm 23:1-3,5,7-9)
     {
       book: 19,
       chapter: 23,
@@ -111,7 +101,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         { start: 7, end: 9 },
       ],
     },
-    // Book with number prefix (1 Chronicles 29:11)
     {
       book: 13,
       chapter: 29,
@@ -127,7 +116,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
   display(): void {
     const { containerEl } = this;
-    // Clear the parent container first
     containerEl.empty();
 
     const settingsContainer = containerEl.createDiv({
@@ -143,16 +131,31 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           .setValue(this.plugin.settings.language)
           .onChange(async (value) => {
             const newLanguage = value as Language;
-
-            // Pre-load new language's bible books
             loadBibleBooks(newLanguage);
-
-            // Update settings
             this.plugin.settings.language = newLanguage;
             await this.plugin.saveSettings();
-
-            // Redisplay settings UI
             this.display();
+          }),
+      );
+
+    // Link format toggle
+    new Setting(settingsContainer)
+      .setName('Link format')
+      .setDesc(
+        '"JW Library app" opens directly in the JW Library app (jwlibrary://). ' +
+        '"JW.org share link" also works in browsers and is better for sharing notes with others.',
+      )
+      .addDropdown((dropdown) =>
+        dropdown
+          .addOptions({
+            jwlibrary: 'JW Library app (jwlibrary://)',
+            'jworg-finder': 'JW.org share link (jw.org/finder)',
+          })
+          .setValue(this.plugin.settings.linkFormat ?? 'jwlibrary')
+          .onChange(async (value) => {
+            this.plugin.settings.linkFormat = value as LinkFormat;
+            await this.plugin.saveSettings();
+            this.updatePreview();
           }),
       );
 
@@ -203,8 +206,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         }),
       );
 
-    // Add Link Styling section
-
     const linkStylingContainer = settingsContainer.createDiv({
       cls: 'setting-item setting-item--linkStyling',
     });
@@ -237,7 +238,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           }),
       );
 
-    // Prefix outside link
     new Setting(settingsContainer)
       .setClass('setting-item--input')
       .setName(this.t('settings.linkStyling.prefixOutsideLink.name'))
@@ -265,7 +265,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           });
       });
 
-    // Prefix inside link
     new Setting(settingsContainer)
       .setClass('setting-item--input')
       .setName(this.t('settings.linkStyling.prefixInsideLink.name'))
@@ -293,7 +292,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           });
       });
 
-    // Suffix inside link
     new Setting(settingsContainer)
       .setClass('setting-item--input')
       .setName(this.t('settings.linkStyling.suffixInsideLink.name'))
@@ -321,7 +319,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           });
       });
 
-    // Suffix outside link
     new Setting(settingsContainer)
       .setClass('setting-item--input')
       .setName(this.t('settings.linkStyling.suffixOutsideLink.name'))
@@ -349,7 +346,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
           });
       });
 
-    // Presets row
     const presetContainer = settingsContainer.createDiv({
       cls: 'setting-item setting-item--presets',
     });
@@ -375,10 +371,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     void this.presetButton(
       presetButtonsContainer,
       this.previewReferences[2],
-      {
-        ...DEFAULT_STYLES,
-        fontStyle: this.plugin.settings.fontStyle,
-      },
+      { ...DEFAULT_STYLES, fontStyle: this.plugin.settings.fontStyle },
       'default',
     );
 
@@ -408,7 +401,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       'bookEmoji',
     );
 
-    // Font style
     new Setting(settingsContainer)
       .setName(this.t('settings.linkStyling.fontStyle.name'))
       .setDesc(this.t('settings.linkStyling.fontStyle.description'))
@@ -431,26 +423,21 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       cls: 'setting-item setting-item--preview',
     });
 
-    // Add preview section
     previewContainer.createDiv({
       text: this.t('settings.linkStyling.preview.name'),
       cls: 'setting-item-h1',
     });
 
-    // Create container for preview content
     const previewItemsContainer = previewContainer.createDiv();
 
-    // Create three divs for our markdown content
     for (let i = 0; i < 3; i++) {
       previewItemsContainer.createDiv({
         attr: { id: `preview-container-${i}` },
       });
     }
 
-    // Initialize preview
     this.updatePreview();
 
-    // Add Bible Quote Formatting section
     const bibleQuoteContainer = settingsContainer.createDiv({
       cls: 'setting-item setting-item--column setting-item--bibleQuote',
     });
@@ -469,7 +456,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       cls: 'setting-item-description',
     });
 
-    // Template presets
     const templatePresetContainer = bibleQuoteContainer.createDiv({
       cls: 'setting-item-presets',
     });
@@ -483,13 +469,11 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       cls: 'preset-buttons-container',
     });
 
-    // Create 4 preset buttons
     this.createPresetButton(buttonsRow, 'short', BIBLE_QUOTE_TEMPLATES.short);
     this.createPresetButton(buttonsRow, 'plain', BIBLE_QUOTE_TEMPLATES.plain);
     this.createPresetButton(buttonsRow, 'foldable', BIBLE_QUOTE_TEMPLATES.foldable);
     this.createPresetButton(buttonsRow, 'expanded', BIBLE_QUOTE_TEMPLATES.expanded);
 
-    // Template textarea
     new Setting(bibleQuoteContainer)
       .setName(this.t('settings.bibleQuote.template.name'))
       .setDesc(this.t('settings.bibleQuote.template.description'))
@@ -507,7 +491,6 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         text.inputEl.cols = 50;
       });
 
-    // Add Bible quote preview section
     const bibleQuotePreviewContainer = bibleQuoteContainer.createDiv({
       cls: 'setting-item-preview',
     });
@@ -517,12 +500,10 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       cls: 'setting-item-h2',
     });
 
-    // Create container for bible quote preview content
     bibleQuotePreviewContainer.createDiv({
       attr: { id: 'bible-quote-preview-container' },
     });
 
-    // Initialize bible quote preview
     this.updateBibleQuotePreview();
 
     const offlineBibleContainer = settingsContainer.createDiv({
@@ -532,57 +513,39 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     void this.renderOfflineBibleSection(offlineBibleContainer);
   }
 
-  /**
-   * Updates the Bible quote preview with the selected template
-   */
   updateBibleQuotePreview(): void {
     const container = activeDocument.getElementById('bible-quote-preview-container');
     if (!container) return;
 
-    // Sample Bible reference for preview
     const sampleReference = {
       book: 40,
       chapter: 24,
       verseRanges: [{ start: 14, end: 14 }],
     };
 
-    // Generate the linked reference
     const bibleRefLinked = convertBibleTextToMarkdownLink(sampleReference, this.plugin.settings);
     if (!bibleRefLinked) return;
 
-    // Generate the plain text reference
     const bibleRef = formatBibleText(
       sampleReference,
       this.plugin.settings.bookLength,
       this.plugin.settings.language,
     );
 
-    // Sample lorem ipsum text for preview
     const sampleText =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 
-    // Process template with sample data
     const markdown = this.plugin.settings.bibleQuote.template
       .replace(/\{bibleRef\}/g, bibleRef)
       .replace(/\{bibleRefLinked\}/g, bibleRefLinked)
       .replace(/\{quote\}/g, sampleText);
 
-    // Clear previous content
     container.empty();
-
-    // Create a new component instance for this render
     const component = new MarkdownComponent();
-
-    // Render markdown to HTML
     void MarkdownRenderer.render(this.app, markdown, container, '.', component);
-
-    // Register the component to ensure proper cleanup
     this.plugin.addChild(component);
   }
 
-  /**
-   * Creates a preset button for the Bible quote template
-   */
   createPresetButton(container: HTMLElement, name: string, template: string): void {
     const button = container.createEl('button', {
       text: this.t(`settings.bibleQuote.presets.${name}`),
@@ -593,7 +556,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
       void (async () => {
         this.plugin.settings.bibleQuote.template = template;
         await this.plugin.saveSettings();
-        this.display(); // Refresh to show new template in textarea
+        this.display();
         this.updateBibleQuotePreview();
       })();
     });
@@ -725,9 +688,7 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
 
   private async handleBibleImport(container: HTMLElement): Promise<void> {
     const selectedFile = await this.selectEpubFile();
-    if (!selectedFile) {
-      return;
-    }
+    if (!selectedFile) return;
 
     const importService = this.plugin.getEpubImportService();
     this.importInFlight = true;
@@ -773,10 +734,10 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
   private async openOfflineBibleFolder(): Promise<void> {
     if (!Platform.isDesktop) return;
     const folderPath = getOfflineBibleAbsolutePath(this.app, this.plugin.manifest.id);
-    // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic require for desktop-only Node.js API
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { mkdir } = require('fs/promises') as typeof import('fs/promises');
     await mkdir(folderPath, { recursive: true });
-    // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic require for desktop-only Electron API
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { shell } = require('electron') as typeof import('electron');
     const error = await shell.openPath(folderPath);
 
@@ -806,12 +767,8 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     });
   }
 
-  /**
-   * Updates the preview elements with formatted Bible references
-   */
   updatePreview(): void {
     try {
-      // Generate markdown links for all references first
       const markdownLinks = this.previewReferences.map((reference) =>
         convertBibleTextToMarkdownLink(reference, this.plugin.settings),
       );
@@ -820,37 +777,22 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
         throw new Error('Failed to generate one or more markdown links');
       }
 
-      // Create three markdown paragraphs with the links embedded
       const markdownParagraphs = [
-        // First paragraph with inline reference
         `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut in arcu vitae nunc hendrerit tempus ac sed ${markdownLinks[0]} felis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec gravida turpis eu diam pellentesque, sed rhoncus nulla placerat.`,
-
-        // Second paragraph with only the reference
         `${markdownLinks[1]}`,
-
-        // Third paragraph with reference at the end
         `Nullam faucibus, leo eget tincidunt convallis, sapien nisl tincidunt nulla, nec eleifend arcu risus a tellus. Cras tincidunt fermentum mauris, non tempor nibh tincidunt in. Mauris et diam quis nisl placerat egestas in vitae sem. Sed eget diam consectetur, mollis turpis vel, dignissim tortor. Mauris iaculis ipsum eu ${markdownLinks[2]}`,
       ];
 
-      // Render each markdown paragraph in its container
       markdownParagraphs.forEach((markdown, index) => {
         const container = activeDocument.getElementById(`preview-container-${index}`);
         if (container) {
-          // Clear previous content
           container.empty();
-
-          // Create a new component instance for this render
           const component = new MarkdownComponent();
-
-          // Render markdown to HTML
           void MarkdownRenderer.render(this.app, markdown, container, '.', component);
-
-          // Register the component to ensure proper cleanup
           this.plugin.addChild(component);
         }
       });
     } catch (err: unknown) {
-      // Safe error logging
       const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
       logger.error(errorMessage);
     }
