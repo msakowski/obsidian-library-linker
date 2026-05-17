@@ -27,6 +27,8 @@ function updateLanguagesTs(code, locale) {
   const signComment = '  // Sign languages';
   const lcStart = src.indexOf('export const LANGUAGE_CODES = [');
   const signIdx = src.indexOf(signComment, lcStart);
+  if (signIdx === -1)
+    throw new Error(`[wire-language] Could not find "${signComment}" in languages.ts`);
 
   if (!src.slice(lcStart, signIdx).includes(`'${code}'`)) {
     // Extract spoken-block lines (between the opening '[' and the sign comment)
@@ -151,7 +153,7 @@ function addChangeset(name) {
     console.log(`[wire-language] Changeset already exists — skipped`);
     return;
   }
-  writeFileSync(path, `---\n'jw-library-linker': patch\n---\n\nAdd support for ${name}.\n`, 'utf8');
+  writeFileSync(path, `---\n'jw-library-linker': minor\n---\n\nAdd support for ${name}.\n`, 'utf8');
   console.log(`[wire-language] Created .changeset/add-${slug}-language-support.md`);
 }
 

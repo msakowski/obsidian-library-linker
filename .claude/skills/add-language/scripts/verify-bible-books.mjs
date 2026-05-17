@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { resolveSupportedEntry, repoRoot } from './resolve.mjs';
+import { findEntry, resolveSupportedEntry, repoRoot } from './resolve.mjs';
 
 function parseYaml(code) {
   const text = readFileSync(resolve(repoRoot, `locale/bibleBooks/${code}.yaml`), 'utf8');
@@ -93,5 +93,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.error('Usage: node verify-bible-books.mjs <locale>');
     process.exit(1);
   }
-  run(resolveSupportedEntry(arg));
+  run(findEntry(arg) ?? resolveSupportedEntry(arg));
 }
