@@ -75,16 +75,17 @@ settings:
     allowOnlineFallback:
       name: Consenti fallback online
       description: Se i dati offline non sono disponibili, consenti al plugin di provare il provider di citazioni online.
-    status:
-      name: Stato della lingua installata
-      notInstalled: Nessuna Bibbia offline è installata per {{language}}.
-      installed: Bibbia offline per {{language}} installata da {{sourceFileName}} il {{importedAt}} con {{chapterCount}} capitoli.
+    installedList:
+      name: Bibbie offline installate
+      description: È possibile installare una Bibbia offline per lingua. La lingua viene rilevata dai metadati dell'EPUB.
+      empty: Nessuna Bibbia offline ancora installata.
+      entry: '{{sourceFileName}} — {{chapterCount}} capitoli, importato il {{importedAt}}'
     actions:
       name: Azioni Bibbia offline
-      description: Importa, sostituisci, rimuovi o ispeziona il corpus della Bibbia offline per la lingua selezionata.
+      description: Importa un EPUB per aggiungere una nuova lingua. Per sostituirne una esistente, rimuovila prima.
       import: Importa EPUB della Bibbia
-      reimport: Reimporta EPUB della Bibbia
-      remove: Rimuovi Bibbia offline
+      importing: Importazione in corso...
+      remove: Rimuovi
       openFolder: Apri cartella Bibbia offline
 commands:
   linkUnlinkedBibleReferences: Collega i riferimenti biblici non collegati
@@ -112,8 +113,8 @@ notices:
   errorInsertingQuotes: Errore durante l'inserimento delle citazioni bibliche
   bibleQuoteFetchFailed: Impossibile recuperare il testo biblico — riprova
   offlineBibleImported: Bibbia offline importata per {{language}}
-  offlineBibleReimported: Bibbia offline reimportata per {{language}}
   offlineBibleRemoved: Bibbia offline rimossa per {{language}}
+  offlineBibleAlreadyInstalled: Una Bibbia offline per {{language}} è già installata. Rimuovila prima di reimportare.
   offlineBibleImportFailed: Importazione dell'EPUB della Bibbia offline non riuscita
   offlineBibleOpenFolderFailed: Impossibile aprire la cartella della Bibbia offline
 suggestions:

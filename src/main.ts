@@ -1,14 +1,14 @@
-import { Editor, Notice, Plugin, Menu, Platform } from 'obsidian';
+import { Editor, Notice, Plugin, Menu } from 'obsidian';
 import { ConversionType, convertLinks } from '@/utils/convertLinks';
 import type { LinkReplacerSettings, LinkStyles, BibleQuoteFormat } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { TranslationService } from '@/services/TranslationService';
-import { FileSystemOfflineBibleRepository } from '@/services/FileSystemOfflineBibleRepository';
+import { VaultOfflineBibleRepository } from '@/services/VaultOfflineBibleRepository';
 import { OfflineBibleCitationProvider } from '@/services/OfflineBibleCitationProvider';
 import { OnlineBibleCitationProvider } from '@/services/OnlineBibleCitationProvider';
 import { ConfiguredBibleCitationProvider } from '@/services/ConfiguredBibleCitationProvider';
 import { BibleEpubImportService } from '@/services/BibleEpubImportService';
-import { getOfflineBibleRootPath } from '@/services/PluginDataPathService';
+import { getOfflineBibleVaultPath } from '@/services/PluginDataPathService';
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { loadBibleBooks } from '@/stores/bibleBooks';
 import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
@@ -65,9 +65,9 @@ export default class JWLibraryLinkerPlugin extends Plugin {
   // Services
   private translationService!: TranslationService;
   private bibleSuggester!: BibleReferenceSuggester;
-  private offlineBibleRepository: FileSystemOfflineBibleRepository | null = null;
+  private offlineBibleRepository!: VaultOfflineBibleRepository;
   private bibleCitationProvider!: ConfiguredBibleCitationProvider;
-  private epubImportService: BibleEpubImportService | null = null;
+  private epubImportService!: BibleEpubImportService;
 
   // Convenience binding for backward compatibility
   private t!: (key: string, variables?: Record<string, string>) => string;
@@ -82,17 +82,16 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     // Load settings (may update language)
     await this.loadSettings();
 
-    if (Platform.isDesktopApp) {
-      const offlineBibleRootPath = getOfflineBibleRootPath(this.app, this.manifest.id);
-      this.offlineBibleRepository = new FileSystemOfflineBibleRepository(offlineBibleRootPath);
-      this.epubImportService = new BibleEpubImportService(this.offlineBibleRepository);
-    }
+    const offlineBibleVaultPath = getOfflineBibleVaultPath(this.app, this.manifest.id);
+    this.offlineBibleRepository = new VaultOfflineBibleRepository(
+      this.app.vault.adapter,
+      offlineBibleVaultPath,
+    );
+    this.epubImportService = new BibleEpubImportService(this.offlineBibleRepository);
 
     this.bibleCitationProvider = new ConfiguredBibleCitationProvider(
       () => this.settings,
-      this.offlineBibleRepository
-        ? new OfflineBibleCitationProvider(this.offlineBibleRepository, this.t)
-        : new OnlineBibleCitationProvider(),
+      new OfflineBibleCitationProvider(this.offlineBibleRepository, this.t),
       new OnlineBibleCitationProvider(),
       this.t,
     );
@@ -304,11 +303,11 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     return this.bibleCitationProvider;
   }
 
-  getOfflineBibleRepository(): FileSystemOfflineBibleRepository | null {
+  getOfflineBibleRepository(): VaultOfflineBibleRepository {
     return this.offlineBibleRepository;
   }
 
-  getEpubImportService(): BibleEpubImportService | null {
+  getEpubImportService(): BibleEpubImportService {
     return this.epubImportService;
   }
 

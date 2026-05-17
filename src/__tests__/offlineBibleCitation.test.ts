@@ -1,23 +1,29 @@
+/**
+ * @jest-environment jsdom
+ */
+import { webcrypto } from 'crypto';
 import { zipSync, strToU8 } from 'fflate';
-import { mkdtemp, rm, writeFile } from 'fs/promises';
-import { join } from 'path';
-import { tmpdir } from 'os';
-import { FileSystemOfflineBibleRepository } from '@/services/FileSystemOfflineBibleRepository';
+import { VaultOfflineBibleRepository } from '@/services/VaultOfflineBibleRepository';
 import { BibleEpubImportService } from '@/services/BibleEpubImportService';
 import { OfflineBibleCitationProvider } from '@/services/OfflineBibleCitationProvider';
 import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
+import { createInMemoryAdapter } from './__helpers__/createInMemoryAdapter';
+
+const ROOT = '.obsidian/plugins/jw-library-linker/offline-bible';
 
 beforeAll(() => {
+  if (!globalThis.crypto?.subtle) {
+    Object.defineProperty(globalThis, 'crypto', { value: webcrypto, configurable: true });
+  }
   initializeTestBibleBooks();
 });
 
 describe('offline Bible citation flow', () => {
   test('imports an EPUB once and serves citations from local JSON', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'librarylinker-offline-'));
-    const repository = new FileSystemOfflineBibleRepository(join(tempDir, 'offline-bible'));
+    const adapter = createInMemoryAdapter();
+    const repository = new VaultOfflineBibleRepository(adapter, ROOT);
     const importer = new BibleEpubImportService(repository);
     const provider = new OfflineBibleCitationProvider(repository, (key) => key);
-    const epubPath = join(tempDir, 'nwt_X.epub');
 
     const archive = zipSync({
       mimetype: strToU8('application/epub+zip'),
@@ -52,10 +58,8 @@ describe('offline Bible citation flow', () => {
 </html>`),
     });
 
-    await writeFile(epubPath, Buffer.from(archive));
-
     const importResult = await importer.importBible({
-      filePath: epubPath,
+      fileData: archive,
       overwriteExisting: false,
     });
 
@@ -80,16 +84,13 @@ describe('offline Bible citation flow', () => {
       text: 'Im Anfang erschuf Gott Himmel und Erde. Die Erde war formlos und leer.',
       citation: '1. Mo. 1:1-2',
     });
-
-    await rm(tempDir, { recursive: true, force: true });
   });
 
   test('preserves spaces when EPUB markup splits verse text across inline tags', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'librarylinker-offline-'));
-    const repository = new FileSystemOfflineBibleRepository(join(tempDir, 'offline-bible'));
+    const adapter = createInMemoryAdapter();
+    const repository = new VaultOfflineBibleRepository(adapter, ROOT);
     const importer = new BibleEpubImportService(repository);
     const provider = new OfflineBibleCitationProvider(repository, (key) => key);
-    const epubPath = join(tempDir, 'nwt_X_spacing.epub');
 
     const archive = zipSync({
       mimetype: strToU8('application/epub+zip'),
@@ -129,10 +130,8 @@ describe('offline Bible citation flow', () => {
 </html>`),
     });
 
-    await writeFile(epubPath, Buffer.from(archive));
-
     const importResult = await importer.importBible({
-      filePath: epubPath,
+      fileData: archive,
       overwriteExisting: false,
     });
 
@@ -149,15 +148,12 @@ describe('offline Bible citation flow', () => {
 
     expect(citation.success).toBe(true);
     expect(citation.text).toContain('war formlos und leer, und Finsternis');
-
-    await rm(tempDir, { recursive: true, force: true });
   });
 
   test('imports chapters even when nav files are not sequential within a book', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'librarylinker-offline-'));
-    const repository = new FileSystemOfflineBibleRepository(join(tempDir, 'offline-bible'));
+    const adapter = createInMemoryAdapter();
+    const repository = new VaultOfflineBibleRepository(adapter, ROOT);
     const importer = new BibleEpubImportService(repository);
-    const epubPath = join(tempDir, 'nwt_X_gap.epub');
 
     const archive = zipSync({
       mimetype: strToU8('application/epub+zip'),
@@ -202,10 +198,8 @@ describe('offline Bible citation flow', () => {
 </html>`),
     });
 
-    await writeFile(epubPath, Buffer.from(archive));
-
     const importResult = await importer.importBible({
-      filePath: epubPath,
+      fileData: archive,
       overwriteExisting: false,
     });
 
@@ -217,16 +211,13 @@ describe('offline Bible citation flow', () => {
 
     expect(chapter1?.verses['1']).toBe('Kapitel eins.');
     expect(chapter3?.verses['1']).toBe('Kapitel drei.');
-
-    await rm(tempDir, { recursive: true, force: true });
   });
 
   test('uses the next nav target anchor instead of assuming verse numbers are consecutive', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'librarylinker-offline-'));
-    const repository = new FileSystemOfflineBibleRepository(join(tempDir, 'offline-bible'));
+    const adapter = createInMemoryAdapter();
+    const repository = new VaultOfflineBibleRepository(adapter, ROOT);
     const importer = new BibleEpubImportService(repository);
     const provider = new OfflineBibleCitationProvider(repository, (key) => key);
-    const epubPath = join(tempDir, 'nwt_X_anchor.epub');
 
     const archive = zipSync({
       mimetype: strToU8('application/epub+zip'),
@@ -263,10 +254,8 @@ describe('offline Bible citation flow', () => {
 </html>`),
     });
 
-    await writeFile(epubPath, Buffer.from(archive));
-
     const importResult = await importer.importBible({
-      filePath: epubPath,
+      fileData: archive,
       overwriteExisting: false,
     });
 
@@ -283,16 +272,13 @@ describe('offline Bible citation flow', () => {
 
     expect(citation.success).toBe(true);
     expect(citation.text).toBe('Vers eins. Noch immer Vers eins.');
-
-    await rm(tempDir, { recursive: true, force: true });
   });
 
   test('can derive verse numbers from anchors when nav link text is not plain numeric text', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'librarylinker-offline-'));
-    const repository = new FileSystemOfflineBibleRepository(join(tempDir, 'offline-bible'));
+    const adapter = createInMemoryAdapter();
+    const repository = new VaultOfflineBibleRepository(adapter, ROOT);
     const importer = new BibleEpubImportService(repository);
     const provider = new OfflineBibleCitationProvider(repository, (key) => key);
-    const epubPath = join(tempDir, 'nwt_X_anchor-fallback.epub');
 
     const archive = zipSync({
       mimetype: strToU8('application/epub+zip'),
@@ -325,10 +311,8 @@ describe('offline Bible citation flow', () => {
 </html>`),
     });
 
-    await writeFile(epubPath, Buffer.from(archive));
-
     const importResult = await importer.importBible({
-      filePath: epubPath,
+      fileData: archive,
       overwriteExisting: false,
     });
 
@@ -345,16 +329,13 @@ describe('offline Bible citation flow', () => {
 
     expect(citation.success).toBe(true);
     expect(citation.text).toBe('Erster Vers. Zweiter Vers.');
-
-    await rm(tempDir, { recursive: true, force: true });
   });
 
   test('ignores unrelated internal links outside the verse navigation container', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'librarylinker-offline-'));
-    const repository = new FileSystemOfflineBibleRepository(join(tempDir, 'offline-bible'));
+    const adapter = createInMemoryAdapter();
+    const repository = new VaultOfflineBibleRepository(adapter, ROOT);
     const importer = new BibleEpubImportService(repository);
     const provider = new OfflineBibleCitationProvider(repository, (key) => key);
-    const epubPath = join(tempDir, 'nwt_X_container.epub');
 
     const archive = zipSync({
       mimetype: strToU8('application/epub+zip'),
@@ -395,10 +376,8 @@ describe('offline Bible citation flow', () => {
 </html>`),
     });
 
-    await writeFile(epubPath, Buffer.from(archive));
-
     const importResult = await importer.importBible({
-      filePath: epubPath,
+      fileData: archive,
       overwriteExisting: false,
     });
 
@@ -415,16 +394,13 @@ describe('offline Bible citation flow', () => {
 
     expect(citation.success).toBe(true);
     expect(citation.text).toBe('Erster Vers. Zweiter Vers.');
-
-    await rm(tempDir, { recursive: true, force: true });
   });
 
   test('does not pull trailing non-verse blocks into the last verse of a chapter', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'librarylinker-offline-'));
-    const repository = new FileSystemOfflineBibleRepository(join(tempDir, 'offline-bible'));
+    const adapter = createInMemoryAdapter();
+    const repository = new VaultOfflineBibleRepository(adapter, ROOT);
     const importer = new BibleEpubImportService(repository);
     const provider = new OfflineBibleCitationProvider(repository, (key) => key);
-    const epubPath = join(tempDir, 'nwt_X_last-verse-boundary.epub');
 
     const archive = zipSync({
       mimetype: strToU8('application/epub+zip'),
@@ -462,10 +438,8 @@ describe('offline Bible citation flow', () => {
 </html>`),
     });
 
-    await writeFile(epubPath, Buffer.from(archive));
-
     const importResult = await importer.importBible({
-      filePath: epubPath,
+      fileData: archive,
       overwriteExisting: false,
     });
 
@@ -482,16 +456,13 @@ describe('offline Bible citation flow', () => {
 
     expect(citation.success).toBe(true);
     expect(citation.text).toBe('Zweiter Vers mit weiterem Satz.');
-
-    await rm(tempDir, { recursive: true, force: true });
   });
 
   test('keeps inline content that belongs to the last verse inside the same block', async () => {
-    const tempDir = await mkdtemp(join(tmpdir(), 'librarylinker-offline-'));
-    const repository = new FileSystemOfflineBibleRepository(join(tempDir, 'offline-bible'));
+    const adapter = createInMemoryAdapter();
+    const repository = new VaultOfflineBibleRepository(adapter, ROOT);
     const importer = new BibleEpubImportService(repository);
     const provider = new OfflineBibleCitationProvider(repository, (key) => key);
-    const epubPath = join(tempDir, 'nwt_X_last-verse-inline.epub');
 
     const archive = zipSync({
       mimetype: strToU8('application/epub+zip'),
@@ -529,10 +500,8 @@ describe('offline Bible citation flow', () => {
 </html>`),
     });
 
-    await writeFile(epubPath, Buffer.from(archive));
-
     const importResult = await importer.importBible({
-      filePath: epubPath,
+      fileData: archive,
       overwriteExisting: false,
     });
 
@@ -549,7 +518,5 @@ describe('offline Bible citation flow', () => {
 
     expect(citation.success).toBe(true);
     expect(citation.text).toBe('Zweiter Vers, mit Nachsatz im selben Absatz.');
-
-    await rm(tempDir, { recursive: true, force: true });
   });
 });
