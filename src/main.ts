@@ -35,6 +35,7 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
   updatedLinkStructure: 'keepCurrentStructure',
   noLanguageParameter: false,
   reconvertExistingLinks: false,
+  linkFormat: 'jwlibrary',
   bibleQuote: {
     template: BIBLE_QUOTE_TEMPLATES.short,
   },
@@ -62,24 +63,20 @@ function migrateFormatToTemplate(format: BibleQuoteFormat): string {
 export default class JWLibraryLinkerPlugin extends Plugin {
   settings: LinkReplacerSettings = DEFAULT_SETTINGS;
 
-  // Services
   private translationService!: TranslationService;
   private bibleSuggester!: BibleReferenceSuggester;
   private offlineBibleRepository!: VaultOfflineBibleRepository;
   private bibleCitationProvider!: ConfiguredBibleCitationProvider;
   private epubImportService!: BibleEpubImportService;
 
-  // Convenience binding for backward compatibility
   private t!: (key: string, variables?: Record<string, string>) => string;
 
   async onload() {
-    // Initialize translation service
     this.translationService = new TranslationService();
     await this.translationService.initialize();
     this.t = this.translationService.t.bind(this.translationService);
     BibleTextFetcher.initialize(this.app);
 
-    // Load settings (may update language)
     await this.loadSettings();
 
     const offlineBibleVaultPath = getOfflineBibleVaultPath(this.app, this.manifest.id);
@@ -96,13 +93,10 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       this.t,
     );
 
-    // Load bible books for saved language
     loadBibleBooks(getBookLanguage(this.settings.language));
 
-    // Add settings tab
     this.addSettingTab(new JWLibraryLinkerSettings(this.app, this));
 
-    // Add command to link unlinked Bible references
     this.addCommand({
       id: 'link-unlinked-bible-references',
       name: this.t('commands.linkUnlinkedBibleReferences'),
@@ -175,7 +169,6 @@ export default class JWLibraryLinkerPlugin extends Plugin {
         const selection = editor.getSelection();
         let contentSelection: ContentSelection | undefined;
 
-        // If text is selected, work only on the selection
         if (selection) {
           const selectionRange = editor.listSelections()[0];
           const startLine = Math.min(selectionRange.anchor.line, selectionRange.head.line);
@@ -247,13 +240,11 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     this.bibleSuggester = new BibleReferenceSuggester(this);
     this.registerEditorSuggest(this.bibleSuggester);
 
-    // Register context menu for JW Library links
     this.registerEvent(
       this.app.workspace.on('editor-menu', (menu: Menu, editor: Editor) => {
         const cursor = editor.getCursor();
         const line = editor.getLine(cursor.line);
 
-        // Check if the cursor line contains a JW Library link
         const jwLibraryRegex = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)\s]*)?/;
         if (jwLibraryRegex.test(line)) {
           menu.addItem((item) => {
@@ -292,9 +283,6 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     logger.log('Plugin loaded');
   }
 
-  /**
-   * Get the translation service instance
-   */
   getTranslationService(): TranslationService {
     return this.translationService;
   }
@@ -326,8 +314,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       },
     };
 
-    // Migrate old format to template
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any -- accessing removed property for migration from old settings format
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any -- migration from old settings format
     const oldFormat = (this.settings.bibleQuote as any).format as BibleQuoteFormat | undefined;
     if (oldFormat && !this.settings.bibleQuote.template) {
       this.settings.bibleQuote.template = migrateFormatToTemplate(oldFormat);
