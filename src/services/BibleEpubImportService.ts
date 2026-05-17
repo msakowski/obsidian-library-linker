@@ -3,14 +3,16 @@ import type {
   BibleImportResult,
   EpubImportService,
   Language,
+  Locale,
   OfflineBibleChapter,
   OfflineBibleCorpusMetadata,
   OfflineBibleRepository,
 } from '@/types';
 import { unzipSync, strFromU8 } from 'fflate';
-import { getLanguageByLocale } from '@/consts/languages';
 import { cleanHtmlText } from '@/utils/cleanHtmlText';
 import { webCryptoSha256 } from '@/utils/webCryptoSha256';
+import { getLanguageFromLocale } from '@/utils/getLanguageFromLocale';
+import { logger } from '@/utils/logger';
 
 interface VerseTarget {
   book: number;
@@ -217,14 +219,17 @@ export class BibleEpubImportService implements EpubImportService {
   }
 
   private detectLanguage(packageDoc: Document): Language | undefined {
-    const languageValue = Array.from(packageDoc.getElementsByTagName('*'))
+    const locale = Array.from(packageDoc.getElementsByTagName('*'))
       .find((node) => node.localName === 'language')
       ?.textContent?.trim();
-    if (!languageValue) {
+
+    logger.log({ locale }, 'Detected language', packageDoc);
+
+    if (!locale) {
       return undefined;
     }
 
-    return getLanguageByLocale(languageValue);
+    return getLanguageFromLocale(locale as Locale);
   }
 
   private readModifiedAt(packageDoc: Document): string | undefined {
@@ -423,7 +428,7 @@ export class BibleEpubImportService implements EpubImportService {
   }
 
   private countLinks(node: ParentNode): number {
-    return node instanceof Element ? node.querySelectorAll('a[href*="#"]').length : 0;
+    return 'querySelectorAll' in node ? node.querySelectorAll('a[href*="#"]').length : 0;
   }
 
   private readonly domParser = new DOMParser();
@@ -431,6 +436,8 @@ export class BibleEpubImportService implements EpubImportService {
   private parseXml(content: string): Document {
     const doc = this.domParser.parseFromString(content, 'application/xhtml+xml');
     const parserError = doc.querySelector('parsererror');
+
+    logger.log({ parserError }, 'Parser error', content);
 
     if (parserError) {
       throw new Error('Invalid EPUB: failed to parse XML content.');

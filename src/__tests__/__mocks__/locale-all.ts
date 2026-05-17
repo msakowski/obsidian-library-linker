@@ -2,15 +2,20 @@
 // This loads the actual YAML files from the filesystem
 import fs from 'fs';
 import path from 'path';
-import yaml from 'js-yaml';
-import { globSync } from 'glob';
+import YAML from 'yaml';
 
 // In Jest/CommonJS context, __dirname is available
 const projectRoot = path.resolve(__dirname, '../../..');
 
-// Discover all locale files using glob (same as build time)
-const localeFiles = globSync('locale/*.yaml', { cwd: projectRoot, absolute: false });
-const bibleBookFiles = globSync('locale/bibleBooks/*.yaml', { cwd: projectRoot, absolute: false });
+const localeDir = path.resolve(projectRoot, 'locale');
+const localeFiles = fs
+  .readdirSync(localeDir)
+  .filter((f) => f.endsWith('.yaml'))
+  .map((f) => `locale/${f}`);
+const bibleBookFiles = fs
+  .readdirSync(path.join(localeDir, 'bibleBooks'))
+  .filter((f) => f.endsWith('.yaml'))
+  .map((f) => `locale/bibleBooks/${f}`);
 
 const allFiles = [...localeFiles, ...bibleBookFiles].sort();
 
@@ -19,8 +24,7 @@ const locales: Record<string, unknown> = {};
 for (const file of allFiles) {
   const fullPath = path.resolve(projectRoot, file);
   const yamlContent = fs.readFileSync(fullPath, 'utf8');
-  const parsed = yaml.load(yamlContent, { schema: yaml.JSON_SCHEMA });
-  locales[file] = parsed;
+  locales[file] = YAML.parse(yamlContent) as unknown;
 }
 
 export default locales;

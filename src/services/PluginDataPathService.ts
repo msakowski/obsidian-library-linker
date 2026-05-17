@@ -1,7 +1,10 @@
-import { FileSystemAdapter, type App } from 'obsidian';
+import { FileSystemAdapter, Platform, type App } from 'obsidian';
 
 function joinPath(...segments: string[]): string {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  if (!Platform.isDesktop) {
+    throw new Error('Node.js APIs are not available on mobile');
+  }
+  // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic require for desktop-only Node.js API
   const { join } = require('path') as typeof import('path');
   return join(...segments);
 }

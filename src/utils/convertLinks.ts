@@ -32,7 +32,7 @@ export function convertLinks(
 
     // Handle Bible references
     if (url.startsWith('jwpub://b/') && (type === 'bible' || type === 'all')) {
-      const reference = parseBibleReferenceFromUrl(url, settings.language);
+      const reference = parseBibleReferenceFromUrl(url);
       const convertedLink = convertBibleTextToMarkdownLink(reference, settings, text);
       if (convertedLink) {
         return convertedLink;

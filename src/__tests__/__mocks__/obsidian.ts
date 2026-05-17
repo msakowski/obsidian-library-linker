@@ -199,8 +199,17 @@ export const request = jest.fn();
 
 // Mock Platform
 export const Platform = {
-  isMobileApp: true,
-  isDesktopApp: false,
+  isDesktop: true,
+  isDesktopApp: true,
+  isMobile: false,
+  isMobileApp: false,
 };
+
+// Mock activeDocument and activeWindow (for popout window compatibility)
+export const activeDocument = globalThis.document;
+export const activeWindow = globalThis.window;
+
+// Mock getLanguage
+export const getLanguage = jest.fn<string, []>(() => 'en');
 
 // Add any other Obsidian classes/types you need to mock

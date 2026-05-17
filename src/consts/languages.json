@@ -73,8 +73,7 @@
   },
   {
     "code": "TPO",
-    "locale": "pt_pt",
-    "importAliases": ["pt"],
+    "locale": "pt-PT",
     "vernacular": "Português (Portugal)",
     "script": "ROMAN",
     "name": "Portuguese (Portugal)",
@@ -173,7 +172,7 @@
   },
   {
     "code": "BFL",
-    "locale": "sgn_bf",
+    "locale": "sgn-BF",
     "vernacular": "Burkina Faso Sign Language",
     "script": "ROMAN",
     "name": "Burkina Faso Sign Language",
@@ -182,7 +181,7 @@
   },
   {
     "code": "CRS",
-    "locale": "sgn_cf",
+    "locale": "sgn-CF",
     "vernacular": "Langue des signes centrafricaine",
     "script": "ROMAN",
     "name": "Central African Republic Sign Language",
@@ -308,7 +307,7 @@
   },
   {
     "code": "LSI",
-    "locale": "sgn_ci",
+    "locale": "sgn-CI",
     "vernacular": "Langue des signes ivoirienne",
     "script": "ROMAN",
     "name": "Ivorian Sign Language",
@@ -335,7 +334,7 @@
   },
   {
     "code": "CML",
-    "locale": "sgn_cm",
+    "locale": "sgn-CM",
     "vernacular": "Langue des signes camerounaise",
     "script": "ROMAN",
     "name": "Langue des signes camerounaise",
@@ -457,6 +456,15 @@
     "script": "ROMAN",
     "name": "Vietnamese Sign Language",
     "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
+    "code": "I",
+    "locale": "it",
+    "vernacular": "Italiano",
+    "script": "ROMAN",
+    "name": "Italian",
+    "isSignLanguage": false,
     "isRTL": false
   }
 ]
