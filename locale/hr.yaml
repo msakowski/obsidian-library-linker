@@ -85,7 +85,6 @@ settings:
       description: Uvezite EPUB kako biste dodali novi jezik. Za zamjenu postojećeg, prvo ga uklonite.
       import: Uvezi EPUB Biblije
       importing: Uvozim ...
-      remove: Ukloni
       openFolder: Otvori mapu izvanmrežne Biblije
 commands:
   linkUnlinkedBibleReferences: Poveži nepovezane biblijske reference

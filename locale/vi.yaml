@@ -85,7 +85,6 @@ settings:
       description: Nhập một tệp EPUB để thêm một ngôn ngữ mới. Để thay thế bản hiện có, hãy xóa bản đó trước.
       import: Nhập tệp EPUB Kinh Thánh
       importing: Đang nhập ...
-      remove: Xóa
       openFolder: Mở thư mục Kinh Thánh ngoại tuyến
 commands:
   linkUnlinkedBibleReferences: Tạo liên kết cho các tham chiếu Kinh Thánh chưa có liên kết

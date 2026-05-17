@@ -1,58 +1,15 @@
 .jw-library-linker {
-  .setting-item--column {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .setting-item--linkStyling {
-    margin-top: 1em;
-    padding-top: 1em;
-    border-top: 1px solid var(--background-modifier-border);
-  }
-
-  .setting-item-h1 {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 0.5em;
-  }
-
-  .setting-item-h2 {
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-bottom: 0.5em;
-  }
-
-  .setting-item-description {
-    color: var(--text-muted);
-    margin-bottom: 1em;
-  }
-
   /* Input and preview styles */
   .setting-item--input input {
     width: 8ch;
   }
 
-  .setting-item--preview,
-  .setting-item--presets,
-  .setting-item--linkStyling {
-    display: block;
-  }
-
   /* Presets section styles */
-  .setting-item--presets {
-    justify-content: space-between;
-  }
-
-  .setting-item--presets .setting-item-heading {
-    white-space: nowrap;
-    margin-top: 0 !important;
-  }
-
   .preset-buttons-container {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-top: 12px;
+    margin-bottom: 1rem;
   }
 
   /* Preset button styles */
@@ -102,13 +59,6 @@
     border: 1px solid var(--background-modifier-border);
     border-radius: 4px;
     background-color: var(--background-primary);
-  }
-
-  /* Template textarea styles */
-  .setting-item--presets textarea {
-    font-family: var(--font-monospace);
-    min-height: 80px;
-    resize: vertical;
   }
 
   blockquote {

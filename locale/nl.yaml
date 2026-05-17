@@ -85,7 +85,6 @@ settings:
       description: Importeer een EPUB om een nieuwe taal toe te voegen. Verwijder een bestaande eerst om deze te vervangen.
       import: Bijbel-EPUB importeren
       importing: Bezig met importeren ...
-      remove: Verwijderen
       openFolder: Map offline Bijbel openen
 commands:
   linkUnlinkedBibleReferences: Link niet gelinkte Bijbeltekst verwijzingen

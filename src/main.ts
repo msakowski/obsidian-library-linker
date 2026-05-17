@@ -11,7 +11,7 @@ import { BibleEpubImportService } from '@/services/BibleEpubImportService';
 import { getOfflineBibleVaultPath } from '@/services/PluginDataPathService';
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { loadBibleBooks } from '@/stores/bibleBooks';
-import { JWLibraryLinkerSettings } from '@/JWLibraryLinkerSettings';
+import { JWLibraryLinkerSettings } from '@/settings/JWLibraryLinkerSettings';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
 import { linkUnlinkedBibleReferences } from '@/utils/linkUnlinkedBibleReferences';
 import { ConvertSuggester } from '@/ConvertSuggester';

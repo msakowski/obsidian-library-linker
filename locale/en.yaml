@@ -85,7 +85,6 @@ settings:
       description: Import an EPUB to add a new language. To replace an existing one, remove it first.
       import: Import Bible EPUB
       importing: Importing...
-      remove: Remove
       openFolder: Open Offline Bible Folder
 commands:
   linkUnlinkedBibleReferences: Link unlinked Bible references
