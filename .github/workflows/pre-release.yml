@@ -8,16 +8,16 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
-  contents: write   # Required for tagging the release
-  pull-requests: write  # Required for creating release PRs
+  contents: write # Required for tagging the release
+  pull-requests: write # Required for creating release PRs
 
 jobs:
   draft-release:
     name: Draft Release PR
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.USER_TOKEN }}
 

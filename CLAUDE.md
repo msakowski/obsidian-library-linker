@@ -6,9 +6,7 @@ Also see [AGENTS.md](AGENTS.md) for general Obsidian plugin development guidelin
 
 Before every commit, you MUST:
 
-1. **Lint** — Run `pnpm test:lint` and fix any issues
-2. **Test** — Run `pnpm test:jest` and ensure all tests pass
-3. **Changeset** — Add a changeset file in `.changeset/` describing the change (use `patch` for fixes/improvements, `minor` for new features)
+- **Changeset** — Check `.changeset/` for an existing changeset that covers the changes. If none exists, add one (use `patch` for fixes/improvements, `minor` for new features). If one exists, propose an update if needed.
 
 ## Project overview
 

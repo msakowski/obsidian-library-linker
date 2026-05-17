@@ -457,5 +457,14 @@
     "name": "Vietnamese Sign Language",
     "isSignLanguage": true,
     "isRTL": false
+  },
+  {
+    "code": "I",
+    "locale": "it",
+    "vernacular": "Italiano",
+    "script": "ROMAN",
+    "name": "Italian",
+    "isSignLanguage": false,
+    "isRTL": false
   }
 ]

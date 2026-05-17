@@ -3276,15 +3276,6 @@
     "isRTL": true
   },
   {
-    "code": "I",
-    "locale": "it",
-    "vernacular": "Italiano",
-    "script": "ROMAN",
-    "name": "Italian",
-    "isSignLanguage": false,
-    "isRTL": false
-  },
-  {
     "code": "ISL",
     "locale": "ise",
     "vernacular": "Lingua dei segni italiana",
