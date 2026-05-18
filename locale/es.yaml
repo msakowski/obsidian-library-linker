@@ -85,7 +85,6 @@ settings:
       description: Importe un EPUB para añadir un nuevo idioma. Para reemplazar uno existente, elimínelo primero.
       import: Importar EPUB de la Biblia
       importing: Importando ...
-      remove: Eliminar
       openFolder: Abrir carpeta de la Biblia sin conexión
 commands:
   linkUnlinkedBibleReferences: Enlazar referencias bíblicas no enlazadas

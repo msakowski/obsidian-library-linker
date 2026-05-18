@@ -64,7 +64,6 @@ type Translation = {
         name: string;
         description: string;
         import: string;
-        remove: string;
         openFolder: string;
       };
     };
