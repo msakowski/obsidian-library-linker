@@ -1,5 +1,39 @@
 # obsidian-library-linker
 
+## 0.15.0
+
+### Minor Changes
+
+- [#276](https://github.com/msakowski/obsidian-library-linker/pull/276) [`d6035da`](https://github.com/msakowski/obsidian-library-linker/commit/d6035da63a61bf1990e77e71337d6fb52c5ff2a8) Thanks [@msakowski](https://github.com/msakowski)! - Enable offline Bible EPUB import on iOS, iPadOS, and Android. Previously this feature was desktop-only because the import service used Node `fs`/`crypto`. The repository now uses Obsidian's cross-platform `DataAdapter`, hashing uses Web Crypto, and the `Platform.isDesktopApp` gates around the offline-Bible UI are removed (the desktop-only "Open folder in Finder" button stays gated). Per-chapter `.md` mirror files are no longer written; existing files are left in place and self-clean on next re-import.
+
+- [#276](https://github.com/msakowski/obsidian-library-linker/pull/276) [`6a26a2d`](https://github.com/msakowski/obsidian-library-linker/commit/6a26a2de943ca4fcc1070930240bc0cfb8259661) Thanks [@msakowski](https://github.com/msakowski)! - Offline Bible settings now show a list of all installed languages with per-language Remove buttons, and the Import button is always available — the language is detected from the EPUB metadata. Importing an EPUB no longer requires switching the plugin's main language first. Re-importing a Bible for a language that is already installed shows a notice asking you to remove it first.
+
+### Patch Changes
+
+- [#287](https://github.com/msakowski/obsidian-library-linker/pull/287) [`0cd81e9`](https://github.com/msakowski/obsidian-library-linker/commit/0cd81e9fc4f45a844300a488358926a3396e6474) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add support for Italian.
+
+- [#273](https://github.com/msakowski/obsidian-library-linker/pull/273) [`c641657`](https://github.com/msakowski/obsidian-library-linker/commit/c641657221e35912c26bae0bdf357e8c14ca2449) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add simple-git-hooks with a pre-push hook that runs `pnpm test` to prevent pushing broken code.
+
+- [#277](https://github.com/msakowski/obsidian-library-linker/pull/277) [`78bc0f9`](https://github.com/msakowski/obsidian-library-linker/commit/78bc0f9420b0587866ba21b2f9706383a11b2156) Thanks [@pedro-silva-oliveira](https://github.com/pedro-silva-oliveira)! - Fix Portuguese WOL URL generation for Portuguese (Portugal) so the Bible fetcher uses the correct TPO endpoint.
+
+- [#266](https://github.com/msakowski/obsidian-library-linker/pull/266) [`f06506f`](https://github.com/msakowski/obsidian-library-linker/commit/f06506f1d51fb142ded39e91d292777f361db34f) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Centralize locale/language mapping into dedicated `getLocaleFromLanguage` and `getLanguageFromLocale` utils. Fixes Portuguese locale code from `pt` to `pt_pt`.
+
+- [#281](https://github.com/msakowski/obsidian-library-linker/pull/281) [`b193a94`](https://github.com/msakowski/obsidian-library-linker/commit/b193a94f318f00e3ec62f1931eaa8db493f878b9) Thanks [@msakowski](https://github.com/msakowski)! - Fix all Obsidian plugin scanner warnings: iOS regex compatibility, deprecated APIs, mobile safety guards, dependency replacements, and minAppVersion bump to 1.7.2.
+
+- [#274](https://github.com/msakowski/obsidian-library-linker/pull/274) [`65a90fa`](https://github.com/msakowski/obsidian-library-linker/commit/65a90faed96c6344347f31b32fb1b297f3175518) Thanks [@msakowski](https://github.com/msakowski)! - Fix single-chapter book detection in silent mode and link unlinked references
+
+  Single-chapter books (Obadiah, Philemon, 2 John, 3 John, Jude) can now be detected
+  without the `chapter:verse` colon format in all modes:
+  - **Silent mode**: typing `Judas 3` or `3. Johannes 14` now triggers the suggestion popup
+  - **Link unlinked references**: plain-text references like `Jude 3` are now detected and converted
+  - **Command mode** (`/b`): already worked, unchanged
+
+- [#290](https://github.com/msakowski/obsidian-library-linker/pull/290) [`cb0dae7`](https://github.com/msakowski/obsidian-library-linker/commit/cb0dae7d52edc61fce84b13e9e1c0418c409111c) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Refactor settings UI into per-section modules under `src/settings/`. No behavior change.
+
+- [#285](https://github.com/msakowski/obsidian-library-linker/pull/285) [`1705143`](https://github.com/msakowski/obsidian-library-linker/commit/17051434b6a037e7a50570c83dd51f97f5111f22) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Upgrade to Node 24, switch CI to ubuntu-slim, bump GitHub Actions to v6, and replace ts-jest with @swc/jest.
+
+- [#286](https://github.com/msakowski/obsidian-library-linker/pull/286) [`b91e6de`](https://github.com/msakowski/obsidian-library-linker/commit/b91e6dea4000b72476c7c6a50412254c8fb843fa) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add claude skill 'add-language'
+
 ## 0.14.0
 
 ### Minor Changes
