@@ -15,6 +15,7 @@ export const LOCALES = [
   'ko',
   'nl',
   'pt-PT',
+  'ru',
   'vi',
 ] as const;
 
@@ -31,6 +32,7 @@ export const LANGUAGE_CODES = [
   'O',
   'S',
   'TPO',
+  'U',
   'VT',
   'X',
   // Sign languages
