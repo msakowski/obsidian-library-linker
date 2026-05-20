@@ -1,0 +1,136 @@
+settings:
+  language:
+    name: 言語
+    description: 聖書の引照に使用する言語を選択してください
+  openAutomatically:
+    name: リンクを自動的に開く
+    description: 「リンクして開く」コマンドをリストの一番上に移動します
+  updatedLinkStructure:
+    name: リンクテキストを保持する
+    description: 有効にすると、聖書の本文を変換する際に現在のリンクテキストが保持されます
+    keepCurrentStructure: 現在の構造を保持する
+    usePluginSettings: プラグインの設定を使用する
+  noLanguageParameter:
+    name: 言語に依存しないリンクを作成する
+    description: 有効にすると、リンクに言語パラメータが追加されません。リンクはJW Libraryの言語で開きます
+  reconvertExistingLinks:
+    name: 既存のリンクを再変換する
+    description: 有効にすると、すでに変換済みの jwlibrary:// リンクが現在のフォーマット設定に従って再変換されます。これにより、すべてのリンクを最新の設定に合わせて更新できます。
+  bookLength:
+    name: リンクテキストの長さ
+    description: リンクテキストの長さを選択してください
+    short: 短い
+    medium: 中
+    long: 長い
+  linkStyling:
+    name: リンクのスタイル
+    description: リンクの前後または内側に追加する文字または絵文字を選択し、フォントスタイルを選択してください
+    reset: 'デフォルトにリセット： "{{default}}"'
+    prefixOutsideLink:
+      name: リンクの外側の接頭辞
+      description: リンクの前に追加するテキスト
+    prefixInsideLink:
+      name: リンクの内側の接頭辞
+      description: リンクテキストの先頭に追加するテキスト
+    suffixInsideLink:
+      name: リンクの内側の接尾辞
+      description: リンクテキストの末尾に追加するテキスト
+    suffixOutsideLink:
+      name: リンクの外側の接尾辞
+      description: リンクの後に追加するテキスト
+    presets:
+      name: スタイルプリセット
+      description: リンクのプリセットスタイルを選択してください
+    fontStyle:
+      name: フォントスタイル
+      description: リンクテキストのフォントスタイルを選択してください
+      normal: 標準
+      italic: イタリック
+      bold: 太字
+    preview:
+      name: リンクのプレビュー
+  bibleQuote:
+    name: 聖書引用のフォーマット
+    description: 聖書の引用を挿入する際のフォーマットを設定します
+    presets:
+      name: テンプレートプリセット
+      short: リンク + 引用
+      plain: 引用内のリンク
+      foldable: 折りたたみ可能なコールアウト
+      expanded: 展開されたコールアウト
+    template:
+      name: 引用テンプレート
+      description: '変数を使って引用フォーマットをカスタマイズします： {bibleRef}, {bibleRefLinked}, {quote}'
+    preview:
+      name: 聖書引用のプレビュー
+  offlineBible:
+    name: オフライン聖書
+    description: 聖書のEPUBを一度インポートし、ローカルの章データをオフラインの引用検索に使用します。
+    enabled:
+      name: オフライン聖書を有効にする
+      description: 引用パイプラインがインポートされたローカル聖書データを使用できるようにします。
+    preferOffline:
+      name: オフライン引用を優先する
+      description: オンライン取得を試みる前に、インポートされたオフライン聖書を確認します。
+    allowOnlineFallback:
+      name: オンラインフォールバックを許可する
+      description: オフラインデータが不足している場合、プラグインがオンラインの引用プロバイダーを試すことを許可します。
+    installedList:
+      name: インストール済みのオフライン聖書
+      description: 言語ごとに1つのオフライン聖書をインストールできます。言語はEPUBのメタデータから検出されます。
+      empty: オフライン聖書はまだインストールされていません。
+      entry: '{{sourceFileName}} — {{chapterCount}} 章、インポート日 {{importedAt}}'
+    actions:
+      name: オフライン聖書の操作
+      description: 新しい言語を追加するにはEPUBをインポートしてください。既存のものを置き換えるには、まず削除してください。
+      import: 聖書EPUBをインポート
+      importing: インポート中...
+      openFolder: オフライン聖書フォルダを開く
+commands:
+  linkUnlinkedBibleReferences: リンクされていない聖書の引照をリンクする
+  convertToJWLibraryLinks: 選択範囲のリンクをJW Libraryリンクに変換する
+  insertBibleQuotes: JW Libraryリンクの聖書引用を挿入する
+  insertBibleQuoteAtCursor: カーソル位置に聖書引用を挿入する
+convertSuggester:
+  emptyStateText: 変換タイプを選択してください
+  options:
+    all: すべて
+    bible: 聖書の引照
+    publication: 出版物
+contextMenu:
+  insertBibleQuote: 聖書引用を挿入
+notices:
+  convertedBibleReferences: '{{count}} 件の聖書引照を変換しました'
+  pleaseSelectText: 変換するテキストを選択してください
+  noBibleReferencesFound: 聖書の引照が見つかりませんでした
+  bibleQuotesInserted: 聖書引用を正常に挿入しました
+  bibleQuotesInsertedSelection: 選択範囲の聖書引用を挿入しました
+  bibleQuoteInsertedAtCursor: カーソル位置に聖書引用を挿入しました
+  noBibleLinksFound: JW Libraryリンクが見つかりませんでした
+  noBibleLinkAtCursor: カーソル位置にJW Libraryリンクが見つかりませんでした
+  bibleQuoteAlreadyExists: 聖書引用はすでに存在しています
+  errorInsertingQuotes: 聖書引用の挿入中にエラーが発生しました
+  bibleQuoteFetchFailed: 聖書の本文を取得できませんでした — もう一度お試しください
+  offlineBibleImported: '{{language}}のオフライン聖書をインポートしました'
+  offlineBibleRemoved: '{{language}}のオフライン聖書を削除しました'
+  offlineBibleAlreadyInstalled: '{{language}}のオフライン聖書はすでにインストールされています。再インポートするにはまず削除してください。'
+  offlineBibleImportFailed: オフライン聖書EPUBのインポートに失敗しました
+  offlineBibleOpenFolderFailed: オフライン聖書フォルダを開けませんでした
+suggestions:
+  createLink: 'リンクを作成： {{text}}'
+  createLinks: 'リンクを作成： {{text}}'
+  createAndOpen: 'リンクを作成して開く： {{text}}'
+  createMultipleAndOpenFirst: 'リンクを作成して最初のものを開く： {{text}}'
+  typing: '聖書の引照を入力： {{text}}'
+  typingEmpty: 聖書の引照を入力
+errors:
+  invalidVerseNumber: 節番号が無効です
+  versesAscendingOrder: 節は昇順でなければなりません
+  chaptersAscendingOrder: 章は昇順でなければなりません
+  invalidVerseFormat: 節の形式が無効です
+  invalidReferenceFormat: 引照の形式が無効です
+  unsupportedLanguage: サポートされていない言語です
+  offlineBibleNotInstalled: '{{language}}のオフライン聖書はインストールされていません。設定で聖書EPUBをインポートしてオフライン引用を有効にしてください。'
+  offlineBibleVerseMissing: '{{language}}のオフライン聖書では、要求された節が見つからないか読み取れません。'
+  offlineBibleLookupFailed: オフライン聖書の検索に失敗しました。
+  onlineFallbackDisabled: オンラインフォールバックは無効です。
