@@ -1,0 +1,136 @@
+settings:
+  language:
+    name: Ululimi
+    description: Salapo ululimi ulwa malembo ya Baibolo
+  openAutomatically:
+    name: Isulapo amalinki mu kupanga
+    description: Ipusha icipope ca "Ifumya kabili wisule" pa muulu wa fyonse
+  updatedLinkStructure:
+    name: Sungilila amalembo ya linki
+    description: Nga cabikwa, amalembo yaba muli linki yalisungwa ilyo ulekonkomesha amalembo ya Baibolo
+    keepCurrentStructure: Sunga icimo capali nomba
+    usePluginSettings: Bomfya ifyo wabika muli plugin
+  noLanguageParameter:
+    name: Panga linki ishishipanda pa lulimi
+    description: Nga cabikwa, ululimi tabwakubikwa muli linki. Linki yakeisula mu lulimi ulwaba mu JW Library
+  reconvertExistingLinks:
+    name: Pyangulula amalinki ayalipo
+    description: Nga cabikwa, amalinki ya jwlibrary:// ayalibembulwa kale yakapyangululwa ukulingana ne fyo wabika nomba. Ici cikalengo kuti wonse amalinki yacileelele ifyo waikatilako.
+  bookLength:
+    name: Ubutali bwa malembo ya linki
+    description: Salapo ubutali bwa malembo ya linki
+    short: Akashoso
+    medium: Mu kati
+    long: Akatali
+  linkStyling:
+    name: Ifyo linki yamoneka
+    description: Salapo ifishibilo nelyo emoji ya kubika ilyo ushilatampa linki, mu kati nelyo ku mpela. Salapo ne mfwala ya makalata.
+    reset: 'Bwesesha ku ca cilibatu: "{{default}}"'
+    prefixOutsideLink:
+      name: Ica kutampa kunse kwa linki
+      description: Amalembo ya kubika ilyo ushilatampa linki
+    prefixInsideLink:
+      name: Ica kutampa mu kati ka linki
+      description: Amalembo ya kubika kunkulo ya malembo ya linki
+    suffixInsideLink:
+      name: Ica kupwisha mu kati ka linki
+      description: Amalembo ya kubika ku mpela ya malembo ya linki
+    suffixOutsideLink:
+      name: Ica kupwisha kunse kwa linki
+      description: Amalembo ya kubika pa numa ya linki
+    presets:
+      name: Ifyalipekanishiwa
+      description: Salapo icalipekanishiwa ica linki
+    fontStyle:
+      name: Imfwala ya makalata
+      description: Salapo imfwala ya makalata ya malembo ya linki
+      normal: Iyatampikwa
+      italic: Iyatatatika
+      bold: Iyakosa
+    preview:
+      name: Ukumona linki
+  bibleQuote:
+    name: Ukupwililika amashiwi ya Baibolo
+    description: Pekanya ifyo amashiwi ya Baibolo yakaba ilyo yabikwa
+    presets:
+      name: Ifya kubomfya ifyalipekanishiwa
+      short: Linki + ishiwi
+      plain: Linki muli ishiwi
+      foldable: Akacalo akangapindiwa
+      expanded: Akacalo akafuulwa
+    template:
+      name: Icilangililo ca mashiwi
+      description: 'Bomfya ifishibilo ifi pa kupanga ifyo mashiwi yakaba: {bibleRef}, {bibleRefLinked}, {quote}'
+    preview:
+      name: Ukumona amashiwi ya Baibolo
+  offlineBible:
+    name: Baibolo wa kunse kwa intaneti
+    description: Letapo Baibolo wa EPUB umuku umo lwekela kabili bomfya amasambililo ya pa makompyuta nga taupo intaneti.
+    enabled:
+      name: Suminisha Baibolo wa kunse kwa intaneti
+      description: Suminisha amalembo ukubomfya Baibolo wa kuli kompyuta uo waletele.
+    preferOffline:
+      name: Cabilisha Baibolo wa kunse kwa intaneti
+      description: Tala umona Baibolo wakuli kompyuta pa ntaanshi ya ukufwaya pa intaneti.
+    allowOnlineFallback:
+      name: Suminisha ukufwaya pa intaneti
+      description: Nga Baibolo wakuli kompyuta tabaliko, plugin ikafwaye pa intaneti.
+    installedList:
+      name: BaiBolo ba kunse kwa intaneti abaletwa
+      description: Baibolo umo wene fye e wingaba pa ululimi. Ululimi lulipusukila mu lyashi lya EPUB.
+      empty: Tapali Baibolo wa kunse kwa intaneti uwaletwa.
+      entry: '{{sourceFileName}} — {{chapterCount}} ifipandwa, waletwa {{importedAt}}'
+    actions:
+      name: Ifyakucita pali Baibolo wa kunse kwa intaneti
+      description: Letapo EPUB pa kulundako ululimi ulupya. Pa kupyangulula uwalipo, tala umufumyepo.
+      import: Letapo Baibolo wa EPUB
+      importing: Ukuleta...
+      openFolder: Isula apo Baibolo wa kunse kwa intaneti aba
+commands:
+  linkUnlinkedBibleReferences: Lundako amalinki kuli amalembo ya Baibolo ayashili na malinki
+  convertToJWLibraryLinks: Pyangulula amalinki yasalwa ku malinki ya JW Library
+  insertBibleQuotes: Bikapo amashiwi ya Baibolo pa malinki ya JW Library
+  insertBibleQuoteAtCursor: Bikapo amashiwi ya Baibolo apo kasanika nshiba
+convertSuggester:
+  emptyStateText: Salapo umusango wa kupyangulula
+  options:
+    all: Fyonse
+    bible: Amalembo ya Baibolo
+    publication: Impapulo
+contextMenu:
+  insertBibleQuote: Bikapo amashiwi ya Baibolo
+notices:
+  convertedBibleReferences: 'Wapyangulula amalembo ya Baibolo {{count}}'
+  pleaseSelectText: Mukwai salapo amalembo ya kupyangulula
+  noBibleReferencesFound: Tapasangwa amalembo ya Baibolo
+  bibleQuotesInserted: Amashiwi ya Baibolo yabikwa bwino
+  bibleQuotesInsertedSelection: Amashiwi ya Baibolo yabikwa pa cisalwa
+  bibleQuoteInsertedAtCursor: Amashiwi ya Baibolo yabikwa apo kasanika nshiba
+  noBibleLinksFound: Tapasangwa amalinki ya JW Library
+  noBibleLinkAtCursor: Apo kasanika nshiba tapasangwa linki ya JW Library
+  bibleQuoteAlreadyExists: Amashiwi ya Baibolo nayalibapo kale
+  errorInsertingQuotes: Kwacitika ubulufyanya pa kubika amashiwi ya Baibolo
+  bibleQuoteFetchFailed: Te kufwaya amashiwi ya Baibolo — mukwai eseni cipya
+  offlineBibleImported: 'Baibolo wa kunse kwa intaneti waletwa wa {{language}}'
+  offlineBibleRemoved: 'Baibolo wa kunse kwa intaneti wafumishiwa wa {{language}}'
+  offlineBibleAlreadyInstalled: 'Baibolo wa kunse kwa intaneti uwa {{language}} naulipo kale. Mufumyepo intaanshi ya kuleta nakabili.'
+  offlineBibleImportFailed: Califilwa ukuleta Baibolo wa EPUB wa kunse kwa intaneti
+  offlineBibleOpenFolderFailed: Te kwisula ifaila ya Baibolo wa kunse kwa intaneti
+suggestions:
+  createLink: 'Panga linki: {{text}}'
+  createLinks: 'Panga amalinki: {{text}}'
+  createAndOpen: 'Panga linki kabili isula: {{text}}'
+  createMultipleAndOpenFirst: 'Panga amalinki kabili isula uwa kubalilapo: {{text}}'
+  typing: 'Lemba lembo lya Baibolo: {{text}}'
+  typingEmpty: Lemba lembo lya Baibolo
+errors:
+  invalidVerseNumber: Inomba ya cikomo tayalingwa
+  versesAscendingOrder: Ifikomo fifwile ukuba mu butantiko bwa ku muulu
+  chaptersAscendingOrder: Ifipandwa fifwile ukuba mu butantiko bwa ku muulu
+  invalidVerseFormat: Imimoneke ya cikomo tayalingwa
+  invalidReferenceFormat: Imimoneke ya lembo tayalingwa
+  unsupportedLanguage: Ululimi tabwasuminishiwa
+  offlineBibleNotInstalled: 'Tapali Baibolo wa kunse kwa intaneti uwa {{language}}. Letapo Baibolo wa EPUB mu settings pa kusuminisha amashiwi ya kunse kwa intaneti.'
+  offlineBibleVerseMissing: 'Ifikomo fyalombwa tafyabako nelyo te kufibelenga mu Baibolo wa kunse kwa intaneti uwa {{language}}.'
+  offlineBibleLookupFailed: Ukufwaya muli Baibolo wa kunse kwa intaneti kwalifilwa.
+  onlineFallbackDisabled: Ukufwaya pa intaneti kwaeshiwa.

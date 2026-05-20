@@ -47,7 +47,8 @@
   {
     "language": "Bemba",
     "users": 123600,
-    "supported": false
+    "supported": true,
+    "languageCode": "CW"
   },
   {
     "language": "Polish",

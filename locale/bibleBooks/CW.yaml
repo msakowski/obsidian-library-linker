@@ -1,0 +1,413 @@
+- id: 1
+  aliases: []
+  name:
+    long: Ukutendeka
+    medium: Ukute.
+    short: Ukt
+- id: 2
+  aliases: []
+  name:
+    long: Ukufuma
+    medium: Ukufu.
+    short: Ukf
+- id: 3
+  aliases: []
+  name:
+    long: Ubwina Lebi
+    medium: Lebi
+    short: Le
+- id: 4
+  aliases: []
+  name:
+    long: Impendwa
+    medium: Impe.
+    short: Imp
+- id: 5
+  aliases: []
+  name:
+    long: Amalango
+    medium: Amala.
+    short: Amg
+- id: 6
+  aliases: []
+  name:
+    long: Yoshua
+    medium: Yosh.
+    short: Yos
+- id: 7
+  aliases: []
+  name:
+    long: Abapingushi
+    medium: Abapi.
+    short: Aba
+- id: 8
+  aliases: []
+  name:
+    long: Ruti
+    medium: Ruti
+    short: Ru
+- id: 9
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Samwele
+    medium: 1 Sam.
+    short: 1Sa
+- id: 10
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Samwele
+    medium: 2 Sam.
+    short: 2Sa
+- id: 11
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Ishamfumu
+    medium: 1 Isha.
+    short: 1Is
+- id: 12
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Ishamfumu
+    medium: 2 Isha.
+    short: 2Is
+- id: 13
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Imilandu
+    medium: 1 Imila.
+    short: 1Im
+- id: 14
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Imilandu
+    medium: 2 Imila.
+    short: 2Im
+- id: 15
+  aliases: []
+  name:
+    long: Esra
+    medium: Esra
+    short: Esr
+- id: 16
+  aliases: []
+  name:
+    long: Nehemia
+    medium: Nehe.
+    short: Neh
+- id: 17
+  aliases: []
+  name:
+    long: Estere
+    medium: Este.
+    short: Est
+- id: 18
+  aliases: []
+  name:
+    long: Yobo
+    medium: Yobo
+    short: Yb
+- id: 19
+  aliases: []
+  name:
+    long: Amalumbo
+    medium: Ilumbo
+    short: Am
+- id: 20
+  aliases: []
+  name:
+    long: Amapinda
+    medium: Amapi.
+    short: Amp
+- id: 21
+  aliases: []
+  name:
+    long: Lukala Milandu
+    medium: Luk. Mil
+    short: Lik. Mil
+- id: 22
+  aliases: []
+  name:
+    long: Ulwimbo lwa Nyimbo
+    medium: Ulwimbo
+    short: Uln
+- id: 23
+  aliases: []
+  name:
+    long: Esaya
+    medium: Esa.
+    short: Es
+- id: 24
+  aliases: []
+  name:
+    long: Yeremia
+    medium: Yer.
+    short: Ye
+- id: 25
+  aliases: []
+  name:
+    long: Inyimbo sha Bulanda
+    medium: Inyimbo
+    short: Isb
+- id: 26
+  aliases: []
+  name:
+    long: Esekiele
+    medium: Esek.
+    short: Ek
+- id: 27
+  aliases: []
+  name:
+    long: Daniele
+    medium: Dan.
+    short: Da
+- id: 28
+  aliases: []
+  name:
+    long: Hosea
+    medium: Hos.
+    short: Ho
+- id: 29
+  aliases: []
+  name:
+    long: Yoele
+    medium: Yoele
+    short: Yoe
+- id: 30
+  aliases: []
+  name:
+    long: Amose
+    medium: Amose
+    short: Ams
+- id: 31
+  aliases: []
+  name:
+    long: Obadia
+    medium: Obad.
+    short: Ob
+- id: 32
+  aliases: []
+  name:
+    long: Yona
+    medium: Yona
+    short: Yn
+- id: 33
+  aliases: []
+  name:
+    long: Mika
+    medium: Mika
+    short: Mk
+- id: 34
+  aliases: []
+  name:
+    long: Nahumu
+    medium: Nahu.
+    short: Na
+- id: 35
+  aliases: []
+  name:
+    long: Habakuki
+    medium: Haba.
+    short: Hab
+- id: 36
+  aliases: []
+  name:
+    long: Sefania
+    medium: Sefa.
+    short: Sef
+- id: 37
+  aliases: []
+  name:
+    long: Hagai
+    medium: Hag.
+    short: Hg
+- id: 38
+  aliases: []
+  name:
+    long: Sekaria
+    medium: Seka.
+    short: Sek
+- id: 39
+  aliases: []
+  name:
+    long: Malaki
+    medium: Mal.
+    short: Mal
+- id: 40
+  aliases: []
+  name:
+    long: Mateo
+    medium: Mat.
+    short: Mt
+- id: 41
+  aliases: []
+  name:
+    long: Marko
+    medium: Marko
+    short: Mko
+- id: 42
+  aliases: []
+  name:
+    long: Luka
+    medium: Luka
+    short: Lk
+- id: 43
+  aliases: []
+  name:
+    long: Yohane
+    medium: Yoh.
+    short: Yh
+- id: 44
+  aliases: []
+  name:
+    long: Imilimo
+    medium: Imil.
+    short: Imi
+- id: 45
+  aliases: []
+  name:
+    long: Abena Roma
+    medium: Rom.
+    short: Ro
+- id: 46
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Abena Korinti
+    medium: 1 Kor.
+    short: 1Ko
+- id: 47
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Abena Korinti
+    medium: 2Ko.
+    short: 2Ko
+- id: 48
+  aliases: []
+  name:
+    long: Abena Galatia
+    medium: Gal.
+    short: Ga
+- id: 49
+  aliases: []
+  name:
+    long: Abena Efese
+    medium: Efes.
+    short: Ef
+- id: 50
+  aliases: []
+  name:
+    long: Abena Filipi
+    medium: Flp.
+    short: Flp
+- id: 51
+  aliases: []
+  name:
+    long: Abena Kolose
+    medium: Kol.
+    short: Ko
+- id: 52
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Abena Tesalonika
+    medium: 1 Tes.
+    short: 1Te
+- id: 53
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Abena Tesalonika
+    medium: 2 Tes.
+    short: 2Te
+- id: 54
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Timote
+    medium: 1 Tim.
+    short: 1Ti
+- id: 55
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Timote
+    medium: 2 Tim.
+    short: 2Ti
+- id: 56
+  aliases: []
+  name:
+    long: Tito
+    medium: Tt.
+    short: Tt
+- id: 57
+  aliases: []
+  name:
+    long: Filemone
+    medium: File.
+    short: Flm
+- id: 58
+  aliases: []
+  name:
+    long: AbaHebere
+    medium: Heb.
+    short: He
+- id: 59
+  aliases: []
+  name:
+    long: Yakobo
+    medium: Yako.
+    short: Yak
+- id: 60
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Petro
+    medium: 1 Pet.
+    short: 1Pe
+- id: 61
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Petro
+    medium: 2 Pet.
+    short: 2Pe
+- id: 62
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Yohane
+    medium: 1 Yoh.
+    short: 1Yo
+- id: 63
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Yohane
+    medium: 2 Yoh.
+    short: 2Yo
+- id: 64
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3 Yohane
+    medium: 3 Yoh.
+    short: 3Yo
+- id: 65
+  aliases: []
+  name:
+    long: Yuda
+    medium: Yuda
+    short: Yu
+- id: 66
+  aliases: []
+  name:
+    long: Ukusokolola
+    medium: Ukus.
+    short: Uks
