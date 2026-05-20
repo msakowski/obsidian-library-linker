@@ -15,6 +15,7 @@ export const LOCALES = [
   'ko',
   'nl',
   'pt-PT',
+  'tl',
   'vi',
 ] as const;
 
@@ -30,6 +31,7 @@ export const LANGUAGE_CODES = [
   'KO',
   'O',
   'S',
+  'TG',
   'TPO',
   'VT',
   'X',

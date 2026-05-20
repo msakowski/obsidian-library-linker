@@ -42,7 +42,8 @@
   {
     "language": "Tagalog",
     "users": 133152,
-    "supported": false
+    "supported": true,
+    "languageCode": "TG"
   },
   {
     "language": "Bemba",

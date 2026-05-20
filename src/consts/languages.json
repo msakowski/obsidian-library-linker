@@ -466,5 +466,14 @@
     "name": "Italian",
     "isSignLanguage": false,
     "isRTL": false
+  },
+  {
+    "code": "TG",
+    "locale": "tl",
+    "vernacular": "Tagalog",
+    "script": "ROMAN",
+    "name": "Tagalog",
+    "isSignLanguage": false,
+    "isRTL": false
   }
 ]

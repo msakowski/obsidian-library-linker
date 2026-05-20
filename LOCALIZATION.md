@@ -14,6 +14,7 @@
 | KO   | 한국어 / Korean                   |
 | O    | Nederlands / Dutch                |
 | S    | español / Spanish                 |
+| TG   | Tagalog / Tagalog                 |
 | TPO  | português / Portuguese (Portugal) |
 | VT   | Tiếng Việt / Vietnamese           |
 | X    | Deutsch / German                  |
