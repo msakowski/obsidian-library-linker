@@ -131,10 +131,17 @@ Use conventional commit format: `fix:`, `feat:`, `chore:`, `perf:`, `docs:`
 
 ### Branch naming
 
-- `fix/<description>` for bug fixes
-- `feat/<description>` for new features
-- `perf/<description>` for performance improvements
-- `docs/<description>` for documentation changes
+- `feat/<branchname>` for new features
+- `fix/<branchname>` for bug fixes
+- `chore/<branchname>` for chores / maintenance
+- `perf/<branchname>` for performance improvements
+- `docs/<branchname>` for documentation changes
+
+### Git worktrees
+
+- Always create git worktrees under the project root's `.worktrees/` folder. The worktree path mirrors the branch name, including the prefix — e.g. branch `feat/foo` lives at `.worktrees/feat/foo`, `fix/bar` at `.worktrees/fix/bar`, `chore/baz` at `.worktrees/chore/baz`.
+- Never place worktrees outside the repo or in a sibling directory.
+- `.worktrees/` is gitignored — do not commit it.
 
 ## Adding a new language
 
