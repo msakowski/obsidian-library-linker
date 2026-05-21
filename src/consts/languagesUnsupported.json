@@ -7245,15 +7245,6 @@
     "isRTL": false
   },
   {
-    "code": "U",
-    "locale": "ru",
-    "vernacular": "русский",
-    "script": "CYRILLIC",
-    "name": "Russian",
-    "isSignLanguage": false,
-    "isRTL": false
-  },
-  {
     "code": "RSL",
     "locale": "rsl",
     "vernacular": "русский жестовый",

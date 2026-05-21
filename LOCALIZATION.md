@@ -16,6 +16,7 @@
 | O    | Nederlands / Dutch                |
 | S    | español / Spanish                 |
 | TPO  | português / Portuguese (Portugal) |
+| U    | русский / Russian                 |
 | VT   | Tiếng Việt / Vietnamese           |
 | X    | Deutsch / German                  |
 
