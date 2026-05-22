@@ -26,7 +26,8 @@
   {
     "language": "Italian",
     "users": 254334,
-    "supported": false
+    "supported": true,
+    "languageCode": "I"
   },
   {
     "language": "German",
@@ -37,12 +38,14 @@
   {
     "language": "Japanese",
     "users": 214118,
-    "supported": false
+    "supported": true,
+    "languageCode": "J"
   },
   {
     "language": "Tagalog",
     "users": 133152,
-    "supported": false
+    "supported": true,
+    "languageCode": "TG"
   },
   {
     "language": "Bemba",
@@ -129,7 +132,8 @@
   {
     "language": "Russian",
     "users": 36794,
-    "supported": false
+    "supported": true,
+    "languageCode": "U"
   },
   {
     "language": "Kikuyu",

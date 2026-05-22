@@ -3321,15 +3321,6 @@
     "isRTL": false
   },
   {
-    "code": "J",
-    "locale": "ja",
-    "vernacular": "日本語",
-    "script": "JAPANESE",
-    "name": "Japanese",
-    "isSignLanguage": false,
-    "isRTL": false
-  },
-  {
     "code": "JSL",
     "locale": "jsl",
     "vernacular": "日本手話",
@@ -7245,15 +7236,6 @@
     "isRTL": false
   },
   {
-    "code": "U",
-    "locale": "ru",
-    "vernacular": "русский",
-    "script": "CYRILLIC",
-    "name": "Russian",
-    "isSignLanguage": false,
-    "isRTL": false
-  },
-  {
     "code": "RSL",
     "locale": "rsl",
     "vernacular": "русский жестовый",
@@ -8033,15 +8015,6 @@
     "vernacular": "табасаран",
     "script": "CYRILLIC",
     "name": "Tabasaran",
-    "isSignLanguage": false,
-    "isRTL": false
-  },
-  {
-    "code": "TG",
-    "locale": "tl",
-    "vernacular": "Tagalog",
-    "script": "ROMAN",
-    "name": "Tagalog",
     "isSignLanguage": false,
     "isRTL": false
   },

@@ -468,6 +468,33 @@
     "isRTL": false
   },
   {
+    "code": "U",
+    "locale": "ru",
+    "vernacular": "русский",
+    "script": "CYRILLIC",
+    "name": "Russian",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "J",
+    "locale": "ja",
+    "vernacular": "日本語",
+    "script": "JAPANESE",
+    "name": "Japanese",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "TG",
+    "locale": "tl",
+    "vernacular": "Tagalog",
+    "script": "ROMAN",
+    "name": "Tagalog",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
     "code": "CW",
     "locale": "bem",
     "vernacular": "Cibemba",

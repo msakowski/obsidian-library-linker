@@ -1,0 +1,413 @@
+- id: 1
+  aliases: []
+  name:
+    long: Бытие
+    medium: Быт.
+    short: Бт
+- id: 2
+  aliases: []
+  name:
+    long: Исход
+    medium: Исх.
+    short: Исх
+- id: 3
+  aliases: []
+  name:
+    long: Левит
+    medium: Лев.
+    short: Лв
+- id: 4
+  aliases: []
+  name:
+    long: Числа
+    medium: Чис.
+    short: Чс
+- id: 5
+  aliases: []
+  name:
+    long: Второзаконие
+    medium: Втор.
+    short: Вт
+- id: 6
+  aliases: []
+  name:
+    long: Иисус Навин
+    medium: Иис. Н.
+    short: ИсН
+- id: 7
+  aliases: []
+  name:
+    long: Судей
+    medium: Суд.
+    short: Сд
+- id: 8
+  aliases: []
+  name:
+    long: Руфь
+    medium: Руфь
+    short: Рф
+- id: 9
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Самуила
+    medium: 1 Сам.
+    short: 1См
+- id: 10
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Самуила
+    medium: 2 Сам.
+    short: 2См
+- id: 11
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Царей
+    medium: 1 Цар.
+    short: 1Цр
+- id: 12
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Царей
+    medium: 2 Цар.
+    short: 2Цр
+- id: 13
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Летопись
+    medium: 1 Лет.
+    short: 1Лт
+- id: 14
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Летопись
+    medium: 2 Лет.
+    short: 2Лт
+- id: 15
+  aliases: []
+  name:
+    long: Ездра
+    medium: Езд.
+    short: Езд
+- id: 16
+  aliases: []
+  name:
+    long: Неемия
+    medium: Неем.
+    short: Не
+- id: 17
+  aliases: []
+  name:
+    long: Эсфирь
+    medium: Эсф.
+    short: Эсф
+- id: 18
+  aliases: []
+  name:
+    long: Иов
+    medium: Иов
+    short: Иов
+- id: 19
+  aliases: []
+  name:
+    long: Псалмы
+    medium: Пс.
+    short: Пс
+- id: 20
+  aliases: []
+  name:
+    long: Притчи
+    medium: Прит.
+    short: Пр
+- id: 21
+  aliases: []
+  name:
+    long: Экклезиаст
+    medium: Эккл.
+    short: Эк
+- id: 22
+  aliases: []
+  name:
+    long: Песня Соломона
+    medium: Песня
+    short: Псн
+- id: 23
+  aliases: []
+  name:
+    long: Исайя
+    medium: Ис.
+    short: Иса
+- id: 24
+  aliases: []
+  name:
+    long: Иеремия
+    medium: Иер.
+    short: Иер
+- id: 25
+  aliases: []
+  name:
+    long: Плач Иеремии
+    medium: Плач
+    short: Пл
+- id: 26
+  aliases: []
+  name:
+    long: Иезекииль
+    medium: Иез.
+    short: Иез
+- id: 27
+  aliases: []
+  name:
+    long: Даниил
+    medium: Дан.
+    short: Дан
+- id: 28
+  aliases: []
+  name:
+    long: Осия
+    medium: Ос.
+    short: Ос
+- id: 29
+  aliases: []
+  name:
+    long: Иоиль
+    medium: Иоиль
+    short: Ил
+- id: 30
+  aliases: []
+  name:
+    long: Амос
+    medium: Ам.
+    short: Ам
+- id: 31
+  aliases: []
+  name:
+    long: Авдий
+    medium: Авд.
+    short: Авд
+- id: 32
+  aliases: []
+  name:
+    long: Иона
+    medium: Иона
+    short: Ион
+- id: 33
+  aliases: []
+  name:
+    long: Михей
+    medium: Мих.
+    short: Мх
+- id: 34
+  aliases: []
+  name:
+    long: Наум
+    medium: Наум
+    short: На
+- id: 35
+  aliases: []
+  name:
+    long: Аввакум
+    medium: Авв.
+    short: Авв
+- id: 36
+  aliases: []
+  name:
+    long: Софония
+    medium: Соф.
+    short: Сф
+- id: 37
+  aliases: []
+  name:
+    long: Аггей
+    medium: Агг.
+    short: Аг
+- id: 38
+  aliases: []
+  name:
+    long: Захария
+    medium: Зах.
+    short: Зх
+- id: 39
+  aliases: []
+  name:
+    long: Малахия
+    medium: Мал.
+    short: Мл
+- id: 40
+  aliases: []
+  name:
+    long: Матфея
+    medium: Матф.
+    short: Мф
+- id: 41
+  aliases: []
+  name:
+    long: Марка
+    medium: Мар.
+    short: Мк
+- id: 42
+  aliases: []
+  name:
+    long: Луки
+    medium: Луки
+    short: Лк
+- id: 43
+  aliases: []
+  name:
+    long: Иоанна
+    medium: Иоан.
+    short: Ин
+- id: 44
+  aliases: []
+  name:
+    long: Деяния
+    medium: Деян.
+    short: Де
+- id: 45
+  aliases: []
+  name:
+    long: Римлянам
+    medium: Рим.
+    short: Рм
+- id: 46
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Коринфянам
+    medium: 1 Кор.
+    short: 1Кр
+- id: 47
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Коринфянам
+    medium: 2 Кор.
+    short: 2Кр
+- id: 48
+  aliases: []
+  name:
+    long: Галатам
+    medium: Гал.
+    short: Гл
+- id: 49
+  aliases: []
+  name:
+    long: Эфесянам
+    medium: Эф.
+    short: Эф
+- id: 50
+  aliases: []
+  name:
+    long: Филиппийцам
+    medium: Флп.
+    short: Фп
+- id: 51
+  aliases: []
+  name:
+    long: Колоссянам
+    medium: Кол.
+    short: Кл
+- id: 52
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Фессалоникийцам
+    medium: 1 Фес.
+    short: 1Фс
+- id: 53
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Фессалоникийцам
+    medium: 2 Фес.
+    short: 2Фс
+- id: 54
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Тимофею
+    medium: 1 Тим.
+    short: 1Тм
+- id: 55
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Тимофею
+    medium: 2 Тим.
+    short: 2Тм
+- id: 56
+  aliases: []
+  name:
+    long: Титу
+    medium: Титу
+    short: Тит
+- id: 57
+  aliases: []
+  name:
+    long: Филимону
+    medium: Флм.
+    short: Фм
+- id: 58
+  aliases: []
+  name:
+    long: Евреям
+    medium: Евр.
+    short: Евр
+- id: 59
+  aliases: []
+  name:
+    long: Иакова
+    medium: Иак.
+    short: Иак
+- id: 60
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Петра
+    medium: 1 Пет.
+    short: 1Пт
+- id: 61
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Петра
+    medium: 2 Пет.
+    short: 2Пт
+- id: 62
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Иоанна
+    medium: 1 Иоан.
+    short: 1Ин
+- id: 63
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Иоанна
+    medium: 2 Иоан.
+    short: 2Ин
+- id: 64
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3 Иоанна
+    medium: 3 Иоан.
+    short: 3Ин
+- id: 65
+  aliases: []
+  name:
+    long: Иуды
+    medium: Иуды
+    short: Иуды
+- id: 66
+  aliases: []
+  name:
+    long: Откровение
+    medium: Отк.
+    short: Отк
