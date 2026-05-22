@@ -8028,15 +8028,6 @@
     "isRTL": false
   },
   {
-    "code": "TG",
-    "locale": "tl",
-    "vernacular": "Tagalog",
-    "script": "ROMAN",
-    "name": "Tagalog",
-    "isSignLanguage": false,
-    "isRTL": false
-  },
-  {
     "code": "TH",
     "locale": "ty",
     "vernacular": "Tahiti",

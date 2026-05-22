@@ -1,0 +1,136 @@
+settings:
+  language:
+    name: Wika
+    description: Piliin ang wika para sa mga reperensiya sa Bibliya
+  openAutomatically:
+    name: Buksan ang mga link nang awtomatiko
+    description: Inililipat ang utos na "I-link at buksan" sa tuktok ng listahan
+  updatedLinkStructure:
+    name: Panatilihin ang teksto ng link
+    description: Kapag pinagana, ang kasalukuyang teksto ng link ay pananatilihin kapag kino-convert ang teksto sa Bibliya
+    keepCurrentStructure: Panatilihin ang kasalukuyang istruktura
+    usePluginSettings: Gamitin ang mga setting ng plugin
+  noLanguageParameter:
+    name: Gumawa ng mga link na hindi nakadepende sa wika
+    description: Kapag pinagana, walang parameter ng wika ang idaragdag sa link. Bubuksan ang mga link sa wika ng JW Library
+  reconvertExistingLinks:
+    name: I-reconvert ang mga umiiral na link
+    description: Kapag pinagana, ang mga na-convert na jwlibrary:// link ay muling iko-convert ayon sa kasalukuyang mga setting ng formatting. Ito ay nagbibigay-daan sa iyong i-update ang lahat ng link upang tumugma sa iyong pinakabagong mga kagustuhan.
+  bookLength:
+    name: Haba ng teksto ng link
+    description: Piliin ang haba ng teksto ng link
+    short: Maikli
+    medium: Katamtaman
+    long: Mahaba
+  linkStyling:
+    name: Estilo ng link
+    description: Pumili ng mga karakter o emoji na idaragdag bago, pagkatapos, o sa loob ng link, piliin ang estilo ng font
+    reset: 'I-reset sa default: "{{default}}"'
+    prefixOutsideLink:
+      name: Prefix sa labas ng link
+      description: Teksto na idaragdag bago ang link
+    prefixInsideLink:
+      name: Prefix sa loob ng link
+      description: Teksto na idaragdag sa simula ng teksto ng link
+    suffixInsideLink:
+      name: Suffix sa loob ng link
+      description: Teksto na idaragdag sa dulo ng teksto ng link
+    suffixOutsideLink:
+      name: Suffix sa labas ng link
+      description: Teksto na idaragdag pagkatapos ng link
+    presets:
+      name: Mga preset na estilo
+      description: Pumili ng preset na estilo para sa link
+    fontStyle:
+      name: Estilo ng font
+      description: Piliin ang estilo ng font para sa teksto ng link
+      normal: Normal
+      italic: Italiko
+      bold: Bold
+    preview:
+      name: Preview ng link
+  bibleQuote:
+    name: Pag-format ng sipi sa Bibliya
+    description: I-configure kung paano nakaformat ang mga sipi sa Bibliya kapag inilagay
+    presets:
+      name: Mga preset na template
+      short: Link + sipi
+      plain: Link sa sipi
+      foldable: Naitutupig na Callout
+      expanded: Pinalawak na Callout
+    template:
+      name: Template ng sipi
+      description: 'I-customize ang format ng sipi gamit ang mga variable: {bibleRef}, {bibleRefLinked}, {quote}'
+    preview:
+      name: Preview ng sipi sa Bibliya
+  offlineBible:
+    name: Offline na Bibliya
+    description: Mag-import ng Bible EPUB nang isang beses at gamitin ang lokal na data ng kabanata para sa offline na paghahanap ng sipi.
+    enabled:
+      name: Paganahin ang offline na Bibliya
+      description: Payagan ang pipeline ng sipi na gamitin ang na-import na lokal na data ng Bibliya.
+    preferOffline:
+      name: Mas gusto ang mga offline na sipi
+      description: Suriin ang na-import na offline na Bibliya bago subukang kunin online.
+    allowOnlineFallback:
+      name: Payagan ang online na fallback
+      description: Kung walang offline na data, payagan ang plugin na subukan ang online na tagapagbigay ng sipi.
+    installedList:
+      name: Mga naka-install na offline na Bibliya
+      description: Isang offline na Bibliya lamang ang maaaring i-install kada wika. Ang wika ay natutukoy mula sa metadata ng EPUB.
+      empty: Wala pang naka-install na offline na Bibliya.
+      entry: '{{sourceFileName}} — {{chapterCount}} kabanata, na-import {{importedAt}}'
+    actions:
+      name: Mga aksyon para sa offline na Bibliya
+      description: Mag-import ng EPUB upang magdagdag ng bagong wika. Para palitan ang umiiral, alisin muna ito.
+      import: Mag-import ng Bible EPUB
+      importing: Nag-i-import...
+      openFolder: Buksan ang Folder ng Offline na Bibliya
+commands:
+  linkUnlinkedBibleReferences: I-link ang mga hindi naka-link na reperensiya sa Bibliya
+  convertToJWLibraryLinks: I-convert ang mga link sa napili tungo sa mga link ng JW Library
+  insertBibleQuotes: Ipasok ang mga sipi sa Bibliya para sa mga link ng JW Library
+  insertBibleQuoteAtCursor: Ipasok ang sipi sa Bibliya sa lokasyon ng cursor
+convertSuggester:
+  emptyStateText: Pumili ng uri ng conversion
+  options:
+    all: Lahat
+    bible: Mga reperensiya sa Bibliya
+    publication: Mga publikasyon
+contextMenu:
+  insertBibleQuote: Ipasok ang sipi sa Bibliya
+notices:
+  convertedBibleReferences: 'Na-convert na {{count}} reperensiya sa Bibliya'
+  pleaseSelectText: Mangyaring pumili ng teksto na iko-convert
+  noBibleReferencesFound: Walang nakitang reperensiya sa Bibliya
+  bibleQuotesInserted: Matagumpay na naipasok ang mga sipi sa Bibliya
+  bibleQuotesInsertedSelection: Naipasok ang mga sipi sa Bibliya para sa napili
+  bibleQuoteInsertedAtCursor: Naipasok ang sipi sa Bibliya sa lokasyon ng cursor
+  noBibleLinksFound: Walang nakitang link ng JW Library
+  noBibleLinkAtCursor: Walang nakitang link ng JW Library sa lokasyon ng cursor
+  bibleQuoteAlreadyExists: Mayroon nang sipi sa Bibliya
+  errorInsertingQuotes: Error sa pagpasok ng mga sipi sa Bibliya
+  bibleQuoteFetchFailed: Hindi makuha ang teksto ng Bibliya — mangyaring subukan muli
+  offlineBibleImported: 'Na-import ang offline na Bibliya para sa {{language}}'
+  offlineBibleRemoved: 'Inalis ang offline na Bibliya para sa {{language}}'
+  offlineBibleAlreadyInstalled: 'May naka-install nang offline na Bibliya para sa {{language}}. Alisin muna ito upang muling mag-import.'
+  offlineBibleImportFailed: Nabigo ang pag-import ng offline na Bible EPUB
+  offlineBibleOpenFolderFailed: Hindi mabuksan ang folder ng offline na Bibliya
+suggestions:
+  createLink: 'Gumawa ng link: {{text}}'
+  createLinks: 'Gumawa ng mga link: {{text}}'
+  createAndOpen: 'Gumawa ng link at buksan: {{text}}'
+  createMultipleAndOpenFirst: 'Gumawa ng mga link at buksan ang una: {{text}}'
+  typing: 'Maglagay ng reperensiya sa Bibliya: {{text}}'
+  typingEmpty: Maglagay ng reperensiya sa Bibliya
+errors:
+  invalidVerseNumber: Hindi wastong numero ng talata
+  versesAscendingOrder: Ang mga talata ay dapat nasa pataas na pagkakasunod
+  chaptersAscendingOrder: Ang mga kabanata ay dapat nasa pataas na pagkakasunod
+  invalidVerseFormat: Hindi wastong format ng talata
+  invalidReferenceFormat: Hindi wastong format ng reperensiya
+  unsupportedLanguage: Hindi suportadong wika
+  offlineBibleNotInstalled: 'Walang naka-install na offline na Bibliya para sa {{language}}. Mag-import ng Bible EPUB sa mga setting upang paganahin ang mga offline na sipi.'
+  offlineBibleVerseMissing: 'Ang mga hinihinging talata ay wala o hindi nababasa sa offline na Bibliya para sa {{language}}.'
+  offlineBibleLookupFailed: Nabigo ang paghahanap sa offline na Bibliya.
+  onlineFallbackDisabled: Naka-disable ang online na fallback.
