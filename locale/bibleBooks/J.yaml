@@ -1,0 +1,396 @@
+- id: 1
+  aliases: []
+  name:
+    long: 創世記
+    medium: 創
+    short: 創
+- id: 2
+  aliases: []
+  name:
+    long: 出エジプト記
+    medium: 出
+    short: 出
+- id: 3
+  aliases: []
+  name:
+    long: レビ記
+    medium: レビ
+    short: レビ
+- id: 4
+  aliases: []
+  name:
+    long: 民数記
+    medium: 民
+    short: 民
+- id: 5
+  aliases: []
+  name:
+    long: 申命記
+    medium: 申
+    short: 申
+- id: 6
+  aliases: []
+  name:
+    long: ヨシュア
+    medium: ヨシュ
+    short: ヨシ
+- id: 7
+  aliases: []
+  name:
+    long: 裁き人
+    medium: 裁
+    short: 裁
+- id: 8
+  aliases: []
+  name:
+    long: ルツ
+    medium: ルツ
+    short: ルツ
+- id: 9
+  aliases: []
+  name:
+    long: サムエル第一
+    medium: サム一
+    short: サ一
+- id: 10
+  aliases: []
+  name:
+    long: サムエル第二
+    medium: サム二
+    short: サ二
+- id: 11
+  aliases: []
+  name:
+    long: 列王第一
+    medium: 王一
+    short: 王一
+- id: 12
+  aliases: []
+  name:
+    long: 列王第二
+    medium: 王二
+    short: 王二
+- id: 13
+  aliases: []
+  name:
+    long: 歴代第一
+    medium: 代一
+    short: 代一
+- id: 14
+  aliases: []
+  name:
+    long: 歴代第二
+    medium: 代二
+    short: 代二
+- id: 15
+  aliases: []
+  name:
+    long: エズラ
+    medium: エズ
+    short: エズ
+- id: 16
+  aliases: []
+  name:
+    long: ネヘミヤ
+    medium: ネヘ
+    short: ネヘ
+- id: 17
+  aliases: []
+  name:
+    long: エステル
+    medium: エス
+    short: エス
+- id: 18
+  aliases: []
+  name:
+    long: ヨブ
+    medium: ヨブ
+    short: ヨブ
+- id: 19
+  aliases: []
+  name:
+    long: 詩編
+    medium: 詩
+    short: 詩
+- id: 20
+  aliases: []
+  name:
+    long: 格言
+    medium: 格
+    short: 格
+- id: 21
+  aliases: []
+  name:
+    long: 伝道の書
+    medium: 伝
+    short: 伝
+- id: 22
+  aliases: []
+  name:
+    long: ソロモンの歌
+    medium: ソロ
+    short: ソロ
+- id: 23
+  aliases: []
+  name:
+    long: イザヤ
+    medium: イザ
+    short: イザ
+- id: 24
+  aliases: []
+  name:
+    long: エレミヤ
+    medium: エレ
+    short: エレ
+- id: 25
+  aliases: []
+  name:
+    long: 哀歌
+    medium: 哀
+    short: 哀
+- id: 26
+  aliases: []
+  name:
+    long: エゼキエル
+    medium: エゼ
+    short: エゼ
+- id: 27
+  aliases: []
+  name:
+    long: ダニエル
+    medium: ダニ
+    short: ダニ
+- id: 28
+  aliases: []
+  name:
+    long: ホセア
+    medium: ホセ
+    short: ホセ
+- id: 29
+  aliases: []
+  name:
+    long: ヨエル
+    medium: ヨエ
+    short: ヨエ
+- id: 30
+  aliases: []
+  name:
+    long: アモス
+    medium: アモ
+    short: アモ
+- id: 31
+  aliases: []
+  name:
+    long: オバデヤ
+    medium: オバ
+    short: オバ
+- id: 32
+  aliases: []
+  name:
+    long: ヨナ
+    medium: ヨナ
+    short: ヨナ
+- id: 33
+  aliases: []
+  name:
+    long: ミカ
+    medium: ミカ
+    short: ミカ
+- id: 34
+  aliases: []
+  name:
+    long: ナホム
+    medium: ナホ
+    short: ナホ
+- id: 35
+  aliases: []
+  name:
+    long: ハバクク
+    medium: ハバ
+    short: ハバ
+- id: 36
+  aliases: []
+  name:
+    long: ゼパニヤ
+    medium: ゼパ
+    short: ゼパ
+- id: 37
+  aliases: []
+  name:
+    long: ハガイ
+    medium: ハガ
+    short: ハガ
+- id: 38
+  aliases: []
+  name:
+    long: ゼカリヤ
+    medium: ゼカ
+    short: ゼカ
+- id: 39
+  aliases: []
+  name:
+    long: マラキ
+    medium: マラ
+    short: マラ
+- id: 40
+  aliases: []
+  name:
+    long: マタイ
+    medium: マタ
+    short: マタ
+- id: 41
+  aliases: []
+  name:
+    long: マルコ
+    medium: マル
+    short: マル
+- id: 42
+  aliases: []
+  name:
+    long: ルカ
+    medium: ルカ
+    short: ルカ
+- id: 43
+  aliases: []
+  name:
+    long: ヨハネ
+    medium: ヨハ
+    short: ヨハ
+- id: 44
+  aliases: []
+  name:
+    long: 使徒
+    medium: 使徒
+    short: 使徒
+- id: 45
+  aliases: []
+  name:
+    long: ローマ
+    medium: ロマ
+    short: ロマ
+- id: 46
+  aliases: []
+  name:
+    long: コリント第一
+    medium: コリ一
+    short: コ一
+- id: 47
+  aliases: []
+  name:
+    long: コリント第二
+    medium: コリ二
+    short: コ二
+- id: 48
+  aliases: []
+  name:
+    long: ガラテア
+    medium: ガラ
+    short: ガラ
+- id: 49
+  aliases: []
+  name:
+    long: エフェソス
+    medium: エフェ
+    short: エフ
+- id: 50
+  aliases: []
+  name:
+    long: フィリピ
+    medium: フィリ
+    short: フィリ
+- id: 51
+  aliases: []
+  name:
+    long: コロサイ
+    medium: コロ
+    short: コロ
+- id: 52
+  aliases: []
+  name:
+    long: テサロニケ第一
+    medium: テサ一
+    short: テサ一
+- id: 53
+  aliases: []
+  name:
+    long: テサロニケ第二
+    medium: テサ二
+    short: テサ二
+- id: 54
+  aliases: []
+  name:
+    long: テモテ第一
+    medium: テモ一
+    short: テモ一
+- id: 55
+  aliases: []
+  name:
+    long: テモテ第二
+    medium: テモ二
+    short: テモ二
+- id: 56
+  aliases: []
+  name:
+    long: テトス
+    medium: テト
+    short: テト
+- id: 57
+  aliases: []
+  name:
+    long: フィレモン
+    medium: フィレ
+    short: フィレ
+- id: 58
+  aliases: []
+  name:
+    long: ヘブライ
+    medium: ヘブ
+    short: ヘブ
+- id: 59
+  aliases: []
+  name:
+    long: ヤコブ
+    medium: ヤコ
+    short: ヤコ
+- id: 60
+  aliases: []
+  name:
+    long: ペテロ第一
+    medium: ペテ一
+    short: ペ一
+- id: 61
+  aliases: []
+  name:
+    long: ペテロ第二
+    medium: ペテ二
+    short: ペ二
+- id: 62
+  aliases: []
+  name:
+    long: ヨハネ第一
+    medium: ヨハ一
+    short: ヨ一
+- id: 63
+  aliases: []
+  name:
+    long: ヨハネ第二
+    medium: ヨハ二
+    short: ヨ二
+- id: 64
+  aliases: []
+  name:
+    long: ヨハネ第三
+    medium: ヨハ三
+    short: ヨ三
+- id: 65
+  aliases: []
+  name:
+    long: ユダ
+    medium: ユダ
+    short: ユダ
+- id: 66
+  aliases: []
+  name:
+    long: 啓示
+    medium: 啓
+    short: 啓

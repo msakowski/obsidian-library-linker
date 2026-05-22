@@ -38,7 +38,8 @@
   {
     "language": "Japanese",
     "users": 214118,
-    "supported": false
+    "supported": true,
+    "languageCode": "J"
   },
   {
     "language": "Tagalog",
