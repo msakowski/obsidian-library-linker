@@ -1,5 +1,17 @@
 # obsidian-library-linker
 
+## 0.16.0
+
+### Minor Changes
+
+- [#295](https://github.com/msakowski/obsidian-library-linker/pull/295) [`17bb230`](https://github.com/msakowski/obsidian-library-linker/commit/17bb23040ffeee02dcb4f3058082f61b5ef22801) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add support for Cibemba.
+
+- [#291](https://github.com/msakowski/obsidian-library-linker/pull/291) [`db7237c`](https://github.com/msakowski/obsidian-library-linker/commit/db7237cffbb7c134fdf81b21e9c6105837f53c46) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add support for Japanese.
+
+- [#292](https://github.com/msakowski/obsidian-library-linker/pull/292) [`cf80ae9`](https://github.com/msakowski/obsidian-library-linker/commit/cf80ae996f5adaac211d43d6742bc2897f3944a7) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add support for Russian.
+
+- [#294](https://github.com/msakowski/obsidian-library-linker/pull/294) [`4b57384`](https://github.com/msakowski/obsidian-library-linker/commit/4b573843d1ff877fddbf963a22686f432a961750) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add support for Tagalog.
+
 ## 0.15.0
 
 ### Minor Changes
