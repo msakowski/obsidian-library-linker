@@ -18,6 +18,7 @@ pnpm dev
 ## Testing the Plugin Locally in Obsidian
 
 1. Start dev mode with `pnpm dev`
+
 2. Symlink the project directory into your Obsidian vault's plugins folder:
 
    ```bash
@@ -25,21 +26,22 @@ pnpm dev
    ```
 
 3. In Obsidian, go to **Settings > Community Plugins** and enable **JW Library Linker**
+
 4. After making code changes, run the Obsidian command **"Reload app without saving"** to pick up the new build
 
 ## Available Scripts
 
-| Script                | Description                                         |
-| --------------------- | --------------------------------------------------- |
-| `pnpm dev`            | Watch mode with debug logging enabled               |
-| `pnpm build`          | Type-check and production build (minified, no sourcemaps) |
-| `pnpm test`           | Run lint, type-check, and unit tests                |
-| `pnpm test:lint`      | ESLint check                                        |
-| `pnpm test:lint-fix`  | ESLint with auto-fix                                |
-| `pnpm test:types`     | TypeScript type-check (`tsc --noEmit`)              |
-| `pnpm test:jest`      | Run Jest unit tests                                 |
-| `pnpm test:jest-watch`| Run Jest in watch mode                              |
-| `pnpm changeset`      | Create a changeset for versioning                   |
+| Script                 | Description                                               |
+| ---------------------- | --------------------------------------------------------- |
+| `pnpm dev`             | Watch mode with debug logging enabled                     |
+| `pnpm build`           | Type-check and production build (minified, no sourcemaps) |
+| `pnpm test`            | Run lint, type-check, and unit tests                      |
+| `pnpm test:lint`       | ESLint check                                              |
+| `pnpm test:lint-fix`   | ESLint with auto-fix                                      |
+| `pnpm test:types`      | TypeScript type-check (`tsc --noEmit`)                    |
+| `pnpm test:jest`       | Run Jest unit tests                                       |
+| `pnpm test:jest-watch` | Run Jest in watch mode                                    |
+| `pnpm changeset`       | Create a changeset for versioning                         |
 
 ## Project Structure
 

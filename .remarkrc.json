@@ -1,0 +1,14 @@
+{
+  "settings": {
+    "bullet": "-",
+    "emphasis": "_",
+    "strong": "*",
+    "strongRepetition": 2,
+    "fences": true,
+    "listItemIndent": "one",
+    "rule": "-",
+    "ruleRepetition": 3,
+    "ruleSpaces": false
+  },
+  "plugins": [["remark-gfm", { "tablePipeAlign": true }], "remark-preset-lint-recommended"]
+}

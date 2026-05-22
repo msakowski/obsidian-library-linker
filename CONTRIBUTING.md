@@ -19,6 +19,35 @@ Our development approach is driven by the following core principles:
 - We aim to be compatible with other well-established plugins and avoid interference. Please report issues if found. [Known issues](https://github.com/msakowski/obsidian-library-linker/#known-issues)
 - We respect copyright laws and do not expose or reveal copyrighted content from JW Library.
 
+## Linting & Formatting
+
+This project uses two linters:
+
+- **ESLint** (type-checked rules) — TypeScript/JavaScript source under `src/`
+- **remark** (`remark-preset-lint-recommended` + `remark-gfm`) — Markdown files
+
+| Command                 | Purpose                                |
+| ----------------------- | -------------------------------------- |
+| `pnpm test:lint`        | Run ESLint and remark                  |
+| `pnpm test:lint-fix`    | Run both with auto-fix                 |
+| `pnpm test:lint-ts`     | ESLint only                            |
+| `pnpm test:lint-md`     | remark only                            |
+| `pnpm test:lint-md-fix` | remark with `--output` to rewrite docs |
+
+### Git hooks
+
+Managed via `simple-git-hooks` (configured in `package.json`):
+
+- **pre-commit** — runs `lint-staged`, which lints (and auto-fixes) only staged files
+- **pre-push** — runs `pnpm test:affected` (ESLint + remark + `tsc` + Jest on tests related to changes since `origin/main`); a push is aborted if any check fails. Use `pnpm test` for the full suite.
+
+### Recommended VS Code extensions
+
+Install these for inline diagnostics matching CI:
+
+- [`dbaeumer.vscode-eslint`](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) — ESLint
+- [`unifiedjs.vscode-remark`](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-remark) — remark for Markdown
+
 ## Contribution Process
 
 To ensure a smooth contribution, please follow these steps:

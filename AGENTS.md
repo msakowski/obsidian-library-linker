@@ -12,11 +12,12 @@ In a downstream plugin, if `TEMPLATE_USAGE.md` still exists at the repo root, th
 2. Run `bun install && bun run init` to reset inherited template state (CHANGELOG, versions.json, manifest, package.json).
 3. Complete the manual follow-ups listed in `TEMPLATE_USAGE.md` (plugin class renames, README rewrite, `docs/` user guide, `documentation/` technical docs, funding links).
 4. **Remove the initialization tooling from the downstream plugin once initialization is complete.** Delete:
-    - `TEMPLATE_USAGE.md`
-    - `scripts/init-from-template.ts` (and its `.spec.ts` if present)
-    - The `"init"` entry in `package.json` `scripts`
 
-    These files only belong in uninitialized clones of the template. Leaving them behind is a signal that step 3 isn't actually complete.
+   - `TEMPLATE_USAGE.md`
+   - `scripts/init-from-template.ts` (and its `.spec.ts` if present)
+   - The `"init"` entry in `package.json` `scripts`
+
+   These files only belong in uninitialized clones of the template. Leaving them behind is a signal that step 3 isn't actually complete.
 
 Skipping this section (in a downstream plugin) leads to template leakage: bogus version entries in `CHANGELOG.md`, wrong repo URLs in `package.json`, and the `my-plugin` id shipping in the first release.
 
@@ -199,9 +200,9 @@ scripts/
 ```
 
 - Manual install for testing: copy `main.js`, `manifest.json`, `styles.css` (if any) to:
-    ```
-    <Vault>/.obsidian/plugins/<plugin-id>/
-    ```
+  ```
+  <Vault>/.obsidian/plugins/<plugin-id>/
+  ```
 - Reload Obsidian and enable the plugin in **Settings → Community plugins**.
 
 ## File & folder conventions
@@ -240,16 +241,16 @@ scripts/
 ## Manifest rules (`manifest.json`)
 
 - Must include (non-exhaustive):
-    - `id` (plugin ID; for local dev it should match the folder name)
-    - `name`
-    - `version` (Semantic Versioning `x.y.z`)
-    - `minAppVersion`
-    - `description`
-    - `isDesktopOnly` (boolean)
-    - Optional: `author`, `authorUrl`, `fundingUrl` (string or map)
+  - `id` (plugin ID; for local dev it should match the folder name)
+  - `name`
+  - `version` (Semantic Versioning `x.y.z`)
+  - `minAppVersion`
+  - `description`
+  - `isDesktopOnly` (boolean)
+  - Optional: `author`, `authorUrl`, `fundingUrl` (string or map)
 - Never change `id` after release. Treat it as stable API.
 - Keep `minAppVersion` accurate when using newer APIs. Common bumps: `1.1.0` (`ButtonComponent.setIcon`/`setTooltip`), `1.4.10` (`AbstractInputSuggest`), `1.5.7` (`Vault.getFileByPath`), `1.7.2` (`Workspace.revealLeaf`).
-- Canonical requirements are coded here: https://github.com/obsidianmd/obsidian-releases/blob/master/.github/workflows/validate-plugin-entry.yml
+- Canonical requirements are coded here: <https://github.com/obsidianmd/obsidian-releases/blob/master/.github/workflows/validate-plugin-entry.yml>
 
 ### Community catalog listing rules
 
@@ -313,7 +314,7 @@ Follow Obsidian's **Developer Policies** and **Plugin Guidelines**. In particula
 ## Coding conventions
 
 - **Keep `main.ts` minimal**: Focus only on plugin lifecycle (onload, onunload, addCommand calls). Delegate all feature logic to separate modules.
-- **Split large files**: If any file exceeds ~200-300 lines, consider breaking it into smaller, focused modules.
+- **Split large files**: If any file exceeds \~200-300 lines, consider breaking it into smaller, focused modules.
 - **Use clear module boundaries**: Each file should have a single, well-defined responsibility.
 - Bundle everything into `main.js` (no unbundled runtime deps).
 - Avoid Node/Electron APIs if you want mobile compatibility; set `isDesktopOnly` accordingly.
@@ -614,10 +615,10 @@ this.registerInterval(
 
 ## References
 
-- Obsidian sample plugin using Bun: https://github.com/rzbin/obsidian-plugin-template-bun
-- API documentation: https://docs.obsidian.md
-- Bun documentation: https://bun.com/docs
-- Developer policies: https://docs.obsidian.md/Developer+policies
-- Plugin guidelines: https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines
-- Style guide: https://help.obsidian.md/style-guide
+- Obsidian sample plugin using Bun: <https://github.com/rzbin/obsidian-plugin-template-bun>
+- API documentation: <https://docs.obsidian.md>
+- Bun documentation: <https://bun.com/docs>
+- Developer policies: <https://docs.obsidian.md/Developer+policies>
+- Plugin guidelines: <https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines>
+- Style guide: <https://help.obsidian.md/style-guide>
 - When fixing community-catalog review warnings, mine sibling plugin commits for prior fixes before re-inventing solutions — the same warnings recur across plugins and most have already been solved once.
