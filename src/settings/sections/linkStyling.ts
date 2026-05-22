@@ -269,8 +269,6 @@ export function updateLinkStylingPreview(tab: SettingsTabContext): void {
       convertBibleTextToMarkdownLink(reference, tab.plugin.settings),
     );
 
-    console.log(markdownLinks, tab.plugin.settings);
-
     if (!markdownLinks.every(Boolean)) {
       throw new Error('Failed to generate one or more markdown links');
     }
