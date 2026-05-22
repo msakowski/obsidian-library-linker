@@ -493,5 +493,14 @@
     "name": "Tagalog",
     "isSignLanguage": false,
     "isRTL": false
+  },
+  {
+    "code": "CW",
+    "locale": "bem",
+    "vernacular": "Cibemba",
+    "script": "ROMAN",
+    "name": "Cibemba",
+    "isSignLanguage": false,
+    "isRTL": false
   }
 ]

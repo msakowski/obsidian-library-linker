@@ -6,6 +6,7 @@
 | ---- | --------------------------------- |
 | B    | čeština / Czech                   |
 | C    | hrvatski / Croatian               |
+| CW   | Cibemba / Cibemba                 |
 | D    | Dansk / Danish                    |
 | E    | English / English                 |
 | F    | français / French                 |
