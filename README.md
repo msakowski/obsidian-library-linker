@@ -8,12 +8,15 @@ Instantly create, convert, and enrich Bible references with direct links to [JW 
 | ---- | --------------------------------- |
 | E    | English / English                 |
 | S    | español / Spanish                 |
-| F    | français / French                 |
 | TPO  | português / Portuguese (Portugal) |
+| F    | français / French                 |
 | I    | Italiano / Italian                |
 | X    | Deutsch / German                  |
-| VT   | Tiếng Việt / Vietnamese           |
+| J    | 日本語 / Japanese                 |
+| TG   | Tagalog / Tagalog                 |
 | KO   | 한국어 / Korean                   |
+| U    | русский / Russian                 |
+| VT   | Tiếng Việt / Vietnamese           |
 
 … and many more. See [LOCALIZATION.md](LOCALIZATION.md) for the full list and instructions on adding a new language.
 
