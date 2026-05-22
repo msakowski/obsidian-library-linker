@@ -1,6 +1,9 @@
 import { Notice, Platform, Setting } from 'obsidian';
 import type { Language } from '@/types';
-import { getOfflineBibleAbsolutePath } from '@/services/PluginDataPathService';
+import {
+  getOfflineBibleAbsolutePath,
+  getOfflineBibleVaultPath,
+} from '@/services/PluginDataPathService';
 import { logger } from '@/utils/logger';
 import { LANGUAGE_LABELS } from '@/consts/languages';
 import type { SettingsTabContext } from '@/settings/types';
@@ -193,10 +196,11 @@ async function handleBibleRemoval(
 
 async function openOfflineBibleFolder(tab: SettingsTabContext): Promise<void> {
   if (!Platform.isDesktop) return;
+  const vaultPath = getOfflineBibleVaultPath(tab.app, tab.plugin.manifest.id);
+  if (!(await tab.app.vault.adapter.exists(vaultPath))) {
+    await tab.app.vault.adapter.mkdir(vaultPath);
+  }
   const folderPath = getOfflineBibleAbsolutePath(tab.app, tab.plugin.manifest.id);
-  // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic require for desktop-only Node.js API
-  const { mkdir } = require('fs/promises') as typeof import('fs/promises');
-  await mkdir(folderPath, { recursive: true });
   // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic require for desktop-only Electron API
   const { shell } = require('electron') as typeof import('electron');
   const error = await shell.openPath(folderPath);
