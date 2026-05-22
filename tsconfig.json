@@ -20,5 +20,5 @@
     },
   },
   "include": ["**/*.ts"],
-  "exclude": ["node_modules/**", "*.js", "*.mjs"],
+  "exclude": ["node_modules/**", ".worktrees", "*.js", "*.mjs"],
 }
