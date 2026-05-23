@@ -12,9 +12,9 @@ Instantly create, convert, and enrich Bible references with direct links to [JW 
 | F    | français / French                 |
 | I    | Italiano / Italian                |
 | X    | Deutsch / German                  |
-| J    | 日本語 / Japanese                 |
+| J    | 日本語 / Japanese                    |
 | TG   | Tagalog / Tagalog                 |
-| KO   | 한국어 / Korean                   |
+| KO   | 한국어 / Korean                      |
 | U    | русский / Russian                 |
 | VT   | Tiếng Việt / Vietnamese           |
 
@@ -48,7 +48,7 @@ Type a Bible reference and the plugin creates a markdown link that opens directl
 
 ### 2. Insert Bible Quotes
 
-Fetch actual Bible text from jw.org and insert it directly into your notes.
+Fetch actual Bible text from jw\.org and insert it directly into your notes.
 
 **Three ways to insert quotes:**
 
@@ -80,7 +80,7 @@ You can also create your own template using the variables `{bibleRef}`, `{bibleR
 
 ### 3. Convert Existing Links
 
-Convert `jwpub://` links, publication links, and jw.org web links into `jwlibrary://` links that open directly in JW Library.
+Convert `jwpub://` links, publication links, and jw\.org web links into `jwlibrary://` links that open directly in JW Library.
 
 1. Select text containing links
 2. Open the command palette (Ctrl/Cmd + P)

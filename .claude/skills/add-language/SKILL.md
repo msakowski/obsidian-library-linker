@@ -1,8 +1,9 @@
 ---
+
 name: add-language
-description: Add support for a new language to jw-library-linker. Moves the entry from src/consts/languagesUnsupported.json to src/consts/languages.json, fetches Bible book names from jw.org, and updates all the wiring listed in LOCALIZATION.md (LANGUAGE_CODES, LOCALES, sign-language map, bibleBooks YAML, locale YAML, changeset). Use when the user asks to "add language X", "support language X", or invokes /add-language with a language name or JW Library code.
-allowed-tools: Bash(node .claude/skills/add-language/scripts/*), Write(locale/*)
----
+description: Add support for a new language to jw-library-linker. Moves the entry from src/consts/languagesUnsupported.json to src/consts/languages.json, fetches Bible book names from jw\.org, and updates all the wiring listed in LOCALIZATION.md (LANGUAGE\_CODES, LOCALES, sign-language map, bibleBooks YAML, locale YAML, changeset). Use when the user asks to "add language X", "support language X", or invokes /add-language with a language name or JW Library code.
+allowed-tools: Bash(node .claude/skills/add-language/scripts/_), Write(locale/_)
+--------------------------------------------------------------------------------
 
 # Add a new language
 
@@ -22,7 +23,7 @@ node .claude/skills/add-language/scripts/add-language.mjs <locale>
 
 For spoken languages this single command:
 
-- Fetches `locale/bibleBooks/<CODE>.yaml` from jw.org
+- Fetches `locale/bibleBooks/<CODE>.yaml` from jw\.org
 - Verifies the yaml (66 entries, contiguous ids 1…66, name fields, prefix rule) — **hard-fails before any mutation if invalid**
 - Moves the entry from `languagesUnsupported.json` → `languages.json`
 - Adds `code` to `LANGUAGE_CODES` and `locale` to `LOCALES` in `src/consts/languages.ts`
@@ -57,9 +58,11 @@ Skip if `locale/<locale>.yaml` already exists.
 If missing, create it by translating each value in `locale/en.yaml` into the target language. Keep the keys, structure, and any `{{placeholders}}` or quoted defaults intact — translate only the user-facing strings.
 
 **YAML quoting rule:** Any value that contains a `{{placeholder}}` must be wrapped in single quotes, e.g.:
+
 ```yaml
 notInstalled: '{{language}}のオフライン聖書はインストールされていません。'
 ```
+
 This applies whenever the placeholder is adjacent to non-ASCII text or other characters that would confuse the YAML parser. When in doubt, quote it.
 
 ## Step 4 — Verify

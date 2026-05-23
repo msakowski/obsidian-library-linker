@@ -1,0 +1,7 @@
+node_modules
+main.js
+CHANGELOG.md
+.changeset
+.claude/docs
+graphify-out
+offline-bible

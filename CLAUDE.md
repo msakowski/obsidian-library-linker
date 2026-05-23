@@ -17,7 +17,7 @@ Key features:
 - `/b` trigger for inline Bible reference suggestions
 - Automatic detection of Bible references in text
 - Batch conversion of `jwpub://` links to `jwlibrary://` links
-- Bible quote insertion (fetches text from jw.org)
+- Bible quote insertion (fetches text from jw\.org)
 - Multi-language support (9 languages)
 
 ## Tech stack
@@ -43,7 +43,7 @@ Key features:
 
 ## Project structure
 
-```
+```text
 src/
 ├── __tests__/                # Tests mirror src/ structure
 │   ├── __helpers__/          # createSettings(), initializeBibleBooksForTests()
@@ -117,7 +117,7 @@ Errors thrown in utils use translation keys as messages (e.g. `throw new Error('
 
 Format: `.changeset/<descriptive-name>.md`
 
-```
+```markdown
 ---
 'jw-library-linker': patch
 ---
