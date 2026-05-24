@@ -5,6 +5,7 @@ import { Platform, requestUrl } from 'obsidian';
 import { cleanHtmlText } from '@/utils/cleanHtmlText';
 import { logger } from '@/utils/logger';
 import { getLocaleFromLanguage } from '@/utils/getLocaleFromLanguage';
+import { normalizeRange } from '@/utils/normalizeRange';
 
 interface BibleTextResult {
   text: string;
@@ -75,9 +76,9 @@ export class BibleTextFetcher {
   ): Promise<BibleTextResult> {
     logger.log('fetchBibleText', reference, language);
     try {
-      const { book, chapter, verseRanges } = reference;
+      const { book, ranges } = reference;
 
-      if (!verseRanges || verseRanges.length === 0) {
+      if (!ranges || ranges.length === 0) {
         return {
           text: '',
           citation: '',
@@ -86,7 +87,8 @@ export class BibleTextFetcher {
         };
       }
 
-      const html = await this.fetchChapterHtml(book, chapter, language);
+      const { chapterStart } = normalizeRange(ranges[0]);
+      const html = await this.fetchChapterHtml(book, chapterStart, language);
       const result = this.extractBibleText(html, reference);
 
       return {
@@ -418,16 +420,16 @@ export class BibleTextFetcher {
     html: string,
     reference: BibleReference,
   ): { text: string; citation: string } {
-    const { book, chapter, verseRanges } = reference;
+    const { book, ranges } = reference;
 
-    if (!verseRanges || verseRanges.length === 0) {
+    if (!ranges || ranges.length === 0) {
       return {
         text: 'Unable to extract Bible text - no verse ranges',
         citation: this.generateCitation(reference),
       };
     }
 
-    const { start, end } = verseRanges[0];
+    const { chapterStart: chapter, verseStart: start, verseEnd: end } = normalizeRange(ranges[0]);
 
     const doc = new DOMParser().parseFromString(html, 'text/html');
 
@@ -481,15 +483,15 @@ export class BibleTextFetcher {
   }
 
   private static generateCitation(reference: BibleReference): string {
-    const { book, chapter, verseRanges } = reference;
+    const { book, ranges } = reference;
 
-    if (!verseRanges || verseRanges.length === 0) {
-      return `Book ${book}:${chapter}`;
+    if (!ranges || ranges.length === 0) {
+      return `Book ${book}`;
     }
 
-    const { start, end } = verseRanges[0];
-    const verseText = start === end ? `${start}` : `${start}-${end}`;
+    const { chapterStart, verseStart, verseEnd } = normalizeRange(ranges[0]);
+    const verseText = verseStart === verseEnd ? `${verseStart}` : `${verseStart}-${verseEnd}`;
 
-    return `Book ${book}:${chapter}:${verseText}`;
+    return `Book ${book}:${chapterStart}:${verseText}`;
   }
 }

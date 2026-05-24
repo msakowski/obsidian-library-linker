@@ -72,8 +72,7 @@ describe('offline Bible citation flow', () => {
     const citation = await provider.getCitation(
       {
         book: 1,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 2 }],
+        ranges: [{ chapterStart: 1, verseStart: 1, verseEnd: 2 }],
       },
       'X',
     );
@@ -140,8 +139,7 @@ describe('offline Bible citation flow', () => {
     const citation = await provider.getCitation(
       {
         book: 1,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 2 }],
+        ranges: [{ chapterStart: 1, verseStart: 1, verseEnd: 2 }],
       },
       'X',
     );
@@ -264,8 +262,7 @@ describe('offline Bible citation flow', () => {
     const citation = await provider.getCitation(
       {
         book: 1,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 1 }],
+        ranges: [{ chapterStart: 1, verseStart: 1 }],
       },
       'X',
     );
@@ -321,8 +318,7 @@ describe('offline Bible citation flow', () => {
     const citation = await provider.getCitation(
       {
         book: 1,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 2 }],
+        ranges: [{ chapterStart: 1, verseStart: 1, verseEnd: 2 }],
       },
       'X',
     );
@@ -386,8 +382,7 @@ describe('offline Bible citation flow', () => {
     const citation = await provider.getCitation(
       {
         book: 1,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 2 }],
+        ranges: [{ chapterStart: 1, verseStart: 1, verseEnd: 2 }],
       },
       'X',
     );
@@ -448,8 +443,7 @@ describe('offline Bible citation flow', () => {
     const citation = await provider.getCitation(
       {
         book: 1,
-        chapter: 1,
-        verseRanges: [{ start: 2, end: 2 }],
+        ranges: [{ chapterStart: 1, verseStart: 2 }],
       },
       'X',
     );
@@ -510,8 +504,7 @@ describe('offline Bible citation flow', () => {
     const citation = await provider.getCitation(
       {
         book: 1,
-        chapter: 1,
-        verseRanges: [{ start: 2, end: 2 }],
+        ranges: [{ chapterStart: 1, verseStart: 2 }],
       },
       'X',
     );

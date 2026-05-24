@@ -9,17 +9,16 @@ import { createSettingGroup } from '@/settings/createSettingGroup';
 import type { SettingsTabContext } from '@/settings/types';
 
 const previewReferences: BibleReference[] = [
-  { book: 66, chapter: 21, verseRanges: [{ start: 4, end: 4 }] },
+  { book: 66, ranges: [{ chapterStart: 21, verseStart: 4 }] },
   {
     book: 19,
-    chapter: 23,
-    verseRanges: [
-      { start: 1, end: 3 },
-      { start: 5, end: 5 },
-      { start: 7, end: 9 },
+    ranges: [
+      { chapterStart: 23, verseStart: 1, verseEnd: 3 },
+      { chapterStart: 23, verseStart: 5 },
+      { chapterStart: 23, verseStart: 7, verseEnd: 9 },
     ],
   },
-  { book: 13, chapter: 29, verseRanges: [{ start: 11, end: 11 }] },
+  { book: 13, ranges: [{ chapterStart: 29, verseStart: 11 }] },
 ];
 
 function presetButton(

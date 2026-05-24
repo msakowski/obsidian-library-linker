@@ -17,8 +17,7 @@ describe('parseBibleReference', () => {
       input: 'joh3:16',
       expected: {
         book: 43,
-        chapter: 3,
-        verseRanges: [{ start: 16, end: 16 }],
+        ranges: [{ chapterStart: 3, verseStart: 16 }],
       },
     },
     {
@@ -26,8 +25,7 @@ describe('parseBibleReference', () => {
       input: 'joh 3:16',
       expected: {
         book: 43,
-        chapter: 3,
-        verseRanges: [{ start: 16, end: 16 }],
+        ranges: [{ chapterStart: 3, verseStart: 16 }],
       },
     },
     {
@@ -35,8 +33,7 @@ describe('parseBibleReference', () => {
       input: 'ps23:1-3',
       expected: {
         book: 19,
-        chapter: 23,
-        verseRanges: [{ start: 1, end: 3 }],
+        ranges: [{ chapterStart: 23, verseStart: 1, verseEnd: 3 }],
       },
     },
     {
@@ -44,12 +41,11 @@ describe('parseBibleReference', () => {
       input: 'joh1:1,2,4,6,7-8,12-14',
       expected: {
         book: 43,
-        chapter: 1,
-        verseRanges: [
-          { start: 1, end: 2 }, // 1,2 becomes a range
-          { start: 4, end: 4 }, // single verse
-          { start: 6, end: 8 }, // 6,7-8 becomes one range
-          { start: 12, end: 14 }, // explicit range
+        ranges: [
+          { chapterStart: 1, verseStart: 1, verseEnd: 2 }, // 1,2 becomes a range
+          { chapterStart: 1, verseStart: 4 }, // single verse
+          { chapterStart: 1, verseStart: 6, verseEnd: 8 }, // 6,7-8 becomes one range
+          { chapterStart: 1, verseStart: 12, verseEnd: 14 }, // explicit range
         ],
       },
     },
@@ -58,12 +54,11 @@ describe('parseBibleReference', () => {
       input: 'joh 1:1-2, 4, 6, 7-8, 12-14',
       expected: {
         book: 43,
-        chapter: 1,
-        verseRanges: [
-          { start: 1, end: 2 },
-          { start: 4, end: 4 },
-          { start: 6, end: 8 },
-          { start: 12, end: 14 },
+        ranges: [
+          { chapterStart: 1, verseStart: 1, verseEnd: 2 },
+          { chapterStart: 1, verseStart: 4 },
+          { chapterStart: 1, verseStart: 6, verseEnd: 8 },
+          { chapterStart: 1, verseStart: 12, verseEnd: 14 },
         ],
       },
     },
@@ -73,8 +68,7 @@ describe('parseBibleReference', () => {
       language: 'VT' as Language,
       expected: {
         book: 3,
-        chapter: 25,
-        verseRanges: [{ start: 1, end: 1 }],
+        ranges: [{ chapterStart: 25, verseStart: 1 }],
       },
     },
     {
@@ -83,8 +77,7 @@ describe('parseBibleReference', () => {
       language: 'VT' as Language,
       expected: {
         book: 9,
-        chapter: 3,
-        verseRanges: [{ start: 1, end: 1 }],
+        ranges: [{ chapterStart: 3, verseStart: 1 }],
       },
     },
     {
@@ -93,8 +86,7 @@ describe('parseBibleReference', () => {
       language: 'KO' as Language,
       expected: {
         book: 66,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 1 }],
+        ranges: [{ chapterStart: 1, verseStart: 1 }],
       },
     },
     {
@@ -103,8 +95,7 @@ describe('parseBibleReference', () => {
       language: 'KO' as Language,
       expected: {
         book: 62,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 1 }],
+        ranges: [{ chapterStart: 1, verseStart: 1 }],
       },
     },
     {
@@ -113,8 +104,7 @@ describe('parseBibleReference', () => {
       language: 'KO' as Language,
       expected: {
         book: 62,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 1 }],
+        ranges: [{ chapterStart: 1, verseStart: 1 }],
       },
     },
   ];
@@ -231,9 +221,7 @@ describe('parseBibleReference', () => {
       const result = parseBibleReference('matt3:1-4:11', 'E');
       expect(result).toEqual({
         book: 40, // Matthew
-        chapter: 3,
-        endChapter: 4,
-        verseRanges: [{ start: 1, end: 11 }],
+        ranges: [{ chapterStart: 3, chapterEnd: 4, verseStart: 1, verseEnd: 11 }],
       });
     });
 
@@ -241,9 +229,7 @@ describe('parseBibleReference', () => {
       const result = parseBibleReference('Matt 3:1-4:11', 'E');
       expect(result).toEqual({
         book: 40,
-        chapter: 3,
-        endChapter: 4,
-        verseRanges: [{ start: 1, end: 11 }],
+        ranges: [{ chapterStart: 3, chapterEnd: 4, verseStart: 1, verseEnd: 11 }],
       });
     });
 
@@ -251,9 +237,7 @@ describe('parseBibleReference', () => {
       const result = parseBibleReference('Matt. 3:1-4:11', 'E');
       expect(result).toEqual({
         book: 40,
-        chapter: 3,
-        endChapter: 4,
-        verseRanges: [{ start: 1, end: 11 }],
+        ranges: [{ chapterStart: 3, chapterEnd: 4, verseStart: 1, verseEnd: 11 }],
       });
     });
 
@@ -261,9 +245,7 @@ describe('parseBibleReference', () => {
       const result = parseBibleReference('1mo1:1-2:3', 'X');
       expect(result).toEqual({
         book: 1, // Genesis
-        chapter: 1,
-        endChapter: 2,
-        verseRanges: [{ start: 1, end: 3 }],
+        ranges: [{ chapterStart: 1, chapterEnd: 2, verseStart: 1, verseEnd: 3 }],
       });
     });
 
@@ -292,8 +274,7 @@ describe('parseBibleReference', () => {
         input: 'Obadiah 1',
         expected: {
           book: 31,
-          chapter: 1,
-          verseRanges: [{ start: 1, end: 1 }],
+          ranges: [{ chapterStart: 1, verseStart: 1 }],
         },
       },
       {
@@ -301,8 +282,7 @@ describe('parseBibleReference', () => {
         input: 'Philemon 5',
         expected: {
           book: 57,
-          chapter: 1,
-          verseRanges: [{ start: 5, end: 5 }],
+          ranges: [{ chapterStart: 1, verseStart: 5 }],
         },
       },
       {
@@ -310,8 +290,7 @@ describe('parseBibleReference', () => {
         input: '2 John 1',
         expected: {
           book: 63,
-          chapter: 1,
-          verseRanges: [{ start: 1, end: 1 }],
+          ranges: [{ chapterStart: 1, verseStart: 1 }],
         },
       },
       {
@@ -319,8 +298,7 @@ describe('parseBibleReference', () => {
         input: '3 John 14',
         expected: {
           book: 64,
-          chapter: 1,
-          verseRanges: [{ start: 14, end: 14 }],
+          ranges: [{ chapterStart: 1, verseStart: 14 }],
         },
       },
       {
@@ -328,8 +306,7 @@ describe('parseBibleReference', () => {
         input: 'Jude 3',
         expected: {
           book: 65,
-          chapter: 1,
-          verseRanges: [{ start: 3, end: 3 }],
+          ranges: [{ chapterStart: 1, verseStart: 3 }],
         },
       },
       {
@@ -337,8 +314,7 @@ describe('parseBibleReference', () => {
         input: 'Jude 1-5',
         expected: {
           book: 65,
-          chapter: 1,
-          verseRanges: [{ start: 1, end: 5 }],
+          ranges: [{ chapterStart: 1, verseStart: 1, verseEnd: 5 }],
         },
       },
       {
@@ -346,12 +322,11 @@ describe('parseBibleReference', () => {
         input: 'Jude 1,3,5-7,10',
         expected: {
           book: 65,
-          chapter: 1,
-          verseRanges: [
-            { start: 1, end: 1 },
-            { start: 3, end: 3 },
-            { start: 5, end: 7 },
-            { start: 10, end: 10 },
+          ranges: [
+            { chapterStart: 1, verseStart: 1 },
+            { chapterStart: 1, verseStart: 3 },
+            { chapterStart: 1, verseStart: 5, verseEnd: 7 },
+            { chapterStart: 1, verseStart: 10 },
           ],
         },
       },
@@ -360,8 +335,7 @@ describe('parseBibleReference', () => {
         input: 'Jude 1:3',
         expected: {
           book: 65,
-          chapter: 1,
-          verseRanges: [{ start: 3, end: 3 }],
+          ranges: [{ chapterStart: 1, verseStart: 3 }],
         },
       },
       {
@@ -369,8 +343,7 @@ describe('parseBibleReference', () => {
         input: 'Philemon 1:1',
         expected: {
           book: 57,
-          chapter: 1,
-          verseRanges: [{ start: 1, end: 1 }],
+          ranges: [{ chapterStart: 1, verseStart: 1 }],
         },
       },
     ];
@@ -391,32 +364,28 @@ describe('parseBibleReference', () => {
     test('parses Vietnamese book name with hyphens', () => {
       expect(parseBibleReference('Lê-vi 1:1', 'VT')).toEqual({
         book: 3,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 1 }],
+        ranges: [{ chapterStart: 1, verseStart: 1 }],
       });
     });
 
     test('parses Vietnamese book name with multiple hyphens', () => {
       expect(parseBibleReference('Nê-hê-mi 1:1', 'VT')).toEqual({
         book: 16,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 1 }],
+        ranges: [{ chapterStart: 1, verseStart: 1 }],
       });
     });
 
     test('parses Vietnamese book with hyphens and verse range', () => {
       expect(parseBibleReference('Đa-ni-ên 3:1-5', 'VT')).toEqual({
         book: 27,
-        chapter: 3,
-        verseRanges: [{ start: 1, end: 5 }],
+        ranges: [{ chapterStart: 3, verseStart: 1, verseEnd: 5 }],
       });
     });
 
     test('parses Vietnamese book with prefix, spaces, and hyphens', () => {
       expect(parseBibleReference('1 Sa-mu-ên 1:1', 'VT')).toEqual({
         book: 9,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 1 }],
+        ranges: [{ chapterStart: 1, verseStart: 1 }],
       });
     });
   });
@@ -425,24 +394,21 @@ describe('parseBibleReference', () => {
     test('parses Korean book name with spaces', () => {
       expect(parseBibleReference('고린도 전서 1:1', 'KO')).toEqual({
         book: 46,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 1 }],
+        ranges: [{ chapterStart: 1, verseStart: 1 }],
       });
     });
 
     test('parses Korean long book name with spaces', () => {
       expect(parseBibleReference('요한 계시록 1:1', 'KO')).toEqual({
         book: 66,
-        chapter: 1,
-        verseRanges: [{ start: 1, end: 1 }],
+        ranges: [{ chapterStart: 1, verseStart: 1 }],
       });
     });
 
     test('parses Korean multi-word book with verse range', () => {
       expect(parseBibleReference('디모데 전서 3:1-5', 'KO')).toEqual({
         book: 54,
-        chapter: 3,
-        verseRanges: [{ start: 1, end: 5 }],
+        ranges: [{ chapterStart: 3, verseStart: 1, verseEnd: 5 }],
       });
     });
   });

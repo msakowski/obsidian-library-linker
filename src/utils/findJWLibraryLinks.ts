@@ -15,7 +15,13 @@ export interface ContentSelection {
   endLine: number;
 }
 
-function parseSingleBibleCode(code: string): BibleReference | null {
+interface BibleCodeParts {
+  book: number;
+  chapter: number;
+  verse: number;
+}
+
+function parseSingleBibleCode(code: string): BibleCodeParts | null {
   if (code.length !== 8) return null;
 
   const book = parseInt(code.substring(0, 2), 10);
@@ -24,11 +30,7 @@ function parseSingleBibleCode(code: string): BibleReference | null {
 
   if (isNaN(book) || isNaN(chapter) || isNaN(verse)) return null;
 
-  return {
-    book,
-    chapter,
-    verseRanges: [{ start: verse, end: verse }],
-  };
+  return { book, chapter, verse };
 }
 
 export function parseJWLibraryLink(url: string): BibleReference | null {
@@ -46,19 +48,46 @@ export function parseJWLibraryLink(url: string): BibleReference | null {
 
     if (!startRef || !endRef) return null;
 
+    if (startRef.chapter !== endRef.chapter) {
+      return {
+        book: startRef.book,
+        ranges: [
+          {
+            chapterStart: startRef.chapter,
+            chapterEnd: endRef.chapter,
+            verseStart: startRef.verse,
+            verseEnd: endRef.verse,
+          },
+        ],
+      };
+    }
+
+    if (startRef.verse === endRef.verse) {
+      return {
+        book: startRef.book,
+        ranges: [{ chapterStart: startRef.chapter, verseStart: startRef.verse }],
+      };
+    }
+
     return {
       book: startRef.book,
-      chapter: startRef.chapter,
-      verseRanges: [
+      ranges: [
         {
-          start: startRef.verseRanges![0].start,
-          end: endRef.verseRanges![0].start,
+          chapterStart: startRef.chapter,
+          verseStart: startRef.verse,
+          verseEnd: endRef.verse,
         },
       ],
     };
   }
 
-  return parseSingleBibleCode(bibleCode);
+  const single = parseSingleBibleCode(bibleCode);
+  if (!single) return null;
+
+  return {
+    book: single.book,
+    ranges: [{ chapterStart: single.chapter, verseStart: single.verse }],
+  };
 }
 
 export function findJWLibraryLinks(

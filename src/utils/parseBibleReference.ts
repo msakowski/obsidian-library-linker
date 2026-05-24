@@ -1,6 +1,6 @@
 import { findBook } from '@/utils/findBook';
 import { SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
-import type { Language, VerseRange, BibleReference } from '@/types';
+import type { Language, ReferenceRange, BibleReference } from '@/types';
 import { logger } from '@/utils/logger';
 
 function parseVerseNumber(verse: string): number {
@@ -11,7 +11,7 @@ function parseVerseNumber(verse: string): number {
   return num;
 }
 
-function parseVerseRanges(versePart: string): VerseRange[] {
+function parseVerseRanges(versePart: string, chapter: number): ReferenceRange[] {
   // Remove any trailing commas
   versePart = versePart.trim();
 
@@ -30,9 +30,9 @@ function parseVerseRanges(versePart: string): VerseRange[] {
     throw new Error('errors.invalidVerseFormat');
   }
 
-  const ranges: VerseRange[] = [];
+  const ranges: ReferenceRange[] = [];
   let lastEndVerse = 0;
-  let currentRange: VerseRange | null = null;
+  let currentRange: { chapterStart: number; verseStart: number; verseEnd?: number } | null = null;
 
   for (const part of parts) {
     // Check for invalid patterns like "1-2-3" or "1--2"
@@ -56,11 +56,12 @@ function parseVerseRanges(versePart: string): VerseRange[] {
 
       // If this range starts right after the current range, extend it
       if (currentRange && start === lastEndVerse + 1) {
-        currentRange.end = end;
+        currentRange.verseEnd = end;
       } else {
         currentRange = {
-          start,
-          end,
+          chapterStart: chapter,
+          verseStart: start,
+          verseEnd: end,
         };
         ranges.push(currentRange);
       }
@@ -76,11 +77,11 @@ function parseVerseRanges(versePart: string): VerseRange[] {
 
       // If this verse is consecutive with the current range, extend it
       if (currentRange && verse === lastEndVerse + 1) {
-        currentRange.end = verse;
+        currentRange.verseEnd = verse;
       } else {
         currentRange = {
-          start: verse,
-          end: verse,
+          chapterStart: chapter,
+          verseStart: verse,
         };
         ranges.push(currentRange);
       }
@@ -210,12 +211,12 @@ export function parseBibleReference(input: string, language: Language): BibleRef
 
     return {
       book: book.id,
-      chapter: startChapterNumber,
-      endChapter: endChapterNumber,
-      verseRanges: [
+      ranges: [
         {
-          start: startVerseNumber,
-          end: endVerseNumber,
+          chapterStart: startChapterNumber,
+          chapterEnd: endChapterNumber,
+          verseStart: startVerseNumber,
+          verseEnd: endVerseNumber,
         },
       ],
     };
@@ -236,11 +237,11 @@ export function parseBibleReference(input: string, language: Language): BibleRef
 
       return {
         book: book.id,
-        chapter: chapter,
-        verseRanges: [
+        ranges: [
           {
-            start: startVerseNumber,
-            end: endVerseNumber,
+            chapterStart: chapter,
+            verseStart: startVerseNumber,
+            verseEnd: endVerseNumber,
           },
         ],
       };
@@ -248,11 +249,10 @@ export function parseBibleReference(input: string, language: Language): BibleRef
 
     return {
       book: book.id,
-      chapter: chapter,
-      verseRanges: [
+      ranges: [
         {
-          start: startVerseNumber,
-          end: startVerseNumber,
+          chapterStart: chapter,
+          verseStart: startVerseNumber,
         },
       ],
     };
@@ -261,12 +261,11 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   // TODO: move parseVerseRanges to own file and include simple verse parsing
 
   // Complex verse ranges
-  const result = parseVerseRanges(actualVersesPart);
+  const result = parseVerseRanges(actualVersesPart, chapter);
 
   return {
     book: book.id,
-    chapter: chapter,
-    verseRanges: result,
+    ranges: result,
   };
 }
 
@@ -324,16 +323,31 @@ export const parseBibleReferenceFromUrl = (url: string): BibleReference => {
   const startChapterNum = parseInt(chapterStart, 10);
   const endChapterNum = parseInt(chapterEnd, 10);
 
+  const verseStartNum = parseInt(verseStart, 10);
+  const verseEndNum = parseInt(verseEnd, 10);
+
   // Handle multi-chapter references
   if (startChapterNum !== endChapterNum) {
     return {
       book: parseInt(bookStart, 10),
-      chapter: startChapterNum,
-      endChapter: endChapterNum,
-      verseRanges: [
+      ranges: [
         {
-          start: parseInt(verseStart, 10),
-          end: parseInt(verseEnd, 10),
+          chapterStart: startChapterNum,
+          chapterEnd: endChapterNum,
+          verseStart: verseStartNum,
+          verseEnd: verseEndNum,
+        },
+      ],
+    };
+  }
+
+  if (verseStartNum === verseEndNum) {
+    return {
+      book: parseInt(bookStart, 10),
+      ranges: [
+        {
+          chapterStart: startChapterNum,
+          verseStart: verseStartNum,
         },
       ],
     };
@@ -341,11 +355,11 @@ export const parseBibleReferenceFromUrl = (url: string): BibleReference => {
 
   return {
     book: parseInt(bookStart, 10),
-    chapter: startChapterNum,
-    verseRanges: [
+    ranges: [
       {
-        start: parseInt(verseStart, 10),
-        end: parseInt(verseEnd, 10),
+        chapterStart: startChapterNum,
+        verseStart: verseStartNum,
+        verseEnd: verseEndNum,
       },
     ],
   };

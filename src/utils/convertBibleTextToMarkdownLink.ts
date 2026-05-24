@@ -2,6 +2,7 @@ import { formatJWLibraryLink } from '@/utils/formatJWLibraryLink';
 import { formatBibleText } from '@/utils/formatBibleText';
 import type { BibleReference, LinkReplacerSettings, LinkStyles } from '@/types';
 import { getBibleBooks } from '@/stores/bibleBooks';
+import { normalizeRange } from '@/utils/normalizeRange';
 
 /**
  * Apply styling to the link text based on font style setting
@@ -59,8 +60,10 @@ export function convertBibleTextToMarkdownLink(
 
   if (Array.isArray(links)) {
     // Format verse ranges without leading zeros
-    const verseRanges = reference.verseRanges!.map(({ start, end }) =>
-      start === end ? start.toString() : `${start}-${end}`,
+    const normalizedRanges = reference.ranges.map(normalizeRange);
+    const firstChapter = normalizedRanges[0].chapterStart;
+    const verseRanges = normalizedRanges.map(({ verseStart, verseEnd }) =>
+      verseStart === verseEnd ? verseStart.toString() : `${verseStart}-${verseEnd}`,
     );
 
     // Create array of markdown links
@@ -70,9 +73,9 @@ export function convertBibleTextToMarkdownLink(
         if (i === 0) {
           // First link includes book name and chapter
           if (keepStrukture) {
-            linkText = `${bookName} ${reference.chapter}:${range}`;
+            linkText = `${bookName} ${firstChapter}:${range}`;
           } else {
-            linkText = `${prefixInside}${bookName} ${reference.chapter}:${range}`;
+            linkText = `${prefixInside}${bookName} ${firstChapter}:${range}`;
           }
         } else if (i === verseRanges.length - 1) {
           // Last link includes verse numbers and suffix

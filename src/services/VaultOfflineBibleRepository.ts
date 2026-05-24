@@ -7,6 +7,7 @@ import type {
   OfflineBibleRepository,
 } from '@/types';
 import { padBook, padChapter } from '@/utils/padNumber';
+import { normalizeRange } from '@/utils/normalizeRange';
 
 interface SchemaFile {
   schemaVersion: number;
@@ -66,18 +67,27 @@ export class VaultOfflineBibleRepository implements OfflineBibleRepository {
   }
 
   async getVerseRange(reference: BibleReference, language: Language): Promise<string | null> {
-    if (reference.endChapter && reference.endChapter !== reference.chapter) {
+    if (!reference.ranges.length) {
       return null;
     }
 
-    const chapter = await this.getChapter(language, reference.book, reference.chapter);
-    if (!chapter || !reference.verseRanges?.length) {
+    const normalized = reference.ranges.map(normalizeRange);
+    const firstChapter = normalized[0].chapterStart;
+
+    // Multi-chapter spans and refs whose ranges differ in chapter are not supported offline.
+    for (const r of normalized) {
+      if (r.chapterStart !== r.chapterEnd) return null;
+      if (r.chapterStart !== firstChapter) return null;
+    }
+
+    const chapter = await this.getChapter(language, reference.book, firstChapter);
+    if (!chapter) {
       return null;
     }
 
     const parts: string[] = [];
-    for (const range of reference.verseRanges) {
-      for (let verse = range.start; verse <= range.end; verse++) {
+    for (const range of normalized) {
+      for (let verse = range.verseStart; verse <= range.verseEnd; verse++) {
         const text = chapter.verses[String(verse)];
         if (!text) return null;
         parts.push(text);

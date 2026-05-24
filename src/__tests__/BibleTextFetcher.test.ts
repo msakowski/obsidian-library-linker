@@ -92,8 +92,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 21,
-            chapter: 3,
-            verseRanges: [{ start: 1, end: 1 }],
+            ranges: [{ chapterStart: 3, verseStart: 1 }],
           },
           'X',
         );
@@ -119,8 +118,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 19,
-            chapter: 23,
-            verseRanges: [{ start: 1, end: 1 }],
+            ranges: [{ chapterStart: 23, verseStart: 1 }],
           },
           'X',
         );
@@ -145,8 +143,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 1,
-            chapter: 1,
-            verseRanges: [{ start: 1, end: 1 }],
+            ranges: [{ chapterStart: 1, verseStart: 1 }],
           },
           'X',
         );
@@ -169,8 +166,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 60,
-            chapter: 1,
-            verseRanges: [{ start: 1, end: 1 }],
+            ranges: [{ chapterStart: 1, verseStart: 1 }],
           },
           'X',
         );
@@ -198,8 +194,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 40,
-            chapter: 24,
-            verseRanges: [{ start: 14, end: 14 }],
+            ranges: [{ chapterStart: 24, verseStart: 14 }],
           },
           'E',
         );
@@ -224,8 +219,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 40,
-            chapter: 24,
-            verseRanges: [{ start: 14, end: 15 }],
+            ranges: [{ chapterStart: 24, verseStart: 14, verseEnd: 15 }],
           },
           'E',
         );
@@ -253,8 +247,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 23,
-            chapter: 55,
-            verseRanges: [{ start: 1, end: 2 }],
+            ranges: [{ chapterStart: 55, verseStart: 1, verseEnd: 2 }],
           },
           'X',
         );
@@ -282,8 +275,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 21,
-            chapter: 3,
-            verseRanges: [{ start: 2, end: 2 }],
+            ranges: [{ chapterStart: 3, verseStart: 2 }],
           },
           'X',
         );
@@ -312,8 +304,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 21,
-            chapter: 3,
-            verseRanges: [{ start: 1, end: 2 }],
+            ranges: [{ chapterStart: 3, verseStart: 1, verseEnd: 2 }],
           },
           'X',
         );
@@ -340,8 +331,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 19,
-            chapter: 23,
-            verseRanges: [{ start: 1, end: 1 }],
+            ranges: [{ chapterStart: 23, verseStart: 1 }],
           },
           'X',
         );
@@ -389,8 +379,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 40,
-            chapter: 24,
-            verseRanges: [{ start: 14, end: 14 }],
+            ranges: [{ chapterStart: 24, verseStart: 14 }],
           },
           'E',
         );
@@ -422,8 +411,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 40,
-            chapter: 24,
-            verseRanges: [{ start: 14, end: 14 }],
+            ranges: [{ chapterStart: 24, verseStart: 14 }],
           },
           'E',
         );
@@ -449,8 +437,7 @@ describe('BibleTextFetcher', () => {
         const result = await BibleTextFetcher.fetchBibleText(
           {
             book: 43,
-            chapter: 3,
-            verseRanges: [{ start: 16, end: 16 }],
+            ranges: [{ chapterStart: 3, verseStart: 16 }],
           },
           'E',
         );
@@ -474,7 +461,7 @@ describe('BibleTextFetcher', () => {
 
         // First call: curl is tried and fails with ENOENT
         await BibleTextFetcher.fetchBibleText(
-          { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+          { book: 43, ranges: [{ chapterStart: 3, verseStart: 16 }] },
           'E',
         );
         expect(mockedExecFile).toHaveBeenCalledTimes(1);
@@ -482,7 +469,7 @@ describe('BibleTextFetcher', () => {
         // Second call: curl should be skipped entirely
         mockedExecFile.mockClear();
         await BibleTextFetcher.fetchBibleText(
-          { book: 43, chapter: 4, verseRanges: [{ start: 1, end: 1 }] },
+          { book: 43, ranges: [{ chapterStart: 4, verseStart: 1 }] },
           'E',
         );
         expect(mockedExecFile).not.toHaveBeenCalled();
@@ -499,11 +486,11 @@ describe('BibleTextFetcher', () => {
       mockedRequestUrl.mockResolvedValue({ status: 200, text: chapterHtml });
 
       const r1 = await BibleTextFetcher.fetchBibleText(
-        { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
+        { book: 40, ranges: [{ chapterStart: 24, verseStart: 14 }] },
         'E',
       );
       const r2 = await BibleTextFetcher.fetchBibleText(
-        { book: 40, chapter: 24, verseRanges: [{ start: 15, end: 15 }] },
+        { book: 40, ranges: [{ chapterStart: 24, verseStart: 15 }] },
         'E',
       );
 
@@ -522,11 +509,11 @@ describe('BibleTextFetcher', () => {
         .mockResolvedValueOnce({ status: 200, text: html2 });
 
       await BibleTextFetcher.fetchBibleText(
-        { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
+        { book: 40, ranges: [{ chapterStart: 24, verseStart: 14 }] },
         'E',
       );
       await BibleTextFetcher.fetchBibleText(
-        { book: 40, chapter: 25, verseRanges: [{ start: 1, end: 1 }] },
+        { book: 40, ranges: [{ chapterStart: 25, verseStart: 1 }] },
         'E',
       );
 
@@ -541,11 +528,11 @@ describe('BibleTextFetcher', () => {
         .mockResolvedValueOnce({ status: 200, text: htmlX });
 
       await BibleTextFetcher.fetchBibleText(
-        { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
+        { book: 40, ranges: [{ chapterStart: 24, verseStart: 14 }] },
         'E',
       );
       await BibleTextFetcher.fetchBibleText(
-        { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
+        { book: 40, ranges: [{ chapterStart: 24, verseStart: 14 }] },
         'X',
       );
 
@@ -570,7 +557,7 @@ describe('BibleTextFetcher', () => {
         .mockResolvedValueOnce({ status: 200, text: html2 });
 
       const p1 = BibleTextFetcher.fetchBibleText(
-        { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
+        { book: 40, ranges: [{ chapterStart: 24, verseStart: 14 }] },
         'E',
       );
       await jest.runAllTimersAsync();
@@ -580,7 +567,7 @@ describe('BibleTextFetcher', () => {
 
       // Second request immediately — throttle delay kicks in
       const p2 = BibleTextFetcher.fetchBibleText(
-        { book: 40, chapter: 25, verseRanges: [{ start: 1, end: 1 }] },
+        { book: 40, ranges: [{ chapterStart: 25, verseStart: 1 }] },
         'E',
       );
       // Before timers advance, second HTTP request has not been made
@@ -600,7 +587,7 @@ describe('BibleTextFetcher', () => {
       mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
 
       const p1 = BibleTextFetcher.fetchBibleText(
-        { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
+        { book: 40, ranges: [{ chapterStart: 24, verseStart: 14 }] },
         'E',
       );
       await jest.runAllTimersAsync();
@@ -609,7 +596,7 @@ describe('BibleTextFetcher', () => {
 
       // Cache hit — resolves immediately without timers
       const r2 = await BibleTextFetcher.fetchBibleText(
-        { book: 40, chapter: 24, verseRanges: [{ start: 15, end: 15 }] },
+        { book: 40, ranges: [{ chapterStart: 24, verseStart: 15 }] },
         'E',
       );
 

@@ -9,32 +9,24 @@ describe('formatBibleText', () => {
   describe('with long format', () => {
     test('formats single verse', () => {
       expect(
-        formatBibleText(
-          { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
-          'long',
-          'X',
-        ),
+        formatBibleText({ book: 43, ranges: [{ chapterStart: 3, verseStart: 16 }] }, 'long', 'X'),
       ).toBe('Johannes 3:16');
       expect(
-        formatBibleText(
-          { book: 19, chapter: 23, verseRanges: [{ start: 1, end: 1 }] },
-          'long',
-          'X',
-        ),
+        formatBibleText({ book: 19, ranges: [{ chapterStart: 23, verseStart: 1 }] }, 'long', 'X'),
       ).toBe('Psalm 23:1');
     });
 
     test('formats verse range', () => {
       expect(
         formatBibleText(
-          { book: 19, chapter: 23, verseRanges: [{ start: 1, end: 3 }] },
+          { book: 19, ranges: [{ chapterStart: 23, verseStart: 1, verseEnd: 3 }] },
           'long',
           'X',
         ),
       ).toBe('Psalm 23:1-3');
       expect(
         formatBibleText(
-          { book: 66, chapter: 21, verseRanges: [{ start: 3, end: 4 }] },
+          { book: 66, ranges: [{ chapterStart: 21, verseStart: 3, verseEnd: 4 }] },
           'long',
           'X',
         ),
@@ -43,17 +35,13 @@ describe('formatBibleText', () => {
 
     test('handles books with numbers', () => {
       expect(
-        formatBibleText({ book: 1, chapter: 1, verseRanges: [{ start: 1, end: 1 }] }, 'long', 'X'),
+        formatBibleText({ book: 1, ranges: [{ chapterStart: 1, verseStart: 1 }] }, 'long', 'X'),
       ).toBe('1. Mose 1:1');
       expect(
-        formatBibleText(
-          { book: 2, chapter: 3, verseRanges: [{ start: 14, end: 14 }] },
-          'long',
-          'X',
-        ),
+        formatBibleText({ book: 2, ranges: [{ chapterStart: 3, verseStart: 14 }] }, 'long', 'X'),
       ).toBe('2. Mose 3:14');
       expect(
-        formatBibleText({ book: 60, chapter: 1, verseRanges: [{ start: 3, end: 3 }] }, 'long', 'X'),
+        formatBibleText({ book: 60, ranges: [{ chapterStart: 1, verseStart: 3 }] }, 'long', 'X'),
       ).toBe('1. Petrus 1:3');
     });
   });
@@ -61,32 +49,24 @@ describe('formatBibleText', () => {
   describe('with short format', () => {
     test('formats single verse', () => {
       expect(
-        formatBibleText(
-          { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
-          'short',
-          'X',
-        ),
+        formatBibleText({ book: 43, ranges: [{ chapterStart: 3, verseStart: 16 }] }, 'short', 'X'),
       ).toBe('Joh 3:16');
       expect(
-        formatBibleText(
-          { book: 19, chapter: 23, verseRanges: [{ start: 1, end: 1 }] },
-          'short',
-          'X',
-        ),
+        formatBibleText({ book: 19, ranges: [{ chapterStart: 23, verseStart: 1 }] }, 'short', 'X'),
       ).toBe('Ps 23:1');
     });
 
     test('formats verse range', () => {
       expect(
         formatBibleText(
-          { book: 19, chapter: 23, verseRanges: [{ start: 1, end: 3 }] },
+          { book: 19, ranges: [{ chapterStart: 23, verseStart: 1, verseEnd: 3 }] },
           'short',
           'X',
         ),
       ).toBe('Ps 23:1-3');
       expect(
         formatBibleText(
-          { book: 66, chapter: 21, verseRanges: [{ start: 3, end: 4 }] },
+          { book: 66, ranges: [{ chapterStart: 21, verseStart: 3, verseEnd: 4 }] },
           'short',
           'X',
         ),
@@ -95,112 +75,80 @@ describe('formatBibleText', () => {
 
     test('handles books with numbers', () => {
       expect(
-        formatBibleText({ book: 1, chapter: 1, verseRanges: [{ start: 1, end: 1 }] }, 'short', 'X'),
+        formatBibleText({ book: 1, ranges: [{ chapterStart: 1, verseStart: 1 }] }, 'short', 'X'),
       ).toBe('1Mo 1:1');
       expect(
-        formatBibleText(
-          { book: 2, chapter: 3, verseRanges: [{ start: 14, end: 14 }] },
-          'short',
-          'X',
-        ),
+        formatBibleText({ book: 2, ranges: [{ chapterStart: 3, verseStart: 14 }] }, 'short', 'X'),
       ).toBe('2Mo 3:14');
       expect(
-        formatBibleText(
-          { book: 60, chapter: 1, verseRanges: [{ start: 3, end: 3 }] },
-          'short',
-          'X',
-        ),
+        formatBibleText({ book: 60, ranges: [{ chapterStart: 1, verseStart: 3 }] }, 'short', 'X'),
       ).toBe('1Pe 1:3');
     });
   });
 
   test('throw error on invalid reference', () => {
     expect(() =>
-      formatBibleText({ book: 200, chapter: 1, verseRanges: [{ start: 1, end: 1 }] }, 'long', 'X'),
+      formatBibleText({ book: 200, ranges: [{ chapterStart: 1, verseStart: 1 }] }, 'long', 'X'),
     ).toThrow('errors.bookNotFound');
     // TODO: test for verse ranges
     expect(() =>
-      formatBibleText(
-        { book: 70, chapter: 100, verseRanges: [{ start: 1, end: 1 }] },
-        'short',
-        'X',
-      ),
+      formatBibleText({ book: 70, ranges: [{ chapterStart: 100, verseStart: 1 }] }, 'short', 'X'),
     ).toThrow('errors.bookNotFound');
   });
 
   describe('single-chapter books', () => {
     test('formats Obadiah without chapter number', () => {
       expect(
-        formatBibleText({ book: 31, chapter: 1, verseRanges: [{ start: 1, end: 1 }] }, 'long', 'E'),
+        formatBibleText({ book: 31, ranges: [{ chapterStart: 1, verseStart: 1 }] }, 'long', 'E'),
       ).toBe('Obadiah 1');
       expect(
-        formatBibleText(
-          { book: 31, chapter: 1, verseRanges: [{ start: 1, end: 1 }] },
-          'short',
-          'E',
-        ),
+        formatBibleText({ book: 31, ranges: [{ chapterStart: 1, verseStart: 1 }] }, 'short', 'E'),
       ).toBe('Ob 1');
     });
 
     test('formats Philemon without chapter number', () => {
       expect(
-        formatBibleText({ book: 57, chapter: 1, verseRanges: [{ start: 5, end: 5 }] }, 'long', 'E'),
+        formatBibleText({ book: 57, ranges: [{ chapterStart: 1, verseStart: 5 }] }, 'long', 'E'),
       ).toBe('Philemon 5');
       expect(
-        formatBibleText(
-          { book: 57, chapter: 1, verseRanges: [{ start: 5, end: 5 }] },
-          'short',
-          'E',
-        ),
+        formatBibleText({ book: 57, ranges: [{ chapterStart: 1, verseStart: 5 }] }, 'short', 'E'),
       ).toBe('Phm 5');
     });
 
     test('formats 2 John without chapter number', () => {
       expect(
-        formatBibleText({ book: 63, chapter: 1, verseRanges: [{ start: 1, end: 1 }] }, 'long', 'E'),
+        formatBibleText({ book: 63, ranges: [{ chapterStart: 1, verseStart: 1 }] }, 'long', 'E'),
       ).toBe('2 John 1');
       expect(
-        formatBibleText(
-          { book: 63, chapter: 1, verseRanges: [{ start: 1, end: 1 }] },
-          'short',
-          'E',
-        ),
+        formatBibleText({ book: 63, ranges: [{ chapterStart: 1, verseStart: 1 }] }, 'short', 'E'),
       ).toBe('2Jo 1');
     });
 
     test('formats 3 John without chapter number', () => {
       expect(
-        formatBibleText(
-          { book: 64, chapter: 1, verseRanges: [{ start: 14, end: 14 }] },
-          'long',
-          'E',
-        ),
+        formatBibleText({ book: 64, ranges: [{ chapterStart: 1, verseStart: 14 }] }, 'long', 'E'),
       ).toBe('3 John 14');
       expect(
-        formatBibleText(
-          { book: 64, chapter: 1, verseRanges: [{ start: 14, end: 14 }] },
-          'short',
-          'E',
-        ),
+        formatBibleText({ book: 64, ranges: [{ chapterStart: 1, verseStart: 14 }] }, 'short', 'E'),
       ).toBe('3Jo 14');
     });
 
     test('formats Jude without chapter number', () => {
       expect(
-        formatBibleText({ book: 65, chapter: 1, verseRanges: [{ start: 3, end: 3 }] }, 'long', 'E'),
+        formatBibleText({ book: 65, ranges: [{ chapterStart: 1, verseStart: 3 }] }, 'long', 'E'),
       ).toBe('Jude 3');
       expect(
-        formatBibleText(
-          { book: 65, chapter: 1, verseRanges: [{ start: 3, end: 3 }] },
-          'short',
-          'E',
-        ),
+        formatBibleText({ book: 65, ranges: [{ chapterStart: 1, verseStart: 3 }] }, 'short', 'E'),
       ).toBe('Jude 3');
     });
 
     test('formats Jude verse range without chapter number', () => {
       expect(
-        formatBibleText({ book: 65, chapter: 1, verseRanges: [{ start: 1, end: 5 }] }, 'long', 'E'),
+        formatBibleText(
+          { book: 65, ranges: [{ chapterStart: 1, verseStart: 1, verseEnd: 5 }] },
+          'long',
+          'E',
+        ),
       ).toBe('Jude 1-5');
     });
 
@@ -209,12 +157,11 @@ describe('formatBibleText', () => {
         formatBibleText(
           {
             book: 65,
-            chapter: 1,
-            verseRanges: [
-              { start: 1, end: 1 },
-              { start: 3, end: 3 },
-              { start: 5, end: 7 },
-              { start: 10, end: 10 },
+            ranges: [
+              { chapterStart: 1, verseStart: 1 },
+              { chapterStart: 1, verseStart: 3 },
+              { chapterStart: 1, verseStart: 5, verseEnd: 7 },
+              { chapterStart: 1, verseStart: 10 },
             ],
           },
           'long',
@@ -230,9 +177,7 @@ describe('formatBibleText', () => {
         formatBibleText(
           {
             book: 40,
-            chapter: 3,
-            endChapter: 4,
-            verseRanges: [{ start: 1, end: 11 }],
+            ranges: [{ chapterStart: 3, chapterEnd: 4, verseStart: 1, verseEnd: 11 }],
           },
           'long',
           'X',
@@ -245,9 +190,7 @@ describe('formatBibleText', () => {
         formatBibleText(
           {
             book: 40,
-            chapter: 3,
-            endChapter: 4,
-            verseRanges: [{ start: 1, end: 11 }],
+            ranges: [{ chapterStart: 3, chapterEnd: 4, verseStart: 1, verseEnd: 11 }],
           },
           'short',
           'X',
@@ -260,9 +203,7 @@ describe('formatBibleText', () => {
         formatBibleText(
           {
             book: 1,
-            chapter: 1,
-            endChapter: 2,
-            verseRanges: [{ start: 1, end: 3 }],
+            ranges: [{ chapterStart: 1, chapterEnd: 2, verseStart: 1, verseEnd: 3 }],
           },
           'long',
           'E',
@@ -275,9 +216,7 @@ describe('formatBibleText', () => {
         formatBibleText(
           {
             book: 43,
-            chapter: 2,
-            endChapter: 3,
-            verseRanges: [{ start: 3, end: 6 }],
+            ranges: [{ chapterStart: 2, chapterEnd: 3, verseStart: 3, verseEnd: 6 }],
           },
           'short',
           'E',

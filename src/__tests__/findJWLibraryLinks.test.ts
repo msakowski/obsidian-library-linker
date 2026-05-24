@@ -23,8 +23,7 @@ describe('findJWLibraryLinks', () => {
       lineNumber: 0,
       reference: {
         book: 40,
-        chapter: 5,
-        verseRanges: [{ start: 3, end: 3 }],
+        ranges: [{ chapterStart: 5, verseStart: 3 }],
       },
     });
   });
@@ -105,8 +104,7 @@ describe('findJWLibraryLinks', () => {
       lineNumber: 0,
       reference: {
         book: 40,
-        chapter: 24,
-        verseRanges: [{ start: 14, end: 14 }],
+        ranges: [{ chapterStart: 24, verseStart: 14 }],
       },
     });
   });

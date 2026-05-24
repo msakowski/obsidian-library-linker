@@ -74,8 +74,7 @@ describe('loadBibleBooks / getBibleBooks for sign languages', () => {
 describe('formatJWLibraryLink uses sign language code as wtlocale', () => {
   const reference: BibleReference = {
     book: 40,
-    chapter: 24,
-    verseRanges: [{ start: 14, end: 14 }],
+    ranges: [{ chapterStart: 24, verseStart: 14 }],
   };
 
   test('ASL produces wtlocale=ASL', () => {

@@ -1,6 +1,7 @@
 import { SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
 import type { BibleReference, Language, BookLength } from '@/types';
 import { getBibleBookById } from '@/stores/bibleBooks';
+import { normalizeRange } from '@/utils/normalizeRange';
 
 export function formatBibleText(
   reference: BibleReference,
@@ -15,10 +16,17 @@ export function formatBibleText(
 
   const bookName = bookEntry.name[bookLength];
 
-  // Format the verse reference
-  const verseRefs = reference.verseRanges!.map(({ start, end }) =>
-    start === end ? start.toString() : `${start}-${end}`,
-  );
+  if (!reference.ranges.length) {
+    throw new Error('errors.invalidReferenceFormat');
+  }
+
+  const first = normalizeRange(reference.ranges[0]);
+
+  // Format the verse part for same-chapter ranges
+  const verseRefs = reference.ranges.map((r) => {
+    const n = normalizeRange(r);
+    return n.verseStart === n.verseEnd ? n.verseStart.toString() : `${n.verseStart}-${n.verseEnd}`;
+  });
 
   // Single-chapter books don't need "chapter:" prefix
   const isSingleChapterBook = SINGLE_CHAPTER_BOOKS.includes(reference.book);
@@ -26,13 +34,10 @@ export function formatBibleText(
     return `${bookName} ${verseRefs.join(',')}`;
   }
 
-  // Handle multi-chapter references
-  if (reference.endChapter && reference.endChapter !== reference.chapter) {
-    // For multi-chapter references, the verseRanges contain start verse and end verse
-    const startVerse = reference.verseRanges![0].start;
-    const endVerse = reference.verseRanges![0].end;
-    return `${bookName} ${reference.chapter}:${startVerse}-${reference.endChapter}:${endVerse}`;
+  // Handle multi-chapter references (single range that spans chapters)
+  if (first.chapterStart !== first.chapterEnd) {
+    return `${bookName} ${first.chapterStart}:${first.verseStart}-${first.chapterEnd}:${first.verseEnd}`;
   }
 
-  return `${bookName} ${reference.chapter}:${verseRefs.join(',')}`;
+  return `${bookName} ${first.chapterStart}:${verseRefs.join(',')}`;
 }

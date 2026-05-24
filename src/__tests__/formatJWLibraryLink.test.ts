@@ -5,8 +5,7 @@ describe('formatJWLibraryLink', () => {
   test('formats single verse reference', () => {
     const reference: BibleReference = {
       book: 43,
-      chapter: 3,
-      verseRanges: [{ start: 16, end: 16 }],
+      ranges: [{ chapterStart: 3, verseStart: 16 }],
     };
     expect(formatJWLibraryLink(reference)).toBe('jwlibrary:///finder?bible=43003016');
   });
@@ -14,8 +13,7 @@ describe('formatJWLibraryLink', () => {
   test('formats verse range reference', () => {
     const reference: BibleReference = {
       book: 19,
-      chapter: 23,
-      verseRanges: [{ start: 1, end: 3 }],
+      ranges: [{ chapterStart: 23, verseStart: 1, verseEnd: 3 }],
     };
     expect(formatJWLibraryLink(reference)).toBe('jwlibrary:///finder?bible=19023001-19023003');
   });
@@ -23,12 +21,11 @@ describe('formatJWLibraryLink', () => {
   test('formats complex verse reference with multiple ranges', () => {
     const reference: BibleReference = {
       book: 43,
-      chapter: 1,
-      verseRanges: [
-        { start: 1, end: 2 },
-        { start: 4, end: 4 },
-        { start: 6, end: 8 },
-        { start: 12, end: 14 },
+      ranges: [
+        { chapterStart: 1, verseStart: 1, verseEnd: 2 },
+        { chapterStart: 1, verseStart: 4 },
+        { chapterStart: 1, verseStart: 6, verseEnd: 8 },
+        { chapterStart: 1, verseStart: 12, verseEnd: 14 },
       ],
     };
     expect(formatJWLibraryLink(reference)).toEqual([
@@ -42,11 +39,10 @@ describe('formatJWLibraryLink', () => {
   test('formats complex verse reference with single verses', () => {
     const reference: BibleReference = {
       book: 43,
-      chapter: 1,
-      verseRanges: [
-        { start: 1, end: 1 },
-        { start: 4, end: 4 },
-        { start: 6, end: 6 },
+      ranges: [
+        { chapterStart: 1, verseStart: 1 },
+        { chapterStart: 1, verseStart: 4 },
+        { chapterStart: 1, verseStart: 6 },
       ],
     };
     expect(formatJWLibraryLink(reference)).toEqual([
@@ -61,9 +57,7 @@ describe('formatJWLibraryLink', () => {
     test('formats multi-chapter reference', () => {
       const reference: BibleReference = {
         book: 40, // Matthew
-        chapter: 3,
-        endChapter: 4,
-        verseRanges: [{ start: 1, end: 11 }],
+        ranges: [{ chapterStart: 3, chapterEnd: 4, verseStart: 1, verseEnd: 11 }],
       };
       expect(formatJWLibraryLink(reference)).toBe('jwlibrary:///finder?bible=40003001-40004011');
     });
@@ -71,9 +65,7 @@ describe('formatJWLibraryLink', () => {
     test('formats multi-chapter reference with language', () => {
       const reference: BibleReference = {
         book: 40, // Matthew
-        chapter: 3,
-        endChapter: 4,
-        verseRanges: [{ start: 1, end: 11 }],
+        ranges: [{ chapterStart: 3, chapterEnd: 4, verseStart: 1, verseEnd: 11 }],
       };
       expect(formatJWLibraryLink(reference, 'E')).toBe(
         'jwlibrary:///finder?bible=40003001-40004011&wtlocale=E',
@@ -83,9 +75,7 @@ describe('formatJWLibraryLink', () => {
     test('formats multi-chapter reference across many chapters', () => {
       const reference: BibleReference = {
         book: 1, // Genesis
-        chapter: 1,
-        endChapter: 50,
-        verseRanges: [{ start: 1, end: 26 }],
+        ranges: [{ chapterStart: 1, chapterEnd: 50, verseStart: 1, verseEnd: 26 }],
       };
       expect(formatJWLibraryLink(reference)).toBe('jwlibrary:///finder?bible=01001001-01050026');
     });

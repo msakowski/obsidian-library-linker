@@ -71,7 +71,7 @@ export function updateBibleQuotePreview(tab: SettingsTabContext): void {
   const container = activeDocument.getElementById('bible-quote-preview-container');
   if (!container) return;
 
-  const sampleReference = { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] };
+  const sampleReference = { book: 40, ranges: [{ chapterStart: 24, verseStart: 14 }] };
 
   const bibleRefLinked = convertBibleTextToMarkdownLink(sampleReference, tab.plugin.settings);
   if (!bibleRefLinked) return;

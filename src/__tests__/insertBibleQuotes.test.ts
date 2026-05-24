@@ -75,7 +75,7 @@ describe('insertAllBibleQuotes', () => {
     (findJWLibraryLinks as jest.Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
-        reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        reference: { book: 43, ranges: [{ chapterStart: 3, verseStart: 16 }] },
         lineNumber: 0,
         lineText: 'jwlibrary:///finder?bible=43003016',
       },
@@ -104,7 +104,7 @@ describe('insertAllBibleQuotes', () => {
     (findJWLibraryLinks as jest.Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
-        reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        reference: { book: 43, ranges: [{ chapterStart: 3, verseStart: 16 }] },
         lineNumber: 0,
         lineText: 'jwlibrary:///finder?bible=43003016',
       },
@@ -132,7 +132,7 @@ describe('insertAllBibleQuotes', () => {
     (findJWLibraryLinks as jest.Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
-        reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        reference: { book: 43, ranges: [{ chapterStart: 3, verseStart: 16 }] },
         lineNumber: 0,
         lineText: 'jwlibrary:///finder?bible=43003016',
       },
@@ -159,7 +159,7 @@ describe('insertAllBibleQuotes', () => {
     (findJWLibraryLinks as jest.Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
-        reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        reference: { book: 43, ranges: [{ chapterStart: 3, verseStart: 16 }] },
         lineNumber: 0,
         lineText: '> [!quote] [John 3:16](jwlibrary:///finder?bible=43003016)',
       },
@@ -183,13 +183,13 @@ describe('insertAllBibleQuotes', () => {
     (findJWLibraryLinks as jest.Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
-        reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        reference: { book: 43, ranges: [{ chapterStart: 3, verseStart: 16 }] },
         lineNumber: 0,
         lineText: 'jwlibrary:///finder?bible=43003016',
       },
       {
         url: 'jwlibrary:///finder?bible=40005003',
-        reference: { book: 40, chapter: 5, verseRanges: [{ start: 3, end: 3 }] },
+        reference: { book: 40, ranges: [{ chapterStart: 5, verseStart: 3 }] },
         lineNumber: 2,
         lineText: 'jwlibrary:///finder?bible=40005003',
       },
@@ -224,7 +224,7 @@ describe('insertAllBibleQuotes', () => {
     (findJWLibraryLinks as jest.Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
-        reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        reference: { book: 43, ranges: [{ chapterStart: 3, verseStart: 16 }] },
         lineNumber: 0,
         lineText: 'jwlibrary:///finder?bible=43003016',
       },
@@ -253,7 +253,7 @@ describe('insertAllBibleQuotes', () => {
     (findJWLibraryLinks as jest.Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
-        reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+        reference: { book: 43, ranges: [{ chapterStart: 3, verseStart: 16 }] },
         lineNumber: 0,
         lineText: 'jwlibrary:///finder?bible=43003016',
       },

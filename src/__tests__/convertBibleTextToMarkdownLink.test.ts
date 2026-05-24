@@ -13,8 +13,7 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 43,
-            chapter: 3,
-            verseRanges: [{ start: 16, end: 16 }],
+            ranges: [{ chapterStart: 3, verseStart: 16 }],
           },
           createSettings({
             bookLength: 'long',
@@ -25,8 +24,7 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 19,
-            chapter: 23,
-            verseRanges: [{ start: 1, end: 1 }],
+            ranges: [{ chapterStart: 23, verseStart: 1 }],
           },
           createSettings({
             bookLength: 'long',
@@ -38,8 +36,7 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 19,
-            chapter: 23,
-            verseRanges: [{ start: 1, end: 1 }],
+            ranges: [{ chapterStart: 23, verseStart: 1 }],
           },
           createSettings({
             bookLength: 'long',
@@ -55,8 +52,7 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 19,
-            chapter: 23,
-            verseRanges: [{ start: 1, end: 3 }],
+            ranges: [{ chapterStart: 23, verseStart: 1, verseEnd: 3 }],
           },
           createSettings({
             bookLength: 'long',
@@ -68,8 +64,7 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 66,
-            chapter: 21,
-            verseRanges: [{ start: 3, end: 4 }],
+            ranges: [{ chapterStart: 21, verseStart: 3, verseEnd: 4 }],
           },
           createSettings({
             bookLength: 'long',
@@ -84,12 +79,11 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 43,
-            chapter: 1,
-            verseRanges: [
-              { start: 1, end: 2 },
-              { start: 4, end: 4 },
-              { start: 6, end: 8 },
-              { start: 12, end: 14 },
+            ranges: [
+              { chapterStart: 1, verseStart: 1, verseEnd: 2 },
+              { chapterStart: 1, verseStart: 4 },
+              { chapterStart: 1, verseStart: 6, verseEnd: 8 },
+              { chapterStart: 1, verseStart: 12, verseEnd: 14 },
             ],
           },
           createSettings({
@@ -106,11 +100,10 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 1,
-            chapter: 3,
-            verseRanges: [
-              { start: 1, end: 5 },
-              { start: 7, end: 7 },
-              { start: 9, end: 9 },
+            ranges: [
+              { chapterStart: 3, verseStart: 1, verseEnd: 5 },
+              { chapterStart: 3, verseStart: 7 },
+              { chapterStart: 3, verseStart: 9 },
             ],
           },
           createSettings({
@@ -132,8 +125,7 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 43,
-            chapter: 3,
-            verseRanges: [{ start: 16, end: 16 }],
+            ranges: [{ chapterStart: 3, verseStart: 16 }],
           },
           createSettings(),
         ),
@@ -142,8 +134,7 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 19,
-            chapter: 23,
-            verseRanges: [{ start: 1, end: 1 }],
+            ranges: [{ chapterStart: 23, verseStart: 1 }],
           },
           createSettings({
             language: 'X',
@@ -157,8 +148,7 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 19,
-            chapter: 23,
-            verseRanges: [{ start: 1, end: 3 }],
+            ranges: [{ chapterStart: 23, verseStart: 1, verseEnd: 3 }],
           },
           createSettings({
             language: 'X',
@@ -169,8 +159,7 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 66,
-            chapter: 21,
-            verseRanges: [{ start: 3, end: 4 }],
+            ranges: [{ chapterStart: 21, verseStart: 3, verseEnd: 4 }],
           },
           createSettings({
             language: 'X',
@@ -184,12 +173,11 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 43,
-            chapter: 1,
-            verseRanges: [
-              { start: 1, end: 2 },
-              { start: 4, end: 4 },
-              { start: 6, end: 8 },
-              { start: 12, end: 14 },
+            ranges: [
+              { chapterStart: 1, verseStart: 1, verseEnd: 2 },
+              { chapterStart: 1, verseStart: 4 },
+              { chapterStart: 1, verseStart: 6, verseEnd: 8 },
+              { chapterStart: 1, verseStart: 12, verseEnd: 14 },
             ],
           },
           createSettings(),
@@ -204,11 +192,10 @@ describe('convertBibleTextToMarkdownLink', () => {
         convertBibleTextToMarkdownLink(
           {
             book: 1,
-            chapter: 3,
-            verseRanges: [
-              { start: 1, end: 5 },
-              { start: 7, end: 7 },
-              { start: 9, end: 9 },
+            ranges: [
+              { chapterStart: 3, verseStart: 1, verseEnd: 5 },
+              { chapterStart: 3, verseStart: 7 },
+              { chapterStart: 3, verseStart: 9 },
             ],
           },
           createSettings({
@@ -228,8 +215,7 @@ describe('convertBibleTextToMarkdownLink', () => {
       convertBibleTextToMarkdownLink(
         {
           book: 70,
-          chapter: 200,
-          verseRanges: [{ start: 1, end: 1 }],
+          ranges: [{ chapterStart: 200, verseStart: 1 }],
         },
         createSettings(),
       ),

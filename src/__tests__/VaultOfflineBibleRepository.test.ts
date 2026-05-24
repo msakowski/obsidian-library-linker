@@ -84,7 +84,7 @@ describe('VaultOfflineBibleRepository', () => {
     await repo.saveCorpus(makeMetadata(), [makeChapter({ verses: { '1': 'A' } })]);
 
     const text = await repo.getVerseRange(
-      { book: 1, chapter: 1, verseRanges: [{ start: 5, end: 5 }] },
+      { book: 1, ranges: [{ chapterStart: 1, verseStart: 5 }] },
       'X',
     );
     expect(text).toBeNull();
@@ -96,7 +96,7 @@ describe('VaultOfflineBibleRepository', () => {
     await repo.saveCorpus(makeMetadata(), [makeChapter()]);
 
     const text = await repo.getVerseRange(
-      { book: 1, chapter: 1, verseRanges: [{ start: 1, end: 2 }] },
+      { book: 1, ranges: [{ chapterStart: 1, verseStart: 1, verseEnd: 2 }] },
       'X',
     );
     expect(text).toBe('Im Anfang. Die Erde war leer.');

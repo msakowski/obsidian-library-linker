@@ -66,16 +66,24 @@ export interface BibleBook {
   chapters: number;
 }
 
-export interface VerseRange {
-  start: number;
-  end: number;
-}
+// If chapterEnd is set, verseEnd MUST also be set.
+export type ReferenceRange =
+  | {
+      chapterStart: number;
+      verseStart: number;
+      chapterEnd?: undefined;
+      verseEnd?: number;
+    }
+  | {
+      chapterStart: number;
+      verseStart: number;
+      chapterEnd: number;
+      verseEnd: number;
+    };
 
 export interface BibleReference {
   book: number;
-  chapter: number;
-  endChapter?: number; // For multi-chapter references (e.g., "Matt. 3:1-4:11")
-  verseRanges?: VerseRange[]; // For complex verse references with multiple ranges
+  ranges: ReferenceRange[];
 }
 
 export interface OfflineBibleCorpusMetadata {
