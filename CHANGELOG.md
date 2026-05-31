@@ -1,5 +1,13 @@
 # obsidian-library-linker
 
+## 0.16.1
+
+### Patch Changes
+
+- [#297](https://github.com/msakowski/obsidian-library-linker/pull/297) [`8f80f29`](https://github.com/msakowski/obsidian-library-linker/commit/8f80f29ec4e6d7c598b581db22d4a653c589f6a2) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Stop using Node's `fs` and `path` modules directly. The offline Bible folder is now created via Obsidian's vault adapter API, addressing the community plugin review warning about direct filesystem access.
+
+- [#301](https://github.com/msakowski/obsidian-library-linker/pull/301) [`11348ef`](https://github.com/msakowski/obsidian-library-linker/commit/11348ef5df674c7bd91c4d62a52c12bbb31959c1) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add remark-based markdown linting and reformat documentation files.
+
 ## 0.16.0
 
 ### Minor Changes
