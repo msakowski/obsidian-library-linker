@@ -82,6 +82,7 @@ export function updateBibleQuotePreview(tab: SettingsTabContext): void {
     tab.plugin.settings.language,
   );
 
+  // TODO: Replace with actual quote from the Bible
   const sampleText =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 

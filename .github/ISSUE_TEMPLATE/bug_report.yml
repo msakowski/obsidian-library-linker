@@ -1,6 +1,6 @@
 name: Bug Report
 description: Report something that isn't working as expected
-title: "fix: "
+title: ""
 labels: ["bug"]
 body:
   - type: markdown
@@ -39,15 +39,6 @@ body:
       required: true
 
   - type: textarea
-    id: expected-behaviour
-    attributes:
-      label: Expected Behaviour
-      description: What should happen instead?
-      placeholder: The plugin should...
-    validations:
-      required: true
-
-  - type: textarea
     id: steps-to-reproduce
     attributes:
       label: Steps to Reproduce
@@ -60,9 +51,26 @@ body:
       required: true
 
   - type: textarea
+    id: expected-behaviour
+    attributes:
+      label: Expected Behaviour
+      description: What should happen instead?
+      placeholder: The plugin should...
+    validations:
+      required: true
+
+  - type: textarea
     id: additional-context
     attributes:
       label: Additional Context
-      description: Any other context, screenshots, or error messages from the developer console (Ctrl+Shift+I).
+      description: Any other context, or error messages from the developer console (Ctrl+Shift+I).
+    validations:
+      required: false
+
+  - type: upload
+    id: screenshots
+    attributes:
+      label: Upload screenshots
+      description: If applicable, add screenshots to help explain the issue.
     validations:
       required: false
