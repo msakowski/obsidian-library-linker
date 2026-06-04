@@ -12,6 +12,17 @@ import {
 import { logger } from '@/utils/logger';
 import { getBookLanguage } from './signLanguage';
 
+const MARKDOWN_LINK_WITH_JWLIBRARY =
+  /\[[^\]]*\]\(jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)]*?)?\)/g;
+const BARE_JWLIBRARY_LINK = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^\s)]*)?/g;
+
+function isLinkStandaloneOnLine(lineText: string): boolean {
+  const stripped = lineText
+    .replace(MARKDOWN_LINK_WITH_JWLIBRARY, '')
+    .replace(BARE_JWLIBRARY_LINK, '');
+  return stripped.trim().length === 0;
+}
+
 function processTemplate(
   template: string,
   variables: {
@@ -144,11 +155,19 @@ export async function insertAllBibleQuotes(
     try {
       const quoteText = await generateBibleQuoteText(linkInfo, settings, provider);
       if (quoteText) {
-        changes.push({
-          from: { line: linkInfo.lineNumber, ch: 0 },
-          to: { line: linkInfo.lineNumber, ch: currentLine.length },
-          text: quoteText,
-        });
+        if (isLinkStandaloneOnLine(currentLine)) {
+          changes.push({
+            from: { line: linkInfo.lineNumber, ch: 0 },
+            to: { line: linkInfo.lineNumber, ch: currentLine.length },
+            text: quoteText,
+          });
+        } else {
+          changes.push({
+            from: { line: linkInfo.lineNumber, ch: currentLine.length },
+            to: { line: linkInfo.lineNumber, ch: currentLine.length },
+            text: '\n\n' + quoteText,
+          });
+        }
       } else {
         fetchFailed++;
         logger.warn(
@@ -249,15 +268,27 @@ export async function insertBibleQuoteAtCursor(
 
   if (quoteTexts.length > 0) {
     const combinedText = quoteTexts.join('\n\n');
-    editor.transaction({
-      changes: [
-        {
-          from: { line: targetLineNumber, ch: 0 },
-          to: { line: targetLineNumber, ch: targetLineText.length },
-          text: combinedText,
-        },
-      ],
-    });
+    if (isLinkStandaloneOnLine(targetLineText)) {
+      editor.transaction({
+        changes: [
+          {
+            from: { line: targetLineNumber, ch: 0 },
+            to: { line: targetLineNumber, ch: targetLineText.length },
+            text: combinedText,
+          },
+        ],
+      });
+    } else {
+      editor.transaction({
+        changes: [
+          {
+            from: { line: targetLineNumber, ch: targetLineText.length },
+            to: { line: targetLineNumber, ch: targetLineText.length },
+            text: '\n\n' + combinedText,
+          },
+        ],
+      });
+    }
     return { inserted: true, alreadyExists: false, fetchFailed: false };
   }
 
