@@ -243,6 +243,46 @@ describe('insertAllBibleQuotes', () => {
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
+  test('should append quote below when link is embedded in surrounding text', async () => {
+    const lineText =
+      'Jehova befähigt uns ([Jer. 1:8-9](jwlibrary:///finder?bible=24001008-24001009&wtlocale=X); w10 15. 1. 9)';
+    mockLastLine.mockReturnValue(0);
+    mockGetLine.mockReturnValue(lineText);
+
+    (findJWLibraryLinks as jest.Mock).mockReturnValue([
+      {
+        url: 'jwlibrary:///finder?bible=24001008-24001009&wtlocale=X',
+        reference: { book: 24, chapter: 1, verseRanges: [{ start: 8, end: 9 }] },
+        lineNumber: 0,
+        lineText,
+      },
+    ]);
+
+    (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValue({
+      success: true,
+      text: 'Have no fear because of their appearance.',
+    });
+
+    (convertBibleTextToMarkdownLink as jest.Mock).mockReturnValue(
+      '[Jer. 1:8-9](jwlibrary:///finder?bible=24001008-24001009&wtlocale=X)',
+    );
+
+    const result = await insertAllBibleQuotes(mockEditor, settings, provider);
+
+    expect(result.inserted).toBe(1);
+    expect(mockTransaction).toHaveBeenCalledWith({
+      changes: [
+        {
+          from: { line: 0, ch: lineText.length },
+          to: { line: 0, ch: lineText.length },
+          text:
+            '\n\n[Jer. 1:8-9](jwlibrary:///finder?bible=24001008-24001009&wtlocale=X)\n' +
+            '> Have no fear because of their appearance.',
+        },
+      ],
+    });
+  });
+
   test('should trim whitespace from variables in custom template', async () => {
     // Test for bug where trailing whitespace breaks markdown formatting
     settings.bibleQuote.template = '> ***{bibleRefLinked}***\n> *{quote}*';
@@ -381,11 +421,11 @@ describe('insertBibleQuoteAtCursor', () => {
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
-  test('should insert quotes for all links on the same line', async () => {
+  test('should insert quotes for all links on the same line when standalone', async () => {
     mockGetCursor.mockReturnValue({ line: 0, ch: 10 });
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue(
-      'jwlibrary:///finder?bible=43003016 and jwlibrary:///finder?bible=40005003',
+      'jwlibrary:///finder?bible=43003016 jwlibrary:///finder?bible=40005003',
     );
 
     (BibleTextFetcher.fetchBibleText as jest.Mock)
@@ -411,13 +451,90 @@ describe('insertBibleQuoteAtCursor', () => {
           from: { line: 0, ch: 0 },
           to: {
             line: 0,
-            ch: 'jwlibrary:///finder?bible=43003016 and jwlibrary:///finder?bible=40005003'.length,
+            ch: 'jwlibrary:///finder?bible=43003016 jwlibrary:///finder?bible=40005003'.length,
           },
           text:
             '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)\n' +
             '> For God loved the world so much that he gave his only-begotten Son.\n\n' +
             '[Matt. 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)\n' +
             '> Happy are those conscious of their spiritual need.',
+        },
+      ],
+    });
+  });
+
+  test('should append quote below when link is embedded in surrounding text', async () => {
+    const lineText =
+      'Jehova befähigt uns ([Jer. 1:8-9](jwlibrary:///finder?bible=24001008-24001009&wtlocale=X); w10 15. 1. 9 Abs. 7-8)';
+    mockGetCursor.mockReturnValue({ line: 0, ch: 25 });
+    mockLastLine.mockReturnValue(0);
+    mockGetLine.mockReturnValue(lineText);
+
+    (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValueOnce({
+      success: true,
+      text: 'Have no fear because of their appearance, for I am with you to save you.',
+    });
+
+    (convertBibleTextToMarkdownLink as jest.Mock).mockReturnValueOnce(
+      '[Jer. 1:8-9](jwlibrary:///finder?bible=24001008-24001009&wtlocale=X)',
+    );
+
+    const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
+
+    expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
+    expect(mockTransaction).toHaveBeenCalledWith({
+      changes: [
+        {
+          from: { line: 0, ch: lineText.length },
+          to: { line: 0, ch: lineText.length },
+          text:
+            '\n\n[Jer. 1:8-9](jwlibrary:///finder?bible=24001008-24001009&wtlocale=X)\n' +
+            '> Have no fear because of their appearance, for I am with you to save you.',
+        },
+      ],
+    });
+  });
+
+  test('should replace line when link is the only content (standalone)', async () => {
+    const lineText = '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)';
+    mockGetCursor.mockReturnValue({ line: 0, ch: 10 });
+    mockLastLine.mockReturnValue(0);
+    mockGetLine.mockReturnValue(lineText);
+
+    const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
+
+    expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
+    expect(mockTransaction).toHaveBeenCalledWith({
+      changes: [
+        {
+          from: { line: 0, ch: 0 },
+          to: { line: 0, ch: lineText.length },
+          text:
+            '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)\n' +
+            '> For God loved the world so much that he gave his only-begotten Son.',
+        },
+      ],
+    });
+  });
+
+  test('should append quote below when link has prefix text', async () => {
+    const lineText =
+      'See this reference: [John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)';
+    mockGetCursor.mockReturnValue({ line: 0, ch: 25 });
+    mockLastLine.mockReturnValue(0);
+    mockGetLine.mockReturnValue(lineText);
+
+    const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
+
+    expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
+    expect(mockTransaction).toHaveBeenCalledWith({
+      changes: [
+        {
+          from: { line: 0, ch: lineText.length },
+          to: { line: 0, ch: lineText.length },
+          text:
+            '\n\n[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)\n' +
+            '> For God loved the world so much that he gave his only-begotten Son.',
         },
       ],
     });
