@@ -223,6 +223,96 @@ describe('convertBibleTextToMarkdownLink', () => {
     });
   });
 
+  describe('with prefix/suffix styling on multi-range links', () => {
+    test('applies styling when keepCurrentStructure and no originalText (new link creation)', () => {
+      expect(
+        convertBibleTextToMarkdownLink(
+          {
+            book: 19,
+            chapter: 119,
+            verseRanges: [
+              { start: 1, end: 1 },
+              { start: 5, end: 8 },
+              { start: 50, end: 50 },
+            ],
+          },
+          createSettings({
+            bookLength: 'long',
+            language: 'X',
+            updatedLinkStructure: 'keepCurrentStructure',
+            prefixOutsideLink: '(',
+            prefixInsideLink: '',
+            suffixInsideLink: '',
+            suffixOutsideLink: ')',
+          }),
+        ),
+      ).toBe(
+        '([Psalm 119:1](jwlibrary:///finder?bible=19119001&wtlocale=X),' +
+          '[5-8](jwlibrary:///finder?bible=19119005-19119008&wtlocale=X),' +
+          '[50](jwlibrary:///finder?bible=19119050&wtlocale=X))',
+      );
+    });
+
+    test('applies inside prefix/suffix styling on multi-range links', () => {
+      expect(
+        convertBibleTextToMarkdownLink(
+          {
+            book: 19,
+            chapter: 119,
+            verseRanges: [
+              { start: 1, end: 1 },
+              { start: 5, end: 8 },
+              { start: 50, end: 50 },
+            ],
+          },
+          createSettings({
+            bookLength: 'long',
+            language: 'X',
+            updatedLinkStructure: 'keepCurrentStructure',
+            prefixOutsideLink: '',
+            prefixInsideLink: '📖 ',
+            suffixInsideLink: ' ✓',
+            suffixOutsideLink: '',
+          }),
+        ),
+      ).toBe(
+        '[📖 Psalm 119:1](jwlibrary:///finder?bible=19119001&wtlocale=X),' +
+          '[5-8](jwlibrary:///finder?bible=19119005-19119008&wtlocale=X),' +
+          '[50 ✓](jwlibrary:///finder?bible=19119050&wtlocale=X)',
+      );
+    });
+
+    test('skips styling when keepCurrentStructure and originalText is provided', () => {
+      expect(
+        convertBibleTextToMarkdownLink(
+          {
+            book: 19,
+            chapter: 119,
+            verseRanges: [
+              { start: 1, end: 1 },
+              { start: 5, end: 8 },
+              { start: 50, end: 50 },
+            ],
+          },
+          createSettings({
+            bookLength: 'long',
+            language: 'X',
+            updatedLinkStructure: 'keepCurrentStructure',
+            prefixOutsideLink: '(',
+            prefixInsideLink: '',
+            suffixInsideLink: '',
+            suffixOutsideLink: ')',
+          }),
+          'Psalm 119:1,5-8,50',
+        ),
+      ).toBe(
+        '[Psalm 119:1](jwlibrary:///finder?bible=19119001&wtlocale=X),' +
+          '[5-8](jwlibrary:///finder?bible=19119005-19119008&wtlocale=X),' +
+          '[50](jwlibrary:///finder?bible=19119050&wtlocale=X)',
+      );
+    });
+  });
+
   test('throws error on invalid reference', () => {
     expect(() =>
       convertBibleTextToMarkdownLink(

@@ -63,20 +63,22 @@ export function convertBibleTextToMarkdownLink(
       start === end ? start.toString() : `${start}-${end}`,
     );
 
+    const skipStyling = keepStrukture && !!originalText;
+
     // Create array of markdown links
     const styledLinks = verseRanges
       .map((range, i) => {
         let linkText;
         if (i === 0) {
           // First link includes book name and chapter
-          if (keepStrukture) {
+          if (skipStyling) {
             linkText = `${bookName} ${reference.chapter}:${range}`;
           } else {
             linkText = `${prefixInside}${bookName} ${reference.chapter}:${range}`;
           }
         } else if (i === verseRanges.length - 1) {
           // Last link includes verse numbers and suffix
-          if (keepStrukture) {
+          if (skipStyling) {
             linkText = range;
           } else {
             linkText = `${range}${suffixInside}`;
@@ -93,7 +95,7 @@ export function convertBibleTextToMarkdownLink(
       })
       .join(',');
 
-    if (keepStrukture) {
+    if (skipStyling) {
       return styledLinks;
     }
 
