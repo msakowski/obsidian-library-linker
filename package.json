@@ -25,7 +25,7 @@
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm exec lint-staged",
-    "pre-push": "pnpm test:affected"
+    "pre-push": "sh scripts/pre-push.sh"
   },
   "lint-staged": {
     "*.{ts,js,mjs,cjs}": "eslint --fix",
