@@ -1,5 +1,13 @@
 # obsidian-library-linker
 
+## 0.16.2
+
+### Patch Changes
+
+- [#307](https://github.com/msakowski/obsidian-library-linker/pull/307) [`94970ad`](https://github.com/msakowski/obsidian-library-linker/commit/94970ad00c1eb358be360451c5100e3ac5e10c39) Thanks [@msakowski](https://github.com/msakowski)! - Fix prefix/suffix styling not applied to multi-range links when "Keep current structure" is set.
+
+- [#306](https://github.com/msakowski/obsidian-library-linker/pull/306) [`aa1f0fa`](https://github.com/msakowski/obsidian-library-linker/commit/aa1f0fa2b44bcd058c0ee276d3ef713acaf6e8cc) Thanks [@msakowski](https://github.com/msakowski)! - Fixed Bible quote insertion destroying surrounding text when the link is embedded in a paragraph. The quote is now appended below the line instead of replacing it.
+
 ## 0.16.1
 
 ### Patch Changes
