@@ -29,7 +29,7 @@
   },
   "lint-staged": {
     "*.{ts,js,mjs,cjs}": "eslint --fix",
-    "!(.changeset/**/*)*.md": "remark --output --quiet --frail"
+    "*.md": "remark --output --quiet --frail --silently-ignore"
   },
   "keywords": [],
   "author": {
