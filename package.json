@@ -67,13 +67,6 @@
     "yaml": "^2.9.0"
   },
   "packageManager": "pnpm@11.1.2",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@swc/core",
-      "esbuild",
-      "unrs-resolver"
-    ]
-  },
   "dependencies": {
     "fflate": "^0.8.3"
   }
