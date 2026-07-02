@@ -1,25 +1,23 @@
-// Unmock BibleTextFetcher in case other tests mocked it
-jest.unmock('@/services/BibleTextFetcher');
-
-// Mock obsidian module (uses __mocks__/obsidian.ts)
-jest.mock('obsidian');
-jest.mock('child_process', () => ({
-  execFile: jest.fn(),
+// Obsidian is mocked via resolve.alias in vitest.config.ts (see __mocks__/obsidian.ts).
+vi.mock('child_process', () => ({
+  execFile: vi.fn(),
 }));
 
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { Platform, requestUrl } from 'obsidian';
 import { execFile } from 'child_process';
+import type { Mock, MockInstance } from 'vitest';
 
-const mockedRequestUrl = requestUrl as jest.Mock;
-const mockedExecFile = execFile as unknown as jest.Mock;
+const mockedRequestUrl = requestUrl as Mock;
+const mockedExecFile = execFile as unknown as Mock;
 const mockedPlatform = Platform as { isDesktopApp: boolean; isMobileApp: boolean };
 
-jest.mock('util', () => {
-  const actual = jest.requireActual<typeof import('util')>('util');
+// Kept self-contained: mock factories may not reference out-of-scope variables.
+vi.mock('util', async () => {
+  const actual = await vi.importActual<typeof import('util')>('util');
   return {
     ...actual,
-    promisify: jest.fn((fn: (...args: unknown[]) => void) => {
+    promisify: vi.fn((fn: (...args: unknown[]) => void) => {
       return (...args: unknown[]) =>
         new Promise((resolve, reject) => {
           fn(...args, (error: Error | null, stdout: string) => {
@@ -36,7 +34,7 @@ jest.mock('util', () => {
 
 describe('BibleTextFetcher', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     mockedRequestUrl.mockReset();
     mockedExecFile.mockReset();
     mockedPlatform.isDesktopApp = false;
@@ -356,10 +354,10 @@ describe('BibleTextFetcher', () => {
     });
 
     describe('network fallback behavior', () => {
-      let warnSpy: jest.SpyInstance;
+      let warnSpy: MockInstance;
 
       beforeEach(() => {
-        warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+        warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
       });
 
       afterEach(() => {
@@ -555,11 +553,11 @@ describe('BibleTextFetcher', () => {
 
   describe('request throttling', () => {
     beforeEach(() => {
-      jest.useFakeTimers();
+      vi.useFakeTimers();
     });
 
     afterEach(() => {
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     test('throttles consecutive requests for different chapters', async () => {
@@ -573,7 +571,7 @@ describe('BibleTextFetcher', () => {
         { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
         'E',
       );
-      await jest.runAllTimersAsync();
+      await vi.runAllTimersAsync();
       const r1 = await p1;
       expect(r1.success).toBe(true);
       expect(mockedRequestUrl).toHaveBeenCalledTimes(1);
@@ -586,7 +584,7 @@ describe('BibleTextFetcher', () => {
       // Before timers advance, second HTTP request has not been made
       expect(mockedRequestUrl).toHaveBeenCalledTimes(1);
 
-      await jest.runAllTimersAsync();
+      await vi.runAllTimersAsync();
       const r2 = await p2;
       expect(r2.success).toBe(true);
       expect(mockedRequestUrl).toHaveBeenCalledTimes(2);
@@ -603,7 +601,7 @@ describe('BibleTextFetcher', () => {
         { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] },
         'E',
       );
-      await jest.runAllTimersAsync();
+      await vi.runAllTimersAsync();
       await p1;
       expect(mockedRequestUrl).toHaveBeenCalledTimes(1);
 

@@ -9,39 +9,41 @@ import type { Editor } from 'obsidian';
 import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
 
 // Mock dependencies
-jest.mock('@/services/BibleTextFetcher');
-jest.mock('@/utils/convertBibleTextToMarkdownLink');
-
+vi.mock('@/services/BibleTextFetcher');
+vi.mock('@/utils/convertBibleTextToMarkdownLink');
 // Mock findJWLibraryLinks but keep parseJWLibraryLink real
-jest.mock('@/utils/findJWLibraryLinks', () => ({
-  ...jest.requireActual<typeof import('@/utils/findJWLibraryLinks')>('@/utils/findJWLibraryLinks'),
-  findJWLibraryLinks: jest.fn(),
+vi.mock('@/utils/findJWLibraryLinks', async () => ({
+  ...(await vi.importActual<typeof import('@/utils/findJWLibraryLinks')>(
+    '@/utils/findJWLibraryLinks',
+  )),
+  findJWLibraryLinks: vi.fn(),
 }));
 
 import { findJWLibraryLinks } from '@/utils/findJWLibraryLinks';
+import type { Mock, Mocked } from 'vitest';
 
 beforeAll(() => {
   initializeTestBibleBooks();
 });
 
 describe('insertAllBibleQuotes', () => {
-  let mockEditor: jest.Mocked<Editor>;
+  let mockEditor: Mocked<Editor>;
   let settings: LinkReplacerSettings;
   let provider: BibleCitationProvider;
-  let mockGetLine: jest.Mock;
-  let mockLastLine: jest.Mock;
-  let mockTransaction: jest.Mock;
+  let mockGetLine: Mock;
+  let mockLastLine: Mock;
+  let mockTransaction: Mock;
 
   beforeEach(() => {
-    mockGetLine = jest.fn();
-    mockLastLine = jest.fn();
-    mockTransaction = jest.fn();
+    mockGetLine = vi.fn();
+    mockLastLine = vi.fn();
+    mockTransaction = vi.fn();
 
     mockEditor = {
       getLine: mockGetLine,
       lastLine: mockLastLine,
       transaction: mockTransaction,
-    } as unknown as jest.Mocked<Editor>;
+    } as unknown as Mocked<Editor>;
 
     provider = new OnlineBibleCitationProvider();
 
@@ -53,26 +55,26 @@ describe('insertAllBibleQuotes', () => {
     } satisfies LinkReplacerSettings;
 
     // Mock BibleTextFetcher
-    (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValue({
+    (BibleTextFetcher.fetchBibleText as Mock).mockResolvedValue({
       success: true,
       text: 'For God loved the world so much that he gave his only-begotten Son.',
     });
 
     // Mock convertBibleTextToMarkdownLink
-    (convertBibleTextToMarkdownLink as jest.Mock).mockReturnValue(
+    (convertBibleTextToMarkdownLink as Mock).mockReturnValue(
       '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)',
     );
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should insert Bible quote for single link', async () => {
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue('jwlibrary:///finder?bible=43003016');
 
-    (findJWLibraryLinks as jest.Mock).mockReturnValue([
+    (findJWLibraryLinks as Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
         reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
@@ -101,7 +103,7 @@ describe('insertAllBibleQuotes', () => {
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue('jwlibrary:///finder?bible=43003016');
 
-    (findJWLibraryLinks as jest.Mock).mockReturnValue([
+    (findJWLibraryLinks as Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
         reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
@@ -129,7 +131,7 @@ describe('insertAllBibleQuotes', () => {
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue('jwlibrary:///finder?bible=43003016');
 
-    (findJWLibraryLinks as jest.Mock).mockReturnValue([
+    (findJWLibraryLinks as Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
         reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
@@ -156,7 +158,7 @@ describe('insertAllBibleQuotes', () => {
     const lines = ['> [!quote] [John 3:16](jwlibrary:///finder?bible=43003016)', '> Quote text'];
     mockGetLine.mockImplementation((line: number) => lines[line]);
 
-    (findJWLibraryLinks as jest.Mock).mockReturnValue([
+    (findJWLibraryLinks as Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
         reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
@@ -180,7 +182,7 @@ describe('insertAllBibleQuotes', () => {
     ];
     mockGetLine.mockImplementation((line: number) => lines[line]);
 
-    (findJWLibraryLinks as jest.Mock).mockReturnValue([
+    (findJWLibraryLinks as Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
         reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
@@ -195,7 +197,7 @@ describe('insertAllBibleQuotes', () => {
       },
     ]);
 
-    (convertBibleTextToMarkdownLink as jest.Mock)
+    (convertBibleTextToMarkdownLink as Mock)
       .mockReturnValueOnce('[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)')
       .mockReturnValueOnce('[Matt. 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)');
 
@@ -209,7 +211,7 @@ describe('insertAllBibleQuotes', () => {
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue('No links here');
 
-    (findJWLibraryLinks as jest.Mock).mockReturnValue([]);
+    (findJWLibraryLinks as Mock).mockReturnValue([]);
 
     const result = await insertAllBibleQuotes(mockEditor, settings, provider);
 
@@ -221,7 +223,7 @@ describe('insertAllBibleQuotes', () => {
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue('jwlibrary:///finder?bible=43003016');
 
-    (findJWLibraryLinks as jest.Mock).mockReturnValue([
+    (findJWLibraryLinks as Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
         reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
@@ -230,12 +232,12 @@ describe('insertAllBibleQuotes', () => {
       },
     ]);
 
-    (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValue({
+    (BibleTextFetcher.fetchBibleText as Mock).mockResolvedValue({
       success: false,
       text: null,
     });
 
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const result = await insertAllBibleQuotes(mockEditor, settings, provider);
     warnSpy.mockRestore();
 
@@ -249,7 +251,7 @@ describe('insertAllBibleQuotes', () => {
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue(lineText);
 
-    (findJWLibraryLinks as jest.Mock).mockReturnValue([
+    (findJWLibraryLinks as Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=24001008-24001009&wtlocale=X',
         reference: { book: 24, chapter: 1, verseRanges: [{ start: 8, end: 9 }] },
@@ -258,12 +260,12 @@ describe('insertAllBibleQuotes', () => {
       },
     ]);
 
-    (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValue({
+    (BibleTextFetcher.fetchBibleText as Mock).mockResolvedValue({
       success: true,
       text: 'Have no fear because of their appearance.',
     });
 
-    (convertBibleTextToMarkdownLink as jest.Mock).mockReturnValue(
+    (convertBibleTextToMarkdownLink as Mock).mockReturnValue(
       '[Jer. 1:8-9](jwlibrary:///finder?bible=24001008-24001009&wtlocale=X)',
     );
 
@@ -290,7 +292,7 @@ describe('insertAllBibleQuotes', () => {
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue('jwlibrary:///finder?bible=43003016');
 
-    (findJWLibraryLinks as jest.Mock).mockReturnValue([
+    (findJWLibraryLinks as Mock).mockReturnValue([
       {
         url: 'jwlibrary:///finder?bible=43003016',
         reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
@@ -300,11 +302,11 @@ describe('insertAllBibleQuotes', () => {
     ]);
 
     // Mock with trailing whitespace to simulate the bug
-    (convertBibleTextToMarkdownLink as jest.Mock).mockReturnValue(
+    (convertBibleTextToMarkdownLink as Mock).mockReturnValue(
       '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E) ',
     );
 
-    (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValue({
+    (BibleTextFetcher.fetchBibleText as Mock).mockResolvedValue({
       success: true,
       text: 'For God loved the world so much that he gave his only-begotten Son. ',
     });
@@ -325,26 +327,26 @@ describe('insertAllBibleQuotes', () => {
 });
 
 describe('insertBibleQuoteAtCursor', () => {
-  let mockEditor: jest.Mocked<Editor>;
+  let mockEditor: Mocked<Editor>;
   let settings: LinkReplacerSettings;
   let provider: BibleCitationProvider;
-  let mockGetCursor: jest.Mock;
-  let mockGetLine: jest.Mock;
-  let mockLastLine: jest.Mock;
-  let mockTransaction: jest.Mock;
+  let mockGetCursor: Mock;
+  let mockGetLine: Mock;
+  let mockLastLine: Mock;
+  let mockTransaction: Mock;
 
   beforeEach(() => {
-    mockGetCursor = jest.fn();
-    mockGetLine = jest.fn();
-    mockLastLine = jest.fn();
-    mockTransaction = jest.fn();
+    mockGetCursor = vi.fn();
+    mockGetLine = vi.fn();
+    mockLastLine = vi.fn();
+    mockTransaction = vi.fn();
 
     mockEditor = {
       getCursor: mockGetCursor,
       getLine: mockGetLine,
       lastLine: mockLastLine,
       transaction: mockTransaction,
-    } as unknown as jest.Mocked<Editor>;
+    } as unknown as Mocked<Editor>;
 
     provider = new OnlineBibleCitationProvider();
 
@@ -355,18 +357,18 @@ describe('insertBibleQuoteAtCursor', () => {
       },
     } satisfies LinkReplacerSettings;
 
-    (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValue({
+    (BibleTextFetcher.fetchBibleText as Mock).mockResolvedValue({
       success: true,
       text: 'For God loved the world so much that he gave his only-begotten Son.',
     });
 
-    (convertBibleTextToMarkdownLink as jest.Mock).mockReturnValue(
+    (convertBibleTextToMarkdownLink as Mock).mockReturnValue(
       '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)',
     );
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should insert quote at cursor line', async () => {
@@ -428,7 +430,7 @@ describe('insertBibleQuoteAtCursor', () => {
       'jwlibrary:///finder?bible=43003016 jwlibrary:///finder?bible=40005003',
     );
 
-    (BibleTextFetcher.fetchBibleText as jest.Mock)
+    (BibleTextFetcher.fetchBibleText as Mock)
       .mockResolvedValueOnce({
         success: true,
         text: 'For God loved the world so much that he gave his only-begotten Son.',
@@ -438,7 +440,7 @@ describe('insertBibleQuoteAtCursor', () => {
         text: 'Happy are those conscious of their spiritual need.',
       });
 
-    (convertBibleTextToMarkdownLink as jest.Mock)
+    (convertBibleTextToMarkdownLink as Mock)
       .mockReturnValueOnce('[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)')
       .mockReturnValueOnce('[Matt. 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)');
 
@@ -470,12 +472,12 @@ describe('insertBibleQuoteAtCursor', () => {
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue(lineText);
 
-    (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValueOnce({
+    (BibleTextFetcher.fetchBibleText as Mock).mockResolvedValueOnce({
       success: true,
       text: 'Have no fear because of their appearance, for I am with you to save you.',
     });
 
-    (convertBibleTextToMarkdownLink as jest.Mock).mockReturnValueOnce(
+    (convertBibleTextToMarkdownLink as Mock).mockReturnValueOnce(
       '[Jer. 1:8-9](jwlibrary:///finder?bible=24001008-24001009&wtlocale=X)',
     );
 
@@ -546,12 +548,12 @@ describe('insertBibleQuoteAtCursor', () => {
     const lines = ['[Matt. 24:14](jwlibrary:///finder?bible=40024014&wtlocale=E)', ''];
     mockGetLine.mockImplementation((line: number) => lines[line]);
 
-    (BibleTextFetcher.fetchBibleText as jest.Mock).mockResolvedValueOnce({
+    (BibleTextFetcher.fetchBibleText as Mock).mockResolvedValueOnce({
       success: true,
       text: 'And this good news of the Kingdom will be preached in all the inhabited earth.',
     });
 
-    (convertBibleTextToMarkdownLink as jest.Mock).mockReturnValueOnce(
+    (convertBibleTextToMarkdownLink as Mock).mockReturnValueOnce(
       '[Matt. 24:14](jwlibrary:///finder?bible=40024014&wtlocale=E)',
     );
 

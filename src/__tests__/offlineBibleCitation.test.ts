@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import { webcrypto } from 'crypto';
 import { zipSync, strToU8 } from 'fflate';

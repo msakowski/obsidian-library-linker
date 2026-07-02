@@ -24,22 +24,22 @@ Key features:
 
 - **TypeScript** (strict mode) with `@/*` path aliases mapping to `./src/*`
 - **esbuild** for bundling (CJS output, `main.js`)
-- **Jest** + **SWC** for testing (`jsdom` environment)
+- **Vitest** for testing (`jsdom` environment)
 - **ESLint** (type-checked rules) + **Prettier**
 - **pnpm** as package manager (not npm)
 - **Changesets** for versioning
 
 ## Commands
 
-| Command              | Purpose                                  |
-| -------------------- | ---------------------------------------- |
-| `pnpm dev`           | Watch mode with `DEBUG=true`             |
-| `pnpm build`         | Type-check + production build            |
-| `pnpm test`          | Lint + type-check + jest (full CI check) |
-| `pnpm test:lint`     | ESLint only                              |
-| `pnpm test:lint-fix` | ESLint with auto-fix                     |
-| `pnpm test:jest`     | Jest only                                |
-| `pnpm test:types`    | TypeScript type-check only               |
+| Command              | Purpose                                    |
+| -------------------- | ------------------------------------------ |
+| `pnpm dev`           | Watch mode with `DEBUG=true`               |
+| `pnpm build`         | Type-check + production build              |
+| `pnpm test`          | Lint + type-check + Vitest (full CI check) |
+| `pnpm test:lint`     | ESLint only                                |
+| `pnpm test:lint-fix` | ESLint with auto-fix                       |
+| `pnpm test:vitest`   | Vitest only                                |
+| `pnpm test:types`    | TypeScript type-check only                 |
 
 ## Project structure
 
@@ -101,10 +101,11 @@ Errors thrown in utils use translation keys as messages (e.g. `throw new Error('
 ### Tests
 
 - Test files live in `src/__tests__/*.test.ts`
-- Use `@jest-environment jsdom` directive when DOM APIs are needed
+- The `jsdom` environment is enabled globally in `vitest.config.ts`; add a `// @vitest-environment jsdom` directive only to override it per file
+- Vitest globals (`describe`, `test`, `expect`, `vi`, ...) are enabled — no imports needed; import mock helper _types_ (`Mock`, `Mocked`, `MockInstance`) from `vitest`
 - Use `initializeBibleBooksForTests()` helper to pre-load Bible book data
 - Use `createSettings()` helper for properly typed test settings
-- Tests run with SWC for speed (`@swc/jest` transform)
+- Module mocks resolve via `resolve.alias` in `vitest.config.ts` (`obsidian`, `electron`, `locale:all`, `@/`, `mocks/`)
 
 ### Types
 

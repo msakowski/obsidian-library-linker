@@ -1,3 +1,3 @@
 export const shell = {
-  openPath: jest.fn().mockResolvedValue(''),
+  openPath: vi.fn().mockResolvedValue(''),
 };

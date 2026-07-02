@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  */
 import { webCryptoSha256 } from '@/utils/webCryptoSha256';
 
