@@ -39,7 +39,7 @@ This project uses two linters:
 Managed via `simple-git-hooks` (configured in `package.json`):
 
 - **pre-commit** — runs `lint-staged`, which lints (and auto-fixes) only staged files
-- **pre-push** — runs `pnpm test:affected` (ESLint + remark + `tsc` + Jest on tests related to changes since `origin/main`); a push is aborted if any check fails. Use `pnpm test` for the full suite.
+- **pre-push** — runs `pnpm test:affected` (ESLint + remark + `tsc` + Vitest on tests related to changes since `origin/main`); a push is aborted if any check fails. Use `pnpm test` for the full suite.
 
 ### Recommended VS Code extensions
 

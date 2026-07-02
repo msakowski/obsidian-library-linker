@@ -346,10 +346,9 @@ export class BibleTextFetcher {
     if (!Platform.isDesktop) {
       throw new Error('System curl is only available on desktop');
     }
-    // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic require for desktop-only Node.js API
-    const { execFile } = require('child_process') as typeof import('child_process');
-    // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic require for desktop-only Node.js API
-    const { promisify } = require('util') as typeof import('util');
+    // Dynamic imports for desktop-only Node.js APIs (kept lazy so mobile never loads them).
+    const { execFile } = await import('child_process');
+    const { promisify } = await import('util');
     const execFileAsync = promisify(execFile);
 
     const { stdout } = await execFileAsync(

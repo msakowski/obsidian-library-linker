@@ -201,10 +201,10 @@ export class MarkdownRenderer {
 }
 
 // Mock requestUrl function
-export const requestUrl = jest.fn();
+export const requestUrl = vi.fn();
 
 // Mock request function (older API, returns string directly)
-export const request = jest.fn();
+export const request = vi.fn();
 
 // Mock Platform
 export const Platform = {
@@ -219,6 +219,6 @@ export const activeDocument = globalThis.document;
 export const activeWindow = globalThis.window;
 
 // Mock getLanguage
-export const getLanguage = jest.fn<string, []>(() => 'en');
+export const getLanguage = vi.fn(() => 'en');
 
 // Add any other Obsidian classes/types you need to mock

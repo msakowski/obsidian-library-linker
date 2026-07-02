@@ -77,7 +77,7 @@ describe('findBook', () => {
   });
 
   test('throws error for unknown books', () => {
-    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     expect(() => findBook('nonexistent', 'X')).toThrow('errors.bookNotFound');
     expect(() => findBook('', 'X')).toThrow('errors.bookNotFound');
     expect(() => findBook('xyz', 'X')).toThrow('errors.bookNotFound');

@@ -33,7 +33,7 @@ jobs:
         run: pnpm test:lint
 
       - name: unit-test
-        run: pnpm test:jest
+        run: pnpm test:vitest
 
       - name: typecheck
         run: pnpm test:types

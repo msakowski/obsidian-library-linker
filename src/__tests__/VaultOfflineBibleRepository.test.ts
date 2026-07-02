@@ -1,5 +1,5 @@
 /**
- * @jest-environment jsdom
+ * @vitest-environment jsdom
  */
 import { VaultOfflineBibleRepository } from '@/services/VaultOfflineBibleRepository';
 import { createInMemoryAdapter } from './__helpers__/createInMemoryAdapter';

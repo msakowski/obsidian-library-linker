@@ -1,14 +1,15 @@
 import { findJWLibraryLinks, findJWLibraryLinksInLine } from '@/utils/findJWLibraryLinks';
 import type { Editor } from 'obsidian';
+import type { Mocked } from 'vitest';
 
 describe('findJWLibraryLinks', () => {
-  let mockEditor: jest.Mocked<Editor>;
+  let mockEditor: Mocked<Editor>;
 
   beforeEach(() => {
     mockEditor = {
-      getLine: jest.fn(),
-      lastLine: jest.fn(),
-    } as unknown as jest.Mocked<Editor>;
+      getLine: vi.fn(),
+      lastLine: vi.fn(),
+    } as unknown as Mocked<Editor>;
   });
 
   test('should find single JW Library link', () => {

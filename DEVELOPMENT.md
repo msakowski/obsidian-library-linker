@@ -31,23 +31,23 @@ pnpm dev
 
 ## Available Scripts
 
-| Script                 | Description                                               |
-| ---------------------- | --------------------------------------------------------- |
-| `pnpm dev`             | Watch mode with debug logging enabled                     |
-| `pnpm build`           | Type-check and production build (minified, no sourcemaps) |
-| `pnpm test`            | Run lint, type-check, and unit tests                      |
-| `pnpm test:lint`       | ESLint check                                              |
-| `pnpm test:lint-fix`   | ESLint with auto-fix                                      |
-| `pnpm test:types`      | TypeScript type-check (`tsc --noEmit`)                    |
-| `pnpm test:jest`       | Run Jest unit tests                                       |
-| `pnpm test:jest-watch` | Run Jest in watch mode                                    |
-| `pnpm changeset`       | Create a changeset for versioning                         |
+| Script                   | Description                                               |
+| ------------------------ | --------------------------------------------------------- |
+| `pnpm dev`               | Watch mode with debug logging enabled                     |
+| `pnpm build`             | Type-check and production build (minified, no sourcemaps) |
+| `pnpm test`              | Run lint, type-check, and unit tests                      |
+| `pnpm test:lint`         | ESLint check                                              |
+| `pnpm test:lint-fix`     | ESLint with auto-fix                                      |
+| `pnpm test:types`        | TypeScript type-check (`tsc --noEmit`)                    |
+| `pnpm test:vitest`       | Run Vitest unit tests                                     |
+| `pnpm test:vitest-watch` | Run Vitest in watch mode                                  |
+| `pnpm changeset`         | Create a changeset for versioning                         |
 
 ## Project Structure
 
 ```
 src/
-├── __tests__/            # Unit tests (Jest + SWC)
+├── __tests__/            # Unit tests (Vitest)
 ├── consts/               # Constants (chapter counts, etc.)
 ├── services/             # BibleTextFetcher, TranslationService
 ├── stores/               # Bible books data store
@@ -78,9 +78,9 @@ To view debug output, open the Obsidian developer console (**Ctrl+Shift+I** / **
 
 - **Language**: TypeScript (strict mode)
 - **Bundler**: esbuild (configured in `esbuild.config.mjs`)
-- **Testing**: Jest with SWC transform, jsdom environment
+- **Testing**: Vitest, jsdom environment
 - **Linting**: ESLint with TypeScript type-checked rules + Prettier
-- **Path aliases**: `@/*` maps to `./src/*` (configured in `tsconfig.json`, `jest.config.js`, and esbuild)
+- **Path aliases**: `@/*` maps to `./src/*` (configured in `tsconfig.json`, `vitest.config.ts`, and esbuild)
 - **Locales**: YAML files bundled at build time via a custom esbuild plugin (`esbuild-yaml-plugin.mjs`)
 
 ## CI
@@ -88,5 +88,5 @@ To view debug output, open the Obsidian developer console (**Ctrl+Shift+I** / **
 GitHub Actions runs on every push to `main` and on all pull requests (`.github/workflows/test.yml`):
 
 1. Lint (`pnpm test:lint`)
-2. Unit tests (`pnpm test:jest`)
+2. Unit tests (`pnpm test:vitest`)
 3. Type-check (`pnpm test:types`)

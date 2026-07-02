@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import YAML from 'yaml';
 
-// In Jest/CommonJS context, __dirname is available
+// Vitest injects __dirname per test module.
 const projectRoot = path.resolve(__dirname, '../../..');
 
 const localeDir = path.resolve(projectRoot, 'locale');
