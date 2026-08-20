@@ -1,76 +1,437 @@
 {
-  "esbuild-yaml-plugin.mjs": 1776639443.5532398,
-  "jest.config.js": 1776639443.5537498,
-  "eslint.config.ts": 1776693605.104873,
-  "esbuild.config.mjs": 1776639443.5535011,
-  "version-bump.mjs": 1767355631.0,
-  "src/main.ts": 1777131892.5656984,
-  "src/JWLibraryLinkerSettings.ts": 1777130590.7682416,
-  "src/BibleReferenceSuggester.ts": 1776253032.014613,
-  "src/electron.d.ts": 1776639443.5583632,
-  "src/types.ts": 1777224766.2903385,
-  "src/yaml.d.ts": 1767355631.0,
-  "src/ConvertSuggester.ts": 1767211372.0,
-  "src/stores/bibleBooks.ts": 1777131892.5669188,
-  "src/utils/getLanguageFromLocale.ts": 1777225802.200643,
-  "src/utils/parseBibleReference.ts": 1776253032.01647,
-  "src/utils/buildBookNameRegex.ts": 1776253032.016124,
-  "src/utils/padNumber.ts": 1754165727.0,
-  "src/utils/signLanguage.ts": 1777131892.5679295,
-  "src/utils/convertBibleTextToMarkdownLink.ts": 1767211372.0,
-  "src/utils/bibleReferenceRegex.ts": 1776253032.0159347,
-  "src/utils/convertBibleReference.ts": 1745002083.0,
-  "src/utils/bibleBookExists.ts": 1767211372.0,
-  "src/utils/logger.ts": 1772569179.0,
-  "src/utils/cleanHtmlText.ts": 1777207397.75006,
-  "src/utils/findBook.ts": 1776253032.0162323,
-  "src/utils/findJWLibraryLinks.ts": 1776639443.5602996,
-  "src/utils/getLocaleFromLanguage.ts": 1777226037.8366408,
-  "src/utils/formatJWLibraryLink.ts": 1767211372.0,
-  "src/utils/convertPublicationReference.ts": 1760732708.0,
-  "src/utils/linkUnlinkedBibleReferences.ts": 1776639443.5609627,
-  "src/utils/formatBibleText.ts": 1768833249.0,
-  "src/utils/convertLinks.ts": 1767109626.0,
-  "src/utils/insertBibleQuotes.ts": 1777131892.5677426,
-  "src/__tests__/convertLinks.test.ts": 1767355631.0,
-  "src/__tests__/parseBibleReference.test.ts": 1777130590.7699685,
-  "src/__tests__/findBook.test.ts": 1777212636.8718543,
-  "src/__tests__/convertBibleReference.test.ts": 1767213022.0,
-  "src/__tests__/languageValidation.test.ts": 1777224842.9246714,
-  "src/__tests__/buildBookNameRegex.test.ts": 1776253032.015335,
-  "src/__tests__/localeValidation.test.ts": 1777210864.103075,
-  "src/__tests__/linkUnlinkedBibleReferences.test.ts": 1776253032.0157187,
-  "src/__tests__/formatBibleText.test.ts": 1768833249.0,
-  "src/__tests__/convertBibleTextToMarkdownLink.test.ts": 1767355631.0,
-  "src/__tests__/signLanguage.test.ts": 1777131892.5637283,
-  "src/__tests__/bibleReferenceRegex.test.ts": 1776253032.0152645,
-  "src/__tests__/getLocaleFromLanguage.test.ts": 1777226129.0765612,
-  "src/__tests__/BibleTextFetcher.test.ts": 1777212440.511154,
-  "src/__tests__/cleanHtmlText.test.ts": 1777207397.7483406,
-  "src/__tests__/formatJWLibraryLink.test.ts": 1767213022.0,
-  "src/__tests__/convertPublicationReference.test.ts": 1767213022.0,
-  "src/__tests__/insertBibleQuotes.test.ts": 1777212588.9130795,
-  "src/__tests__/offlineBibleCitation.test.ts": 1777228338.9193213,
-  "src/__tests__/findJWLibraryLinks.test.ts": 1775933160.9536748,
-  "src/__tests__/__mocks__/obsidian.ts": 1776639443.558007,
-  "src/__tests__/__mocks__/electron.ts": 1776639443.557719,
-  "src/__tests__/__mocks__/plugin.ts": 1777131896.1386278,
-  "src/__tests__/__mocks__/locale-all.ts": 1775933160.953144,
-  "src/__tests__/__helpers__/initializeBibleBooksForTests.ts": 1777207397.7476537,
-  "src/__tests__/__helpers__/createSettings.ts": 1767355631.0,
-  "src/consts/languages.ts": 1777224860.7639475,
-  "src/consts/chapterCounts.ts": 1767211372.0,
-  "src/services/BibleEpubImportService.ts": 1777228322.3232946,
-  "src/services/OnlineBibleCitationProvider.ts": 1776639443.5593581,
-  "src/services/TranslationService.ts": 1777227125.6700103,
-  "src/services/OfflineBibleCitationProvider.ts": 1777130590.7725468,
-  "src/services/PluginDataPathService.ts": 1776680976.0816393,
-  "src/services/BibleTextFetcher.ts": 1777226278.7867513,
-  "src/services/FileSystemOfflineBibleRepository.ts": 1776680976.081385,
-  "src/services/ConfiguredBibleCitationProvider.ts": 1776639443.558845,
-  "CHANGELOG.md": 1776680976.0803876,
-  "README.md": 1777209757.3736951,
-  "CONTRIBUTING.md": 1770745715.0,
-  "DEVELOPMENT.md": 1772569167.0,
-  "CLAUDE.md": 1775574609.482347
+  "esbuild-yaml-plugin.mjs": {
+    "mtime": 1779486815.1945467,
+    "ast_hash": "a26268808f1a47bf84b657ce8bc5f423",
+    "semantic_hash": "a26268808f1a47bf84b657ce8bc5f423"
+  },
+  "eslint.config.ts": {
+    "mtime": 1779487145.4332552,
+    "ast_hash": "724abb1338e05a2dd6a8908bc95011ae",
+    "semantic_hash": "724abb1338e05a2dd6a8908bc95011ae"
+  },
+  "esbuild.config.mjs": {
+    "mtime": 1779486815.1947184,
+    "ast_hash": "2271d6ef8d49eada84f6b8ff9cb40150",
+    "semantic_hash": "2271d6ef8d49eada84f6b8ff9cb40150"
+  },
+  "version-bump.mjs": {
+    "mtime": 1767355631.0,
+    "ast_hash": "92931a2bedc1c97b804e212aeb8619ea",
+    "semantic_hash": "92931a2bedc1c97b804e212aeb8619ea"
+  },
+  "src/main.ts": {
+    "mtime": 1780596886.0254464,
+    "ast_hash": "53004b09a6dd8124a180beb42ffa2274",
+    "semantic_hash": "53004b09a6dd8124a180beb42ffa2274"
+  },
+  "src/BibleReferenceSuggester.ts": {
+    "mtime": 1779486815.2025423,
+    "ast_hash": "73c174e1944383e4ce06cee4ac7a127e",
+    "semantic_hash": "73c174e1944383e4ce06cee4ac7a127e"
+  },
+  "src/electron.d.ts": {
+    "mtime": 1776639443.5583632,
+    "ast_hash": "8a357c11f3499eb5c34130b3093af272",
+    "semantic_hash": "8a357c11f3499eb5c34130b3093af272"
+  },
+  "src/types.ts": {
+    "mtime": 1780596875.4398143,
+    "ast_hash": "9d2fc543bfbc9ec1eb38f24371fc1c22",
+    "semantic_hash": "9d2fc543bfbc9ec1eb38f24371fc1c22"
+  },
+  "src/yaml.d.ts": {
+    "mtime": 1767355631.0,
+    "ast_hash": "a46562c18c733a8fe64d287c2a06918a",
+    "semantic_hash": "a46562c18c733a8fe64d287c2a06918a"
+  },
+  "src/ConvertSuggester.ts": {
+    "mtime": 1767211372.0,
+    "ast_hash": "5f6239f9f73691051098446729d0824f",
+    "semantic_hash": "5f6239f9f73691051098446729d0824f"
+  },
+  "src/stores/bibleBooks.ts": {
+    "mtime": 1777332010.1068,
+    "ast_hash": "764bf3fb0d4e88fb0866b09d02be4d9a",
+    "semantic_hash": "764bf3fb0d4e88fb0866b09d02be4d9a"
+  },
+  "src/utils/getLanguageFromLocale.ts": {
+    "mtime": 1779486815.210396,
+    "ast_hash": "3d0914d213e728947b2e26dc7e21c694",
+    "semantic_hash": "3d0914d213e728947b2e26dc7e21c694"
+  },
+  "src/utils/parseBibleReference.ts": {
+    "mtime": 1779486815.2108011,
+    "ast_hash": "3d6597c9ede29a39e46dec1032cfb83c",
+    "semantic_hash": "3d6597c9ede29a39e46dec1032cfb83c"
+  },
+  "src/utils/buildBookNameRegex.ts": {
+    "mtime": 1779486815.209806,
+    "ast_hash": "ef39080775c437623b9212a0fc8875de",
+    "semantic_hash": "ef39080775c437623b9212a0fc8875de"
+  },
+  "src/utils/padNumber.ts": {
+    "mtime": 1754165727.0,
+    "ast_hash": "35bda001385da74f4e7af205a646fe33",
+    "semantic_hash": "35bda001385da74f4e7af205a646fe33"
+  },
+  "src/utils/signLanguage.ts": {
+    "mtime": 1777131892.5679295,
+    "ast_hash": "a8fbc31d69303b165908ddd69ec96aad",
+    "semantic_hash": "a8fbc31d69303b165908ddd69ec96aad"
+  },
+  "src/utils/convertBibleTextToMarkdownLink.ts": {
+    "mtime": 1781127124.0705059,
+    "ast_hash": "54a27e659d702364725c436623768858",
+    "semantic_hash": "54a27e659d702364725c436623768858"
+  },
+  "src/utils/bibleReferenceRegex.ts": {
+    "mtime": 1779486815.2095983,
+    "ast_hash": "bfda88e5614376922b86cdf43010d2dd",
+    "semantic_hash": "bfda88e5614376922b86cdf43010d2dd"
+  },
+  "src/utils/bibleBookExists.ts": {
+    "mtime": 1767211372.0,
+    "ast_hash": "b9844441395689c5fdd6ac4add64f94d",
+    "semantic_hash": "b9844441395689c5fdd6ac4add64f94d"
+  },
+  "src/utils/logger.ts": {
+    "mtime": 1772569179.0,
+    "ast_hash": "264186ebc2c978a13bb8bd12d5c2e61c",
+    "semantic_hash": "264186ebc2c978a13bb8bd12d5c2e61c"
+  },
+  "src/utils/cleanHtmlText.ts": {
+    "mtime": 1777207397.75006,
+    "ast_hash": "51b5af29ad38d421a034015033014307",
+    "semantic_hash": "51b5af29ad38d421a034015033014307"
+  },
+  "src/utils/findBook.ts": {
+    "mtime": 1779486815.210342,
+    "ast_hash": "ac78c6ba3de17d3e745fab2bf1a45bc6",
+    "semantic_hash": "ac78c6ba3de17d3e745fab2bf1a45bc6"
+  },
+  "src/utils/findJWLibraryLinks.ts": {
+    "mtime": 1779473190.474439,
+    "ast_hash": "6704c8fb3b95448922651efb06c0aadc",
+    "semantic_hash": "6704c8fb3b95448922651efb06c0aadc"
+  },
+  "src/utils/getLocaleFromLanguage.ts": {
+    "mtime": 1779486815.2104428,
+    "ast_hash": "7e8e71482c81a02ec8737bdc4873d2c8",
+    "semantic_hash": "7e8e71482c81a02ec8737bdc4873d2c8"
+  },
+  "src/utils/formatJWLibraryLink.ts": {
+    "mtime": 1767211372.0,
+    "ast_hash": "8d13d74872f76f36f17688428511ab2e",
+    "semantic_hash": "8d13d74872f76f36f17688428511ab2e"
+  },
+  "src/utils/convertPublicationReference.ts": {
+    "mtime": 1779486815.2101948,
+    "ast_hash": "cd84182c6f37096fe246e60543c0e270",
+    "semantic_hash": "cd84182c6f37096fe246e60543c0e270"
+  },
+  "src/utils/linkUnlinkedBibleReferences.ts": {
+    "mtime": 1776639443.5609627,
+    "ast_hash": "2dbcb7f67f3f69f1ff04bb7fc86d713d",
+    "semantic_hash": "2dbcb7f67f3f69f1ff04bb7fc86d713d"
+  },
+  "src/utils/formatBibleText.ts": {
+    "mtime": 1779041685.2677815,
+    "ast_hash": "c6a152ed3405a63793d0816c6bb589fa",
+    "semantic_hash": "c6a152ed3405a63793d0816c6bb589fa"
+  },
+  "src/utils/convertLinks.ts": {
+    "mtime": 1779486815.210013,
+    "ast_hash": "e95f1b267dda1b57d38fa29a1be15f33",
+    "semantic_hash": "e95f1b267dda1b57d38fa29a1be15f33"
+  },
+  "src/utils/insertBibleQuotes.ts": {
+    "mtime": 1781127120.586206,
+    "ast_hash": "0b5f58a1b1f5a52d4a63d59127b1dc9a",
+    "semantic_hash": "0b5f58a1b1f5a52d4a63d59127b1dc9a"
+  },
+  "src/__tests__/convertLinks.test.ts": {
+    "mtime": 1767355631.0,
+    "ast_hash": "1c84177d0327570b9771289ecfd56c1b",
+    "semantic_hash": "1c84177d0327570b9771289ecfd56c1b"
+  },
+  "src/__tests__/parseBibleReference.test.ts": {
+    "mtime": 1777130590.7699685,
+    "ast_hash": "83ac8ed56fcc07c4e0e41f1d9488a5a4",
+    "semantic_hash": "83ac8ed56fcc07c4e0e41f1d9488a5a4"
+  },
+  "src/__tests__/findBook.test.ts": {
+    "mtime": 1783076960.0982506,
+    "ast_hash": "11f1ced2e29d4d9c8a36da4e400745e1",
+    "semantic_hash": "11f1ced2e29d4d9c8a36da4e400745e1"
+  },
+  "src/__tests__/languageValidation.test.ts": {
+    "mtime": 1779486815.2044513,
+    "ast_hash": "5fc4525e523eebcb68ead776aba63fb7",
+    "semantic_hash": "5fc4525e523eebcb68ead776aba63fb7"
+  },
+  "src/__tests__/buildBookNameRegex.test.ts": {
+    "mtime": 1779486815.2039495,
+    "ast_hash": "7a426000350192131886f80894f92c25",
+    "semantic_hash": "7a426000350192131886f80894f92c25"
+  },
+  "src/__tests__/localeValidation.test.ts": {
+    "mtime": 1779486815.2048023,
+    "ast_hash": "2400f6f82d48cf825f028c318db9cb4d",
+    "semantic_hash": "2400f6f82d48cf825f028c318db9cb4d"
+  },
+  "src/__tests__/linkUnlinkedBibleReferences.test.ts": {
+    "mtime": 1783076960.0985956,
+    "ast_hash": "1a6c86e5b7c57b759ecb3dfa1c22c391",
+    "semantic_hash": "1a6c86e5b7c57b759ecb3dfa1c22c391"
+  },
+  "src/__tests__/formatBibleText.test.ts": {
+    "mtime": 1768833249.0,
+    "ast_hash": "123e4f7c96b7aca0f79d4b90aeef59be",
+    "semantic_hash": "123e4f7c96b7aca0f79d4b90aeef59be"
+  },
+  "src/__tests__/convertBibleTextToMarkdownLink.test.ts": {
+    "mtime": 1781127124.0702283,
+    "ast_hash": "9b5c0c7cc729b3b99fcd41b3d7eefd7b",
+    "semantic_hash": "9b5c0c7cc729b3b99fcd41b3d7eefd7b"
+  },
+  "src/__tests__/signLanguage.test.ts": {
+    "mtime": 1777131892.5637283,
+    "ast_hash": "5f87e2bc484480000f8267bf8fca517c",
+    "semantic_hash": "5f87e2bc484480000f8267bf8fca517c"
+  },
+  "src/__tests__/bibleReferenceRegex.test.ts": {
+    "mtime": 1776253032.0152645,
+    "ast_hash": "56e6492d8834c23ed67801afde7de0f5",
+    "semantic_hash": "56e6492d8834c23ed67801afde7de0f5"
+  },
+  "src/__tests__/getLocaleFromLanguage.test.ts": {
+    "mtime": 1779486815.204198,
+    "ast_hash": "ad18cad8d80ffe95e3ffcc2cc368349f",
+    "semantic_hash": "ad18cad8d80ffe95e3ffcc2cc368349f"
+  },
+  "src/__tests__/BibleTextFetcher.test.ts": {
+    "mtime": 1783076960.097599,
+    "ast_hash": "c3387ab4077185610eb502dfd3b44637",
+    "semantic_hash": "c3387ab4077185610eb502dfd3b44637"
+  },
+  "src/__tests__/cleanHtmlText.test.ts": {
+    "mtime": 1783076960.0980253,
+    "ast_hash": "2ac2a1087923b7ccc259af6a826c35ea",
+    "semantic_hash": "2ac2a1087923b7ccc259af6a826c35ea"
+  },
+  "src/__tests__/formatJWLibraryLink.test.ts": {
+    "mtime": 1767213022.0,
+    "ast_hash": "208dd85bb7cfedeaa19024e9e6d46497",
+    "semantic_hash": "208dd85bb7cfedeaa19024e9e6d46497"
+  },
+  "src/__tests__/convertPublicationReference.test.ts": {
+    "mtime": 1767213022.0,
+    "ast_hash": "7968f55e9a75be2cda0688a7aa7d88a6",
+    "semantic_hash": "7968f55e9a75be2cda0688a7aa7d88a6"
+  },
+  "src/__tests__/insertBibleQuotes.test.ts": {
+    "mtime": 1783076960.0984523,
+    "ast_hash": "d8f55b160429a52ee276b2e4cea51697",
+    "semantic_hash": "d8f55b160429a52ee276b2e4cea51697"
+  },
+  "src/__tests__/offlineBibleCitation.test.ts": {
+    "mtime": 1783076960.09869,
+    "ast_hash": "9c6e13dbb8f0a70965c005b97659fe6a",
+    "semantic_hash": "9c6e13dbb8f0a70965c005b97659fe6a"
+  },
+  "src/__tests__/findJWLibraryLinks.test.ts": {
+    "mtime": 1783076960.0983365,
+    "ast_hash": "fb5d3005540e27d28b5470f04e24ad5e",
+    "semantic_hash": "fb5d3005540e27d28b5470f04e24ad5e"
+  },
+  "src/__tests__/__mocks__/obsidian.ts": {
+    "mtime": 1783076960.0979505,
+    "ast_hash": "dd271a7b6947dd19b465fb336e94b8f6",
+    "semantic_hash": "dd271a7b6947dd19b465fb336e94b8f6"
+  },
+  "src/__tests__/__mocks__/electron.ts": {
+    "mtime": 1783076960.0977943,
+    "ast_hash": "9ee2849aac05808fad38fc0e201aa646",
+    "semantic_hash": "9ee2849aac05808fad38fc0e201aa646"
+  },
+  "src/__tests__/__mocks__/plugin.ts": {
+    "mtime": 1779028089.6794877,
+    "ast_hash": "95c20e3d2e2893d85a831caabbc3a828",
+    "semantic_hash": "95c20e3d2e2893d85a831caabbc3a828"
+  },
+  "src/__tests__/__mocks__/locale-all.ts": {
+    "mtime": 1783076960.0978725,
+    "ast_hash": "47ae355251026ca13f4133653a7db2d9",
+    "semantic_hash": "47ae355251026ca13f4133653a7db2d9"
+  },
+  "src/__tests__/__helpers__/initializeBibleBooksForTests.ts": {
+    "mtime": 1779486815.2031696,
+    "ast_hash": "3488bc54513cea9690c1d671e849687c",
+    "semantic_hash": "3488bc54513cea9690c1d671e849687c"
+  },
+  "src/__tests__/__helpers__/createSettings.ts": {
+    "mtime": 1767355631.0,
+    "ast_hash": "f7976b413217986ad09b02a24da747cf",
+    "semantic_hash": "f7976b413217986ad09b02a24da747cf"
+  },
+  "src/consts/languages.ts": {
+    "mtime": 1779487145.435247,
+    "ast_hash": "2bca76b6a524f194e6ce305454f5ba8b",
+    "semantic_hash": "2bca76b6a524f194e6ce305454f5ba8b"
+  },
+  "src/consts/chapterCounts.ts": {
+    "mtime": 1767211372.0,
+    "ast_hash": "e4995c86cd437d69f4ff8faa7893bd33",
+    "semantic_hash": "e4995c86cd437d69f4ff8faa7893bd33"
+  },
+  "src/services/BibleEpubImportService.ts": {
+    "mtime": 1779486815.2067885,
+    "ast_hash": "f642062ba4edb6b31317c8b8ae4c4801",
+    "semantic_hash": "f642062ba4edb6b31317c8b8ae4c4801"
+  },
+  "src/services/OnlineBibleCitationProvider.ts": {
+    "mtime": 1776639443.5593581,
+    "ast_hash": "9258e0fabfa4ee619561db8970c19922",
+    "semantic_hash": "9258e0fabfa4ee619561db8970c19922"
+  },
+  "src/services/TranslationService.ts": {
+    "mtime": 1779486815.2075477,
+    "ast_hash": "29033428c8e40a7a04403021f8e3e130",
+    "semantic_hash": "29033428c8e40a7a04403021f8e3e130"
+  },
+  "src/services/OfflineBibleCitationProvider.ts": {
+    "mtime": 1777130590.7725468,
+    "ast_hash": "5e66078e81135381e032c509b02a7103",
+    "semantic_hash": "5e66078e81135381e032c509b02a7103"
+  },
+  "src/services/PluginDataPathService.ts": {
+    "mtime": 1779487145.436012,
+    "ast_hash": "9d70203642a3537bc767a8025e6218f9",
+    "semantic_hash": "9d70203642a3537bc767a8025e6218f9"
+  },
+  "src/services/BibleTextFetcher.ts": {
+    "mtime": 1783076960.0989223,
+    "ast_hash": "90d01c494dd48be91adf94ef8126e4bf",
+    "semantic_hash": "90d01c494dd48be91adf94ef8126e4bf"
+  },
+  "src/services/ConfiguredBibleCitationProvider.ts": {
+    "mtime": 1776639443.558845,
+    "ast_hash": "aa22a2996601d35943fc7480dfd974ce",
+    "semantic_hash": "aa22a2996601d35943fc7480dfd974ce"
+  },
+  "CHANGELOG.md": {
+    "mtime": 1781127124.0690324,
+    "ast_hash": "972db97138ef9e78f73145198454740e",
+    "semantic_hash": "972db97138ef9e78f73145198454740e"
+  },
+  "README.md": {
+    "mtime": 1783017777.9424846,
+    "ast_hash": "665f86d7952f14f278af35f3152eb816",
+    "semantic_hash": "665f86d7952f14f278af35f3152eb816"
+  },
+  "CONTRIBUTING.md": {
+    "mtime": 1783076960.0967295,
+    "ast_hash": "39b7245b3c47df289f47cacc35b2a40e",
+    "semantic_hash": "39b7245b3c47df289f47cacc35b2a40e"
+  },
+  "DEVELOPMENT.md": {
+    "mtime": 1783076960.0968015,
+    "ast_hash": "73d996e84f9293396a232179c257210a",
+    "semantic_hash": "73d996e84f9293396a232179c257210a"
+  },
+  "CLAUDE.md": {
+    "mtime": 1783076960.09666,
+    "ast_hash": "f32f5e76f2e072d90750aac03200b7a5",
+    "semantic_hash": "f32f5e76f2e072d90750aac03200b7a5"
+  },
+  "vitest.config.ts": {
+    "mtime": 1783076960.099084,
+    "ast_hash": "3657a824e4d9dd543a8887a3c3701d61",
+    "semantic_hash": "3657a824e4d9dd543a8887a3c3701d61"
+  },
+  "src/settings/LanguageSuggest.ts": {
+    "mtime": 1779486815.2080097,
+    "ast_hash": "8ced2da6b7bb287e07854c3c34c01651",
+    "semantic_hash": "8ced2da6b7bb287e07854c3c34c01651"
+  },
+  "src/settings/JWLibraryLinkerSettings.ts": {
+    "mtime": 1780573531.738485,
+    "ast_hash": "ce043b0f642cc91128b8a8a4d7dc9d9d",
+    "semantic_hash": "ce043b0f642cc91128b8a8a4d7dc9d9d"
+  },
+  "src/settings/renderMarkdown.ts": {
+    "mtime": 1779486815.2084036,
+    "ast_hash": "efa81063c398ce6d5d3f9e3c05d0baba",
+    "semantic_hash": "efa81063c398ce6d5d3f9e3c05d0baba"
+  },
+  "src/settings/types.ts": {
+    "mtime": 1779486815.2093031,
+    "ast_hash": "f44fff78218d18d67998cbbd413250fa",
+    "semantic_hash": "f44fff78218d18d67998cbbd413250fa"
+  },
+  "src/settings/MarkdownComponent.ts": {
+    "mtime": 1779486815.2081213,
+    "ast_hash": "d7fdd5ce798a73e88ff309a4599c48d0",
+    "semantic_hash": "d7fdd5ce798a73e88ff309a4599c48d0"
+  },
+  "src/settings/createSettingGroup.ts": {
+    "mtime": 1779486815.2082758,
+    "ast_hash": "e61544ac7c9268f6970b7903db7a0d72",
+    "semantic_hash": "e61544ac7c9268f6970b7903db7a0d72"
+  },
+  "src/settings/sections/bibleQuote.ts": {
+    "mtime": 1780596861.2905223,
+    "ast_hash": "141dfbdcfb83bbb8b7016bc48744f028",
+    "semantic_hash": "141dfbdcfb83bbb8b7016bc48744f028"
+  },
+  "src/settings/sections/linkStyling.ts": {
+    "mtime": 1780596449.60001,
+    "ast_hash": "c474210725ccc8776abbf67c3c79eed3",
+    "semantic_hash": "c474210725ccc8776abbf67c3c79eed3"
+  },
+  "src/settings/sections/generalSettings.ts": {
+    "mtime": 1779486815.2087276,
+    "ast_hash": "b60439508e25911c125c03d0836f16dc",
+    "semantic_hash": "b60439508e25911c125c03d0836f16dc"
+  },
+  "src/settings/sections/offlineBible.ts": {
+    "mtime": 1779487145.4365673,
+    "ast_hash": "c23b4f1661e5fc832a6c32a6b33a3cb9",
+    "semantic_hash": "c23b4f1661e5fc832a6c32a6b33a3cb9"
+  },
+  "src/utils/webCryptoSha256.ts": {
+    "mtime": 1779486815.2108636,
+    "ast_hash": "3df5ff3ca454d1599ed4daf3b2db3671",
+    "semantic_hash": "3df5ff3ca454d1599ed4daf3b2db3671"
+  },
+  "src/__tests__/VaultOfflineBibleRepository.test.ts": {
+    "mtime": 1783076960.0977132,
+    "ast_hash": "dfacecb0d2d586b3c7edba4295f81528",
+    "semantic_hash": "dfacecb0d2d586b3c7edba4295f81528"
+  },
+  "src/__tests__/webCryptoSha256.test.ts": {
+    "mtime": 1783076960.0987754,
+    "ast_hash": "1af3e734116390489ac1b26ad4fda669",
+    "semantic_hash": "1af3e734116390489ac1b26ad4fda669"
+  },
+  "src/__tests__/__helpers__/createInMemoryAdapter.ts": {
+    "mtime": 1779486815.2029486,
+    "ast_hash": "8c69c89066d5ed4c94684472f286bbc3",
+    "semantic_hash": "8c69c89066d5ed4c94684472f286bbc3"
+  },
+  "src/services/VaultOfflineBibleRepository.ts": {
+    "mtime": 1779486815.207681,
+    "ast_hash": "2baa794541749601c0ac7ada6d99507d",
+    "semantic_hash": "2baa794541749601c0ac7ada6d99507d"
+  },
+  "LOCALIZATION.md": {
+    "mtime": 1783017777.9424987,
+    "ast_hash": "371898e4182875dc0666d999e658d75d",
+    "semantic_hash": "371898e4182875dc0666d999e658d75d"
+  },
+  "AGENTS.md": {
+    "mtime": 1783017777.9425027,
+    "ast_hash": "6b36ccc48bce52d1ca38dab0045e4bae",
+    "semantic_hash": "6b36ccc48bce52d1ca38dab0045e4bae"
+  }
 }

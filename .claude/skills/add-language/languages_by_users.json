@@ -199,7 +199,8 @@
   {
     "language": "Hungarian",
     "users": 20588,
-    "supported": false
+    "supported": true,
+    "languageCode": "H"
   },
   {
     "language": "Indonesian",

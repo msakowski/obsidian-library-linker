@@ -3015,24 +3015,6 @@
     "isRTL": false
   },
   {
-    "code": "H",
-    "locale": "hu",
-    "vernacular": "magyar",
-    "script": "ROMAN",
-    "name": "Hungarian",
-    "isSignLanguage": false,
-    "isRTL": false
-  },
-  {
-    "code": "HDF",
-    "locale": "hsh",
-    "vernacular": "magyar jelnyelv",
-    "script": "ROMAN",
-    "name": "Hungarian Sign Language",
-    "isSignLanguage": true,
-    "isRTL": false
-  },
-  {
     "code": "HSK",
     "locale": "hrx",
     "vernacular": "Hunsrik",

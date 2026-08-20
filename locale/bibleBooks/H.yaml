@@ -1,0 +1,418 @@
+- id: 1
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1Mózes
+    medium: 1Móz
+    short: 1Mó
+- id: 2
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2Mózes
+    medium: 2Móz
+    short: 2Mó
+- id: 3
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3Mózes
+    medium: 3Móz
+    short: 3Mó
+- id: 4
+  prefix: '4'
+  aliases: []
+  name:
+    long: 4Mózes
+    medium: 4Móz
+    short: 4Mó
+- id: 5
+  prefix: '5'
+  aliases: []
+  name:
+    long: 5Mózes
+    medium: 5Móz
+    short: 5Mó
+- id: 6
+  aliases: []
+  name:
+    long: Józsué
+    medium: Józs
+    short: Jzs
+- id: 7
+  aliases: []
+  name:
+    long: Bírák
+    medium: Bír
+    short: Bí
+- id: 8
+  aliases: []
+  name:
+    long: Ruth
+    medium: Ruth
+    short: Ru
+- id: 9
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1Sámuel
+    medium: 1Sám
+    short: 1Sá
+- id: 10
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2Sámuel
+    medium: 2Sám
+    short: 2Sá
+- id: 11
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1Királyok
+    medium: 1Kir
+    short: 1Ki
+- id: 12
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2Királyok
+    medium: 2Kir
+    short: 2Ki
+- id: 13
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1Krónikák
+    medium: 1Krón
+    short: 1Kr
+- id: 14
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2Krónikák
+    medium: 2Krón
+    short: 2Kr
+- id: 15
+  aliases: []
+  name:
+    long: Ezsdrás
+    medium: Ezsd
+    short: Ezs
+- id: 16
+  aliases: []
+  name:
+    long: Nehémiás
+    medium: Neh
+    short: Ne
+- id: 17
+  aliases: []
+  name:
+    long: Eszter
+    medium: Eszt
+    short: Esz
+- id: 18
+  aliases: []
+  name:
+    long: Jób
+    medium: Jób
+    short: Jób
+- id: 19
+  aliases: []
+  name:
+    long: Zsoltárok
+    medium: Zsolt
+    short: Zs
+- id: 20
+  aliases: []
+  name:
+    long: Példabeszédek
+    medium: Péld
+    short: Pl
+- id: 21
+  aliases: []
+  name:
+    long: Prédikátor
+    medium: Préd
+    short: Pr
+- id: 22
+  aliases: []
+  name:
+    long: Énekek éneke
+    medium: Ének
+    short: Én
+- id: 23
+  aliases: []
+  name:
+    long: Ézsaiás
+    medium: Ézs
+    short: Ézs
+- id: 24
+  aliases: []
+  name:
+    long: Jeremiás
+    medium: Jer
+    short: Jr
+- id: 25
+  aliases: []
+  name:
+    long: Siralmak
+    medium: Sir
+    short: Si
+- id: 26
+  aliases: []
+  name:
+    long: Ezékiel
+    medium: Ezék
+    short: Ez
+- id: 27
+  aliases: []
+  name:
+    long: Dániel
+    medium: Dán
+    short: Dá
+- id: 28
+  aliases: []
+  name:
+    long: Hóseás
+    medium: Hós
+    short: Hó
+- id: 29
+  aliases: []
+  name:
+    long: Jóel
+    medium: Jóel
+    short: Jóe
+- id: 30
+  aliases: []
+  name:
+    long: Ámós
+    medium: Ám
+    short: Ám
+- id: 31
+  aliases: []
+  name:
+    long: Abdiás
+    medium: Abd
+    short: Ab
+- id: 32
+  aliases: []
+  name:
+    long: Jónás
+    medium: Jón
+    short: Jón
+- id: 33
+  aliases: []
+  name:
+    long: Mikeás
+    medium: Mik
+    short: Mi
+- id: 34
+  aliases: []
+  name:
+    long: Náhum
+    medium: Náh
+    short: Ná
+- id: 35
+  aliases: []
+  name:
+    long: Habakuk
+    medium: Hab
+    short: Ha
+- id: 36
+  aliases: []
+  name:
+    long: Sofóniás
+    medium: Sof
+    short: So
+- id: 37
+  aliases: []
+  name:
+    long: Aggeus
+    medium: Agg
+    short: Ag
+- id: 38
+  aliases: []
+  name:
+    long: Zakariás
+    medium: Zak
+    short: Za
+- id: 39
+  aliases: []
+  name:
+    long: Malakiás
+    medium: Mal
+    short: Ma
+- id: 40
+  aliases: []
+  name:
+    long: Máté
+    medium: Máté
+    short: Mt
+- id: 41
+  aliases: []
+  name:
+    long: Márk
+    medium: Márk
+    short: Mr
+- id: 42
+  aliases: []
+  name:
+    long: Lukács
+    medium: Luk
+    short: Lk
+- id: 43
+  aliases: []
+  name:
+    long: János
+    medium: Ján
+    short: Jn
+- id: 44
+  aliases: []
+  name:
+    long: Cselekedetek
+    medium: Csel
+    short: Cs
+- id: 45
+  aliases: []
+  name:
+    long: Róma
+    medium: Róma
+    short: Ró
+- id: 46
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1Korintusz
+    medium: 1Kor
+    short: 1Ko
+- id: 47
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2Korintusz
+    medium: 2Kor
+    short: 2Ko
+- id: 48
+  aliases: []
+  name:
+    long: Galácia
+    medium: Gal
+    short: Ga
+- id: 49
+  aliases: []
+  name:
+    long: Efézus
+    medium: Ef
+    short: Ef
+- id: 50
+  aliases: []
+  name:
+    long: Filippi
+    medium: Flp
+    short: Flp
+- id: 51
+  aliases: []
+  name:
+    long: Kolosszé
+    medium: Kol
+    short: Kol
+- id: 52
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1Tesszalonika
+    medium: 1Tessz
+    short: 1Te
+- id: 53
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2Tesszalonika
+    medium: 2Tessz
+    short: 2Te
+- id: 54
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1Timóteusz
+    medium: 1Tim
+    short: 1Ti
+- id: 55
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2Timóteusz
+    medium: 2Tim
+    short: 2Ti
+- id: 56
+  aliases: []
+  name:
+    long: Titusz
+    medium: Tit
+    short: Tit
+- id: 57
+  aliases: []
+  name:
+    long: Filemon
+    medium: Filem
+    short: Flm
+- id: 58
+  aliases: []
+  name:
+    long: Héberek
+    medium: Héb
+    short: Héb
+- id: 59
+  aliases: []
+  name:
+    long: Jakab
+    medium: Jak
+    short: Jk
+- id: 60
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1Péter
+    medium: 1Pét
+    short: 1Pt
+- id: 61
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2Péter
+    medium: 2Pét
+    short: 2Pt
+- id: 62
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1János
+    medium: 1Ján
+    short: 1Jn
+- id: 63
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2János
+    medium: 2Ján
+    short: 2Jn
+- id: 64
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3János
+    medium: 3Ján
+    short: 3Jn
+- id: 65
+  aliases: []
+  name:
+    long: Júdás
+    medium: Júd
+    short: Júd
+- id: 66
+  aliases: []
+  name:
+    long: Jelenések
+    medium: Jel
+    short: Jel

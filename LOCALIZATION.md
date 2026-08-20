@@ -11,6 +11,7 @@
 | E    | English / English                 |
 | F    | français / French                 |
 | FI   | suomi / Finnish                   |
+| H    | magyar / Hungarian                |
 | I    | Italiano / Italian                |
 | J    | 日本語 / Japanese                    |
 | KO   | 한국어 / Korean                      |
@@ -36,6 +37,7 @@
 | CRS  | Langue des signes centrafricaine / Central African Republic Sign Language |
 | DGS  | Deutsche Gebärdensprache / German Sign Language                           |
 | FID  | suomalainen viittomakieli / Finnish Sign Language                         |
+| HDF  | magyar jelnyelv / Hungarian Sign Language                                 |
 | HZJ  | hrvatski znakovni jezik / Croatian Sign Language                          |
 | ISG  | Irish Sign Language / Irish Sign Language                                 |
 | JML  | Jamaican Sign Language / Jamaican Sign Language                           |

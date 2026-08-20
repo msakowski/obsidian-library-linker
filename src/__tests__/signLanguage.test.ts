@@ -20,6 +20,10 @@ describe('SIGN_LANGUAGE_MAP', () => {
   test('DGS maps to German', () => {
     expect(SIGN_LANGUAGE_MAP['DGS']).toBe('X');
   });
+
+  test('HDF maps to Hungarian', () => {
+    expect(SIGN_LANGUAGE_MAP['HDF']).toBe('H');
+  });
 });
 
 describe('getBookLanguage', () => {
@@ -35,6 +39,7 @@ describe('getBookLanguage', () => {
     expect(getBookLanguage('DGS')).toBe('X');
     expect(getBookLanguage('KSL')).toBe('KO');
     expect(getBookLanguage('HZJ')).toBe('C');
+    expect(getBookLanguage('HDF')).toBe('H');
   });
 });
 
