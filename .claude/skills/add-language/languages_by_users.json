@@ -205,7 +205,8 @@
   {
     "language": "Indonesian",
     "users": 20571,
-    "supported": false
+    "supported": true,
+    "languageCode": "IN"
   },
   {
     "language": "Finnish",
