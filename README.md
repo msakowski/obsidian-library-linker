@@ -50,11 +50,12 @@ Type a Bible reference and the plugin creates a markdown link that opens directl
 
 Fetch actual Bible text from jw\.org and insert it directly into your notes.
 
-**Three ways to insert quotes:**
+**Four ways to insert quotes:**
 
 1. **Command palette** → "Insert Bible quotes for JW Library links" — processes selected text or the entire note
 2. **Command palette** → "Insert Bible quote at cursor" — inserts a quote for the link at your cursor
 3. **Right-click** on a JW Library link → "Insert Bible quote"
+4. **Automatically** — turn on "Insert quote automatically" to get the quote as soon as a link is created from the suggestions (off by default)
 
 **Customizable quote templates:**
 
@@ -134,6 +135,14 @@ Re-process already converted `jwlibrary://` links with your current formatting s
 ### Bible Quote Template
 
 Customize the format of inserted Bible quotes with a live preview. Choose from presets or write your own template.
+
+### Insert Quote Automatically
+
+Off by default. When turned on, every link created from the suggestions (silent mode, `/b` and "create link and open") is followed by its quote. The text is fetched in the background, so typing is never blocked, and the quote is written next to the link once it arrives. If the text cannot be fetched, a notice is shown and the note is left untouched.
+
+- A reference alone on its line — including one wrapped in your configured prefix and suffix, like `(Matthew 24:14)` — is **replaced** by the quote, so the reference is not repeated above it. A reference inside a sentence keeps its place and the quote goes below.
+- The cursor lands on a fresh line after the quote, ready for the next sentence. If you moved on to another paragraph in the meantime, you are left where you are.
+- A collapsed callout template (`> [!quote]-`) is inserted open (`> [!quote]+`), so the quote can be read straight away and still folded by hand.
 
 ## Commands
 

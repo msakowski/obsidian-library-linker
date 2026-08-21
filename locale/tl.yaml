@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Pag-format ng sipi sa Bibliya
     description: I-configure kung paano nakaformat ang mga sipi sa Bibliya kapag inilagay
+    autoInsert:
+      name: Awtomatikong ipasok ang sipi
+      description: Kapag naka-on, kinukuha at ipinapasok ang teksto ng Bibliya kaagad pagkatapos malikha ang link mula sa mga suhestiyon. Kailangan ng koneksyon sa internet o na-import na offline na Bibliya.
     presets:
       name: Mga preset na template
       short: Link + sipi

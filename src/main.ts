@@ -8,6 +8,7 @@ import { OfflineBibleCitationProvider } from '@/services/OfflineBibleCitationPro
 import { OnlineBibleCitationProvider } from '@/services/OnlineBibleCitationProvider';
 import { ConfiguredBibleCitationProvider } from '@/services/ConfiguredBibleCitationProvider';
 import { BibleEpubImportService } from '@/services/BibleEpubImportService';
+import { AutoBibleQuoteInserter } from '@/services/AutoBibleQuoteInserter';
 import { getOfflineBibleVaultPath } from '@/services/PluginDataPathService';
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { loadBibleBooks } from '@/stores/bibleBooks';
@@ -37,6 +38,7 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
   reconvertExistingLinks: false,
   bibleQuote: {
     template: BIBLE_QUOTE_TEMPLATES.short,
+    autoInsertOnLinkCreation: false,
   },
   offlineBible: {
     enabled: true,
@@ -68,6 +70,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
   private offlineBibleRepository!: VaultOfflineBibleRepository;
   private bibleCitationProvider!: ConfiguredBibleCitationProvider;
   private epubImportService!: BibleEpubImportService;
+  private autoBibleQuoteInserter!: AutoBibleQuoteInserter;
 
   // Convenience binding for backward compatibility
   private t!: (key: string, variables?: Record<string, string>) => string;
@@ -93,6 +96,12 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       () => this.settings,
       new OfflineBibleCitationProvider(this.offlineBibleRepository, this.t),
       new OnlineBibleCitationProvider(),
+      this.t,
+    );
+
+    this.autoBibleQuoteInserter = new AutoBibleQuoteInserter(
+      () => this.settings,
+      this.bibleCitationProvider,
       this.t,
     );
 
@@ -301,6 +310,10 @@ export default class JWLibraryLinkerPlugin extends Plugin {
 
   getBibleCitationProvider(): ConfiguredBibleCitationProvider {
     return this.bibleCitationProvider;
+  }
+
+  getAutoBibleQuoteInserter(): AutoBibleQuoteInserter {
+    return this.autoBibleQuoteInserter;
   }
 
   getOfflineBibleRepository(): VaultOfflineBibleRepository {

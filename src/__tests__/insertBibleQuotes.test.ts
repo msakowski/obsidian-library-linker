@@ -51,6 +51,7 @@ describe('insertAllBibleQuotes', () => {
       ...TEST_DEFAULT_SETTINGS,
       bibleQuote: {
         template: BIBLE_QUOTE_TEMPLATES.short,
+        autoInsertOnLinkCreation: false,
       },
     } satisfies LinkReplacerSettings;
 
@@ -147,7 +148,7 @@ describe('insertAllBibleQuotes', () => {
         {
           from: { line: 0, ch: 0 },
           to: { line: 0, ch: 'jwlibrary:///finder?bible=43003016'.length },
-          text: '> [!quote] [John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)\n> For God loved the world so much that he gave his only-begotten Son.',
+          text: '> [!quote]+ [John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)\n> For God loved the world so much that he gave his only-begotten Son.',
         },
       ],
     });
@@ -354,6 +355,7 @@ describe('insertBibleQuoteAtCursor', () => {
       ...TEST_DEFAULT_SETTINGS,
       bibleQuote: {
         template: BIBLE_QUOTE_TEMPLATES.short,
+        autoInsertOnLinkCreation: false,
       },
     } satisfies LinkReplacerSettings;
 

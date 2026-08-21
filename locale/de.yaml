@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Bibelzitat-Formatierung
     description: Konfiguriere die Formatierung von eingefügten Bibelzitaten
+    autoInsert:
+      name: Zitat automatisch einfügen
+      description: Wenn aktiviert, wird das Bibelzitat direkt nach dem Erstellen eines Links über die Vorschläge abgerufen und eingefügt. Erfordert eine Internetverbindung oder eine importierte Offline-Bibel.
     presets:
       name: Vorlagenvoreinstellungen
       short: Link + Zitat

@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Bibliai idézet formázása
     description: Állítsd be, hogyan formázódjanak a beszúrt bibliai idézetek
+    autoInsert:
+      name: Idézet automatikus beszúrása
+      description: Bekapcsolva a bibliai szöveg letöltésre és beszúrásra kerül, amint a javaslatokból létrejön egy hivatkozás. Internetkapcsolatot vagy importált offline Bibliát igényel.
     presets:
       name: Sablon-előbeállítások
       short: Hivatkozás + idézet

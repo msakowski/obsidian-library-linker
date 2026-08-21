@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Ukupwililika amashiwi ya Baibolo
     description: Pekanya ifyo amashiwi ya Baibolo yakaba ilyo yabikwa
+    autoInsert:
+      name: Insert quote automatically
+      description: When enabled, the Bible quote is fetched and inserted right after a link is created from the suggestions. Needs an internet connection or an imported offline Bible.
     presets:
       name: Ifya kubomfya ifyalipekanishiwa
       short: Linki + ishiwi

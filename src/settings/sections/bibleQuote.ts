@@ -13,6 +13,18 @@ export function renderBibleQuote(tab: SettingsTabContext, container: HTMLElement
     tab.t('settings.bibleQuote.description'),
   );
 
+  new Setting(items)
+    .setName(tab.t('settings.bibleQuote.autoInsert.name'))
+    .setDesc(tab.t('settings.bibleQuote.autoInsert.description'))
+    .addToggle((toggle) =>
+      toggle
+        .setValue(tab.plugin.settings.bibleQuote.autoInsertOnLinkCreation)
+        .onChange(async (value) => {
+          tab.plugin.settings.bibleQuote.autoInsertOnLinkCreation = value;
+          await tab.plugin.saveSettings();
+        }),
+    );
+
   // Template textarea
   new Setting(items)
     .setName(tab.t('settings.bibleQuote.template.name'))

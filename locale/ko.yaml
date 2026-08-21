@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: 성경 인용문 형식
     description: 성경 인용문이 삽입될 때의 형식을 구성합니다
+    autoInsert:
+      name: 인용문 자동 삽입
+      description: 사용하면 제안에서 링크를 만든 직후에 성구 본문을 가져와 삽입합니다. 인터넷 연결 또는 가져온 오프라인 성경이 필요합니다.
     presets:
       name: 템플릿 프리셋
       short: 링크 + 인용문

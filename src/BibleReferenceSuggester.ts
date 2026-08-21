@@ -225,6 +225,12 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     // Force close the suggestion box to prevent it from staying open with italic formatting
     this.close();
 
+    // Opt-in: fetch and insert the quote for the link that was just created.
+    // Runs in the background so typing is never blocked.
+    this.plugin
+      .getAutoBibleQuoteInserter()
+      .scheduleForCreatedLink(editor, reference, convertedLink, context.start.line);
+
     // Handle opening links
     if (suggestion.command === 'open') {
       const url = formatJWLibraryLink(reference, linkLanguage);

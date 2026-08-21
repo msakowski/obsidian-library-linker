@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Foramato da citação bíblica
     description: Configure o formato das citações bíblicas inseridas
+    autoInsert:
+      name: Inserir a citação automaticamente
+      description: Quando ativado, o texto bíblico é obtido e inserido logo após a criação de um link a partir das sugestões. Requer ligação à Internet ou uma Bíblia offline importada.
     presets:
       name: Predefinições de modelo
       short: Link + citação
