@@ -1,0 +1,136 @@
+settings:
+  language:
+    name: Språk
+    description: Velg språk for bibelhenvisninger
+  openAutomatically:
+    name: Åpne lenker automatisk
+    description: Flytter kommandoen «Opprett lenke og åpne» til toppen av listen
+  updatedLinkStructure:
+    name: Behold lenketekst
+    description: Når dette er aktivert, beholdes gjeldende lenketekst ved konvertering av bibeltekst
+    keepCurrentStructure: Behold gjeldende struktur
+    usePluginSettings: Bruk plugin-innstillinger
+  noLanguageParameter:
+    name: Opprett lenker uavhengig av språk
+    description: Når dette er aktivert, legges det ikke til noen språkparameter i lenken. Lenker åpnes på språket til JW Library
+  reconvertExistingLinks:
+    name: Konverter eksisterende lenker på nytt
+    description: Når dette er aktivert, konverteres allerede konverterte jwlibrary://-lenker på nytt i henhold til gjeldende formateringsinnstillinger. Dette gjør det mulig å oppdatere alle lenker slik at de samsvarer med dine nyeste preferanser.
+  bookLength:
+    name: Lengde på lenketekst
+    description: Velg lengde på lenketeksten
+    short: Kort
+    medium: Middels
+    long: Lang
+  linkStyling:
+    name: Lenkestil
+    description: Velg tegn eller emoji som skal legges til før, etter eller inne i lenken og velg skriftstil
+    reset: 'Tilbakestill til standard: "{{default}}"'
+    prefixOutsideLink:
+      name: Prefiks utenfor lenke
+      description: Tekst som legges til før lenken
+    prefixInsideLink:
+      name: Prefiks inni lenke
+      description: Tekst som legges til i begynnelsen av lenketeksten
+    suffixInsideLink:
+      name: Suffiks inne i lenke
+      description: Tekst som legges til på slutten av lenketeksten
+    suffixOutsideLink:
+      name: Suffiks utenfor lenke
+      description: Tekst som legges til etter lenken
+    presets:
+      name: Stilforvalg
+      description: Velg et forhåndsdefinert stilvalg for lenken
+    fontStyle:
+      name: Skriftstil
+      description: Velg skriftstil for lenketeksten
+      normal: Normal
+      italic: Kursiv
+      bold: Fet
+    preview:
+      name: Forhåndsvisning av lenke
+  bibleQuote:
+    name: Formatering av bibelsitat
+    description: Angi hvordan bibelsitater skal formateres når de settes inn
+    presets:
+      name: Malforvalg
+      short: Lenke + sitat
+      plain: Lenke i sitat
+      foldable: Sammenleggbar callout
+      expanded: Utvidet callout
+    template:
+      name: Sitatmal
+      description: 'Tilpass sitatformatet med variablene: {bibleRef}, {bibleRefLinked}, {quote}'
+    preview:
+      name: Forhåndsvisning av bibelsitat
+  offlineBible:
+    name: Offline bibel
+    description: Importer en bibel-EPUB én gang, og bruk lokale kapitteldata for offline sitatoppslag.
+    enabled:
+      name: Aktiver offline bibel
+      description: Tillat at sitatfunksjonen bruker importerte, lokale bibeldata.
+    preferOffline:
+      name: Foretrekk offline sitater
+      description: Sjekk den importerte offline bibelen før det forsøkes å hente sitatet på nettet.
+    allowOnlineFallback:
+      name: Tillat online reserveløsning
+      description: Hvis offline data mangler, tillat at pluginet forsøker den nettbaserte sitatkilden.
+    installedList:
+      name: Installerte offline bibler
+      description: Én offline bibel kan installeres per språk. Språket registreres ut fra EPUB-metadataene.
+      empty: Ingen offline bibler er installert ennå.
+      entry: '{{sourceFileName}} — {{chapterCount}} kapitler, importert {{importedAt}}'
+    actions:
+      name: Handlinger for offline bibel
+      description: Importer en EPUB for å legge til et nytt språk. For å erstatte en eksisterende må du fjerne den først.
+      import: Importer bibel-EPUB
+      importing: Importerer …
+      openFolder: Åpne mappen for offline bibel
+commands:
+  linkUnlinkedBibleReferences: Lenk usammenkoblede bibelhenvisninger
+  convertToJWLibraryLinks: Konverter lenker i utvalget til JW Library-lenker
+  insertBibleQuotes: Sett inn bibelsitater for JW Library-lenker
+  insertBibleQuoteAtCursor: Sett inn bibelsitat ved markøren
+convertSuggester:
+  emptyStateText: Velg en konverteringstype
+  options:
+    all: Alle
+    bible: Bibelhenvisninger
+    publication: Publikasjoner
+contextMenu:
+  insertBibleQuote: Sett inn bibelsitat
+notices:
+  convertedBibleReferences: Konverterte {{count}} bibelhenvisninger
+  pleaseSelectText: Velg tekst som skal konverteres
+  noBibleReferencesFound: Ingen bibelhenvisninger funnet
+  bibleQuotesInserted: Bibelsitater satt inn
+  bibleQuotesInsertedSelection: Bibelsitater satt inn for utvalget
+  bibleQuoteInsertedAtCursor: Bibelsitat satt inn ved markøren
+  noBibleLinksFound: Ingen JW Library-lenker funnet
+  noBibleLinkAtCursor: Ingen JW Library-lenke funnet ved markøren
+  bibleQuoteAlreadyExists: Bibelsitatet finnes allerede
+  errorInsertingQuotes: Feil ved innsetting av bibelsitater
+  bibleQuoteFetchFailed: Kunne ikke hente bibeltekst – prøv igjen
+  offlineBibleImported: Offline bibel importert for {{language}}
+  offlineBibleRemoved: Offline bibel fjernet for {{language}}
+  offlineBibleAlreadyInstalled: En offline bibel for {{language}} er allerede installert. Fjern den først for å importere på nytt.
+  offlineBibleImportFailed: Kunne ikke importere offline bibel-EPUB
+  offlineBibleOpenFolderFailed: Kunne ikke åpne mappen for offline bibel
+suggestions:
+  createLink: 'Opprett lenke: {{text}}'
+  createLinks: 'Opprett lenker: {{text}}'
+  createAndOpen: 'Opprett lenke og åpne: {{text}}'
+  createMultipleAndOpenFirst: 'Opprett lenker og åpne den første: {{text}}'
+  typing: 'Skriv inn bibelhenvisning: {{text}}'
+  typingEmpty: Skriv inn bibelhenvisning
+errors:
+  invalidVerseNumber: Ugyldig versnummer
+  versesAscendingOrder: Versene må være i stigende rekkefølge
+  chaptersAscendingOrder: Kapitlene må være i stigende rekkefølge
+  invalidVerseFormat: Ugyldig versformat
+  invalidReferenceFormat: Ugyldig henvisningsformat
+  unsupportedLanguage: Språket støttes ikke
+  offlineBibleNotInstalled: Ingen offline bibel er installert for {{language}}. Importer en bibel-EPUB i innstillingene for å aktivere offline sitater.
+  offlineBibleVerseMissing: De forespurte versene mangler eller kan ikke leses i offline bibelen for {{language}}.
+  offlineBibleLookupFailed: Offline bibeloppslag mislyktes.
+  onlineFallbackDisabled: Nettbasert reserveløsning er deaktivert.
