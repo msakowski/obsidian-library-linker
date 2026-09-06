@@ -15,6 +15,7 @@ Instantly create, convert, and enrich Bible references with direct links to [JW 
 | J    | 日本語 / Japanese                    |
 | TG   | Tagalog / Tagalog                 |
 | KO   | 한국어 / Korean                      |
+| N    | Norsk / Norwegian                 |
 | U    | русский / Russian                 |
 | VT   | Tiếng Việt / Vietnamese           |
 

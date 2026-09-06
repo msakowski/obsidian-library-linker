@@ -15,6 +15,7 @@
 | I    | Italiano / Italian                |
 | J    | 日本語 / Japanese                    |
 | KO   | 한국어 / Korean                      |
+| N    | Norsk / Norwegian                 |
 | O    | Nederlands / Dutch                |
 | S    | español / Spanish                 |
 | TG   | Tagalog / Tagalog                 |
@@ -56,6 +57,7 @@
 | LSS  | lengua de señas salvadoreña / Salvadoran Sign Language                    |
 | LSU  | lengua de señas uruguaya / Uruguayan Sign Language                        |
 | LSV  | lengua de señas venezolana / Venezuelan Sign Language                     |
+| NDF  | Norsk tegnspråk / Norwegian Sign Language                                 |
 | NGT  | Nederlandse Gebarentaal / Dutch Sign Language                             |
 | NZS  | New Zealand Sign Language / New Zealand Sign Language                     |
 | OGS  | Österreichische Gebärdensprache / Austrian Sign Language                  |
