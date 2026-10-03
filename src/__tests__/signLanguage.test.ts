@@ -24,6 +24,10 @@ describe('SIGN_LANGUAGE_MAP', () => {
   test('HDF maps to Hungarian', () => {
     expect(SIGN_LANGUAGE_MAP['HDF']).toBe('H');
   });
+
+  test('NDF maps to Norwegian', () => {
+    expect(SIGN_LANGUAGE_MAP['NDF']).toBe('N');
+  });
 });
 
 describe('getBookLanguage', () => {
@@ -40,12 +44,13 @@ describe('getBookLanguage', () => {
     expect(getBookLanguage('KSL')).toBe('KO');
     expect(getBookLanguage('HZJ')).toBe('C');
     expect(getBookLanguage('HDF')).toBe('H');
+    expect(getBookLanguage('NDF')).toBe('N');
   });
 });
 
 describe('loadBibleBooks / getBibleBooks for sign languages', () => {
   beforeEach(() => {
-    initializeTestBibleBooks(['E', 'X', 'VT']);
+    initializeTestBibleBooks(['E', 'X', 'VT', 'N']);
   });
 
   test('ASL returns the same books as English', () => {
@@ -67,6 +72,13 @@ describe('loadBibleBooks / getBibleBooks for sign languages', () => {
     const slvBooks = getBibleBooks('SLV');
     const vtBooks = getBibleBooks('VT');
     expect(slvBooks).toBe(vtBooks);
+  });
+
+  test('NDF returns the same books as Norwegian', () => {
+    loadBibleBooks('NDF');
+    const ndfBooks = getBibleBooks('NDF');
+    const norwegianBooks = getBibleBooks('N');
+    expect(ndfBooks).toBe(norwegianBooks);
   });
 
   test('second loadBibleBooks call is a no-op', () => {
