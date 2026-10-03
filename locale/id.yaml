@@ -1,0 +1,136 @@
+settings:
+  language:
+    name: Bahasa
+    description: Pilih Bahasa yang akan digunakan untuk referensi Alkitab
+  openAutomatically:
+    name: Buka tautan secara otomatis
+    description: Pindahkan perintah "Tautkan dan Buka" ke posisi paling atas di dalam daftar perintah
+  updatedLinkStructure:
+    name: Pertahankan teks tautan
+    description: Saat diaktifkan, teks tautan yang dikonversikan menjadi teks Alkitab akan dibiarkan sediakala
+    keepCurrentStructure: Pertahankan struktur tautan yang sekarang
+    usePluginSettings: Gunakan pengaturan plugin
+  noLanguageParameter:
+    name: Buat tautan tidak bergantung pada bahasa
+    description: Saat diaktifkan, parameter bahasa tidak akan ditambahkan ke dalam tautan. Tautan akan dibuka dalam bahasa JW Library
+  reconvertExistingLinks:
+    name: Konversi kembali tautan yang ada
+    description: Saat diaktifkan, tautan jwlibrary:// yang sudah terkonversi akan dikonversikan ulang sesuai dengan pengaturan format tautan anda sekarang. Ini memperbolehkan anda untuk memperbarui semua tautan yang ada agar sesuai dengan pengaturan terbaru anda.
+  bookLength:
+    name: Panjang teks tautan
+    description: Pilih panjang text tautan
+    short: Pendek
+    medium: Sedang
+    long: Panjang
+  linkStyling:
+    name: Tampilan tautan
+    description: Pilih karakter atau emoji untuk ditambahkan sebelum, sesudah atau di dalam tautan, atur tampilan font
+    reset: 'Kembalikan ke semula: "{{default}}"'
+    prefixOutsideLink:
+      name: Awalan di luar tautan
+      description: Teks yang ditambahkan sebelum tautan
+    prefixInsideLink:
+      name: Awalan di dalam tautan
+      description: Teks yang ditambahkan di awal teks tautan
+    suffixInsideLink:
+      name: Akhiran di dalam tautan
+      description: Teks yang ditambahkan di akhir teks tautan
+    suffixOutsideLink:
+      name: Akhiran di luar tautan
+      description: Teks yang ditambahkan setelah tautan
+    presets:
+      name: Preset tampilan
+      description: Pilih preset untuk tampilan tautan
+    fontStyle:
+      name: Tampilan font
+      description: Pilih tampilan font untuk teks tautan
+      normal: Normal
+      italic: Cetak Miring
+      bold: Cetak Tebal
+    preview:
+      name: Pratinjau tautan
+  bibleQuote:
+    name: Format kutipan Alkitab
+    description: Atur bagaimana kutipan Alkitab diformat ketika dimasukkan
+    presets:
+      name: Preset template
+      short: Tautan + Kutipan
+      plain: Tautan dalam kutipan
+      foldable: Catatan Lipat
+      expanded: Catatan yang Diperluas
+    template:
+      name: Template kutipan
+      description: 'Sesuaikan format kutipan menggunakan variabel: {bibleRef}, {bibleRefLinked}, {quote}'
+    preview:
+      name: Pratinjau kutipan Alkitab
+  offlineBible:
+    name: Alkitab offline
+    description: Impor EPUB Alkitab dan gunakan data lokal untuk pencarian kutipan offline.
+    enabled:
+      name: Aktifkan Alkitab offline
+      description: Izinkan alur kerja kutipan untuk menggunakan data Alkitab lokal yang telah diimpor.
+    preferOffline:
+      name: Utamakan kutipan offline
+      description: Cek Alkitab offline terimpor sebelum mencoba untuk mengambil kutipan secara online.
+    allowOnlineFallback:
+      name: Gunakan Pengalihan Online
+      description: Jika data offline tidak ada, izinkan plugin ini untuk mencoba menggunakan provider kutipan online
+    installedList:
+      name: Alkitab offline terinstal
+      description: Satu Alkitab offline dapat diinstal untuk setiap bahasa. Bahasa dideteksi dari metadata EPUB.
+      empty: Belum ada Alkitab offline yang terinstal.
+      entry: '{{sourceFileName}} — {{chapterCount}} pasal, diimpor {{importedAt}}'
+    actions:
+      name: Tindakan Alkitab offline
+      description: Impor EPUB untuk menambahkan bahasa baru. Untuk mengganti bahasa yang sudah ada, silakan hapus bahasa yang sudah ada terlebih dahulu.
+      import: Impor EPUB Alkitab
+      importing: Mengimpor...
+      openFolder: Buka folder Alkitab offline
+commands:
+  linkUnlinkedBibleReferences: Tautkan referensi Alkitab yang tidak terhubung
+  convertToJWLibraryLinks: Ubah tautan terpilih menjadi tautan JW Library
+  insertBibleQuotes: Masukkan kutipan Alkitab untuk tautan JW Library
+  insertBibleQuoteAtCursor: Masukkan kutipan Alkitab di posisi kursor
+convertSuggester:
+  emptyStateText: Pilih jenis konversi
+  options:
+    all: Semua
+    bible: Referensi Aklitab
+    publication: Publikasi
+contextMenu:
+  insertBibleQuote: Masukan kutipan Alkitab
+notices:
+  convertedBibleReferences: Telah mengonversi {{count}} referensi Alkitab
+  pleaseSelectText: Silakan pilih teks untuk diubah
+  noBibleReferencesFound: Referensi Alkitab tidak ditemukan
+  bibleQuotesInserted: Berhasil memasukkan kutipan Alkitab
+  bibleQuotesInsertedSelection: Kutipan Alkitab telah dimasukkan kedalam pilihan text
+  bibleQuoteInsertedAtCursor: Kutipan Alkitab telah dimasukkan di posisi kursor
+  noBibleLinksFound: Tidak menemukan tautan JW Library
+  noBibleLinkAtCursor: Tidak menemukan tautan JW Library di posisi kursor
+  bibleQuoteAlreadyExists: Kutipan Alkitab sudah ada
+  errorInsertingQuotes: Gagal memasukkan kutipan Alkitab
+  bibleQuoteFetchFailed: Gagal mengambil teks Alkitab - silakan coba kembali
+  offlineBibleImported: Alkitab offline telah diimpor untuk {{language}}
+  offlineBibleRemoved: Alkitab offline telah dihapus untuk {{language}}
+  offlineBibleAlreadyInstalled: Alkitab offline untuk {{language}} sudah terinstal. Silakan hapus terlebih dahulu untuk mengimpor kembali.
+  offlineBibleImportFailed: Gagal mengimpor EPUB Alkitab offline
+  offlineBibleOpenFolderFailed: Gagal membuka folder Alkitab offline
+suggestions:
+  createLink: 'Buat Tautan: {{text}}'
+  createLinks: 'Buat Beberapa Tautan: {{text}}'
+  createAndOpen: 'Buat tautan dan buka: {{text}}'
+  createMultipleAndOpenFirst: 'Buat beberapa tautan dan buka yang pertama: {{text}}'
+  typing: 'Masukan Referensi Alkitab: {{text}}'
+  typingEmpty: Masukan Referensi Alkitab
+errors:
+  invalidVerseNumber: Nomor ayat tidak valid
+  versesAscendingOrder: Ayat harus dalam urutan naik
+  chaptersAscendingOrder: Pasal harus dalam urutan naik
+  invalidVerseFormat: Format ayat tidak valid
+  invalidReferenceFormat: Format referensi tidak valid
+  unsupportedLanguage: Bahasa tidak didukung
+  offlineBibleNotInstalled: Belum ada Alkitab online terinstal untuk {{language}}. Impor EPUB Alkitab di menu pengaturan untuk mengaktifkan kutipan offline.
+  offlineBibleVerseMissing: Ayat yang diminta tidak ada atau tidak dapat dibaca di Alkitab offline untuk {{language}}.
+  offlineBibleLookupFailed: Pencarian Alkitab offline gagal.
+  onlineFallbackDisabled: Cadangan online sedang dinonaktifkan.

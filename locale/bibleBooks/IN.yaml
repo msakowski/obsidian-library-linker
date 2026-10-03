@@ -1,0 +1,418 @@
+- id: 1
+  aliases: []
+  name:
+    long: Kejadian
+    medium: Kej.
+    short: Kej
+- id: 2
+  aliases: []
+  name:
+    long: Keluaran
+    medium: Kel.
+    short: Kel
+- id: 3
+  aliases: []
+  name:
+    long: Imamat
+    medium: Im.
+    short: Im
+- id: 4
+  aliases: []
+  name:
+    long: Bilangan
+    medium: Bil.
+    short: Bil
+- id: 5
+  aliases: []
+  name:
+    long: Ulangan
+    medium: Ul.
+    short: Ul
+- id: 6
+  aliases: []
+  name:
+    long: Yosua
+    medium: Yos.
+    short: Yos
+- id: 7
+  aliases:
+    - hakimhakim
+  name:
+    long: Hakim
+    medium: Hak.
+    short: Hak
+- id: 8
+  aliases: []
+  name:
+    long: Rut
+    medium: Rut
+    short: Rut
+- id: 9
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Samuel
+    medium: 1 Sam.
+    short: 1Sam
+- id: 10
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Samuel
+    medium: 2 Sam.
+    short: 2Sam
+- id: 11
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Raja
+    medium: 1 Raj.
+    short: 1Raj
+- id: 12
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Raja
+    medium: 2 Raj.
+    short: 2Raj
+- id: 13
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Tawarikh
+    medium: 1 Taw.
+    short: 1Taw
+- id: 14
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Tawarikh
+    medium: 2 Taw.
+    short: 2Taw
+- id: 15
+  aliases: []
+  name:
+    long: Ezra
+    medium: Ezr.
+    short: Ezr
+- id: 16
+  aliases: []
+  name:
+    long: Nehemia
+    medium: Neh.
+    short: Neh
+- id: 17
+  aliases: []
+  name:
+    long: Ester
+    medium: Est.
+    short: Est
+- id: 18
+  aliases: []
+  name:
+    long: Ayub
+    medium: Ayb.
+    short: Ayb
+- id: 19
+  aliases: []
+  name:
+    long: Mazmur
+    medium: Mz.
+    short: Mz
+- id: 20
+  aliases: []
+  name:
+    long: Amsal
+    medium: Ams.
+    short: Ams
+- id: 21
+  aliases: []
+  name:
+    long: Pengkhotbah
+    medium: Pkh.
+    short: Pkh
+- id: 22
+  aliases:
+    - kidung
+    - kidungagung
+  name:
+    long: Kidung Agung
+    medium: Kid.
+    short: Kid
+- id: 23
+  aliases: []
+  name:
+    long: Yesaya
+    medium: Yes.
+    short: 'Yes'
+- id: 24
+  aliases: []
+  name:
+    long: Yeremia
+    medium: Yer.
+    short: Yer
+- id: 25
+  aliases: []
+  name:
+    long: Ratapan
+    medium: Rat.
+    short: Rat
+- id: 26
+  aliases: []
+  name:
+    long: Yehezkiel
+    medium: Yeh.
+    short: Yeh
+- id: 27
+  aliases: []
+  name:
+    long: Daniel
+    medium: Dan.
+    short: Dan
+- id: 28
+  aliases: []
+  name:
+    long: Hosea
+    medium: Hos.
+    short: Hos
+- id: 29
+  aliases: []
+  name:
+    long: Yoel
+    medium: Yl.
+    short: Yl
+- id: 30
+  aliases: []
+  name:
+    long: Amos
+    medium: Am.
+    short: Am
+- id: 31
+  aliases: []
+  name:
+    long: Obaja
+    medium: Ob.
+    short: Ob
+- id: 32
+  aliases: []
+  name:
+    long: Yunus
+    medium: Yun.
+    short: Yun
+- id: 33
+  aliases: []
+  name:
+    long: Mikha
+    medium: Mi.
+    short: Mi
+- id: 34
+  aliases: []
+  name:
+    long: Nahum
+    medium: Nah.
+    short: Nah
+- id: 35
+  aliases: []
+  name:
+    long: Habakuk
+    medium: Hab.
+    short: Hab
+- id: 36
+  aliases: []
+  name:
+    long: Zefanya
+    medium: Zef.
+    short: Zef
+- id: 37
+  aliases: []
+  name:
+    long: Hagai
+    medium: Hag.
+    short: Hag
+- id: 38
+  aliases: []
+  name:
+    long: Zakharia
+    medium: Za.
+    short: Za
+- id: 39
+  aliases: []
+  name:
+    long: Maleakhi
+    medium: Mal.
+    short: Mal
+- id: 40
+  aliases: []
+  name:
+    long: Matius
+    medium: Mat.
+    short: Mat
+- id: 41
+  aliases: []
+  name:
+    long: Markus
+    medium: Mrk
+    short: Mrk
+- id: 42
+  aliases: []
+  name:
+    long: Lukas
+    medium: Luk.
+    short: Luk
+- id: 43
+  aliases: []
+  name:
+    long: Yohanes
+    medium: Yoh.
+    short: Yoh
+- id: 44
+  aliases:
+    - kisahpararasul
+  name:
+    long: Kisah
+    medium: Kis.
+    short: Kis
+- id: 45
+  aliases: []
+  name:
+    long: Roma
+    medium: Rm.
+    short: Rm
+- id: 46
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Korintus
+    medium: 1 Kor.
+    short: 1Kor
+- id: 47
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Korintus
+    medium: 2 Kor.
+    short: 2Kor
+- id: 48
+  aliases: []
+  name:
+    long: Galatia
+    medium: Gal.
+    short: Gal
+- id: 49
+  aliases: []
+  name:
+    long: Efesus
+    medium: Ef.
+    short: Ef
+- id: 50
+  aliases: []
+  name:
+    long: Filipi
+    medium: Flp.
+    short: Flp
+- id: 51
+  aliases: []
+  name:
+    long: Kolose
+    medium: Kol.
+    short: Kol
+- id: 52
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Tesalonika
+    medium: 1 Tes.
+    short: 1Tes
+- id: 53
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Tesalonika
+    medium: 2 Tes.
+    short: 2Tes
+- id: 54
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Timotius
+    medium: 1 Tim.
+    short: 1Tim
+- id: 55
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Timotius
+    medium: 2 Tim.
+    short: 2Tim
+- id: 56
+  aliases: []
+  name:
+    long: Titus
+    medium: Tit.
+    short: Tit
+- id: 57
+  aliases: []
+  name:
+    long: Filemon
+    medium: Flm.
+    short: Flm
+- id: 58
+  aliases: []
+  name:
+    long: Ibrani
+    medium: Ibr.
+    short: Ibr
+- id: 59
+  aliases: []
+  name:
+    long: Yakobus
+    medium: Yak.
+    short: Yak
+- id: 60
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Petrus
+    medium: 1 Ptr.
+    short: 1Ptr
+- id: 61
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Petrus
+    medium: 2 Ptr.
+    short: 2Ptr
+- id: 62
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Yohanes
+    medium: 1 Yoh.
+    short: 1Yoh
+- id: 63
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Yohanes
+    medium: 2 Yoh.
+    short: 2Yoh
+- id: 64
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3 Yohanes
+    medium: 3 Yoh.
+    short: 3Yoh
+- id: 65
+  aliases: []
+  name:
+    long: Yudas
+    medium: Yud.
+    short: Yud
+- id: 66
+  aliases:
+    - penyingkapan
+  name:
+    long: Wahyu
+    medium: Why.
+    short: Why
