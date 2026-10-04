@@ -35,11 +35,12 @@ export const BIBLE_QUOTE_TEMPLATES = {
   short: '{bibleRefLinked}\n> {quote}',
   plain: '> {bibleRefLinked}\n> {quote}',
   foldable: '> [!quote]- {bibleRefLinked}\n> {quote}',
-  expanded: '> [!quote] {bibleRefLinked}\n> {quote}',
+  expanded: '> [!quote]+ {bibleRefLinked}\n> {quote}',
 } as const;
 
 interface BibleQuoteSettings {
   template: string; // Template for quote formatting
+  autoInsertOnLinkCreation: boolean; // Insert the quote right after the suggester created a link
 }
 
 interface OfflineBibleSettings {

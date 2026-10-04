@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Raamatunlainauksen Muotoilu
     description: Määritä miten raamatunlainaukset muotoillaan kun ne lisätään
+    autoInsert:
+      name: Lisää lainaus automaattisesti
+      description: Kun tämä on käytössä, raamatunkohta haetaan ja lisätään heti kun linkki luodaan ehdotuksista. Vaatii internetyhteyden tai tuodun offline-Raamatun.
     presets:
       name: Malliesiasutukset
       short: Linkki + lainaus

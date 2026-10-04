@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Formátování biblické citace
     description: Nakonfigurujte formátování biblických citací při vkládání
+    autoInsert:
+      name: Vložit citát automaticky
+      description: Když je zapnuto, biblický text se načte a vloží hned po vytvoření odkazu z nabídky. Vyžaduje připojení k internetu nebo importovanou offline Bibli.
     presets:
       name: Přednastavené šablony
       short: Odkaz + citace

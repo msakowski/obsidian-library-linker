@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Định dạng trích dẫn Kinh Thánh
     description: Cấu hình cách trích dẫn Kinh Thánh được định dạng khi chèn vào
+    autoInsert:
+      name: Tự động chèn câu Kinh Thánh
+      description: Khi bật, phần Kinh Thánh sẽ được tải và chèn ngay sau khi liên kết được tạo từ gợi ý. Cần kết nối Internet hoặc một bản Kinh Thánh ngoại tuyến đã nhập.
     presets:
       name: Mẫu định dạng
       short: Liên kết + câu trích

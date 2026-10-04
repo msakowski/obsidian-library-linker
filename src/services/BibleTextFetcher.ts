@@ -89,6 +89,15 @@ export class BibleTextFetcher {
       const html = await this.fetchChapterHtml(book, chapter, language);
       const result = this.extractBibleText(html, reference);
 
+      if (!result.text) {
+        // Better no quote than a placeholder written into the user's note.
+        return {
+          ...result,
+          success: false,
+          error: 'No Bible text found for reference',
+        };
+      }
+
       return {
         ...result,
         success: true,
@@ -421,7 +430,7 @@ export class BibleTextFetcher {
 
     if (!verseRanges || verseRanges.length === 0) {
       return {
-        text: 'Unable to extract Bible text - no verse ranges',
+        text: '',
         citation: this.generateCitation(reference),
       };
     }
@@ -474,7 +483,7 @@ export class BibleTextFetcher {
     const citation = this.generateCitation(reference);
 
     return {
-      text: extractedText || 'Unable to extract Bible text',
+      text: extractedText,
       citation,
     };
   }

@@ -90,6 +90,18 @@ describe('VaultOfflineBibleRepository', () => {
     expect(text).toBeNull();
   });
 
+  test('getVerseRange clamps a range that runs past the end of the chapter', async () => {
+    const adapter = createInMemoryAdapter();
+    const repo = new VaultOfflineBibleRepository(adapter, ROOT);
+    await repo.saveCorpus(makeMetadata(), [makeChapter()]);
+
+    const text = await repo.getVerseRange(
+      { book: 1, chapter: 1, verseRanges: [{ start: 2, end: 176 }] },
+      'X',
+    );
+    expect(text).toBe('Die Erde war leer.');
+  });
+
   test('getVerseRange concatenates multiple verses with a single space', async () => {
     const adapter = createInMemoryAdapter();
     const repo = new VaultOfflineBibleRepository(adapter, ROOT);

@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Formato de Citas Bíblicas
     description: Configurar cómo se formatean las citas bíblicas cuando se insertan
+    autoInsert:
+      name: Insertar la cita automáticamente
+      description: Si está activado, el texto bíblico se obtiene y se inserta justo después de crear un enlace desde las sugerencias. Requiere conexión a Internet o una Biblia sin conexión importada.
     presets:
       name: Plantillas predefinidas
       short: Enlace + cita
