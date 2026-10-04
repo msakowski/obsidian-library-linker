@@ -53,7 +53,12 @@ beforeEach(() => {
 });
 
 function createInserter(): AutoBibleQuoteInserter {
-  return new AutoBibleQuoteInserter(() => settings, provider, t);
+  return new AutoBibleQuoteInserter(
+    () => settings,
+    provider,
+    t,
+    () => 'note.md',
+  );
 }
 
 describe('AutoBibleQuoteInserter', () => {
@@ -99,6 +104,26 @@ describe('AutoBibleQuoteInserter', () => {
 
     await vi.waitFor(() => expect(editor.getContent()).toBe(`${link.trim()}\n> ${QUOTE}\n`));
     expect(getCitation).toHaveBeenCalledTimes(1);
+  });
+
+  test('writes nothing when another note is opened in the editor during the fetch', async () => {
+    const link = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!;
+    const editor = createFakeEditor(link);
+    let filePath = 'first.md';
+    const inserter = new AutoBibleQuoteInserter(
+      () => settings,
+      provider,
+      t,
+      () => filePath,
+    );
+
+    inserter.scheduleForCreatedLink(editor, JOHN_3_16, link, 0);
+    // The other note cites the same verse on the same line.
+    filePath = 'second.md';
+
+    await vi.waitFor(() => expect(getCitation).toHaveBeenCalled());
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(editor.getContent()).toBe(link);
   });
 
   test('ignores text without a JW Library link', () => {

@@ -208,6 +208,82 @@ describe('insertAllBibleQuotes', () => {
     expect(mockTransaction).toHaveBeenCalledTimes(1);
   });
 
+  describe('with several links joined by commas on one line', () => {
+    const line =
+      '[John 3:16](jwlibrary:///finder?bible=43003016), [Matt. 5:3](jwlibrary:///finder?bible=40005003)';
+
+    beforeEach(() => {
+      mockLastLine.mockReturnValue(0);
+      mockGetLine.mockImplementation((n: number) => (n === 0 ? line : ''));
+
+      (findJWLibraryLinks as Mock).mockReturnValue([
+        {
+          url: 'jwlibrary:///finder?bible=43003016',
+          reference: { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+          lineNumber: 0,
+          lineText: line,
+        },
+        {
+          url: 'jwlibrary:///finder?bible=40005003',
+          reference: { book: 40, chapter: 5, verseRanges: [{ start: 3, end: 3 }] },
+          lineNumber: 0,
+          lineText: line,
+        },
+      ]);
+    });
+
+    test('should replace the line with all quotes in a single change', async () => {
+      (convertBibleTextToMarkdownLink as Mock)
+        .mockReturnValueOnce('[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)')
+        .mockReturnValueOnce('[Matt. 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)');
+      (BibleTextFetcher.fetchBibleText as Mock)
+        .mockResolvedValueOnce({ success: true, text: 'For God loved the world.' })
+        .mockResolvedValueOnce({ success: true, text: 'Happy are those.' });
+
+      const result = await insertAllBibleQuotes(mockEditor, settings, provider);
+
+      expect(result.inserted).toBe(2);
+      // Overlapping changes on the same line would glue the quotes together.
+      expect(mockTransaction).toHaveBeenCalledWith({
+        changes: [
+          {
+            from: { line: 0, ch: 0 },
+            to: { line: 0, ch: line.length },
+            text:
+              '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)\n' +
+              '> For God loved the world.\n\n' +
+              '[Matt. 5:3](jwlibrary:///finder?bible=40005003&wtlocale=E)\n' +
+              '> Happy are those.',
+          },
+        ],
+      });
+    });
+
+    test('should keep the line when one of the quotes cannot be fetched', async () => {
+      (convertBibleTextToMarkdownLink as Mock).mockReturnValueOnce(
+        '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)',
+      );
+      (BibleTextFetcher.fetchBibleText as Mock)
+        .mockResolvedValueOnce({ success: true, text: 'For God loved the world.' })
+        .mockResolvedValueOnce({ success: false, error: 'offline' });
+
+      const result = await insertAllBibleQuotes(mockEditor, settings, provider);
+
+      expect(result).toEqual({ inserted: 1, linksFound: 2, fetchFailed: 1 });
+      expect(mockTransaction).toHaveBeenCalledWith({
+        changes: [
+          {
+            from: { line: 0, ch: line.length },
+            to: { line: 0, ch: line.length },
+            text:
+              '\n\n[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)\n' +
+              '> For God loved the world.',
+          },
+        ],
+      });
+    });
+  });
+
   test('should return 0 when no links found', async () => {
     mockLastLine.mockReturnValue(0);
     mockGetLine.mockReturnValue('No links here');

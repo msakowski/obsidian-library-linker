@@ -79,18 +79,41 @@ describe('insertBibleQuoteForCreatedLink', () => {
     expect(editor.getContent()).toBe(`${line}\n\n${link.trim()}\n> ${QUOTE}`);
   });
 
-  test('follows the link when it moved to another line while the text was fetched', async () => {
+  test('writes nothing when the link left its line, even if the verse is cited elsewhere', async () => {
     const link = createdLink(JOHN_3_16);
-    const editor = createFakeEditor(`intro\n\n${link}`, { line: 2, ch: link.length });
+    // The created link on line 2 was undone; line 0 is an earlier mention.
+    const content = `${link}\n\nthe link was undone`;
+    const editor = createFakeEditor(content, { line: 2, ch: 0 });
 
     const result = await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
-      // The link was created on line 0 and has been pushed down since.
-      line: 0,
+      line: 2,
       linkUrl: JOHN_3_16_URL,
     });
 
-    expect(result.inserted).toBe(true);
-    expect(editor.getContent()).toBe(`intro\n\n${link.trim()}\n> ${QUOTE}\n`);
+    expect(result.anchorLost).toBe(true);
+    expect(editor.getContent()).toBe(content);
+  });
+
+  test('writes nothing when the editor now shows another note', async () => {
+    const link = createdLink(JOHN_3_16);
+    const editor = createFakeEditor(link);
+
+    const result = await insertBibleQuoteForCreatedLink(
+      editor,
+      JOHN_3_16,
+      settings,
+      provider,
+      { line: 0, linkUrl: JOHN_3_16_URL },
+      () => false,
+    );
+
+    expect(result).toEqual({
+      inserted: false,
+      alreadyExists: false,
+      fetchFailed: false,
+      anchorLost: true,
+    });
+    expect(editor.getContent()).toBe(link);
   });
 
   test('writes nothing when the created link is gone', async () => {
@@ -110,9 +133,9 @@ describe('insertBibleQuoteForCreatedLink', () => {
     expect(editor.getContent()).toBe('the user deleted the link again');
   });
 
-  test('writes nothing when a quote is already below the link', async () => {
+  test('writes nothing when the quote of this link is already below it', async () => {
     const link = createdLink(JOHN_3_16);
-    const content = `${link}\n> ${QUOTE}`;
+    const content = `As we read in ${link}\n> [!quote]+ ${link.trim()}\n> ${QUOTE}`;
     const editor = createFakeEditor(content);
 
     const result = await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
@@ -122,6 +145,38 @@ describe('insertBibleQuoteForCreatedLink', () => {
 
     expect(result.alreadyExists).toBe(true);
     expect(editor.getContent()).toBe(content);
+  });
+
+  test('quotes a link that sits right above an unrelated blockquote', async () => {
+    const link = createdLink(JOHN_3_16);
+    const editor = createFakeEditor(`${link}\n> Something else entirely`, {
+      line: 0,
+      ch: link.length,
+    });
+
+    const result = await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 0,
+      linkUrl: JOHN_3_16_URL,
+    });
+
+    expect(result.inserted).toBe(true);
+    // A blank line keeps the two blockquotes apart.
+    expect(editor.getContent()).toBe(`${link.trim()}\n> ${QUOTE}\n\n> Something else entirely`);
+  });
+
+  test('puts the quote after a callout that contains the link, not inside it', async () => {
+    const link = createdLink(JOHN_3_16);
+    const callout = `> [!note]\n> As ${link}says\n> the good news is preached.`;
+    const editor = createFakeEditor(callout, { line: 1, ch: 3 });
+
+    const result = await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 1,
+      linkUrl: JOHN_3_16_URL,
+    });
+
+    expect(result.inserted).toBe(true);
+    expect(editor.getContent()).toBe(`${callout}\n\n${link.trim()}\n> ${QUOTE}`);
+    expect(editor.getCursor()).toEqual({ line: 1, ch: 3 });
   });
 
   test('writes nothing when the citation cannot be fetched', async () => {
@@ -170,6 +225,23 @@ describe('insertBibleQuoteForCreatedLink', () => {
     // intro / link / > quote / <empty, cursor here>
     expect(editor.getContent()).toBe(`intro\n${link.trim()}\n> ${QUOTE}\n`);
     expect(editor.getCursor()).toEqual({ line: 3, ch: 0 });
+  });
+
+  test('puts the cursor on a blank line between the quote and the text below', async () => {
+    const link = createdLink(JOHN_3_16);
+    const editor = createFakeEditor(`${link}\nAn existing paragraph.`, {
+      line: 0,
+      ch: link.length,
+    });
+
+    await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 0,
+      linkUrl: JOHN_3_16_URL,
+    });
+
+    // link / > quote / <empty, cursor here> / paragraph
+    expect(editor.getContent()).toBe(`${link.trim()}\n> ${QUOTE}\n\nAn existing paragraph.`);
+    expect(editor.getCursor()).toEqual({ line: 2, ch: 0 });
   });
 
   test('keeps the cursor on the text it was on, wherever that text moved to', async () => {

@@ -28,6 +28,8 @@ export class AutoBibleQuoteInserter {
     private readonly getSettings: () => LinkReplacerSettings,
     private readonly provider: BibleCitationProvider,
     private readonly t: TranslateFn,
+    /** Path of the note shown in `editor`, or null when it cannot be told. */
+    private readonly getEditorFilePath: (editor: Editor) => string | null,
   ) {}
 
   /**
@@ -55,7 +57,12 @@ export class AutoBibleQuoteInserter {
     if (this.inFlight.has(key)) return;
     this.inFlight.add(key);
 
-    void this.insertNow(editor, reference, { line, linkUrl }).finally(() =>
+    // Obsidian reuses the editor when another note is opened in the same tab,
+    // so the note is recorded now and checked again once the text arrives.
+    const filePath = this.getEditorFilePath(editor);
+    const isSameNote = () => this.getEditorFilePath(editor) === filePath;
+
+    void this.insertNow(editor, reference, { line, linkUrl }, isSameNote).finally(() =>
       this.inFlight.delete(key),
     );
   }
@@ -68,6 +75,7 @@ export class AutoBibleQuoteInserter {
     editor: Editor,
     reference: BibleReference,
     anchor: CreatedLinkAnchor,
+    isSameNote?: () => boolean,
   ): Promise<CreatedLinkQuoteResult> {
     try {
       const result = await insertBibleQuoteForCreatedLink(
@@ -76,6 +84,7 @@ export class AutoBibleQuoteInserter {
         this.getSettings(),
         this.provider,
         anchor,
+        isSameNote,
       );
 
       if (result.fetchFailed) {

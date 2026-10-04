@@ -1,4 +1,4 @@
-import { Editor, Notice, Plugin, Menu } from 'obsidian';
+import { Editor, MarkdownView, Notice, Plugin, Menu } from 'obsidian';
 import { ConversionType, convertLinks } from '@/utils/convertLinks';
 import type { LinkReplacerSettings, LinkStyles, BibleQuoteFormat } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
@@ -103,6 +103,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       () => this.settings,
       this.bibleCitationProvider,
       this.t,
+      (editor) => this.getEditorFilePath(editor),
     );
 
     // Load bible books for saved language
@@ -310,6 +311,20 @@ export default class JWLibraryLinkerPlugin extends Plugin {
 
   getBibleCitationProvider(): ConfiguredBibleCitationProvider {
     return this.bibleCitationProvider;
+  }
+
+  /** Path of the note an editor currently shows, or null when the editor is gone. */
+  private getEditorFilePath(editor: Editor): string | null {
+    const active = this.app.workspace.activeEditor;
+    if (active?.editor === editor) return active.file?.path ?? null;
+
+    for (const leaf of this.app.workspace.getLeavesOfType('markdown')) {
+      if (leaf.view instanceof MarkdownView && leaf.view.editor === editor) {
+        return leaf.view.file?.path ?? null;
+      }
+    }
+
+    return null;
   }
 
   getAutoBibleQuoteInserter(): AutoBibleQuoteInserter {
