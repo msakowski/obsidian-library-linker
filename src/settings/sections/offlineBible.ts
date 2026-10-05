@@ -137,7 +137,7 @@ async function renderInstalledBibleList(
         button
           .setButtonText(tab.t('settings.offlineBible.actions.remove'))
           .setIcon('trash')
-          .setWarning()
+          .setDestructive()
           .onClick(() => {
             void handleBibleRemoval(tab, language, wrapper);
           }),
@@ -216,7 +216,7 @@ function selectEpubFile(tab: SettingsTabContext): Promise<File | null> {
     const input = tab.containerEl.createEl('input');
     input.type = 'file';
     input.accept = '.epub,application/epub+zip';
-    input.style.display = 'none';
+    input.hidden = true;
 
     input.addEventListener('change', () => {
       resolve(input.files?.[0] ?? null);
