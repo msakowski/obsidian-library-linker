@@ -2,7 +2,7 @@
   "id": "jw-library-linker",
   "name": "JW Library Linker",
   "version": "0.16.2",
-  "minAppVersion": "1.7.2",
+  "minAppVersion": "1.13.0",
   "description": "Converts JW Library references to actual links in JW Library.",
   "author": "Martin Sakowski",
   "authorUrl": "https://github.com/msakowski",
