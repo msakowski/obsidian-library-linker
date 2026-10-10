@@ -58,6 +58,7 @@ settings:
       plain: Odkaz v citaci
       foldable: Sbalitelný blok
       expanded: Rozbalený blok
+      card: Card
     template:
       name: Šablona citace
       description: 'Přizpůsobte formát citace pomocí proměnných: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: Požadované verše v offline Bibli pro jazyk {{language}} chybí nebo je nelze přečíst.
   offlineBibleLookupFailed: Vyhledání v offline Bibli se nezdařilo.
   onlineFallbackDisabled: Online záloha je vypnuta.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

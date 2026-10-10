@@ -36,6 +36,7 @@ export const BIBLE_QUOTE_TEMPLATES = {
   plain: '> {bibleRefLinked}\n> {quote}',
   foldable: '> [!quote]- {bibleRefLinked}\n> {quote}',
   expanded: '> [!quote] {bibleRefLinked}\n> {quote}',
+  card: '{bibleRef}\n\n{quote}',
 } as const;
 
 interface BibleQuoteSettings {

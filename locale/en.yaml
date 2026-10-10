@@ -58,6 +58,7 @@ settings:
       plain: Link in quote
       foldable: Foldable Callout
       expanded: Expanded Callout
+      card: Card
     template:
       name: Quote template
       description: 'Customize the quote format using variables: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: The requested verses are missing or unreadable in the offline Bible for {{language}}.
   offlineBibleLookupFailed: Offline Bible lookup failed.
   onlineFallbackDisabled: Online fallback is disabled.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

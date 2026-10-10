@@ -58,6 +58,7 @@ settings:
       plain: Link i citat
       foldable: Sammenklappeligt callout
       expanded: Udvidet callout
+      card: Card
     template:
       name: Citatskabelon
       description: 'Tilpas citatformatet med variablerne: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: De ønskede vers mangler eller kan ikke læses i offline-bibelen for {{language}}.
   offlineBibleLookupFailed: Offline-opslag i bibelen mislykkedes.
   onlineFallbackDisabled: Online reserve er deaktiveret.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

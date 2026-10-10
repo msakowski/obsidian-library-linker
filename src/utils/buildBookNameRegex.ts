@@ -5,6 +5,7 @@ import { SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
 function escapeRegex(str: string): string {
   return str
     .replace(/[*+?^${}()|[\]\\]/g, '\\$&') // escape special chars
+    .replace(/[\u0027\u2019\u02BC]/g, "['\u2019\u02BC]") // any apostrophe form
     .replace(/\./g, '\\.?') // dots become optional (e.g. "Joh." matches "Joh" too)
     .replace(/ /g, '\\s?'); // spaces become optional (e.g. "3 Joh" matches "3Joh")
 }

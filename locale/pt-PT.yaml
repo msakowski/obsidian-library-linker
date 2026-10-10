@@ -58,6 +58,7 @@ settings:
       plain: Link na citação
       foldable: Destaque recolhível
       expanded: Destaque expandido
+      card: Card
     template:
       name: Modelo de citação
       description: 'Personalize o formato da citação usando variáveis: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: Os versículos solicitados estão ausentes ou ilegíveis na Bíblia offline para {{language}}.
   offlineBibleLookupFailed: A pesquisa na Bíblia offline falhou.
   onlineFallbackDisabled: A alternativa online está desativada.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

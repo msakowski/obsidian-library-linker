@@ -58,6 +58,7 @@ settings:
       plain: Link sa sipi
       foldable: Naitutupig na Callout
       expanded: Pinalawak na Callout
+      card: Card
     template:
       name: Template ng sipi
       description: 'I-customize ang format ng sipi gamit ang mga variable: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: 'Ang mga hinihinging talata ay wala o hindi nababasa sa offline na Bibliya para sa {{language}}.'
   offlineBibleLookupFailed: Nabigo ang paghahanap sa offline na Bibliya.
   onlineFallbackDisabled: Naka-disable ang online na fallback.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

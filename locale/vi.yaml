@@ -58,6 +58,7 @@ settings:
       plain: Liên kết trong trích dẫn
       foldable: Callout có thể thu gọn
       expanded: Callout mở rộng
+      card: Card
     template:
       name: Mẫu trích dẫn
       description: 'Tùy chỉnh định dạng trích dẫn bằng các biến: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: Các câu được yêu cầu bị thiếu hoặc không thể đọc được trong Kinh Thánh ngoại tuyến cho {{language}}.
   offlineBibleLookupFailed: Tra cứu Kinh Thánh ngoại tuyến thất bại.
   onlineFallbackDisabled: Phương án trực tuyến dự phòng đã bị tắt.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

@@ -47,6 +47,28 @@
     margin: 0;
   }
 
+  /* Presets row: the author's four presets keep their one line, and our card preset
+     starts the second line in column 1, under the first preset, at its natural size.
+     Grid auto-placement puts the four author buttons in columns 1-4 of row 1 and our
+     fifth into column 1 of row 2; justify-items: start keeps it from stretching.
+     Scoped with :has() so other setting rows keep their single-line control. */
+  .setting-item:has(.preset-button-card) .setting-item-control {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: end;
+    justify-items: start;
+    align-items: center;
+  }
+
+  /* Narrow panel: Obsidian stacks the control and makes its buttons full width;
+     fall back to its native flex layout instead of fighting the container query. */
+  @container (max-width: 400px) {
+    .setting-item:has(.preset-button-card) .setting-item-control {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+
   /* Text formatting */
   b,
   strong {
@@ -66,4 +88,71 @@
     padding-left: 2em;
     border-left: 2px solid var(--background-modifier-border);
   }
+}
+
+/* Verse card: chevron toggle next to a Bible link and its floating citation card. */
+.jwll-verse-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1em;
+  height: 1.1em;
+  margin-left: 0.15em;
+  vertical-align: -0.15em;
+  border-radius: var(--radius-s);
+  color: var(--text-faint);
+  cursor: var(--cursor);
+  user-select: none;
+}
+
+.jwll-verse-chevron:hover {
+  color: var(--text-accent);
+  background-color: var(--background-modifier-hover);
+}
+
+.jwll-verse-chevron:focus-visible {
+  outline: 2px solid var(--text-accent);
+  outline-offset: 1px;
+}
+
+.jwll-verse-chevron svg {
+  width: 0.85em;
+  height: 0.85em;
+}
+
+.jwll-verse-card {
+  position: fixed;
+  z-index: var(--layer-popover);
+  box-sizing: border-box;
+  max-width: min(28rem, calc(100vw - 16px));
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: var(--size-4-3);
+  font-size: var(--font-ui-small);
+  line-height: var(--line-height-normal);
+  color: var(--text-normal);
+  background-color: var(--background-secondary);
+  border: 1px solid var(--divider-color);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-s);
+}
+
+.jwll-verse-card-heading {
+  font-weight: var(--font-medium);
+}
+
+.jwll-verse-card-source {
+  margin-left: var(--size-4-2);
+  font-size: var(--font-ui-smaller);
+  color: var(--text-muted);
+}
+
+.jwll-verse-card-body {
+  margin-top: var(--size-4-2);
+  white-space: pre-wrap;
+}
+
+.jwll-verse-card-message {
+  color: var(--text-muted);
+  font-style: italic;
 }

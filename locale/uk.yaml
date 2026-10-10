@@ -1,0 +1,143 @@
+settings:
+  language:
+    name: Мова
+    description: Виберіть мову для біблійних посилань
+  openAutomatically:
+    name: Відкривати посилання автоматично
+    description: Переміщує команду «Створити посилання й відкрити» на початок списку
+  updatedLinkStructure:
+    name: Зберігати текст посилання
+    description: Якщо увімкнено, поточний текст посилання зберігається під час конвертації біблійного тексту
+    keepCurrentStructure: Зберегти поточну структуру
+    usePluginSettings: Використовувати налаштування плагіна
+  noLanguageParameter:
+    name: Створювати посилання незалежно від мови
+    description: Якщо увімкнено, параметр мови не додається до посилання. Посилання відкриватимуться мовою JW Library
+  reconvertExistingLinks:
+    name: Переконвертувати наявні посилання
+    description: Якщо увімкнено, уже сконвертовані посилання jwlibrary:// буде переконвертовано згідно з поточними налаштуваннями форматування. Це дає змогу оновити всі посилання відповідно до останніх уподобань.
+  bookLength:
+    name: Довжина тексту посилання
+    description: Виберіть довжину тексту посилання
+    short: Коротка
+    medium: Середня
+    long: Довга
+  linkStyling:
+    name: Стиль посилання
+    description: Виберіть символи або емодзі, які додаються до, після або всередині посилання; виберіть стиль шрифту
+    reset: 'Скинути до типового: "{{default}}"'
+    prefixOutsideLink:
+      name: Префікс ззовні посилання
+      description: Текст, що додається перед посиланням
+    prefixInsideLink:
+      name: Префікс усередині посилання
+      description: Текст, що додається на початок тексту посилання
+    suffixInsideLink:
+      name: Суфікс усередині посилання
+      description: Текст, що додається в кінець тексту посилання
+    suffixOutsideLink:
+      name: Суфікс ззовні посилання
+      description: Текст, що додається після посилання
+    presets:
+      name: Готові стилі
+      description: Виберіть готовий стиль для посилання
+    fontStyle:
+      name: Стиль шрифту
+      description: Виберіть стиль шрифту для тексту посилання
+      normal: Звичайний
+      italic: Курсив
+      bold: Жирний
+    preview:
+      name: Попередній перегляд посилання
+  bibleQuote:
+    name: Форматування біблійної цитати
+    description: Налаштуйте формат біблійних цитат під час вставлення
+    presets:
+      name: Шаблони
+      short: Посилання + цитата
+      plain: Посилання в цитаті
+      foldable: Згортуваний блок
+      expanded: Розгорнутий блок
+      card: Картка
+    template:
+      name: Шаблон цитати
+      description: 'Налаштуйте формат цитати за допомогою змінних: {bibleRef}, {bibleRefLinked}, {quote}'
+    preview:
+      name: Попередній перегляд цитати
+  offlineBible:
+    name: Офлайн-Біблія
+    description: Імпортуйте EPUB Біблії один раз і використовуйте локальні дані глав для офлайн-пошуку цитат.
+    enabled:
+      name: Увімкнути офлайн-Біблію
+      description: Дозволити конвеєру цитат використовувати імпортовані локальні дані Біблії.
+    preferOffline:
+      name: Надавати перевагу офлайн-цитатам
+      description: Спочатку перевіряти імпортовану офлайн-Біблію, перш ніж намагатися онлайн-пошук.
+    allowOnlineFallback:
+      name: Дозволити онлайн-резерв
+      description: Якщо офлайн-даних немає, дозволити плагіну спробувати онлайн-провайдер цитат.
+    installedList:
+      name: Установлені офлайн-Біблії
+      description: Для кожної мови можна встановити одну офлайн-Біблію. Мова визначається за метаданими EPUB.
+      empty: Офлайн-Біблії ще не встановлено.
+      entry: '{{sourceFileName}} — {{chapterCount}} глав, імпортовано {{importedAt}}'
+    actions:
+      name: Дії з офлайн-Біблією
+      description: Імпортуйте EPUB, щоб додати нову мову. Щоб замінити наявну, спочатку видаліть її.
+      import: Імпортувати EPUB Біблії
+      importing: Імпортування...
+      openFolder: Відкрити папку офлайн-Біблії
+commands:
+  linkUnlinkedBibleReferences: Створити посилання для біблійних згадок без посилань
+  convertToJWLibraryLinks: Конвертувати посилання у виділеному в посилання JW Library
+  insertBibleQuotes: Вставити біблійні цитати для посилань JW Library
+  insertBibleQuoteAtCursor: Вставити біблійну цитату в позиції курсора
+convertSuggester:
+  emptyStateText: Виберіть тип конвертації
+  options:
+    all: Усі
+    bible: Біблійні посилання
+    publication: Публікації
+contextMenu:
+  insertBibleQuote: Вставити біблійну цитату
+notices:
+  convertedBibleReferences: 'Сконвертовано біблійних посилань: {{count}}'
+  pleaseSelectText: Будь ласка, виділіть текст для конвертації
+  noBibleReferencesFound: Біблійних посилань не знайдено
+  bibleQuotesInserted: Біблійні цитати успішно вставлено
+  bibleQuotesInsertedSelection: Біблійні цитати вставлено для виділення
+  bibleQuoteInsertedAtCursor: Біблійну цитату вставлено в позиції курсора
+  noBibleLinksFound: Посилань JW Library не знайдено
+  noBibleLinkAtCursor: У позиції курсора немає посилання JW Library
+  bibleQuoteAlreadyExists: Біблійна цитата вже існує
+  errorInsertingQuotes: Помилка під час вставлення біблійних цитат
+  bibleQuoteFetchFailed: Не вдалося отримати біблійний текст — спробуйте ще раз
+  offlineBibleImported: 'Офлайн-Біблію імпортовано для мови: {{language}}'
+  offlineBibleRemoved: 'Офлайн-Біблію видалено для мови: {{language}}'
+  offlineBibleAlreadyInstalled: 'Офлайн-Біблія для мови {{language}} вже встановлена. Видаліть її, щоб імпортувати заново.'
+  offlineBibleImportFailed: Не вдалося імпортувати EPUB офлайн-Біблії
+  offlineBibleOpenFolderFailed: Не вдалося відкрити папку офлайн-Біблії
+suggestions:
+  createLink: 'Створити посилання: {{text}}'
+  createLinks: 'Створити посилання: {{text}}'
+  createAndOpen: 'Створити посилання й відкрити: {{text}}'
+  createMultipleAndOpenFirst: 'Створити посилання й відкрити перше: {{text}}'
+  typing: 'Введіть біблійне посилання: {{text}}'
+  typingEmpty: Введіть біблійне посилання
+errors:
+  invalidVerseNumber: Невірний номер вірша
+  versesAscendingOrder: Вірші мають бути в зростаючому порядку
+  chaptersAscendingOrder: Глави мають бути в зростаючому порядку
+  invalidVerseFormat: Невірний формат вірша
+  invalidReferenceFormat: Невірний формат посилання
+  unsupportedLanguage: Мова не підтримується
+  offlineBibleNotInstalled: 'Офлайн-Біблія не встановлена для мови {{language}}. Імпортуйте EPUB Біблії в налаштуваннях, щоб увімкнути офлайн-цитати.'
+  offlineBibleVerseMissing: 'Запитані вірші відсутні або нечитабельні в офлайн-Біблії для мови {{language}}.'
+  offlineBibleLookupFailed: Помилка пошуку в офлайн-Біблії.
+  onlineFallbackDisabled: Онлайн-резерв вимкнено.
+card:
+  sourceOffline: з архіву
+  sourceOnline: з мережі
+  loading: Завантаження…
+  unavailable: Текст вірша недоступний
+  toggleLabel: Показати текст вірша

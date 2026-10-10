@@ -58,6 +58,7 @@ settings:
       plain: Linki muli ishiwi
       foldable: Akacalo akangapindiwa
       expanded: Akacalo akafuulwa
+      card: Card
     template:
       name: Icilangililo ca mashiwi
       description: 'Bomfya ifishibilo ifi pa kupanga ifyo mashiwi yakaba: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: 'Ifikomo fyalombwa tafyabako nelyo te kufibelenga mu Baibolo wa kunse kwa intaneti uwa {{language}}.'
   offlineBibleLookupFailed: Ukufwaya muli Baibolo wa kunse kwa intaneti kwalifilwa.
   onlineFallbackDisabled: Ukufwaya pa intaneti kwaeshiwa.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

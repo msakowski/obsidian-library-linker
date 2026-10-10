@@ -58,6 +58,7 @@ settings:
       plain: Link in citaat
       foldable: Inklapbare callout
       expanded: Uitgeklapte callout
+      card: Card
     template:
       name: Citaatsjabloon
       description: 'Pas het citaatformaat aan met variabelen: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: De gevraagde verzen ontbreken of zijn onleesbaar in de offline Bijbel voor {{language}}.
   offlineBibleLookupFailed: Offline Bijbel-zoekopdracht mislukt.
   onlineFallbackDisabled: Online terugval is uitgeschakeld.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

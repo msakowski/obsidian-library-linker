@@ -58,6 +58,7 @@ settings:
       plain: Lien dans citation
       foldable: Callout pliable
       expanded: Callout déplié
+      card: Card
     template:
       name: Modèle de citation
       description: 'Personnalisez le format de citation avec les variables : {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: Les versets demandés sont manquants ou illisibles dans la Bible hors ligne pour {{language}}.
   offlineBibleLookupFailed: La recherche dans la Bible hors ligne a échoué.
   onlineFallbackDisabled: Le recours en ligne est désactivé.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text
