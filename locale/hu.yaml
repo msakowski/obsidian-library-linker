@@ -58,6 +58,7 @@ settings:
       plain: Hivatkozás az idézetben
       foldable: Összecsukható kiemelés
       expanded: Kinyitott kiemelés
+      card: Card
     template:
       name: Idézetsablon
       description: 'Szabd testre az idézet formátumát változókkal: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: A kért versek hiányoznak vagy nem olvashatók az offline Bibliában ({{language}}).
   offlineBibleLookupFailed: Az offline Biblia keresése nem sikerült.
   onlineFallbackDisabled: Az online tartalék le van tiltva.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

@@ -58,6 +58,7 @@ settings:
       plain: Link u citatu
       foldable: Sklopivi okvir
       expanded: Prošireni okvir
+      card: Card
     template:
       name: Predložak citata
       description: 'Prilagodite format citata pomoću varijabli: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: Traženi retci nedostaju ili su nečitljivi u izvanmrežnoj Bibliji za {{language}}.
   offlineBibleLookupFailed: Pretraživanje izvanmrežne Biblije nije uspjelo.
   onlineFallbackDisabled: Mrežna zamjena je onemogućena.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

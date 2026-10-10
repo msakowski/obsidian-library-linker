@@ -19,6 +19,7 @@ import { insertAllBibleQuotes, insertBibleQuoteAtCursor } from '@/utils/insertBi
 import { logger } from '@/utils/logger';
 import { getBookLanguage } from '@/utils/signLanguage';
 import { ContentSelection } from '@/utils/findJWLibraryLinks';
+import { refreshVerseLinks, registerVerseCard } from '@/ui/registerVerseCard';
 
 export const DEFAULT_STYLES: LinkStyles = {
   bookLength: 'medium',
@@ -289,6 +290,9 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       }),
     );
 
+    // Register the verse card (chevron + floating citation card)
+    registerVerseCard(this);
+
     logger.log('Plugin loaded');
   }
 
@@ -337,5 +341,6 @@ export default class JWLibraryLinkerPlugin extends Plugin {
 
   async saveSettings() {
     await this.saveData(this.settings);
+    refreshVerseLinks();
   }
 }

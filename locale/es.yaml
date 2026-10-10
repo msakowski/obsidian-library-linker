@@ -58,6 +58,7 @@ settings:
       plain: Enlace en cita
       foldable: Callout plegable
       expanded: Callout expandido
+      card: Card
     template:
       name: Plantilla de cita
       description: 'Personaliza el formato de cita usando variables: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: Los versículos solicitados faltan o no se pueden leer en la Biblia sin conexión para {{language}}.
   offlineBibleLookupFailed: La búsqueda en la Biblia sin conexión falló.
   onlineFallbackDisabled: La alternativa en línea está desactivada.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

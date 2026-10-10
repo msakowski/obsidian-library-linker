@@ -58,6 +58,7 @@ settings:
       plain: 引用内のリンク
       foldable: 折りたたみ可能なコールアウト
       expanded: 展開されたコールアウト
+      card: Card
     template:
       name: 引用テンプレート
       description: '変数を使って引用フォーマットをカスタマイズします： {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: '{{language}}のオフライン聖書では、要求された節が見つからないか読み取れません。'
   offlineBibleLookupFailed: オフライン聖書の検索に失敗しました。
   onlineFallbackDisabled: オンラインフォールバックは無効です。
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

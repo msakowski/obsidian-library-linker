@@ -60,6 +60,12 @@ export function renderBibleQuote(tab: SettingsTabContext, container: HTMLElement
       cb
         .setButtonText(tab.t('settings.bibleQuote.presets.expanded'))
         .onClick(() => presetOnClick(BIBLE_QUOTE_TEMPLATES.expanded)),
+    )
+    .addButton((cb) =>
+      cb
+        .setButtonText(tab.t('settings.bibleQuote.presets.card'))
+        .setClass('preset-button-card')
+        .onClick(() => presetOnClick(BIBLE_QUOTE_TEMPLATES.card)),
     );
 
   // Preview sub-section

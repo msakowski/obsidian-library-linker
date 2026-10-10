@@ -200,6 +200,9 @@ export class MarkdownRenderer {
   }
 }
 
+// Mock setIcon (used by the verse-link decorator to draw the toggle chevron)
+export const setIcon = vi.fn();
+
 // Mock requestUrl function
 export const requestUrl = vi.fn();
 

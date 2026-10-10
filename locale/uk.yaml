@@ -58,6 +58,7 @@ settings:
       plain: Посилання в цитаті
       foldable: Згортуваний блок
       expanded: Розгорнутий блок
+      card: Картка
     template:
       name: Шаблон цитати
       description: 'Налаштуйте формат цитати за допомогою змінних: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: 'Запитані вірші відсутні або нечитабельні в офлайн-Біблії для мови {{language}}.'
   offlineBibleLookupFailed: Помилка пошуку в офлайн-Біблії.
   onlineFallbackDisabled: Онлайн-резерв вимкнено.
+card:
+  sourceOffline: з архіву
+  sourceOnline: з мережі
+  loading: Завантаження…
+  unavailable: Текст вірша недоступний
+  toggleLabel: Показати текст вірша

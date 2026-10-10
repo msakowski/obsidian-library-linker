@@ -58,6 +58,7 @@ settings:
       plain: Linkki lainauksessa
       foldable: Taitettava callout
       expanded: Laajennettu callout
+      card: Card
     template:
       name: Lainausmalli
       description: 'Mukauta lainausmuotoa muuttujilla: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: Pyydetyt jakeet puuttuvat tai ovat lukukelvottomia offline-Raamatussa kielelle {{language}}.
   offlineBibleLookupFailed: Offline-Raamatun haku epäonnistui.
   onlineFallbackDisabled: Online-vaihtoehto on poistettu käytöstä.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text

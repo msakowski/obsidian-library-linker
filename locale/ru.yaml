@@ -58,6 +58,7 @@ settings:
       plain: Ссылка в цитате
       foldable: Сворачиваемый блок
       expanded: Развёрнутый блок
+      card: Карточка
     template:
       name: Шаблон цитаты
       description: 'Настройте формат цитаты с помощью переменных: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: 'Запрошенные стихи отсутствуют или нечитаемы в офлайн-Библии для языка {{language}}.'
   offlineBibleLookupFailed: Ошибка поиска в офлайн-Библии.
   onlineFallbackDisabled: Онлайн-резерв отключён.
+card:
+  sourceOffline: из архива
+  sourceOnline: из сети
+  loading: Загрузка…
+  unavailable: Текст стиха недоступен
+  toggleLabel: Показать текст стиха

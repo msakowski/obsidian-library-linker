@@ -58,6 +58,7 @@ settings:
       plain: Link in Zitat
       foldable: Einklappbarer Callout
       expanded: Ausgeklappter Callout
+      card: Card
     template:
       name: Zitatvorlage
       description: 'Passe das Zitatformat mit Variablen an: {bibleRef}, {bibleRefLinked}, {quote}'
@@ -134,3 +135,9 @@ errors:
   offlineBibleVerseMissing: Die angeforderten Verse fehlen oder sind in der Offline-Bibel für {{language}} nicht lesbar.
   offlineBibleLookupFailed: Offline-Bibel-Suche fehlgeschlagen.
   onlineFallbackDisabled: Online-Rückfall ist deaktiviert.
+card:
+  sourceOffline: from archive
+  sourceOnline: from web
+  loading: Loading…
+  unavailable: Verse text unavailable
+  toggleLabel: Show verse text
