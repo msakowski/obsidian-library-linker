@@ -3,6 +3,22 @@ import { SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
 import type { Language, VerseRange, BibleReference } from '@/types';
 import { logger } from '@/utils/logger';
 
+// Book names in several locales contain an apostrophe (the Ukrainian ones use
+// the typographic U+2019), while a keyboard produces the ASCII U+0027 or the
+// modifier U+02BC. Removing all three makes the apostrophe irrelevant, so every
+// spelling of a name resolves to the same book. A hyphen between two letters is
+// dropped for the same reason (Vietnamese "Le-vi" is also typed "Levi").
+const normalizeBookText = (input: string): string =>
+  input
+    .trim()
+    .toLowerCase()
+    .replace(/[.\s'\u2019\u02BC]/g, '')
+    .replace(/(\p{L})-(?=\p{L})/gu, '$1');
+
+// The book token: everything before the first chapter digit. All three
+// apostrophe forms are allowed through here so the token is not cut short.
+const BOOK_TOKEN_REGEX = /^([\p{L}0-9'\u2019\u02BC]+?)(\d+.*)$/u;
+
 function parseVerseNumber(verse: string): number {
   const num = parseInt(verse, 10);
   if (isNaN(num) || num < 1) {
@@ -92,15 +108,15 @@ function parseVerseRanges(versePart: string): VerseRange[] {
 }
 
 export function parseBibleReference(input: string, language: Language): BibleReference {
-  input = input
-    .trim()
-    .toLowerCase()
-    .replace(/[.\s]/g, '')
-    .replace(/(\p{L})-(?=\p{L})/gu, '$1');
+  input = normalizeBookText(input);
 
   // Match book, chapter, and verses part
   // Supports both "Book chapter:verse" and "Book verse" (for single-chapter books)
-  const greedyMatch = input.match(new RegExp(`^([\\p{L}0-9]+?)(\\d+.*)$`, 'iu'));
+  // The book token may contain an apostrophe: the Ukrainian book names use the
+  // typographic U+2019, but a keyboard produces U+0027 or U+02BC. All three are
+  // stripped (here and in cleanTerm) before the token is compared with the
+  // stored terms, so any spelling of a name resolves to the same book.
+  const greedyMatch = input.match(BOOK_TOKEN_REGEX);
 
   if (!greedyMatch) {
     throw new Error('errors.invalidFormat');

@@ -477,6 +477,15 @@
     "isRTL": false
   },
   {
+    "code": "K",
+    "locale": "uk",
+    "vernacular": "українська",
+    "script": "CYRILLIC",
+    "name": "Ukrainian",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
     "code": "J",
     "locale": "ja",
     "vernacular": "日本語",

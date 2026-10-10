@@ -14,6 +14,7 @@
 | H    | magyar / Hungarian                |
 | I    | Italiano / Italian                |
 | J    | 日本語 / Japanese                    |
+| K    | українська / Ukrainian            |
 | KO   | 한국어 / Korean                      |
 | O    | Nederlands / Dutch                |
 | S    | español / Spanish                 |
