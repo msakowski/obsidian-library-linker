@@ -72,6 +72,18 @@ describe('BibleTextFetcher', () => {
         'https://wol.jw.org/hr/wol/b/r19/lp-c/nwt/19/23',
       );
     });
+
+    test('builds correct URL for Ukrainian', () => {
+      expect(BibleTextFetcher.buildWOLUrl(51, 3, 'K')).toBe(
+        'https://wol.jw.org/uk/wol/b/r15/lp-k/nwt/51/3',
+      );
+    });
+
+    test('builds correct URL for Russian', () => {
+      expect(BibleTextFetcher.buildWOLUrl(51, 3, 'U')).toBe(
+        'https://wol.jw.org/ru/wol/b/r2/lp-u/nwt/51/3',
+      );
+    });
   });
 
   describe('fetchBibleText', () => {
