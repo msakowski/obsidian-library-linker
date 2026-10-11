@@ -27,6 +27,8 @@ Instantly create, convert, and enrich Bible references with direct links to [JW 
 
 Type a Bible reference and the plugin creates a markdown link that opens directly in JW Library.
 
+Complete references prefer exact book names and abbreviations. For example, Norwegian `Fil 1:1` resolves to Philippians; suggestions still show books matching the typed prefix.
+
 **Command mode** — type `/b` followed by a reference:
 
 ```txt

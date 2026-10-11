@@ -123,7 +123,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
       // Only consider if remainder starts with a digit (valid chapter start)
       if (/^\d/.test(candidateRemainder)) {
         try {
-          const result = findBook(candidateBook, language);
+          const result = findBook(candidateBook, language, { preferExactMatch: true });
           if (result && !Array.isArray(result)) {
             bookName = candidateBook;
             remainder = candidateRemainder;
@@ -152,7 +152,7 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     versesPart = undefined;
   }
 
-  const book = findBook(bookName, language);
+  const book = findBook(bookName, language, { preferExactMatch: true });
 
   if (!book) {
     throw new Error('errors.bookNotFound');

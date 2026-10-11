@@ -7,7 +7,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    include: ['src/__tests__/**/*.{test,spec}.{ts,tsx,js,jsx}'],
+    include: ['src/__tests__/**/*.{test,spec}.{ts,tsx,js,jsx}', 'src/**/*.spec.ts'],
   },
   resolve: {
     alias: [
