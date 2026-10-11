@@ -10,8 +10,8 @@
     "release": "VERSION=$(jq -r '.version' manifest.json) && if git ls-remote --tags origin | grep -q \"refs/tags/$VERSION$\"; then echo \"Tag $VERSION already exists, skipping.\"; else git tag -a $VERSION -m \"Release $VERSION\" && git push origin $VERSION; fi",
     "test:lint": "pnpm test:lint-ts && pnpm test:lint-md",
     "test:lint-fix": "pnpm test:lint-ts-fix && pnpm test:lint-md-fix",
-    "test:lint-ts": "eslint",
-    "test:lint-ts-fix": "eslint --fix",
+    "test:lint-ts": "eslint --max-warnings 0",
+    "test:lint-ts-fix": "eslint --fix --max-warnings 0",
     "test:lint-md": "remark . --frail --quiet",
     "test:lint-md-fix": "remark . --output --quiet",
     "test:types": "tsc --noEmit -skipLibCheck",
@@ -28,7 +28,7 @@
     "pre-push": "sh scripts/pre-push.sh"
   },
   "nano-staged": {
-    "*.{ts,js,mjs,cjs}": "eslint --fix",
+    "*.{ts,js,mjs,cjs}": "eslint --fix --max-warnings 0",
     "*.md": "remark --output --quiet --frail --silently-ignore"
   },
   "keywords": [],

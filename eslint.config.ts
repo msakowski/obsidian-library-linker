@@ -37,7 +37,7 @@ export default defineConfig(
   },
   {
     // Tests run in Node/jsdom, not in Obsidian
-    files: ['src/__tests__/**/*.ts'],
+    files: ['src/__tests__/**/*.ts', 'src/**/*.spec.ts'],
     rules: {
       'no-irregular-whitespace': 'off',
       'obsidianmd/hardcoded-config-path': 'off',

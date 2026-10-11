@@ -26,6 +26,8 @@ This project uses two linters:
 - **ESLint** (type-checked rules) — TypeScript/JavaScript source under `src/`
 - **remark** (`remark-preset-lint-recommended` + `remark-gfm`) — Markdown files
 
+TypeScript lint checks fail on warnings as well as errors, including in the pre-commit hook.
+
 | Command                 | Purpose                                |
 | ----------------------- | -------------------------------------- |
 | `pnpm test:lint`        | Run ESLint and remark                  |
