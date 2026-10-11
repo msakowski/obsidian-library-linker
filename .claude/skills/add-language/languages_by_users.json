@@ -289,7 +289,8 @@
   {
     "language": "Norwegian",
     "users": 12096,
-    "supported": false
+    "supported": true,
+    "languageCode": "N"
   },
   {
     "language": "Chitumbuka",

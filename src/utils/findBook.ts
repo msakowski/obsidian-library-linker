@@ -6,7 +6,11 @@ const cleanTerm = (name: string): string => {
   return name.toLowerCase().replace(/[/.\s-]/g, '');
 };
 
-export const findBook = (bookQuery: string, language: Language): BibleBook | BibleBook[] => {
+export const findBook = (
+  bookQuery: string,
+  language: Language,
+  { preferExactMatch = false }: { preferExactMatch?: boolean } = {},
+): BibleBook | BibleBook[] => {
   const trimmedQuerry = cleanTerm(bookQuery);
 
   if (!trimmedQuerry) {
@@ -21,6 +25,7 @@ export const findBook = (bookQuery: string, language: Language): BibleBook | Bib
     throw new Error('errors.bookNotFound');
   }
 
+  const exactBookIds = new Set<number>();
   const bookEntries = bibleBooks
     .filter((book) => (!book.prefix ? true : trimmedQuerry.match(/^[1-5]/)))
     .filter((book) => {
@@ -37,16 +42,24 @@ export const findBook = (bookQuery: string, language: Language): BibleBook | Bib
       );
 
       const allSearchTerms = [...cleanedAliases, ...cleanedNameVersions];
+      if (allSearchTerms.includes(trimmedQuerry)) {
+        exactBookIds.add(book.id);
+      }
       return allSearchTerms.some((term) => term.startsWith(trimmedQuerry));
     })
     .map((book) => ({ ...book, idPadded: book.id.toString().padStart(2, '0') }));
 
-  if (bookEntries.length > 1) {
-    return bookEntries;
+  const matches =
+    preferExactMatch && exactBookIds.size > 0
+      ? bookEntries.filter((book) => exactBookIds.has(book.id))
+      : bookEntries;
+
+  if (matches.length > 1) {
+    return matches;
   }
 
-  if (bookEntries.length === 1) {
-    return bookEntries[0];
+  if (matches.length === 1) {
+    return matches[0];
   }
 
   throw new Error('errors.bookNotFound');
