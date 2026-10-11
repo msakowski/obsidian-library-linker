@@ -1,5 +1,23 @@
 # obsidian-library-linker
 
+## 0.17.0
+
+### Minor Changes
+
+- [#325](https://github.com/msakowski/obsidian-library-linker/pull/325) [`b752f68`](https://github.com/msakowski/obsidian-library-linker/commit/b752f68d8b7634c37b3bc580e853ae0c16aabf95) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Add support for Hungarian (H) and Hungarian Sign Language (HDF), including Bible book names and UI translations. Hungarian Sign Language reuses the Hungarian book names.
+
+- [#328](https://github.com/msakowski/obsidian-library-linker/pull/328) [`807c749`](https://github.com/msakowski/obsidian-library-linker/commit/807c7497cb92b033dcb668c090331ddd45c0f425) Thanks [@Daruma198](https://github.com/Daruma198)! - Add support for Indonesian (IN) and Indonesian Sign Language (INI), including Bible book names and UI transalations. Indonesian Sign Language reuses the Indonesian book names.
+
+- [#332](https://github.com/msakowski/obsidian-library-linker/pull/332) [`d3c06d2`](https://github.com/msakowski/obsidian-library-linker/commit/d3c06d27ba14cfca3671950ea7ec07e92f5f2ec6) Thanks [@kentgran](https://github.com/kentgran)! - Add support for Norwegian (N) and Norwegian Sign Language (NDF), including Bible book names and UI translations. Norwegian Sign Language reuses the Norwegian book names.
+
+- [#336](https://github.com/msakowski/obsidian-library-linker/pull/336) [`7df6574`](https://github.com/msakowski/obsidian-library-linker/commit/7df6574399aa0b790bfd4af511cfb45bc4ae9e3e) Thanks [@msakowski](https://github.com/msakowski)! - Address Obsidian Community Scorecard findings: drop the desktop `curl` fallback for fetching Bible text (no more `child_process`), use `setDestructive()` instead of the deprecated `setWarning()`, avoid inline styles, and raise `minAppVersion` to 1.13.0. Tooling now uses `eslint-plugin-obsidianmd`, ESLint's `defineConfig()`, and `nano-staged` instead of `lint-staged`.
+
+  Expose settings through the declarative API so their names and descriptions appear in settings search. Enforce zero warnings in TypeScript lint checks and staged-file checks.
+
+### Patch Changes
+
+- [#316](https://github.com/msakowski/obsidian-library-linker/pull/316) [`6f82523`](https://github.com/msakowski/obsidian-library-linker/commit/6f82523bd9b7c83ed2372d368ce53e6c3edc3c1d) Thanks [@schoenwaldnils](https://github.com/schoenwaldnils)! - Migrate the test runner from Jest to Vitest. This removes `jest`, `jest-environment-jsdom`, `@swc/jest`, and `@swc/core` from the dependency tree, which in turn drops transitive packages flagged by Snyk (`@babel/core`, `ws@8.20.1`, `inflight`). The `BibleTextFetcher` desktop curl fallback now loads `child_process`/`util` via lazy dynamic `import()` instead of runtime `require()` (behaviour unchanged — still desktop-only and lazily loaded). Test wall-clock time is unchanged (~3.6s for the full suite).
+
 ## 0.16.2
 
 ### Patch Changes
