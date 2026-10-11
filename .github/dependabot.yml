@@ -6,6 +6,10 @@ updates:
       interval: 'weekly'
       day: 'friday'
       time: '18:00'
+    # typescript-eslint requires the TypeScript 6 API; review major upgrades separately.
+    ignore:
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
     groups:
       all-updates:
         patterns:
