@@ -40,7 +40,7 @@
   "devDependencies": {
     "@changesets/cli": "^3.0.3",
     "@eslint/js": "^10.0.1",
-    "@eslint/json": "0.14.0",
+    "@eslint/json": "2.1.1",
     "@types/node": "^26.6.3",
     "@typescript-eslint/eslint-plugin": "^8.71.0",
     "@typescript-eslint/parser": "^8.71.0",
