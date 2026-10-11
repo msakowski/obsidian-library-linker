@@ -214,8 +214,7 @@ export class BibleTextFetcher {
     // Check if the webviewer view type is registered in Obsidian
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any -- accessing undocumented Obsidian internal API
     const viewByType = (this.app as any).viewRegistry?.viewByType as
-      | Record<string, unknown>
-      | undefined;
+      Record<string, unknown> | undefined;
     return viewByType?.['webviewer'] !== undefined;
   }
 
