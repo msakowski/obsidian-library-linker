@@ -56,6 +56,8 @@ export const SIGN_LANGUAGE_MAP: Partial<Record<Language, Language>> = {
   HDF: 'H',
   // Vietnamese base
   SLV: 'VT',
+  // Norwegian base
+  NDF: 'N',
   // Indonesian base
   INI: 'IN',
 };

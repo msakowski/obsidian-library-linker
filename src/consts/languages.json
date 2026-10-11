@@ -522,6 +522,24 @@
     "isRTL": false
   },
   {
+    "code": "N",
+    "locale": "no",
+    "vernacular": "Norsk",
+    "script": "ROMAN",
+    "name": "Norwegian",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "NDF",
+    "locale": "nsl",
+    "vernacular": "Norsk tegnspråk",
+    "script": "ROMAN",
+    "name": "Norwegian Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
+  },
+  {
     "code": "IN",
     "locale": "id",
     "vernacular": "Bahasa Indonesia",
