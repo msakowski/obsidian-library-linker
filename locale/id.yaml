@@ -95,7 +95,7 @@ convertSuggester:
   emptyStateText: Pilih jenis konversi
   options:
     all: Semua
-    bible: Referensi Aklitab
+    bible: Referensi Alkitab
     publication: Publikasi
 contextMenu:
   insertBibleQuote: Masukan kutipan Alkitab
@@ -130,7 +130,7 @@ errors:
   invalidVerseFormat: Format ayat tidak valid
   invalidReferenceFormat: Format referensi tidak valid
   unsupportedLanguage: Bahasa tidak didukung
-  offlineBibleNotInstalled: Belum ada Alkitab online terinstal untuk {{language}}. Impor EPUB Alkitab di menu pengaturan untuk mengaktifkan kutipan offline.
+  offlineBibleNotInstalled: Belum ada Alkitab offline terinstal untuk {{language}}. Impor EPUB Alkitab di menu pengaturan untuk mengaktifkan kutipan offline.
   offlineBibleVerseMissing: Ayat yang diminta tidak ada atau tidak dapat dibaca di Alkitab offline untuk {{language}}.
   offlineBibleLookupFailed: Pencarian Alkitab offline gagal.
   onlineFallbackDisabled: Cadangan online sedang dinonaktifkan.

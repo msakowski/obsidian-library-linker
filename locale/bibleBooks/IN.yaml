@@ -37,6 +37,7 @@
 - id: 7
   aliases:
     - hakimhakim
+    - hakim-hakim
   name:
     long: Hakim
     medium: Hak.
@@ -251,7 +252,7 @@
   aliases: []
   name:
     long: Markus
-    medium: Mrk
+    medium: Mrk.
     short: Mrk
 - id: 42
   aliases: []
@@ -268,6 +269,7 @@
 - id: 44
   aliases:
     - kisahpararasul
+    - kisah para rasul
   name:
     long: Kisah
     medium: Kis.

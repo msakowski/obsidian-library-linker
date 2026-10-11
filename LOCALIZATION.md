@@ -72,6 +72,8 @@
 
 The plugin UI automatically adapts to your Obsidian language setting, and Bible book names are fully translated for each language.
 
+Indonesian and Indonesian Sign Language also recognize `Kisah Para Rasul` and `Hakim-Hakim`, including their compact forms `KisahParaRasul` and `HakimHakim`.
+
 ## Contributing a new language
 
 Thank you for considering adding a new language — every contribution makes the plugin more useful for more people around the world!
