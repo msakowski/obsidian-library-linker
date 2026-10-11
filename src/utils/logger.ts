@@ -11,7 +11,7 @@ const alwaysEnabled = new Set(['error', 'warn']);
 
 export const logger: Console = new Proxy(console, {
   get(target, prop: keyof Console) {
-    const method = target[prop];
+    const method: unknown = Reflect.get(target, prop);
     if (typeof method !== 'function') return method;
 
     return (...args: unknown[]) => {
