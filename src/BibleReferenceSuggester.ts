@@ -134,7 +134,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
     // Try parsing the reference directly — this handles all book name formats
     // including multi-word, hyphenated, and digit-suffixed names
-    let reference: BibleReference | null = null;
+    let reference: BibleReference;
 
     try {
       reference = parseBibleReference(query, this.plugin.settings.language);
@@ -150,10 +150,6 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
           description: this.t('suggestions.typing', { text: query }),
         },
       ];
-    }
-
-    if (!reference) {
-      return [];
     }
 
     const formattedText = formatBibleText(

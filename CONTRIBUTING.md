@@ -26,6 +26,8 @@ This project uses two linters:
 - **ESLint** (type-checked rules) — TypeScript/JavaScript source under `src/`
 - **remark** (`remark-preset-lint-recommended` + `remark-gfm`) — Markdown files
 
+TypeScript lint checks fail on warnings as well as errors, including in the pre-commit hook.
+
 | Command                 | Purpose                                |
 | ----------------------- | -------------------------------------- |
 | `pnpm test:lint`        | Run ESLint and remark                  |
@@ -38,7 +40,7 @@ This project uses two linters:
 
 Managed via `simple-git-hooks` (configured in `package.json`):
 
-- **pre-commit** — runs `lint-staged`, which lints (and auto-fixes) only staged files
+- **pre-commit** — runs `nano-staged`, which lints (and auto-fixes) only staged files
 - **pre-push** — runs `pnpm test:affected` (ESLint + remark + `tsc` + Vitest on tests related to changes since `origin/main`); a push is aborted if any check fails. Use `pnpm test` for the full suite.
 
 ### Recommended VS Code extensions

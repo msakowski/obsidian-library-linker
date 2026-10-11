@@ -1,9 +1,13 @@
 import { App, PluginSettingTab } from 'obsidian';
+import type { SettingDefinitionItem } from 'obsidian';
 import type JWLibraryLinkerPlugin from '@/main';
-import { renderGeneralSettings } from '@/settings/sections/generalSettings';
-import { renderLinkStyling, updateLinkStylingPreview } from '@/settings/sections/linkStyling';
-import { renderBibleQuote, updateBibleQuotePreview } from '@/settings/sections/bibleQuote';
-import { renderOfflineBible } from '@/settings/sections/offlineBible';
+import { getGeneralSettingsDefinitions } from '@/settings/sections/generalSettings';
+import {
+  getLinkStylingDefinitions,
+  updateLinkStylingPreview,
+} from '@/settings/sections/linkStyling';
+import { getBibleQuoteDefinitions, updateBibleQuotePreview } from '@/settings/sections/bibleQuote';
+import { getOfflineBibleDefinitions } from '@/settings/sections/offlineBible';
 
 export class JWLibraryLinkerSettings extends PluginSettingTab {
   plugin: JWLibraryLinkerPlugin;
@@ -16,19 +20,13 @@ export class JWLibraryLinkerSettings extends PluginSettingTab {
     this.t = this.plugin.getTranslationService().t.bind(this.plugin.getTranslationService());
   }
 
-  display(): void {
-    const { containerEl } = this;
-    containerEl.empty();
-
-    const settingsContainer = containerEl.createDiv({ cls: 'jw-library-linker' });
-
-    renderGeneralSettings(this, settingsContainer);
-    renderLinkStyling(this, settingsContainer);
-    renderBibleQuote(this, settingsContainer);
-    void renderOfflineBible(this, settingsContainer);
-
-    this.updatePreview();
-    this.updateBibleQuotePreview();
+  override getSettingDefinitions(): SettingDefinitionItem[] {
+    return [
+      getGeneralSettingsDefinitions(this),
+      getLinkStylingDefinitions(this),
+      getBibleQuoteDefinitions(this),
+      getOfflineBibleDefinitions(this),
+    ];
   }
 
   updatePreview(): void {

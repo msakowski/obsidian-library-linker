@@ -7,7 +7,7 @@ export interface SettingsTabContext {
   app: App;
   containerEl: HTMLElement;
   importInFlight: boolean;
-  display(): void;
+  update(): void;
   updatePreview(): void;
   updateBibleQuotePreview(): void;
 }

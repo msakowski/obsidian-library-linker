@@ -359,7 +359,9 @@ export class BibleEpubImportService implements EpubImportService {
       range.setEndAfter(verseContainer);
     }
 
-    const wrapper = chapterDoc.createElement('div');
+    // chapterDoc is a detached DOMParser document without a window, so createDiv() is unavailable;
+    // a shallow clone of its body serves as an empty container instead
+    const wrapper = body.cloneNode(false) as HTMLElement;
     wrapper.append(range.cloneContents());
     wrapper
       .querySelectorAll(

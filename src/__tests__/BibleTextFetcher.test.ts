@@ -1,42 +1,15 @@
 // Obsidian is mocked via resolve.alias in vitest.config.ts (see __mocks__/obsidian.ts).
-vi.mock('child_process', () => ({
-  execFile: vi.fn(),
-}));
-
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { Platform, requestUrl } from 'obsidian';
-import { execFile } from 'child_process';
 import type { Mock, MockInstance } from 'vitest';
 
 const mockedRequestUrl = requestUrl as Mock;
-const mockedExecFile = execFile as unknown as Mock;
 const mockedPlatform = Platform as { isDesktopApp: boolean; isMobileApp: boolean };
-
-// Kept self-contained: mock factories may not reference out-of-scope variables.
-vi.mock('util', async () => {
-  const actual = await vi.importActual<typeof import('util')>('util');
-  return {
-    ...actual,
-    promisify: vi.fn((fn: (...args: unknown[]) => void) => {
-      return (...args: unknown[]) =>
-        new Promise((resolve, reject) => {
-          fn(...args, (error: Error | null, stdout: string) => {
-            if (error) {
-              reject(error);
-              return;
-            }
-            resolve({ stdout });
-          });
-        });
-    }),
-  };
-});
 
 describe('BibleTextFetcher', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockedRequestUrl.mockReset();
-    mockedExecFile.mockReset();
     mockedPlatform.isDesktopApp = false;
     mockedPlatform.isMobileApp = true;
     BibleTextFetcher.clearCache();
@@ -364,55 +337,7 @@ describe('BibleTextFetcher', () => {
         warnSpy.mockRestore();
       });
 
-      test('falls back to curl when requestUrl fails on desktop', async () => {
-        const html = `
-          <span id="v40-24-14-1" class="v"><a href="#" class="vl vx vp">14 </a>And this good news of the Kingdom will be preached.</span>
-        `;
-        const curlStdout =
-          `${html}\n` +
-          '__JWLINKER_CURL_META__200\thttps://wol.jw.org/en/wol/b/r1/lp-e/nwt/40/24\ttext/html; charset=utf-8\t1.234';
-
-        mockedRequestUrl.mockRejectedValue(new Error('net::ERR_HTTP2_PROTOCOL_ERROR'));
-        mockedPlatform.isDesktopApp = true;
-        mockedPlatform.isMobileApp = false;
-        mockedExecFile.mockImplementation(
-          (
-            _file: string,
-            _args: string[],
-            _options: Record<string, unknown>,
-            callback: (error: Error | null, stdout: string) => void,
-          ) => callback(null, curlStdout),
-        );
-
-        const result = await BibleTextFetcher.fetchBibleText(
-          {
-            book: 40,
-            chapter: 24,
-            verseRanges: [{ start: 14, end: 14 }],
-          },
-          'E',
-        );
-
-        expect(result.success).toBe(true);
-        expect(result.text).toContain('good news of the Kingdom');
-        expect(mockedExecFile).toHaveBeenCalledWith(
-          'curl',
-          expect.arrayContaining([
-            '-sS',
-            '-L',
-            '--compressed',
-            '--max-time',
-            '30',
-            '--output',
-            '-',
-            '--write-out',
-          ]),
-          { maxBuffer: 1024 * 1024 },
-          expect.any(Function),
-        );
-      });
-
-      test('does not fall back to curl on mobile', async () => {
+      test('does not fall back on mobile', async () => {
         mockedRequestUrl.mockRejectedValue(new Error('net::ERR_HTTP2_PROTOCOL_ERROR'));
         mockedPlatform.isDesktopApp = false;
         mockedPlatform.isMobileApp = true;
@@ -428,21 +353,12 @@ describe('BibleTextFetcher', () => {
 
         expect(result.success).toBe(false);
         expect(result.error).toContain('ERR_HTTP2_PROTOCOL_ERROR');
-        expect(mockedExecFile).not.toHaveBeenCalled();
       });
 
-      test('returns combined error when requestUrl and curl both fail', async () => {
+      test('returns combined error when requestUrl fails and no webviewer is available', async () => {
         mockedRequestUrl.mockRejectedValue(new Error('net::ERR_HTTP2_PROTOCOL_ERROR'));
         mockedPlatform.isDesktopApp = true;
         mockedPlatform.isMobileApp = false;
-        mockedExecFile.mockImplementation(
-          (
-            _file: string,
-            _args: string[],
-            _options: Record<string, unknown>,
-            callback: (error: Error | null, stdout: string) => void,
-          ) => callback(new Error('spawn curl ENOENT'), ''),
-        );
 
         const result = await BibleTextFetcher.fetchBibleText(
           {
@@ -455,35 +371,6 @@ describe('BibleTextFetcher', () => {
 
         expect(result.success).toBe(false);
         expect(result.error).toContain('All fetch methods failed');
-      });
-
-      test('remembers curl unavailability across requests', async () => {
-        mockedRequestUrl.mockRejectedValue(new Error('net::ERR_HTTP2_PROTOCOL_ERROR'));
-        mockedPlatform.isDesktopApp = true;
-        mockedPlatform.isMobileApp = false;
-        mockedExecFile.mockImplementation(
-          (
-            _file: string,
-            _args: string[],
-            _options: Record<string, unknown>,
-            callback: (error: Error | null, stdout: string) => void,
-          ) => callback(new Error('spawn curl ENOENT'), ''),
-        );
-
-        // First call: curl is tried and fails with ENOENT
-        await BibleTextFetcher.fetchBibleText(
-          { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
-          'E',
-        );
-        expect(mockedExecFile).toHaveBeenCalledTimes(1);
-
-        // Second call: curl should be skipped entirely
-        mockedExecFile.mockClear();
-        await BibleTextFetcher.fetchBibleText(
-          { book: 43, chapter: 4, verseRanges: [{ start: 1, end: 1 }] },
-          'E',
-        );
-        expect(mockedExecFile).not.toHaveBeenCalled();
       });
     });
   });

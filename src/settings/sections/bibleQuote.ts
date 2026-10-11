@@ -1,70 +1,86 @@
-import { MarkdownRenderer, Setting } from 'obsidian';
+import { MarkdownRenderer } from 'obsidian';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import { formatBibleText } from '@/utils/formatBibleText';
 import { MarkdownComponent } from '@/settings/MarkdownComponent';
-import { createSettingGroup } from '@/settings/createSettingGroup';
+import type { SettingDefinitionGroup } from 'obsidian';
 import type { SettingsTabContext } from '@/settings/types';
 
-export function renderBibleQuote(tab: SettingsTabContext, container: HTMLElement): void {
-  const items = createSettingGroup(
-    container,
-    tab.t('settings.bibleQuote.name'),
-    tab.t('settings.bibleQuote.description'),
-  );
-
-  // Template textarea
-  new Setting(items)
-    .setName(tab.t('settings.bibleQuote.template.name'))
-    .setDesc(tab.t('settings.bibleQuote.template.description'))
-    .setClass('setting-item--quote')
-    .addTextArea((text) => {
-      text
-        .setValue(tab.plugin.settings.bibleQuote.template)
-        .setPlaceholder('{bibleRefLinked}\\n> {quote}')
-        .onChange(async (value) => {
-          tab.plugin.settings.bibleQuote.template = value;
-          await tab.plugin.saveSettings();
-          tab.updateBibleQuotePreview();
-        });
-      text.inputEl.rows = 4;
-      text.inputEl.cols = 50;
-    });
-
+export function getBibleQuoteDefinitions(tab: SettingsTabContext): SettingDefinitionGroup {
   const presetOnClick = async (template: string) => {
     tab.plugin.settings.bibleQuote.template = template;
     await tab.plugin.saveSettings();
-    tab.display();
+    tab.update();
     tab.updateBibleQuotePreview();
   };
 
-  // Template presets sub-section
-  new Setting(items)
-    .setName(tab.t('settings.bibleQuote.presets.name'))
-    .addButton((cb) =>
-      cb
-        .setButtonText(tab.t('settings.bibleQuote.presets.short'))
-        .onClick(() => presetOnClick(BIBLE_QUOTE_TEMPLATES.short)),
-    )
-    .addButton((cb) =>
-      cb
-        .setButtonText(tab.t('settings.bibleQuote.presets.plain'))
-        .onClick(() => presetOnClick(BIBLE_QUOTE_TEMPLATES.plain)),
-    )
-    .addButton((cb) =>
-      cb
-        .setButtonText(tab.t('settings.bibleQuote.presets.foldable'))
-        .onClick(() => presetOnClick(BIBLE_QUOTE_TEMPLATES.foldable)),
-    )
-    .addButton((cb) =>
-      cb
-        .setButtonText(tab.t('settings.bibleQuote.presets.expanded'))
-        .onClick(() => presetOnClick(BIBLE_QUOTE_TEMPLATES.expanded)),
-    );
+  return {
+    type: 'group',
+    cls: 'jw-library-linker',
+    heading: tab.t('settings.bibleQuote.name'),
+    items: [
+      {
+        name: tab.t('settings.bibleQuote.template.name'),
+        desc: tab.t('settings.bibleQuote.template.description'),
+        render: (setting, group): void => {
+          const description = group.listEl.createDiv({
+            cls: 'setting-item-description',
+            text: tab.t('settings.bibleQuote.description'),
+          });
+          group.listEl.prepend(description);
+          setting.setClass('setting-item--quote').addTextArea((text) => {
+            text
+              .setValue(tab.plugin.settings.bibleQuote.template)
+              .setPlaceholder('{bibleRefLinked}\\n> {quote}')
+              .onChange(async (value) => {
+                tab.plugin.settings.bibleQuote.template = value;
+                await tab.plugin.saveSettings();
+                tab.updateBibleQuotePreview();
+              });
+            text.inputEl.rows = 4;
+            text.inputEl.cols = 50;
+          });
+        },
+      },
+      {
+        name: tab.t('settings.bibleQuote.presets.name'),
 
-  // Preview sub-section
-  new Setting(items).setName(tab.t('settings.bibleQuote.preview.name'));
-  items.createDiv({ attr: { id: 'bible-quote-preview-container' } });
+        render: (setting): void => {
+          setting
+            .addButton((cb) =>
+              cb
+                .setButtonText(tab.t('settings.bibleQuote.presets.short'))
+                .onClick(() => presetOnClick(BIBLE_QUOTE_TEMPLATES.short)),
+            )
+            .addButton((cb) =>
+              cb
+                .setButtonText(tab.t('settings.bibleQuote.presets.plain'))
+                .onClick(() => presetOnClick(BIBLE_QUOTE_TEMPLATES.plain)),
+            )
+            .addButton((cb) =>
+              cb
+                .setButtonText(tab.t('settings.bibleQuote.presets.foldable'))
+                .onClick(() => presetOnClick(BIBLE_QUOTE_TEMPLATES.foldable)),
+            )
+            .addButton((cb) =>
+              cb
+                .setButtonText(tab.t('settings.bibleQuote.presets.expanded'))
+                .onClick(() => presetOnClick(BIBLE_QUOTE_TEMPLATES.expanded)),
+            );
+        },
+      },
+      {
+        name: tab.t('settings.bibleQuote.preview.name'),
+
+        render: (setting, group): void => {
+          setting.setName(tab.t('settings.bibleQuote.preview.name'));
+          group.listEl.createDiv({ attr: { id: 'bible-quote-preview-container' } });
+
+          tab.updateBibleQuotePreview();
+        },
+      },
+    ],
+  };
 }
 
 export function updateBibleQuotePreview(tab: SettingsTabContext): void {
