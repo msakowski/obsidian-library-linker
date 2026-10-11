@@ -13,16 +13,6 @@ interface BibleTextResult {
   error?: string;
 }
 
-interface CurlFetchResult {
-  html: string;
-  meta: {
-    httpCode: string;
-    effectiveUrl: string;
-    contentType: string;
-    timeTotalSeconds: number;
-  };
-}
-
 interface WebviewElement extends HTMLElement {
   getURL?: () => string;
   executeJavaScript?: (code: string, userGesture?: boolean) => Promise<unknown>;
@@ -50,14 +40,12 @@ const WOL_LANG_CONFIG: Record<string, WOLLangConfig> = {
 
 export class BibleTextFetcher {
   private static readonly WOL_BASE = 'https://wol.jw.org';
-  private static readonly CURL_META_MARKER = '__JWLINKER_CURL_META__';
   private static readonly WEBVIEWER_TIMEOUT_MS = 30000;
   private static readonly MIN_REQUEST_INTERVAL_MS = 800;
   private static readonly CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
   private static app: App | null = null;
   private static lastRequestTime = -Infinity;
   private static readonly chapterHtmlCache = new Map<string, { html: string; timestamp: number }>();
-  private static curlAvailable: boolean | null = null; // null = untested
 
   static initialize(app: App): void {
     this.app = app;
@@ -66,7 +54,6 @@ export class BibleTextFetcher {
   static clearCache(): void {
     this.chapterHtmlCache.clear();
     this.lastRequestTime = -Infinity;
-    this.curlAvailable = null;
   }
 
   static async fetchBibleText(
@@ -158,7 +145,7 @@ export class BibleTextFetcher {
    * Fetches HTML from a WOL URL with automatic fallback.
    *
    * All platforms: try requestUrl first.
-   * Desktop fallback chain: curl (if available) → webviewer (if registered).
+   * Desktop fallback: webviewer (if registered).
    * Mobile: no fallback — requestUrl is the only path.
    */
   private static async fetchHtml(url: string): Promise<string> {
@@ -176,24 +163,7 @@ export class BibleTextFetcher {
         throw error;
       }
 
-      // Desktop fallback 1: curl
-      if (this.curlAvailable !== false) {
-        try {
-          const html = await this.fetchWithCurl(url);
-          this.curlAvailable = true;
-          return html;
-        } catch (curlError) {
-          const curlMsg = curlError instanceof Error ? curlError.message : String(curlError);
-          if (curlMsg.includes('ENOENT')) {
-            logger.warn('fetchHtml: curl not available, skipping for future requests');
-            this.curlAvailable = false;
-          } else {
-            logger.warn('fetchHtml: curl failed —', curlMsg);
-          }
-        }
-      }
-
-      // Desktop fallback 2: webviewer
+      // Desktop fallback: webviewer
       if (this.isWebviewerAvailable()) {
         try {
           return await this.fetchWithWebviewer(url);
@@ -205,29 +175,19 @@ export class BibleTextFetcher {
         }
       }
 
-      throw new Error(`All fetch methods failed for ${url}`);
+      throw new Error(`All fetch methods failed for ${url}`, { cause: error });
     }
   }
 
   private static isWebviewerAvailable(): boolean {
     if (!this.app) return false;
     // Check if the webviewer view type is registered in Obsidian
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any -- accessing undocumented Obsidian internal API
-    const viewByType = (this.app as any).viewRegistry?.viewByType as
-      | Record<string, unknown>
-      | undefined;
+    // viewRegistry is an undocumented Obsidian internal API
+    const { viewRegistry } = this.app as App & {
+      viewRegistry?: { viewByType?: Record<string, unknown> };
+    };
+    const viewByType = viewRegistry?.viewByType;
     return viewByType?.['webviewer'] !== undefined;
-  }
-
-  private static async fetchWithCurl(url: string): Promise<string> {
-    const result = await this.fetchWithSystemCurl(url);
-    logger.log(
-      'fetchHtml: curl completed',
-      `http=${result.meta.httpCode}`,
-      `curlTime=${Math.round(result.meta.timeTotalSeconds * 1000)}ms`,
-      `bytes=${result.html.length}`,
-    );
-    return result.html;
   }
 
   private static async fetchWithWebviewer(url: string): Promise<string> {
@@ -340,64 +300,6 @@ export class BibleTextFetcher {
 
   private static delay(ms: number): Promise<void> {
     return new Promise((resolve) => window.setTimeout(resolve, ms));
-  }
-
-  private static async fetchWithSystemCurl(url: string): Promise<CurlFetchResult> {
-    if (!Platform.isDesktop) {
-      throw new Error('System curl is only available on desktop');
-    }
-    // Dynamic imports for desktop-only Node.js APIs (kept lazy so mobile never loads them).
-    const { execFile } = await import('child_process');
-    const { promisify } = await import('util');
-    const execFileAsync = promisify(execFile);
-
-    const { stdout } = await execFileAsync(
-      'curl',
-      [
-        '-sS',
-        '-L',
-        '--compressed',
-        '--max-time',
-        '30',
-        '--output',
-        '-',
-        '--write-out',
-        `\n${this.CURL_META_MARKER}%{http_code}\t%{url_effective}\t%{content_type}\t%{time_total}`,
-        url,
-      ],
-      { maxBuffer: 1024 * 1024 },
-    );
-    const markerIndex = stdout.lastIndexOf(`\n${this.CURL_META_MARKER}`);
-    if (markerIndex === -1) {
-      throw new Error('curl output missing metadata marker');
-    }
-
-    const html = stdout.slice(0, markerIndex);
-    const metaLine = stdout.slice(markerIndex + 1).trim();
-    const meta = this.parseCurlMeta(metaLine);
-
-    if (!html) {
-      throw new Error('curl returned empty response');
-    }
-
-    return { html, meta };
-  }
-
-  private static parseCurlMeta(metaLine: string): CurlFetchResult['meta'] {
-    if (!metaLine.startsWith(this.CURL_META_MARKER)) {
-      throw new Error(`invalid curl metadata: ${metaLine}`);
-    }
-
-    const [httpCode, effectiveUrl, contentType, timeTotal] = metaLine
-      .slice(this.CURL_META_MARKER.length)
-      .split('\t');
-
-    return {
-      httpCode: httpCode || '000',
-      effectiveUrl: effectiveUrl || '',
-      contentType: contentType || '',
-      timeTotalSeconds: timeTotal ? Number(timeTotal) : 0,
-    };
   }
 
   static buildWOLUrl(book: number, chapter: number, language: Language): string {

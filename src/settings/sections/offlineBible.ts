@@ -7,91 +7,102 @@ import {
 import { logger } from '@/utils/logger';
 import { LANGUAGE_LABELS } from '@/consts/languages';
 import type { SettingsTabContext } from '@/settings/types';
-import { createSettingGroup } from '@/settings/createSettingGroup';
+import type { SettingDefinitionGroup } from 'obsidian';
 
-export async function renderOfflineBible(
-  tab: SettingsTabContext,
-  container: HTMLElement,
-): Promise<void> {
-  const items = createSettingGroup(
-    container,
-    tab.t('settings.offlineBible.name'),
-    tab.t('settings.offlineBible.description'),
-  );
-
-  const content = items.createDiv();
-  await renderOfflineBibleContent(tab, content);
-}
-
-async function renderOfflineBibleContent(
-  tab: SettingsTabContext,
-  container: HTMLElement,
-): Promise<void> {
-  container.empty();
-
-  new Setting(container)
-    .setName(tab.t('settings.offlineBible.enabled.name'))
-    .setDesc(tab.t('settings.offlineBible.enabled.description'))
-    .addToggle((toggle) =>
-      toggle.setValue(tab.plugin.settings.offlineBible.enabled).onChange(async (value) => {
-        tab.plugin.settings.offlineBible.enabled = value;
-        await tab.plugin.saveSettings();
-        void renderOfflineBibleContent(tab, container);
-      }),
-    );
-
-  new Setting(container)
-    .setName(tab.t('settings.offlineBible.preferOffline.name'))
-    .setDesc(tab.t('settings.offlineBible.preferOffline.description'))
-    .addToggle((toggle) =>
-      toggle
-        .setValue(tab.plugin.settings.offlineBible.preferOffline)
-        .setDisabled(!tab.plugin.settings.offlineBible.enabled)
-        .onChange(async (value) => {
-          tab.plugin.settings.offlineBible.preferOffline = value;
-          await tab.plugin.saveSettings();
-          void renderOfflineBibleContent(tab, container);
-        }),
-    );
-
-  new Setting(container)
-    .setName(tab.t('settings.offlineBible.allowOnlineFallback.name'))
-    .setDesc(tab.t('settings.offlineBible.allowOnlineFallback.description'))
-    .addToggle((toggle) =>
-      toggle
-        .setValue(tab.plugin.settings.offlineBible.allowOnlineFallback)
-        .setDisabled(!tab.plugin.settings.offlineBible.enabled)
-        .onChange(async (value) => {
-          tab.plugin.settings.offlineBible.allowOnlineFallback = value;
-          await tab.plugin.saveSettings();
-        }),
-    );
-
-  const actionsSetting = new Setting(container)
-    .setName(tab.t('settings.offlineBible.actions.name'))
-    .setDesc(tab.t('settings.offlineBible.actions.description'))
-    .addButton((button) => {
-      if (tab.importInFlight) {
-        button.setButtonText(tab.t('settings.offlineBible.actions.importing')).setDisabled(true);
-      } else {
-        button
-          .setButtonText(tab.t('settings.offlineBible.actions.import'))
-          .setCta()
-          .onClick(() => {
-            void handleBibleImport(tab, container);
+export function getOfflineBibleDefinitions(tab: SettingsTabContext): SettingDefinitionGroup {
+  return {
+    type: 'group',
+    cls: 'jw-library-linker',
+    heading: tab.t('settings.offlineBible.name'),
+    items: [
+      {
+        name: tab.t('settings.offlineBible.enabled.name'),
+        desc: tab.t('settings.offlineBible.enabled.description'),
+        render: (setting, group): void => {
+          const description = group.listEl.createDiv({
+            cls: 'setting-item-description',
+            text: tab.t('settings.offlineBible.description'),
           });
-      }
-    });
-
-  if (Platform.isDesktopApp) {
-    actionsSetting.addButton((button) =>
-      button.setButtonText(tab.t('settings.offlineBible.actions.openFolder')).onClick(() => {
-        void openOfflineBibleFolder(tab);
-      }),
-    );
-  }
-
-  await renderInstalledBibleList(tab, container);
+          group.listEl.prepend(description);
+          setting.addToggle((toggle) =>
+            toggle.setValue(tab.plugin.settings.offlineBible.enabled).onChange(async (value) => {
+              tab.plugin.settings.offlineBible.enabled = value;
+              await tab.plugin.saveSettings();
+              tab.update();
+            }),
+          );
+        },
+      },
+      {
+        name: tab.t('settings.offlineBible.preferOffline.name'),
+        desc: tab.t('settings.offlineBible.preferOffline.description'),
+        render: (setting): void => {
+          setting.addToggle((toggle) =>
+            toggle
+              .setValue(tab.plugin.settings.offlineBible.preferOffline)
+              .setDisabled(!tab.plugin.settings.offlineBible.enabled)
+              .onChange(async (value) => {
+                tab.plugin.settings.offlineBible.preferOffline = value;
+                await tab.plugin.saveSettings();
+                tab.update();
+              }),
+          );
+        },
+      },
+      {
+        name: tab.t('settings.offlineBible.allowOnlineFallback.name'),
+        desc: tab.t('settings.offlineBible.allowOnlineFallback.description'),
+        render: (setting): void => {
+          setting.addToggle((toggle) =>
+            toggle
+              .setValue(tab.plugin.settings.offlineBible.allowOnlineFallback)
+              .setDisabled(!tab.plugin.settings.offlineBible.enabled)
+              .onChange(async (value) => {
+                tab.plugin.settings.offlineBible.allowOnlineFallback = value;
+                await tab.plugin.saveSettings();
+              }),
+          );
+        },
+      },
+      {
+        name: tab.t('settings.offlineBible.actions.name'),
+        desc: tab.t('settings.offlineBible.actions.description'),
+        render: (setting): void => {
+          const actionsSetting = setting.addButton((button) => {
+            if (tab.importInFlight) {
+              button
+                .setButtonText(tab.t('settings.offlineBible.actions.importing'))
+                .setDisabled(true);
+            } else {
+              button
+                .setButtonText(tab.t('settings.offlineBible.actions.import'))
+                .setCta()
+                .onClick(() => {
+                  void handleBibleImport(tab);
+                });
+            }
+          });
+          if (Platform.isDesktopApp) {
+            actionsSetting.addButton((button) =>
+              button
+                .setButtonText(tab.t('settings.offlineBible.actions.openFolder'))
+                .onClick(() => {
+                  void openOfflineBibleFolder(tab);
+                }),
+            );
+          }
+        },
+      },
+      {
+        name: tab.t('settings.offlineBible.installedList.name'),
+        desc: tab.t('settings.offlineBible.installedList.description'),
+        render: (_setting, group): void => {
+          const container = group.listEl.createDiv();
+          void renderInstalledBibleList(tab, container);
+        },
+      },
+    ],
+  };
 }
 
 async function renderInstalledBibleList(
@@ -106,10 +117,6 @@ async function renderInstalledBibleList(
       metadata: (await repository?.getMetadata(language)) ?? null,
     })),
   );
-
-  new Setting(wrapper)
-    .setName(tab.t('settings.offlineBible.installedList.name'))
-    .setDesc(tab.t('settings.offlineBible.installedList.description'));
 
   const container = wrapper.createDiv();
 
@@ -137,21 +144,21 @@ async function renderInstalledBibleList(
         button
           .setButtonText(tab.t('settings.offlineBible.actions.remove'))
           .setIcon('trash')
-          .setWarning()
+          .setDestructive()
           .onClick(() => {
-            void handleBibleRemoval(tab, language, wrapper);
+            void handleBibleRemoval(tab, language);
           }),
       );
   }
 }
 
-async function handleBibleImport(tab: SettingsTabContext, container: HTMLElement): Promise<void> {
+async function handleBibleImport(tab: SettingsTabContext): Promise<void> {
   const selectedFile = await selectEpubFile(tab);
   if (!selectedFile) return;
 
   const importService = tab.plugin.getEpubImportService();
   tab.importInFlight = true;
-  void renderOfflineBibleContent(tab, container);
+  tab.update();
 
   try {
     const result = await importService.importBible({
@@ -180,18 +187,14 @@ async function handleBibleImport(tab: SettingsTabContext, container: HTMLElement
     );
   } finally {
     tab.importInFlight = false;
-    void renderOfflineBibleContent(tab, container);
+    tab.update();
   }
 }
 
-async function handleBibleRemoval(
-  tab: SettingsTabContext,
-  language: Language,
-  container: HTMLElement,
-): Promise<void> {
+async function handleBibleRemoval(tab: SettingsTabContext, language: Language): Promise<void> {
   await tab.plugin.getOfflineBibleRepository()?.removeLanguage(language);
   new Notice(tab.t('notices.offlineBibleRemoved', { language: LANGUAGE_LABELS[language] }));
-  void renderOfflineBibleContent(tab, container);
+  tab.update();
 }
 
 async function openOfflineBibleFolder(tab: SettingsTabContext): Promise<void> {
@@ -216,7 +219,7 @@ function selectEpubFile(tab: SettingsTabContext): Promise<File | null> {
     const input = tab.containerEl.createEl('input');
     input.type = 'file';
     input.accept = '.epub,application/epub+zip';
-    input.style.display = 'none';
+    input.hidden = true;
 
     input.addEventListener('change', () => {
       resolve(input.files?.[0] ?? null);

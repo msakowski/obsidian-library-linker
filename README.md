@@ -105,6 +105,8 @@ The plugin detects valid references and converts them to JW Library links.
 
 ## Settings
 
+Requires Obsidian 1.13.0 or later. Settings are searchable by name and description in Obsidian's settings search.
+
 ### Language
 
 Choose the language for Bible book names and link generation. The plugin UI language follows your Obsidian language setting automatically.
