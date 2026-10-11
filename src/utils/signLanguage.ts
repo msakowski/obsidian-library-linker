@@ -56,6 +56,10 @@ export const SIGN_LANGUAGE_MAP: Partial<Record<Language, Language>> = {
   HDF: 'H',
   // Vietnamese base
   SLV: 'VT',
+  // Norwegian base
+  NDF: 'N',
+  // Indonesian base
+  INI: 'IN',
 };
 
 /** Returns the language to use for Bible book name lookup, resolving sign languages to their spoken base. */

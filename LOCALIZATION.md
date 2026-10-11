@@ -13,8 +13,10 @@
 | FI   | suomi / Finnish                   |
 | H    | magyar / Hungarian                |
 | I    | Italiano / Italian                |
+| IN   | Bahasa Indonesia / Indonesian     |
 | J    | 日本語 / Japanese                    |
 | KO   | 한국어 / Korean                      |
+| N    | Norsk / Norwegian                 |
 | O    | Nederlands / Dutch                |
 | S    | español / Spanish                 |
 | TG   | Tagalog / Tagalog                 |
@@ -40,6 +42,7 @@
 | HDF  | magyar jelnyelv / Hungarian Sign Language                                 |
 | HZJ  | hrvatski znakovni jezik / Croatian Sign Language                          |
 | ISG  | Irish Sign Language / Irish Sign Language                                 |
+| INI  | Bahasa Isyarat Indonesia / Indonesian Sign Language                       |
 | JML  | Jamaican Sign Language / Jamaican Sign Language                           |
 | KSL  | 한국 수어 / Korean Sign Language                                              |
 | LGP  | Língua Gestual Portuguesa / Portuguese Sign Language                      |
@@ -56,6 +59,7 @@
 | LSS  | lengua de señas salvadoreña / Salvadoran Sign Language                    |
 | LSU  | lengua de señas uruguaya / Uruguayan Sign Language                        |
 | LSV  | lengua de señas venezolana / Venezuelan Sign Language                     |
+| NDF  | Norsk tegnspråk / Norwegian Sign Language                                 |
 | NGT  | Nederlandse Gebarentaal / Dutch Sign Language                             |
 | NZS  | New Zealand Sign Language / New Zealand Sign Language                     |
 | OGS  | Österreichische Gebärdensprache / Austrian Sign Language                  |
@@ -69,6 +73,12 @@
 | SPE  | lengua de señas peruana / Peruvian Sign Language                          |
 
 The plugin UI automatically adapts to your Obsidian language setting, and Bible book names are fully translated for each language.
+
+Indonesian and Indonesian Sign Language also recognize `Kisah Para Rasul` and `Hakim-Hakim`, including their compact forms `KisahParaRasul` and `HakimHakim`.
+
+Norwegian and Norwegian Sign Language recognize the official Bible abbreviations, including `Mi`, `Fil`, and `1Te`/`2Te`, as well as alternatives such as `Mik`, `Filip.`, and `1Ts`/`2Ts`.
+
+When parsing complete Bible references, exact book names and abbreviations take precedence over partial-name matches. Suggestions still include books matching the typed prefix.
 
 ## Contributing a new language
 
