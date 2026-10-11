@@ -520,5 +520,23 @@
     "name": "Hungarian Sign Language",
     "isSignLanguage": true,
     "isRTL": false
+  },
+  {
+    "code": "IN",
+    "locale": "id",
+    "vernacular": "Bahasa Indonesia",
+    "script": "ROMAN",
+    "name": "Indonesian",
+    "isSignLanguage": false,
+    "isRTL": false
+  },
+  {
+    "code": "INI",
+    "locale": "inl",
+    "vernacular": "Bahasa Isyarat Indonesia",
+    "script": "ROMAN",
+    "name": "Indonesian Sign Language",
+    "isSignLanguage": true,
+    "isRTL": false
   }
 ]
