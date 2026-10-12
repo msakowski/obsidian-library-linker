@@ -183,6 +183,29 @@ describe('BibleTextFetcher', () => {
         expect(result.text).not.toContain('+');
       });
 
+      test('fails instead of returning placeholder text when the verse is missing', async () => {
+        const html = `
+          <div class="section" data-key="40-24-15">
+            <span id="v40-24-15-1" class="v"><a href="#" class="vl vx vp">15 </a>Therefore, when you catch sight of the disgusting thing</span>
+          </div>
+        `;
+
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
+
+        const result = await BibleTextFetcher.fetchBibleText(
+          {
+            book: 40,
+            chapter: 24,
+            verseRanges: [{ start: 14, end: 14 }],
+          },
+          'E',
+        );
+
+        expect(result.success).toBe(false);
+        expect(result.text).toBe('');
+        expect(result.error).toBe('No Bible text found for reference');
+      });
+
       test('extracts verse range from WOL format', async () => {
         const html = `
           <span id="v40-24-14-1" class="v"><a href="#" class="vl vx vp">14 </a>And this good news of the Kingdom will be preached.</span>
