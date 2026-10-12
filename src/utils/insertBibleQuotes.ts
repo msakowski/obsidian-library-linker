@@ -365,3 +365,189 @@ export async function insertBibleQuoteAtCursor(
 
   return { inserted: false, alreadyExists: false, fetchFailed: linksOnTargetLine.length > 0 };
 }
+
+/** Where a freshly created link was written, so its quote can be placed next to it. */
+export interface CreatedLinkAnchor {
+  /** Line the link was written to. */
+  line: number;
+  /** The `jwlibrary:///…` URL of the created link, used to find it again. */
+  linkUrl: string;
+}
+
+export interface CreatedLinkQuoteResult {
+  inserted: boolean;
+  alreadyExists: boolean;
+  fetchFailed: boolean;
+  /** The created link was gone by the time the text arrived — nothing was written. */
+  anchorLost: boolean;
+}
+
+/**
+ * Checks that the created link is still on the line it was written to.
+ *
+ * The link is not searched for elsewhere: another line with the same URL is
+ * an earlier mention of the verse (or the link was undone), and quoting it
+ * would put the text somewhere the user did not ask for.
+ */
+function isCreatedLinkInPlace(editor: Editor, anchor: CreatedLinkAnchor): boolean {
+  return (
+    anchor.line >= 0 &&
+    anchor.line <= editor.lastLine() &&
+    editor.getLine(anchor.line).includes(anchor.linkUrl)
+  );
+}
+
+/** Last line of the blockquote or callout that `line` belongs to. */
+function findBlockquoteEnd(editor: Editor, line: number): number {
+  let end = line;
+
+  while (
+    end < editor.lastLine() &&
+    editor
+      .getLine(end + 1)
+      .trim()
+      .startsWith('>')
+  ) {
+    end++;
+  }
+
+  return end;
+}
+
+/**
+ * Tells whether the blockquote right below `line` is the quote of this link.
+ *
+ * Any other blockquote or callout below is unrelated text, and must not stop
+ * the quote from being inserted.
+ */
+function hasQuoteBelow(editor: Editor, line: number, linkUrl: string): boolean {
+  if (
+    line >= editor.lastLine() ||
+    !editor
+      .getLine(line + 1)
+      .trim()
+      .startsWith('>')
+  ) {
+    return false;
+  }
+
+  const blockEnd = findBlockquoteEnd(editor, line + 1);
+
+  for (let quoteLine = line + 1; quoteLine <= blockEnd; quoteLine++) {
+    if (editor.getLine(quoteLine).includes(linkUrl)) return true;
+  }
+
+  return false;
+}
+
+/**
+ * Opens a collapsed callout (`[!quote]-` becomes `[!quote]+`).
+ *
+ * A quote that appears on its own but shows nothing is pointless, and `+`
+ * keeps the callout foldable, so it can still be closed by hand.
+ */
+function openCollapsedCallout(quoteText: string): string {
+  return quoteText.replace(/^(\s*>\s*\[![^\]]+\])-/, '$1+');
+}
+
+/**
+ * Inserts the quote for a link that was just created by the suggester.
+ *
+ * Unlike the command driven insertions this runs while the user is typing:
+ * the text is fetched first and the editor is only touched afterwards, once
+ * the link is confirmed to still be where it was written, in the same note
+ * (`isSameNote`), and the cursor is put back where the user left it.
+ */
+export async function insertBibleQuoteForCreatedLink(
+  editor: Editor,
+  reference: BibleReference,
+  settings: LinkReplacerSettings,
+  provider: BibleCitationProvider,
+  anchor: CreatedLinkAnchor,
+  isSameNote: () => boolean = () => true,
+): Promise<CreatedLinkQuoteResult> {
+  const generated = await generateBibleQuoteText(reference, settings, provider);
+  const quoteText = generated && openCollapsedCallout(generated);
+
+  if (!quoteText) {
+    return { inserted: false, alreadyExists: false, fetchFailed: true, anchorLost: false };
+  }
+
+  // The editor is reused when the user opens another note in the same tab, so
+  // a matching line could belong to a different note.
+  if (!isSameNote()) {
+    logger.warn('insertBibleQuoteForCreatedLink: the note changed, skipping insertion');
+    return { inserted: false, alreadyExists: false, fetchFailed: false, anchorLost: true };
+  }
+
+  if (!isCreatedLinkInPlace(editor, anchor)) {
+    logger.warn(
+      'insertBibleQuoteForCreatedLink: created link no longer found, skipping insertion',
+      anchor.linkUrl,
+    );
+    return { inserted: false, alreadyExists: false, fetchFailed: false, anchorLost: true };
+  }
+
+  const targetLine = anchor.line;
+
+  if (hasQuoteBelow(editor, targetLine, anchor.linkUrl)) {
+    logger.log(`insertBibleQuoteForCreatedLink: line ${targetLine} is already quoted`);
+    return { inserted: false, alreadyExists: true, fetchFailed: false, anchorLost: false };
+  }
+
+  const cursorBefore = editor.getCursor();
+  const standalone = isLinkStandaloneOnLine(editor.getLine(targetLine), settings);
+
+  // A link inside a blockquote or callout gets its quote after the whole
+  // block, so the block is not split in two.
+  const insertLine = standalone ? targetLine : findBlockquoteEnd(editor, targetLine);
+  const change = buildQuoteChange(editor, insertLine, quoteText, standalone);
+
+  // When the quote replaces the reference the user is done with that line, so
+  // make sure there is a line left to keep writing on.
+  if (standalone && insertLine >= editor.lastLine()) {
+    change.text += '\n';
+  }
+
+  editor.transaction({ changes: [change] });
+
+  const insertedLineBreaks = change.text.split('\n').length - 1;
+
+  if (standalone && cursorBefore.line === targetLine) {
+    // The reference became the quote — carry on below it.
+    placeCursorAfterQuote(editor, targetLine, quoteText);
+  } else {
+    // The reference sits in a sentence the user may still be writing.
+    restoreCursor(editor, cursorBefore, insertLine, insertedLineBreaks);
+  }
+
+  return { inserted: true, alreadyExists: false, fetchFailed: false, anchorLost: false };
+}
+
+/**
+ * Leaves the cursor on the blank line following the quote, so the user can
+ * keep writing where the reference used to be.
+ */
+function placeCursorAfterQuote(editor: Editor, targetLine: number, quoteText: string): void {
+  const lastQuoteLine = targetLine + quoteText.split('\n').length - 1;
+  const line = Math.min(lastQuoteLine + 1, editor.lastLine());
+
+  editor.setCursor({ line, ch: editor.getLine(line).length });
+}
+
+/**
+ * Puts the cursor back after an insertion the user did not ask for, following
+ * the text it was sitting on if the quote pushed it further down.
+ */
+function restoreCursor(
+  editor: Editor,
+  cursor: EditorPosition,
+  insertLine: number,
+  insertedLineBreaks: number,
+): void {
+  const followed = cursor.line > insertLine ? cursor.line + insertedLineBreaks : cursor.line;
+  const line = Math.min(Math.max(followed, 0), editor.lastLine());
+  const ch = Math.min(Math.max(cursor.ch, 0), editor.getLine(line).length);
+
+  editor.setCursor({ line, ch });
+}
