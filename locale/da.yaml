@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Formatering af bibelcitat
     description: Angiv hvordan bibelcitater skal formateres, når de indsættes
+    autoInsert:
+      name: Indsæt citat automatisk
+      description: Når dette er slået til, hentes og indsættes bibelcitatet, så snart et link oprettes fra forslagene. Kræver internetforbindelse eller en importeret offline-bibel.
     presets:
       name: Skabelonforvalg
       short: Link + citat
