@@ -75,9 +75,19 @@ export class VaultOfflineBibleRepository implements OfflineBibleRepository {
       return null;
     }
 
+    // A range may run past the end of the chapter — a reference spanning
+    // chapters is looked up chapter by chapter with an open end.
+    const lastVerse = Object.keys(chapter.verses).reduce((highest, key) => {
+      const verse = Number(key);
+      return Number.isNaN(verse) ? highest : Math.max(highest, verse);
+    }, 0);
+
     const parts: string[] = [];
     for (const range of reference.verseRanges) {
-      for (let verse = range.start; verse <= range.end; verse++) {
+      const end = Math.min(range.end, lastVerse);
+      if (range.start > end) return null;
+
+      for (let verse = range.start; verse <= end; verse++) {
         const text = chapter.verses[String(verse)];
         if (!text) return null;
         parts.push(text);
