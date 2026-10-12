@@ -2,6 +2,7 @@ import { insertAllBibleQuotes, insertBibleQuoteAtCursor } from '@/utils/insertBi
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { OnlineBibleCitationProvider } from '@/services/OnlineBibleCitationProvider';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
+import { MAX_VERSES_IN_CHAPTER } from '@/utils/splitBibleReferenceForCitation';
 import type { BibleCitationProvider, LinkReplacerSettings } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { TEST_DEFAULT_SETTINGS } from 'mocks/plugin';
@@ -338,6 +339,110 @@ describe('insertAllBibleQuotes', () => {
           text: '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)\n> For God loved the world so much that he gave his only-begotten Son.\n',
         },
       ],
+    });
+  });
+
+  describe('with a reference that spans several ranges or chapters', () => {
+    const line = 'jwlibrary:///finder?bible=40003001-40004011';
+
+    beforeEach(() => {
+      mockLastLine.mockReturnValue(0);
+      mockGetLine.mockReturnValue(line);
+      (convertBibleTextToMarkdownLink as Mock).mockReturnValue(
+        '[Matt. 3:1-4:11](jwlibrary:///finder?bible=40003001-40004011&wtlocale=E)',
+      );
+    });
+
+    test('should fetch every range of a multi-range reference into one quote', async () => {
+      (findJWLibraryLinks as Mock).mockReturnValue([
+        {
+          url: line,
+          reference: {
+            book: 43,
+            chapter: 1,
+            verseRanges: [
+              { start: 1, end: 2 },
+              { start: 4, end: 4 },
+            ],
+          },
+          lineNumber: 0,
+          lineText: line,
+        },
+      ]);
+      (BibleTextFetcher.fetchBibleText as Mock)
+        .mockResolvedValueOnce({ success: true, text: 'First part.' })
+        .mockResolvedValueOnce({ success: true, text: 'Second part.' });
+
+      const result = await insertAllBibleQuotes(mockEditor, settings, provider);
+
+      expect(result.inserted).toBe(1);
+      expect((BibleTextFetcher.fetchBibleText as Mock).mock.calls).toEqual([
+        [{ book: 43, chapter: 1, verseRanges: [{ start: 1, end: 2 }] }, 'E'],
+        [{ book: 43, chapter: 1, verseRanges: [{ start: 4, end: 4 }] }, 'E'],
+      ]);
+      expect(mockTransaction).toHaveBeenCalledWith({
+        changes: [
+          {
+            from: { line: 0, ch: 0 },
+            to: { line: 0, ch: line.length },
+            text:
+              '[Matt. 3:1-4:11](jwlibrary:///finder?bible=40003001-40004011&wtlocale=E)\n' +
+              '> First part. Second part.',
+          },
+        ],
+      });
+    });
+
+    test('should fetch every chapter of a multi-chapter reference', async () => {
+      (findJWLibraryLinks as Mock).mockReturnValue([
+        {
+          url: line,
+          reference: { book: 40, chapter: 3, endChapter: 4, verseRanges: [{ start: 1, end: 11 }] },
+          lineNumber: 0,
+          lineText: line,
+        },
+      ]);
+      (BibleTextFetcher.fetchBibleText as Mock)
+        .mockResolvedValueOnce({ success: true, text: 'Chapter three.' })
+        .mockResolvedValueOnce({ success: true, text: 'Chapter four.' });
+
+      const result = await insertAllBibleQuotes(mockEditor, settings, provider);
+
+      expect(result.inserted).toBe(1);
+      expect((BibleTextFetcher.fetchBibleText as Mock).mock.calls).toEqual([
+        [{ book: 40, chapter: 3, verseRanges: [{ start: 1, end: MAX_VERSES_IN_CHAPTER }] }, 'E'],
+        [{ book: 40, chapter: 4, verseRanges: [{ start: 1, end: 11 }] }, 'E'],
+      ]);
+      expect(mockTransaction).toHaveBeenCalledWith({
+        changes: [
+          {
+            from: { line: 0, ch: 0 },
+            to: { line: 0, ch: line.length },
+            text:
+              '[Matt. 3:1-4:11](jwlibrary:///finder?bible=40003001-40004011&wtlocale=E)\n' +
+              '> Chapter three. Chapter four.',
+          },
+        ],
+      });
+    });
+
+    test('should write nothing when only part of the reference can be fetched', async () => {
+      (findJWLibraryLinks as Mock).mockReturnValue([
+        {
+          url: line,
+          reference: { book: 40, chapter: 3, endChapter: 4, verseRanges: [{ start: 1, end: 11 }] },
+          lineNumber: 0,
+          lineText: line,
+        },
+      ]);
+      (BibleTextFetcher.fetchBibleText as Mock)
+        .mockResolvedValueOnce({ success: true, text: 'Chapter three.' })
+        .mockResolvedValueOnce({ success: false, error: 'offline' });
+
+      const result = await insertAllBibleQuotes(mockEditor, settings, provider);
+
+      expect(result).toEqual({ inserted: 0, linksFound: 1, fetchFailed: 1 });
+      expect(mockTransaction).not.toHaveBeenCalled();
     });
   });
 
