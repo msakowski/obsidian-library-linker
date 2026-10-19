@@ -75,7 +75,7 @@ Fetch actual Bible text from jw\.org and insert it directly into your notes.
 
 <!-- Expanded callout -->
 
-> [!quote] [Matthew 6:33](jwlibrary:///finder?bible=40006033)
+> [!quote]+ [Matthew 6:33](jwlibrary:///finder?bible=40006033)
 > But keep on seeking first the Kingdom...
 ```
 
