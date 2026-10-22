@@ -1,7 +1,7 @@
 import { Editor } from 'obsidian';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import { formatBibleText } from '@/utils/formatBibleText';
-import type { BibleCitationProvider, LinkReplacerSettings } from '@/types';
+import type { BibleCitationProvider, BibleReference, LinkReplacerSettings } from '@/types';
 import {
   findJWLibraryLinks,
   findJWLibraryLinksInLine,
@@ -9,6 +9,7 @@ import {
   type JWLibraryLinkInfo,
   type ContentSelection,
 } from '@/utils/findJWLibraryLinks';
+import { splitBibleReferenceForCitation } from '@/utils/splitBibleReferenceForCitation';
 import { logger } from '@/utils/logger';
 import { getBookLanguage } from './signLanguage';
 
@@ -37,21 +38,34 @@ function processTemplate(
     .replace(/\{quote\}/g, variables.quote.trim());
 }
 
-async function generateBibleQuoteText(
-  linkInfo: JWLibraryLinkInfo,
+/**
+ * Fetches the text of a reference, one provider lookup per part.
+ *
+ * Multi-range and multi-chapter references cannot be resolved in a single
+ * lookup, so they are split up and the parts are stitched back together.
+ * A missing part fails the whole citation — a partial quote would silently
+ * misrepresent the reference.
+ */
+async function fetchCitationText(
+  reference: BibleReference,
   settings: LinkReplacerSettings,
   provider: BibleCitationProvider,
 ): Promise<string | null> {
-  try {
-    logger.log('generateBibleQuoteText: fetching text for', linkInfo.reference);
-    const result = await provider.getCitation(
-      linkInfo.reference,
-      getBookLanguage(settings.language),
-    );
+  const parts = splitBibleReferenceForCitation(reference);
+
+  if (parts.length === 0) {
+    logger.warn('fetchCitationText: reference has no verse ranges', reference);
+    return null;
+  }
+
+  const texts: string[] = [];
+
+  for (const part of parts) {
+    const result = await provider.getCitation(part, getBookLanguage(settings.language));
 
     if (!result.success || !result.text) {
       logger.warn(
-        'generateBibleQuoteText: fetch failed —',
+        'fetchCitationText: fetch failed —',
         result.error ?? 'empty text',
         'success:',
         result.success,
@@ -59,20 +73,41 @@ async function generateBibleQuoteText(
       return null;
     }
 
-    logger.log('generateBibleQuoteText: fetched text length:', result.text.length);
+    texts.push(result.text.trim());
+  }
 
-    const bibleRefLinked = convertBibleTextToMarkdownLink(linkInfo.reference, settings);
+  return texts.join(' ');
+}
+
+async function generateBibleQuoteText(
+  reference: BibleReference,
+  settings: LinkReplacerSettings,
+  provider: BibleCitationProvider,
+): Promise<string | null> {
+  try {
+    logger.log('generateBibleQuoteText: fetching text for', reference);
+    const text = await fetchCitationText(reference, settings, provider);
+
+    if (!text) {
+      return null;
+    }
+
+    logger.log('generateBibleQuoteText: fetched text length:', text.length);
+
+    // The quote is labelled with the reference the user wrote, not with the
+    // parts it was fetched in.
+    const bibleRefLinked = convertBibleTextToMarkdownLink(reference, settings);
     if (!bibleRefLinked) {
       logger.warn('generateBibleQuoteText: convertBibleTextToMarkdownLink returned falsy');
       return null;
     }
 
-    const bibleRef = formatBibleText(linkInfo.reference, settings.bookLength, settings.language);
+    const bibleRef = formatBibleText(reference, settings.bookLength, settings.language);
 
     const processed = processTemplate(settings.bibleQuote.template, {
       bibleRef,
       bibleRefLinked,
-      quote: result.text,
+      quote: text,
     });
 
     return processed;
@@ -153,7 +188,7 @@ export async function insertAllBibleQuotes(
     }
 
     try {
-      const quoteText = await generateBibleQuoteText(linkInfo, settings, provider);
+      const quoteText = await generateBibleQuoteText(linkInfo.reference, settings, provider);
       if (quoteText) {
         if (isLinkStandaloneOnLine(currentLine)) {
           changes.push({
@@ -252,14 +287,7 @@ export async function insertBibleQuoteAtCursor(
     const reference = parseJWLibraryLink(linkInfo.url);
     logger.log('reference', reference);
     if (reference) {
-      const quoteText = await generateBibleQuoteText(
-        {
-          ...linkInfo,
-          reference,
-        },
-        settings,
-        provider,
-      );
+      const quoteText = await generateBibleQuoteText(reference, settings, provider);
       if (quoteText) {
         quoteTexts.push(quoteText);
       }
