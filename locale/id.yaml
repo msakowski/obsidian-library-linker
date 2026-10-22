@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Format kutipan Alkitab
     description: Atur bagaimana kutipan Alkitab diformat ketika dimasukkan
+    autoInsert:
+      name: Sisipkan kutipan secara otomatis
+      description: Jika diaktifkan, kutipan Alkitab diambil dan disisipkan tepat setelah tautan dibuat dari saran. Memerlukan koneksi internet atau Alkitab offline yang sudah diimpor.
     presets:
       name: Preset template
       short: Tautan + Kutipan

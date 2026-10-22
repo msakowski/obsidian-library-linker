@@ -20,6 +20,20 @@ export function getBibleQuoteDefinitions(tab: SettingsTabContext): SettingDefini
     heading: tab.t('settings.bibleQuote.name'),
     items: [
       {
+        name: tab.t('settings.bibleQuote.autoInsert.name'),
+        desc: tab.t('settings.bibleQuote.autoInsert.description'),
+        render: (setting): void => {
+          setting.addToggle((toggle) =>
+            toggle
+              .setValue(tab.plugin.settings.bibleQuote.autoInsertOnLinkCreation)
+              .onChange(async (value) => {
+                tab.plugin.settings.bibleQuote.autoInsertOnLinkCreation = value;
+                await tab.plugin.saveSettings();
+              }),
+          );
+        },
+      },
+      {
         name: tab.t('settings.bibleQuote.template.name'),
         desc: tab.t('settings.bibleQuote.template.description'),
         render: (setting, group): void => {
