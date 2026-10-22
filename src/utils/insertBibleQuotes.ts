@@ -1,7 +1,7 @@
-import { Editor } from 'obsidian';
+import { Editor, EditorPosition } from 'obsidian';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import { formatBibleText } from '@/utils/formatBibleText';
-import type { BibleCitationProvider, LinkReplacerSettings } from '@/types';
+import type { BibleCitationProvider, LinkReplacerSettings, LinkStyles } from '@/types';
 import {
   findJWLibraryLinks,
   findJWLibraryLinksInLine,
@@ -16,10 +16,24 @@ const MARKDOWN_LINK_WITH_JWLIBRARY =
   /\[[^\]]*\]\(jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)]*?)?\)/g;
 const BARE_JWLIBRARY_LINK = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^\s)]*)?/g;
 
-function isLinkStandaloneOnLine(lineText: string): boolean {
-  const stripped = lineText
+type LinkDecorations = Pick<LinkStyles, 'prefixOutsideLink' | 'suffixOutsideLink'>;
+
+function isLinkStandaloneOnLine(lineText: string, decorations?: LinkDecorations): boolean {
+  let stripped = lineText
     .replace(MARKDOWN_LINK_WITH_JWLIBRARY, '')
-    .replace(BARE_JWLIBRARY_LINK, '');
+    .replace(BARE_JWLIBRARY_LINK, '')
+    // A multi-range reference is written as several links joined by commas,
+    // which still makes the line nothing but the reference.
+    .replace(/[,;]/g, '');
+
+  // The characters configured around the link — brackets, an emoji — belong to
+  // the reference, not to any surrounding text.
+  for (const decoration of [decorations?.prefixOutsideLink, decorations?.suffixOutsideLink]) {
+    if (decoration?.trim()) {
+      stripped = stripped.split(decoration).join('');
+    }
+  }
+
   return stripped.trim().length === 0;
 }
 
@@ -85,6 +99,39 @@ async function generateBibleQuoteText(
   }
 }
 
+interface QuoteChange {
+  from: EditorPosition;
+  to: EditorPosition;
+  text: string;
+}
+
+function isBlankLine(editor: Editor, line: number): boolean {
+  return line > editor.lastLine() || editor.getLine(line).trim().length === 0;
+}
+
+/**
+ * Builds the edit that puts a quote next to the reference on `line`.
+ *
+ * With `replaceLine` the quote takes the place of the reference, otherwise it
+ * goes below the line after a blank one. A blank line is kept before any text
+ * that follows, so that text is not pulled into the blockquote.
+ */
+function buildQuoteChange(
+  editor: Editor,
+  line: number,
+  quoteText: string,
+  replaceLine: boolean,
+): QuoteChange {
+  const lineText = editor.getLine(line);
+  const separator = isBlankLine(editor, line + 1) ? '' : '\n';
+
+  return {
+    from: { line, ch: replaceLine ? 0 : lineText.length },
+    to: { line, ch: lineText.length },
+    text: (replaceLine ? '' : '\n\n') + quoteText + separator,
+  };
+}
+
 interface InsertQuotesResult {
   inserted: number;
   linksFound: number;
@@ -117,26 +164,29 @@ export async function insertAllBibleQuotes(
     return { inserted: 0, linksFound: 0, fetchFailed: 0 };
   }
 
-  const changes: Array<{
-    from: { line: number; ch: number };
-    to: { line: number; ch: number };
-    text: string;
-  }> = [];
+  // Several links can share a line (a multi-range reference, or references
+  // joined by commas). Their quotes are combined into a single change per line:
+  // separate changes on the same line would overlap in the transaction.
+  const linksByLine = new Map<number, JWLibraryLinkInfo[]>();
+  for (const linkInfo of links) {
+    const lineLinks = linksByLine.get(linkInfo.lineNumber) ?? [];
+    lineLinks.push(linkInfo);
+    linksByLine.set(linkInfo.lineNumber, lineLinks);
+  }
 
+  const changes: QuoteChange[] = [];
+
+  let inserted = 0;
   let skippedAlreadyQuoted = 0;
   let fetchFailed = 0;
 
-  // Process links in reverse order to maintain line numbers
-  for (let i = links.length - 1; i >= 0; i--) {
-    const linkInfo = links[i];
-
-    if (linkInfo.lineNumber > editor.lastLine()) {
+  for (const [lineNumber, lineLinks] of linksByLine) {
+    if (lineNumber > editor.lastLine()) {
       continue;
     }
 
-    const currentLine = editor.getLine(linkInfo.lineNumber);
-    const nextLine =
-      linkInfo.lineNumber < editor.lastLine() ? editor.getLine(linkInfo.lineNumber + 1) : '';
+    const currentLine = editor.getLine(lineNumber);
+    const nextLine = lineNumber < editor.lastLine() ? editor.getLine(lineNumber + 1) : '';
 
     // Skip if quote already exists
     if (
@@ -145,54 +195,55 @@ export async function insertAllBibleQuotes(
       nextLine &&
       nextLine.trim().startsWith('>')
     ) {
-      skippedAlreadyQuoted++;
-      logger.log(
-        `insertAllBibleQuotes: skipping link on line ${linkInfo.lineNumber} — already quoted`,
-      );
+      skippedAlreadyQuoted += lineLinks.length;
+      logger.log(`insertAllBibleQuotes: skipping links on line ${lineNumber} — already quoted`);
       continue;
     }
 
-    try {
-      const quoteText = await generateBibleQuoteText(linkInfo, settings, provider);
-      if (quoteText) {
-        if (isLinkStandaloneOnLine(currentLine)) {
-          changes.push({
-            from: { line: linkInfo.lineNumber, ch: 0 },
-            to: { line: linkInfo.lineNumber, ch: currentLine.length },
-            text: quoteText,
-          });
+    const quoteTexts: string[] = [];
+
+    for (const linkInfo of lineLinks) {
+      try {
+        const quoteText = await generateBibleQuoteText(linkInfo, settings, provider);
+        if (quoteText) {
+          quoteTexts.push(quoteText);
         } else {
-          changes.push({
-            from: { line: linkInfo.lineNumber, ch: currentLine.length },
-            to: { line: linkInfo.lineNumber, ch: currentLine.length },
-            text: '\n\n' + quoteText,
-          });
+          fetchFailed++;
+          logger.warn(
+            `insertAllBibleQuotes: generateBibleQuoteText returned null for link on line ${lineNumber}`,
+          );
         }
-      } else {
+      } catch (error: unknown) {
         fetchFailed++;
-        logger.warn(
-          `insertAllBibleQuotes: generateBibleQuoteText returned null for link on line ${linkInfo.lineNumber}`,
+        logger.error(
+          `Error processing Bible quote for link on line ${lineNumber}:`,
+          error instanceof Error ? error.message : String(error),
         );
       }
-    } catch (error: unknown) {
-      fetchFailed++;
-      logger.error(
-        `Error processing Bible quote for link ${i}:`,
-        error instanceof Error ? error.message : String(error),
-      );
+    }
+
+    if (quoteTexts.length === 0) {
       continue;
     }
+
+    // The line is only replaced when every reference on it got its quote,
+    // otherwise the references without one would be lost.
+    const replaceLine =
+      quoteTexts.length === lineLinks.length && isLinkStandaloneOnLine(currentLine, settings);
+
+    changes.push(buildQuoteChange(editor, lineNumber, quoteTexts.join('\n\n'), replaceLine));
+    inserted += quoteTexts.length;
   }
 
   logger.log(
-    `insertAllBibleQuotes: ${links.length} links found, ${changes.length} quotes generated, ${skippedAlreadyQuoted} already quoted, ${fetchFailed} failed`,
+    `insertAllBibleQuotes: ${links.length} links found, ${inserted} quotes generated, ${skippedAlreadyQuoted} already quoted, ${fetchFailed} failed`,
   );
 
   if (changes.length > 0) {
     editor.transaction({ changes });
   }
 
-  return { inserted: changes.length, linksFound: links.length, fetchFailed };
+  return { inserted, linksFound: links.length, fetchFailed };
 }
 
 export async function insertBibleQuoteAtCursor(
@@ -267,28 +318,15 @@ export async function insertBibleQuoteAtCursor(
   }
 
   if (quoteTexts.length > 0) {
-    const combinedText = quoteTexts.join('\n\n');
-    if (isLinkStandaloneOnLine(targetLineText)) {
-      editor.transaction({
-        changes: [
-          {
-            from: { line: targetLineNumber, ch: 0 },
-            to: { line: targetLineNumber, ch: targetLineText.length },
-            text: combinedText,
-          },
-        ],
-      });
-    } else {
-      editor.transaction({
-        changes: [
-          {
-            from: { line: targetLineNumber, ch: targetLineText.length },
-            to: { line: targetLineNumber, ch: targetLineText.length },
-            text: '\n\n' + combinedText,
-          },
-        ],
-      });
-    }
+    // The line is only replaced when every reference on it got its quote,
+    // otherwise the references without one would be lost.
+    const replaceLine =
+      quoteTexts.length === linksOnTargetLine.length &&
+      isLinkStandaloneOnLine(targetLineText, settings);
+
+    editor.transaction({
+      changes: [buildQuoteChange(editor, targetLineNumber, quoteTexts.join('\n\n'), replaceLine)],
+    });
     return { inserted: true, alreadyExists: false, fetchFailed: false };
   }
 
