@@ -1,3 +1,6 @@
+overrides:
+  'vite@>=8.0.0 <8.1.6': 8.1.6
+
 allowBuilds:
   '@swc/core': true
   esbuild: true
