@@ -54,9 +54,10 @@ let settings: LinkReplacerSettings;
 
 beforeAll((): void => {
   initializeTestBibleBooks(['E']);
+  const base = createSettings({ language: 'E', bookLength: 'short' });
   settings = {
-    ...createSettings({ language: 'E', bookLength: 'short' }),
-    bibleQuote: { template: BIBLE_QUOTE_TEMPLATES.short },
+    ...base,
+    bibleQuote: { ...base.bibleQuote, template: BIBLE_QUOTE_TEMPLATES.short },
   };
 });
 

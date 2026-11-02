@@ -14,6 +14,7 @@ export class Plugin {
   removeChild(component: Component) {}
   addCommand() {}
   addSettingTab() {}
+  register() {}
   registerEditorSuggest() {}
   registerEvent() {}
   loadData() {

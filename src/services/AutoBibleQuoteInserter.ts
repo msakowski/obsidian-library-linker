@@ -21,8 +21,15 @@ const JW_LIBRARY_URL = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)\s]
  * leaves the note untouched.
  */
 export class AutoBibleQuoteInserter {
-  /** Links currently being quoted, so the same link is never quoted twice. */
-  private readonly inFlight = new Set<string>();
+  /**
+   * Links currently being quoted, per editor, so the same link is never quoted
+   * twice. Scoped to the editor and note: the same verse on the same line of
+   * another note is a different link.
+   */
+  private readonly inFlight = new WeakMap<Editor, Set<string>>();
+
+  /** Set on plugin unload: lookups still pending must not touch any note. */
+  private disposed = false;
 
   constructor(
     private readonly getSettings: () => LinkReplacerSettings,
@@ -53,23 +60,38 @@ export class AutoBibleQuoteInserter {
       return;
     }
 
-    const key = `${line}:${linkUrl}`;
-    if (this.inFlight.has(key)) return;
-    this.inFlight.add(key);
-
     // Obsidian reuses the editor when another note is opened in the same tab,
     // so the note is recorded now and checked again once the text arrives.
     const filePath = this.getEditorFilePath(editor);
     const isSameNote = () => this.getEditorFilePath(editor) === filePath;
 
-    void this.insertNow(editor, reference, { line, linkUrl }, isSameNote).finally(() =>
-      this.inFlight.delete(key),
+    const key = `${filePath ?? ''}:${line}:${linkUrl}`;
+    const editorInFlight = this.inFlight.get(editor) ?? new Set<string>();
+    if (editorInFlight.has(key)) return;
+    editorInFlight.add(key);
+    this.inFlight.set(editor, editorInFlight);
+
+    void this.insertNow(editor, reference, { line, linkUrl, createdLink }, isSameNote).finally(() =>
+      editorInFlight.delete(key),
     );
   }
 
   /**
+   * Drops every pending insertion. Called on plugin unload: a lookup that
+   * resolves afterwards leaves the note untouched.
+   */
+  dispose(): void {
+    this.disposed = true;
+  }
+
+  /** Whether a pending insertion may still edit the note. */
+  private isActive(): boolean {
+    return !this.disposed && this.getSettings().bibleQuote.autoInsertOnLinkCreation;
+  }
+
+  /**
    * Awaitable counterpart of {@link scheduleForCreatedLink}. Never rejects —
-   * failures surface as a notice.
+   * failures surface as a notice, unless the insertion is no longer wanted.
    */
   async insertNow(
     editor: Editor,
@@ -84,10 +106,12 @@ export class AutoBibleQuoteInserter {
         this.getSettings(),
         this.provider,
         anchor,
-        isSameNote,
+        // Checked again once the text arrives: the feature may have been
+        // turned off, or the plugin unloaded, during the lookup.
+        () => this.isActive() && (isSameNote?.() ?? true),
       );
 
-      if (result.fetchFailed) {
+      if (result.fetchFailed && this.isActive()) {
         new Notice(this.t('notices.bibleQuoteFetchFailed'));
       }
 
@@ -97,7 +121,9 @@ export class AutoBibleQuoteInserter {
         'AutoBibleQuoteInserter: error inserting Bible quote:',
         error instanceof Error ? error.message : String(error),
       );
-      new Notice(this.t('notices.errorInsertingQuotes'));
+      if (this.isActive()) {
+        new Notice(this.t('notices.errorInsertingQuotes'));
+      }
 
       return { inserted: false, alreadyExists: false, fetchFailed: true, anchorLost: false };
     }

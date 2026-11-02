@@ -171,4 +171,80 @@ describe('AutoBibleQuoteInserter', () => {
     expect(editor.getContent()).toBe(link);
     expect(Notice).toHaveBeenCalled();
   });
+
+  describe('while a lookup is pending', () => {
+    let resolvers: (() => void)[];
+
+    beforeEach(() => {
+      resolvers = [];
+      getCitation.mockImplementation(
+        () =>
+          new Promise((resolve) => {
+            resolvers.push(() =>
+              resolve({ success: true, source: 'online', text: QUOTE, citation: 'John 3:16' }),
+            );
+          }),
+      );
+    });
+
+    test('quotes the same verse on the same line of two different notes', async () => {
+      const link = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!;
+      const first = createFakeEditor(link);
+      const second = createFakeEditor(link);
+      const paths = new Map([
+        [first, 'first.md'],
+        [second, 'second.md'],
+      ]);
+      const inserter = new AutoBibleQuoteInserter(
+        () => settings,
+        provider,
+        t,
+        (editor) => paths.get(editor as typeof first) ?? null,
+      );
+
+      inserter.scheduleForCreatedLink(first, JOHN_3_16, link, 0);
+      inserter.scheduleForCreatedLink(second, JOHN_3_16, link, 0);
+
+      expect(getCitation).toHaveBeenCalledTimes(2);
+      resolvers.forEach((resolve) => resolve());
+
+      const quoted = `${link.trim()}\n> ${QUOTE}\n`;
+      await vi.waitFor(() => {
+        expect(first.getContent()).toBe(quoted);
+        expect(second.getContent()).toBe(quoted);
+      });
+    });
+
+    test('writes nothing once automatic insertion is turned off', async () => {
+      const link = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!;
+      const editor = createFakeEditor(link);
+      const pending = createInserter().insertNow(editor, JOHN_3_16, {
+        line: 0,
+        linkUrl: 'jwlibrary:///finder?bible=43003016&wtlocale=E',
+      });
+
+      settings.bibleQuote.autoInsertOnLinkCreation = false;
+      resolvers.forEach((resolve) => resolve());
+
+      expect((await pending).inserted).toBe(false);
+      expect(editor.getContent()).toBe(link);
+    });
+
+    test('writes nothing once the plugin is unloaded', async () => {
+      const link = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!;
+      const editor = createFakeEditor(link);
+      const inserter = createInserter();
+      const pending = inserter.insertNow(editor, JOHN_3_16, {
+        line: 0,
+        linkUrl: 'jwlibrary:///finder?bible=43003016&wtlocale=E',
+      });
+
+      inserter.dispose();
+      resolvers.forEach((resolve) => resolve());
+
+      expect((await pending).inserted).toBe(false);
+      expect(editor.getContent()).toBe(link);
+      expect(Notice).not.toHaveBeenCalled();
+    });
+  });
 });

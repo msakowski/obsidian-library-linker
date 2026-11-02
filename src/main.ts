@@ -105,6 +105,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       this.t,
       (editor) => this.getEditorFilePath(editor),
     );
+    this.register(() => this.autoBibleQuoteInserter.dispose());
 
     // Load bible books for saved language
     loadBibleBooks(getBookLanguage(this.settings.language));

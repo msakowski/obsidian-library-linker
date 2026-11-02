@@ -372,6 +372,12 @@ export interface CreatedLinkAnchor {
   line: number;
   /** The `jwlibrary:///…` URL of the created link, used to find it again. */
   linkUrl: string;
+  /**
+   * The exact text that was written, including several comma-joined links for
+   * a multi-range reference. Without it, only the markdown link around
+   * `linkUrl` counts as the created reference.
+   */
+  createdLink?: string;
 }
 
 export interface CreatedLinkQuoteResult {
@@ -441,6 +447,30 @@ function hasQuoteBelow(editor: Editor, line: number, linkUrl: string): boolean {
 }
 
 /**
+ * Whether the line holds nothing but the created reference and its decorations.
+ *
+ * Only then can the quote take the place of the line: any other reference on
+ * it, written before or while the text was being fetched, must survive.
+ */
+function isOnlyCreatedLinkOnLine(
+  lineText: string,
+  anchor: CreatedLinkAnchor,
+  decorations: LinkDecorations,
+): boolean {
+  const created =
+    anchor.createdLink?.trim() ||
+    lineText.match(MARKDOWN_LINK_WITH_JWLIBRARY)?.find((link) => link.includes(anchor.linkUrl));
+
+  if (!created || !lineText.includes(created)) {
+    return false;
+  }
+
+  const rest = lineText.replace(created, '');
+
+  return !rest.includes('jwlibrary:///') && isLinkStandaloneOnLine(rest, decorations);
+}
+
+/**
  * Opens a collapsed callout (`[!quote]-` becomes `[!quote]+`).
  *
  * A quote that appears on its own but shows nothing is pointless, and `+`
@@ -455,8 +485,10 @@ function openCollapsedCallout(quoteText: string): string {
  *
  * Unlike the command driven insertions this runs while the user is typing:
  * the text is fetched first and the editor is only touched afterwards, once
- * the link is confirmed to still be where it was written, in the same note
- * (`isSameNote`), and the cursor is put back where the user left it.
+ * the link is confirmed to still be where it was written, the insertion is
+ * confirmed to still be wanted — same note, feature still on, plugin still
+ * loaded (`shouldStillInsert`) — and the cursor is put back where the user
+ * left it.
  */
 export async function insertBibleQuoteForCreatedLink(
   editor: Editor,
@@ -464,7 +496,7 @@ export async function insertBibleQuoteForCreatedLink(
   settings: LinkReplacerSettings,
   provider: BibleCitationProvider,
   anchor: CreatedLinkAnchor,
-  isSameNote: () => boolean = () => true,
+  shouldStillInsert: () => boolean = () => true,
 ): Promise<CreatedLinkQuoteResult> {
   const generated = await generateBibleQuoteText(reference, settings, provider);
   const quoteText = generated && openCollapsedCallout(generated);
@@ -473,10 +505,10 @@ export async function insertBibleQuoteForCreatedLink(
     return { inserted: false, alreadyExists: false, fetchFailed: true, anchorLost: false };
   }
 
-  // The editor is reused when the user opens another note in the same tab, so
-  // a matching line could belong to a different note.
-  if (!isSameNote()) {
-    logger.warn('insertBibleQuoteForCreatedLink: the note changed, skipping insertion');
+  // The lookup can take seconds: the user may have opened another note in the
+  // same editor, turned the feature off, or the plugin may have been unloaded.
+  if (!shouldStillInsert()) {
+    logger.warn('insertBibleQuoteForCreatedLink: insertion no longer wanted, skipping');
     return { inserted: false, alreadyExists: false, fetchFailed: false, anchorLost: true };
   }
 
@@ -496,7 +528,7 @@ export async function insertBibleQuoteForCreatedLink(
   }
 
   const cursorBefore = editor.getCursor();
-  const standalone = isLinkStandaloneOnLine(editor.getLine(targetLine), settings);
+  const standalone = isOnlyCreatedLinkOnLine(editor.getLine(targetLine), anchor, settings);
 
   // A link inside a blockquote or callout gets its quote after the whole
   // block, so the block is not split in two.

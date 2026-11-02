@@ -319,6 +319,7 @@ describe('insertBibleQuoteForCreatedLink', () => {
     const result = await insertBibleQuoteForCreatedLink(editor, reference, settings, provider, {
       line: 0,
       linkUrl: 'jwlibrary:///finder?bible=43001001-43001002&wtlocale=E',
+      createdLink: link,
     });
 
     expect(result.inserted).toBe(true);
@@ -395,5 +396,52 @@ describe('insertBibleQuoteForCreatedLink', () => {
 
     expect(result.fetchFailed).toBe(true);
     expect(editor.getContent()).toBe(link);
+  });
+
+  test('keeps every other reference that shares the line with the created link', async () => {
+    const matthew: BibleReference = { book: 40, chapter: 5, verseRanges: [{ start: 3, end: 3 }] };
+    const link = createdLink(JOHN_3_16).trim();
+    const other = createdLink(matthew).trim();
+    const line = `${link}, ${other}`;
+    const editor = createFakeEditor(line);
+
+    const result = await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 0,
+      linkUrl: JOHN_3_16_URL,
+      createdLink: link,
+    });
+
+    expect(result.inserted).toBe(true);
+    // Replacing the line would have removed the Matthew link.
+    expect(editor.getContent()).toBe(`${line}\n\n${link}\n> ${QUOTE}`);
+  });
+
+  test('keeps a reference added to the line while the text was being fetched', async () => {
+    const matthew: BibleReference = { book: 40, chapter: 5, verseRanges: [{ start: 3, end: 3 }] };
+    const link = createdLink(JOHN_3_16).trim();
+    const other = createdLink(matthew).trim();
+    const editor = createFakeEditor(link);
+
+    getCitation.mockImplementation(() => {
+      // The user writes another reference next to the link during the lookup.
+      editor.transaction({
+        changes: [
+          {
+            from: { line: 0, ch: link.length },
+            to: { line: 0, ch: link.length },
+            text: ` ${other}`,
+          },
+        ],
+      });
+      return Promise.resolve({ success: true, source: 'online', text: QUOTE, citation: '' });
+    });
+
+    await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 0,
+      linkUrl: JOHN_3_16_URL,
+      createdLink: link,
+    });
+
+    expect(editor.getContent()).toBe(`${link} ${other}\n\n${link}\n> ${QUOTE}`);
   });
 });
