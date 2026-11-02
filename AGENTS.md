@@ -1,624 +1,73 @@
-## Project Documentation
+# Agent instructions
 
-## Building a plugin from this template
+This is the sole agent instruction file for JW Library Linker, an Obsidian community plugin for Bible-reference links, suggestions, conversion, and online/offline quotes. Keep this file focused on workflow and constraints; put detailed reference material in `documentation/`.
 
-**This section applies only when working on an actual plugin that was created from this template — not when working on the template repository itself.**
+## Start here
 
-To tell which case you are in, check the git remote: if `origin` points at `dsebastien/obsidian-plugin-template`, you are in the template repo — skip this entire section and leave `TEMPLATE_USAGE.md`, `scripts/init-from-template.ts`, and the `init` script entry alone (they must ship with the template). Otherwise, you are in a downstream plugin.
+1. Read [Business rules](documentation/Business%20Rules.md), the latest `documentation/history/yyyy-mm-dd.md`, and any active plans relevant to the task under `documentation/plans/`.
+2. Inspect `git status`, the current branch, and relevant code before editing. Preserve unrelated changes; never reset, stash, overwrite, or commit someone else's work implicitly.
+3. Read [Architecture and testing](documentation/Architecture.md) for affected components and [Obsidian development](documentation/Obsidian%20Development.md) for UI, networking, styles, or catalog work. Consult installed `node_modules/obsidian/obsidian.d.ts` before using or extending Obsidian APIs; do not guess signatures.
+4. Follow the user's explicit scope. For implementation requests, carry the workflow below through a reviewable PR unless the user limits the task to local edits, investigation, or a draft.
 
-In a downstream plugin, if `TEMPLATE_USAGE.md` still exists at the repo root, the project has not yet been initialized. Before doing any other work:
+## Branch → worktree → PR
 
-1. Read `TEMPLATE_USAGE.md` end-to-end.
-2. Run `bun install && bun run init` to reset inherited template state (CHANGELOG, versions.json, manifest, package.json).
-3. Complete the manual follow-ups listed in `TEMPLATE_USAGE.md` (plugin class renames, README rewrite, `docs/` user guide, `documentation/` technical docs, funding links).
-4. **Remove the initialization tooling from the downstream plugin once initialization is complete.** Delete:
+- For a new implementation task, fetch `origin` and create a focused branch from current `origin/main`: `feat/<topic>`, `fix/<topic>`, `chore/<topic>`, `perf/<topic>`, or `docs/<topic>`.
+- Create worktrees only under the primary checkout's gitignored `.worktrees/`, mirroring the full branch name. From the primary checkout: `git worktree add -b docs/update-guide .worktrees/docs/update-guide origin/main`. Run edits, installation, checks, commits, and pushes in that worktree. Do not share or symlink `node_modules` between checkouts.
+- When continuing an existing task or PR, use its branch/worktree. Do not move existing uncommitted work automatically. Finish an already-started local task in its checkout unless isolation is needed; never commit it on `main` by default. Transfer only task-owned changes to a task branch before committing.
+- Make the smallest complete change, add meaningful regression coverage, and update relevant documentation. Keep commits scoped to one logical change.
+- Run the validation below. Inspect the final diff, including untracked files and hook edits; stage explicit paths only.
+- In worktrees, verify the effective hook path; use the existing common hooks as described in [worktree hooks](DEVELOPMENT.md#git-hooks-in-worktrees) if the installer cannot handle the `.git` file. Never treat an installer warning as permission to skip hooks.
+- Commit using Conventional Commits, for example `fix(parser): handle single-chapter references`. Keep hooks enabled; fix hook failures. Never use `--no-verify` or `-n`.
+- Push the task branch with upstream tracking. Check for an existing PR for that branch before creating one against `main`; update it rather than opening duplicates. Use the available GitHub connector or `gh` CLI. Do not post additional comments or contact reviewers unless requested.
+- A PR needs a clear problem/result description, checks actually run, and any required manual checks. Mark it draft if validation is blocked or review-critical work remains. Report the PR URL and blockers; do not claim completion when required checks failed.
+- Do not push directly to `main`, force-push, merge PRs, create release tags, publish releases, or delete worktrees/branches unless explicitly instructed. Keep the task worktree available for review. If access or credentials block publishing, leave the local result ready and report the precise next step; never bypass controls.
 
-   - `TEMPLATE_USAGE.md`
-   - `scripts/init-from-template.ts` (and its `.spec.ts` if present)
-   - The `"init"` entry in `package.json` `scripts`
+## Tooling
 
-   These files only belong in uninitialized clones of the template. Leaving them behind is a signal that step 3 isn't actually complete.
+Use **pnpm**, pinned in `package.json`, and Node from `.nvmrc`. CI uses `pnpm-lock.yaml`. Do not add alternate lockfiles or migrate build tools incidentally. esbuild bundles `src/main.ts` to root `main.js`; `styles.css` is tracked source, with no CSS generator or Tailwind pipeline.
 
-Skipping this section (in a downstream plugin) leads to template leakage: bogus version entries in `CHANGELOG.md`, wrong repo URLs in `package.json`, and the `my-plugin` id shipping in the first release.
+| Command                                         | Use                                                                                         |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `pnpm install --frozen-lockfile`                | Install dependencies in the task checkout                                                   |
+| `pnpm dev`                                      | esbuild watch with debug logging                                                            |
+| `pnpm exec tsc --watch --noEmit --skipLibCheck` | Start before code edits; inspect diagnostics after edits and stop the process when finished |
+| `pnpm exec prettier --write <files>`            | Format changed source files                                                                 |
+| `pnpm test:lint`                                | Zero-warning ESLint and Markdown lint                                                       |
+| `pnpm test:types`                               | No-emit type check                                                                          |
+| `pnpm test:vitest`                              | Full Vitest suite                                                                           |
+| `pnpm build`                                    | Type-check and production build                                                             |
 
-## Documentation surfaces
+`pnpm test` also applies lint fixes; prefer explicit check commands for final verification. Hooks run nano-staged before commit and `pnpm test:affected` before push; affected tests do not replace the full suite for code changes.
 
-Three locations, do not mix them:
+For dependency overrides, update `pnpm-workspace.yaml`, regenerate with `pnpm install --lockfile-only --ignore-scripts --config.optimistic-repeat-install=false`, then validate with `pnpm install --frozen-lockfile --config.optimistic-repeat-install=false`. Review the lock diff for unrelated upgrades.
 
-- `README.md` — GitHub landing page; pitch, features, install, quick start.
-- `docs/` — end-user guide, published via GitHub Pages (Jekyll).
-- `documentation/` — technical documentation for you and coding agents (architecture, domain model, business rules, history, plans).
+## Validation and completion
 
-## Project overview
+| Change                                                                     | Required checks                                                                                                      |
+| -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Documentation only, including agent instructions                           | `pnpm test:lint-md` and `git diff --check`; verify local links and command accuracy                                  |
+| Code, localization data, styles, dependencies, or build/test configuration | Format changed source; `pnpm test:lint`, `pnpm test:types`, `pnpm test:vitest`, `pnpm build`, and `git diff --check` |
+| CI or release workflow only                                                | Review workflow syntax, permissions, triggers, and referenced commands; run checks for any affected executable code  |
 
-- Target: Obsidian Community Plugin (TypeScript → bundled JavaScript).
-- Entry point: `main.ts` compiled to `main.js` and loaded by Obsidian.
-- Required release artifacts: `main.js`, `manifest.json`, and optional `styles.css`.
+Use the stricter row for mixed changes. Add focused regression tests for changed logic; no implementation-mirroring tests for documentation or formatting. Fix failures caused by the change; identify unrelated failures explicitly. Hooks and CI may run broader checks and must not be bypassed.
 
-## Agent Workflow
+Tests and builds do not prove GUI behavior. For UI or runtime changes, state what still needs manual verification in Obsidian, including mobile where relevant. See [local testing](DEVELOPMENT.md#testing-the-plugin-locally-in-obsidian). Report changes, validation, PR/local status, and material blockers concisely.
 
-### Session-start checklist
+## Project conventions
 
-Before making any change, read these in order:
+- Use `@/` source aliases, `import type`, existing strict TypeScript/lint configuration, and the shared logger at `@/utils/logger`. Keep lifecycle code small and modules focused.
+- New tests are colocated `.spec.ts` files using Vitest. Existing `src/__tests__/**/*.test.ts` files remain supported. Reuse the mocks/helpers described in [Architecture and testing](documentation/Architecture.md#test-support).
+- Preserve stable plugin/command IDs, settings compatibility, desktop/mobile support, and the privacy constraints in [Business rules](documentation/Business%20Rules.md). Business-rule changes require explicit approval; routine implementation choices do not.
+- Use Obsidian lifecycle cleanup helpers and theme variables. Use native suggesters/modals rather than custom pickers or blocking browser dialogs. Keep UI copy short, translated, and in sentence case.
+- Read [LOCALIZATION.md](LOCALIZATION.md#contributing-a-new-language) for new languages; do not conflate UI locales and JW Library language codes.
 
-1. `documentation/Business Rules.md` — mandatory invariants (see below).
-2. The most recent `documentation/history/yyyy-mm-dd.md` file — what was last done and any open blockers.
-3. Active plans under `documentation/plans/` — what the current direction is.
-4. Relevant sections of `node_modules/obsidian/obsidian.d.ts` whenever you are about to use an Obsidian API you have not recently used. Do not guess API shapes; they change between versions.
+## Documentation and changesets
 
-### Definition of done
+- `README.md` is the landing page; `docs/` is for end users when present; `documentation/` is for architecture, business rules, history, and plans. `DEVELOPMENT.md` covers local setup and `LOCALIZATION.md` covers translations.
+- Update today's `documentation/history/yyyy-mm-dd.md` with changes, decisions, validation, and blockers. Store actionable plans in `documentation/plans/`; update or close them as work progresses. Plans never include timing estimates. Keep durable instructions free of session-specific state.
+- Add or update a `.changeset/<descriptive-name>.md` when the released plugin changes: `'jw-library-linker': patch` for fixes or `minor` for features. Request approval for breaking behavior and a major release. Docs-only, test-only, CI-only, and development-tooling changes need no changeset unless they alter shipped behavior/artifacts. Reuse an existing changeset only when it covers the same logical change.
+- Do not manually bump versions for ordinary changes; Changesets and the existing release workflow handle versioning. Releases require explicit instructions; see [release checks](documentation/Obsidian%20Development.md#release-checks).
 
-A change is only "done" when **all** of the following hold:
+## Protected material
 
-- `bun run tsc` passes with zero errors.
-- `bun run lint` passes with zero warnings (the repo is configured with `--max-warnings 0`).
-- `bun test` passes; new logic has new `.spec.ts` coverage next to the file it tests.
-- `bun run build` completes without errors.
-- The day's file in `documentation/history/` has been updated with what was done, decisions made, and any open questions.
-- If a plan in `documentation/plans/` drove the work, it has been updated or closed.
-- Any user-visible change to behavior, commands, or settings is reflected in `README.md` and/or `docs/`.
-
-You **cannot** self-verify UI behavior — Obsidian is a GUI app and agents do not have a live vault. State explicitly in your final message when a change requires manual runtime verification and what to check. Do not claim a UI feature "works" based solely on a passing build.
-
-### Commit conventions
-
-- Conventional Commits are enforced by commitlint on every commit (`commitlint.config.ts`).
-- Use `bun run cm` (commitizen with `cz-customizable`) to build a valid message interactively. The type and scope list is in `.cz-config.cjs`.
-- Never bypass the commit hooks (no `--no-verify`, no `-n`). If a hook fails, fix the underlying problem.
-- Keep commits scoped: one logical change per commit.
-
-### Files to ignore
-
-**NEVER read or modify** unless explicitly instructed:
-
-- `TODO.md` at the project root.
-- `documentation/archived/` — off-limits reference material.
-- `main.js`, `styles.css` at the repo root, and anything under `dist/` — all generated by the build. Edit the sources (`src/**`, `src/styles.src.css`) instead.
-- `node_modules/` — dependency code; read-only.
-- Release zip files and attached build artifacts.
-
-### Documentation
-
-**IMPORTANT**:
-
-- **NO TIMING IN PLANS**: Plans MUST NEVER include timing information (e.g., "1-3 weeks", "Phase 1 takes X days"). Focus only on what needs to be done, not when
-- Whenever making plans, store or update those in `documentation/plans`
-- Whenever making plans, focus on actionable information
-- **Clarity over grammar**: Always prioritize clarity and conciseness over perfect grammar. Terse, clear documentation is better than verbose, grammatically perfect text
-
-History is maintained in `documentation/history/yyyy-mm-dd.md` files, organized chronologically. Each file documents:
-
-- What was accomplished that day
-- Key decisions made
-- Domain model changes
-- Implementation progress
-- Open questions or blockers
-
-These files are optimized for conciseness and clarity to quickly onboard agents in new sessions.
-
-### Business Rules Compliance
-
-**CRITICAL**: Business rules documented in `documentation/Business Rules.md` MUST ALWAYS be respected unless explicit user approval is given to change or bypass them.
-
-- **Mandatory compliance**: All implementations must respect documented business rules
-- **No exceptions without approval**: Changing or bypassing any business rule requires explicit user approval
-- **Highest priority**: When making changes, business rule compliance is of the utmost importance
-- **Documentation requirement**: When a new business rule is mentioned, it must be immediately documented in `documentation/Business Rules.md` using a concise format (single line or paragraph) without losing precision
-
-**MUST READ** before working on this codebase: `documentation/**/*.md` — system overview, architecture, components, directory structure, configuration, settings, ...
-
-**MUST UPDATE** documentation when making changes. Keep it terse, accurate, no fluff.
-
-### Core Coding Rules
-
-Consult `node_modules/obsidian/obsidian.d.ts` whenever you need to use or extend an Obsidian API. Do not guess type shapes — signatures and fields change between versions.
-
-## Environment & tooling
-
-- **[Bun](https://bun.com/)**: a fast all-in-one JavaScript runtime.
-- **Package manager: Bun** (required for this sample - `package.json` defines scripts and dependencies).
-- **Bundler: Bun** (required for this sample - `build.ts` depends on it).
-- **Types**: `obsidian` type definitions.
-
-### Install
-
-```bash
-bun install
-```
-
-### Dev (watch)
-
-```bash
-bun run dev
-```
-
-### Production build
-
-```bash
-bun run build
-```
-
-## Development Workflow
-
-**CRITICAL**: Before making ANY code changes, start the TypeScript watch process in the background:
-
-```bash
-bun run tsc:watch
-```
-
-This is MANDATORY. The watch process catches type errors immediately as you edit. Check the output after each edit to catch errors early. If you see TypeScript errors, fix them before moving on.
-
-Optionally, also run tests in watch mode:
-
-```bash
-bun test --watch
-```
-
-After editing code, always run the formatter and linter:
-
-```bash
-bun run format
-bun run lint
-```
-
-Both commands are **MANDATORY** after code changes. Fix any lint errors before proceeding.
-
-## Bun Runtime
-
-Default to using Bun instead of Node.js.
-
-- Use `bun <file>` instead of `node <file>` or `ts-node <file>`
-- Use `bun test` instead of `jest` or `vitest`
-- Use `bun build <file.html|file.ts|file.css>` instead of `webpack` or `esbuild`
-- Use `bun install` instead of `npm install` or `yarn install` or `pnpm install`
-- Use `bun run <script>` instead of `npm run <script>` or `yarn run <script>` or `pnpm run <script>`
-- Use `bunx <package> <command>` instead of `npx <package> <command>`
-- Bun automatically loads .env, so don't use dotenv.
-
-## Testing
-
-Use `bun test` to run tests.
-
-**MANDATORY**: All test files MUST use the `.spec.ts` extension (not `.test.ts`).
-
-```ts#example.spec.ts
-import { test, expect } from "bun:test";
-
-test("hello world", () => {
-  expect(1).toBe(1);
-});
-```
-
-Test files should be placed next to the files they test:
-
-```
-scripts/
-  build.ts
-  build.spec.ts        # Tests for build.ts
-  update-version.ts
-  update-version.spec.ts
-```
-
-- Manual install for testing: copy `main.js`, `manifest.json`, `styles.css` (if any) to:
-  ```
-  <Vault>/.obsidian/plugins/<plugin-id>/
-  ```
-- Reload Obsidian and enable the plugin in **Settings → Community plugins**.
-
-## File & folder conventions
-
-### Base organization
-
-- **Organize code into multiple files**: Split functionality across separate modules rather than putting everything in `main.ts`.
-- Source lives in `src/`. Keep `main.ts` small and focused on plugin lifecycle (loading, unloading, registering commands).
-- All CSS lives in `src/styles.src.css` (Tailwind source file)
-- **CSS/Styles**: ALWAYS edit styles in `src/styles.src.css` (Tailwind source file), NEVER edit `styles.css` at the root (this is a generated file that gets overwritten during build).
-- Organize CSS with clear section headers (see existing file structure)
-- Generated `styles.css` at root is auto-generated - never edit directly
-- **Do not commit build artifacts**: Never commit `node_modules/`, `main.js`, or other generated files to version control.
-- Keep the plugin small. Avoid large dependencies. Prefer browser-compatible packages.
-- Generated output should be placed at the plugin root or `dist/` depending on your build setup. Release artifacts must end up at the top level of the plugin folder in the vault (`main.js`, `manifest.json`, `styles.css`).
-
-### Example file structure
-
-```
-  src/
-    main.ts           # Plugin entry point, lifecycle management
-    settings.ts       # Settings interface and defaults
-    commands/         # Command implementations
-      command1.ts
-      command2.ts
-    ui/              # UI components, modals, views
-      modal.ts
-      view.ts
-    utils/           # Utility functions, helpers
-      helpers.ts
-      constants.ts
-    types.ts         # TypeScript interfaces and types
-    styles.src.css
-```
-
-## Manifest rules (`manifest.json`)
-
-- Must include (non-exhaustive):
-  - `id` (plugin ID; for local dev it should match the folder name)
-  - `name`
-  - `version` (Semantic Versioning `x.y.z`)
-  - `minAppVersion`
-  - `description`
-  - `isDesktopOnly` (boolean)
-  - Optional: `author`, `authorUrl`, `fundingUrl` (string or map)
-- Never change `id` after release. Treat it as stable API.
-- Keep `minAppVersion` accurate when using newer APIs. Common bumps: `1.1.0` (`ButtonComponent.setIcon`/`setTooltip`), `1.4.10` (`AbstractInputSuggest`), `1.5.7` (`Vault.getFileByPath`), `1.7.2` (`Workspace.revealLeaf`), `1.8.7` (`getLanguage`), `1.13.0` (`ButtonComponent.setDestructive`).
-- Canonical requirements are coded here: <https://github.com/obsidianmd/obsidian-releases/blob/master/.github/workflows/validate-plugin-entry.yml>
-
-### Community catalog listing rules
-
-These rules apply to **`id`**, **`name`**, and **`description`** in `manifest.json` AND are mirrored into `package.json` (`name`, `description`):
-
-- **`id`**: must not contain the word "obsidian" (catalog trademark rule). The GitHub repo name can keep it; only the manifest `id` is gated. Drop the prefix (`obsidian-time-machine` → `time-machine`).
-- **`name`**: must not contain "Obsidian". Must not be all-uppercase — acronym chains like `CLI REST MCP` trip the check; include at least one lowercase word.
-- **`description`**: must not contain "Obsidian", must not start with the plugin name (the catalog UI already shows it), must end with `.`, `!`, or `?`. These three rules typically fire together — fix in one pass.
-
-**Draft vs accepted timing for `id`:**
-
-- While the catalog entry is still in **draft**: free to rename `id`. Do it before acceptance.
-- Once **accepted**: `id` is locked forever (changing it breaks installed users, settings paths, and keyboard shortcuts).
-- **Sticky-draft-slug gotcha**: even in draft, the catalog stores the slug from the _first_ submission and compares every later manifest against it. A rename then triggers `ERROR: The plugin ID in (<new>) does not match the existing plugin ID (<old>)` — contradicting the "must not contain obsidian" rule. Resolution: delete the draft listing in the catalog admin and resubmit fresh under the new id, or open a thread with the catalog maintainers to release the slug.
-
-## Commands & settings
-
-- Any user-facing commands should be added via `this.addCommand(...)`.
-- If the plugin has configuration, provide a settings tab and sensible defaults.
-- Persist settings using `this.loadData()` / `this.saveData()`.
-- Use stable command IDs; avoid renaming once released.
-- The command `name` must not include the plugin name — Obsidian already prefixes commands with the plugin name in the palette. If you need to rebrand, **rename `name`, not `id`** (renaming an id breaks any user-bound keyboard shortcut). Grep `docs/` and `README.md` for old command names when renaming.
-- File pickers in settings tabs: never hand-roll. Use `AbstractInputSuggest` for inline autocomplete and `FuzzySuggestModal` for a browse-button modal — both cover keyboard nav, theming, and popout-window correctness for free. Hand-rolled menus accumulate inline-style + `document.createElement` lint warnings fast.
-- Replace `window.confirm(...)` with a `Modal` subclass: `confirm()` blocks the UI thread, can't be themed, doesn't play with popout windows, and is forbidden by the scorecard.
-
-## Versioning & releases
-
-- Bump `version` in `manifest.json` (SemVer) and update `versions.json` to map plugin version → minimum app version.
-- Create a GitHub release whose tag exactly matches `manifest.json`'s `version`. Do not use a leading `v`.
-- Attach `manifest.json`, `main.js`, and `styles.css` (if present) to the release as individual assets.
-- After the initial release, follow the process to add/update your plugin in the community catalog as required.
-
-## Security, privacy, and compliance
-
-Follow Obsidian's **Developer Policies** and **Plugin Guidelines**. In particular:
-
-- Default to local/offline operation. Only make network requests when essential to the feature.
-- No hidden telemetry. If you collect optional analytics or call third-party services, require explicit opt-in and document clearly in `README.md` and in settings.
-- Never execute remote code, fetch and eval scripts, or auto-update plugin code outside of normal releases.
-- Minimize scope: read/write only what's necessary inside the vault. Do not access files outside the vault.
-- Clearly disclose any external services used, data sent, and risks.
-- Respect user privacy. Do not collect vault contents, filenames, or personal information unless absolutely necessary and explicitly consented.
-- Avoid deceptive patterns, ads, or spammy notifications.
-- Register and clean up all DOM, app, and interval listeners using the provided `register*` helpers so the plugin unloads safely.
-
-## UX & copy guidelines (for UI text, commands, settings)
-
-- Prefer sentence case for headings, buttons, and titles.
-- Use clear, action-oriented imperatives in step-by-step copy.
-- Use **bold** to indicate literal UI labels. Prefer "select" for interactions.
-- Use arrow notation for navigation: **Settings → Community plugins**.
-- Keep in-app strings short, consistent, and free of jargon.
-
-## Performance
-
-- Keep startup light. Defer heavy work until needed.
-- Avoid long-running tasks during `onload`; use lazy initialization.
-- Batch disk access and avoid excessive vault scans.
-- Debounce/throttle expensive operations in response to file system events.
-
-## Coding conventions
-
-- **Keep `main.ts` minimal**: Focus only on plugin lifecycle (onload, onunload, addCommand calls). Delegate all feature logic to separate modules.
-- **Split large files**: If any file exceeds \~200-300 lines, consider breaking it into smaller, focused modules.
-- **Use clear module boundaries**: Each file should have a single, well-defined responsibility.
-- Bundle everything into `main.js` (no unbundled runtime deps).
-- Avoid Node/Electron APIs if you want mobile compatibility; set `isDesktopOnly` accordingly.
-- Prefer `async/await` over promise chains; handle errors gracefully.
-
-### TypeScript Configuration
-
-This project uses **super strict TypeScript configuration**. All code MUST respect the strict settings defined in `tsconfig.json`:
-
-- ✅ `"strict": true` - All strict type checking options enabled
-- ✅ `"noUnusedLocals": true` - No unused variables allowed
-- ✅ `"noUnusedParameters": true` - No unused function parameters allowed
-- ✅ `"noImplicitReturns": true` - All code paths must return a value
-- ✅ `"noFallthroughCasesInSwitch": true` - No fallthrough in switch statements
-- ✅ `"noUncheckedIndexedAccess": true` - Array/object access returns `T | undefined`
-- ✅ `"noImplicitOverride": true` - Must use `override` keyword when overriding
-- ✅ `"allowUnreachableCode": false` - No unreachable/dead code
-- ✅ `"allowJs": false` - TypeScript only, no JavaScript files
-
-**Always:**
-
-- Check for null/undefined before accessing properties (use `if (!value) return` or optional chaining `value?.property`)
-- Verify array/object access returns non-undefined before use (with `noUncheckedIndexedAccess`, `array[0]` returns `T | undefined`)
-- Specify explicit return types for all functions
-- Remove unused variables or prefix with `_` if intentionally unused
-- Use `override` keyword when overriding parent class methods
-- Ensure all switch statement cases are handled (no missing returns)
-- Use `const` by default, `let` only when reassignment is needed, never `var`
-
-**Common strict mode errors and fixes:**
-
-```typescript
-// 1. Missing override modifier (TS4114)
-override async onload() { }  // ✓ Must use 'override' keyword
-
-// 2. Uninitialized properties (TS2564)
-settings!: PluginSettings;  // ✓ Use definite assignment if initialized in onload
-settings: PluginSettings = DEFAULT_SETTINGS;  // ✓ Or initialize inline
-
-// 3. Unchecked array access (noUncheckedIndexedAccess)
-const first = array[0];
-if (first) { /* use first */ }  // ✓ Must check, array[0] returns T | undefined
-
-// 4. Missing return paths (TS7030)
-function getValue(): string {
-    if (condition) return 'yes';
-    return 'no';  // ✓ All paths must return
-}
-
-// 5. Null checks (TS2531)
-const file = this.app.workspace.getActiveFile();
-if (!file) return;  // ✓ Check before use
-```
-
-### Tailwind CSS Guidelines
-
-This project uses **Tailwind CSS v4** for styling. Follow these guidelines when working with styles:
-
-**Always prefer Tailwind utilities over custom CSS:**
-
-- Use Tailwind utility classes whenever possible instead of writing custom CSS
-- Only use custom CSS when Obsidian CSS variables are required (e.g., `var(--text-accent)`, `var(--background-primary)`)
-- Tailwind utilities can be applied via `@apply` directive in CSS files or directly as class names in TypeScript
-
-**When to use @apply (in src/styles.src.css):**
-
-- For component classes that will be reused across multiple elements
-- When combining Tailwind utilities with Obsidian CSS variables
-- For pseudo-selectors (`:hover`, `::after`, etc.) that need Tailwind utilities
-
-**When to use inline classes (in TypeScript):**
-
-- For one-off styling or element-specific layouts
-- When building dynamic UI elements in TypeScript code
-- For simple utility combinations that don't need a custom class
-
-**Common Tailwind utilities to use:**
-
-- **Layout**: `flex`, `grid`, `block`, `inline-flex`, `items-center`, `justify-center`, `gap-2`
-- **Spacing**: `p-4`, `px-2`, `py-3`, `m-0`, `mt-2`, `mb-4`, `gap-2.5`
-- **Sizing**: `w-full`, `h-4`, `min-w-[150px]`, `max-h-[400px]`
-- **Typography**: `text-sm`, `text-[0.85em]`, `font-medium`, `italic`, `leading-tight`
-- **Borders**: `border`, `rounded`, `border-b`
-- **Colors**: Only use Obsidian CSS variables (Tailwind color utilities won't match theme)
-- **Effects**: `opacity-80`, `transition-all`, `duration-150`, `cursor-pointer`
-- **Display**: `hidden`, `block`, `invisible`
-
-**Obsidian CSS variables (must use custom CSS, not Tailwind):**
-
-- Colors: `var(--text-normal)`, `var(--text-muted)`, `var(--text-accent)`, `var(--text-error)`, `var(--text-on-accent)`
-- Backgrounds: `var(--background-primary)`, `var(--background-secondary)`, `var(--background-primary-alt)`, `var(--background-modifier-hover)`, `var(--background-modifier-border)`
-- Interactive: `var(--interactive-normal)`, `var(--interactive-hover)`, `var(--interactive-accent)`
-- Sizing: `var(--input-height)`, `var(--icon-size)`, `var(--radius-s)`
-- Typography: `var(--font-monospace)`
-
-**Example: Good Tailwind usage**
-
-```css
-/* In src/styles.src.css - component with Tailwind + Obsidian vars */
-.my-button {
-    @apply flex items-center gap-2 px-3 py-2 rounded cursor-pointer;
-    @apply transition-all duration-150 border;
-    background-color: var(--interactive-normal);
-    border-color: var(--background-modifier-border);
-}
-
-.my-button:hover {
-    @apply opacity-100;
-    background-color: var(--interactive-hover);
-}
-```
-
-```typescript
-// In TypeScript - inline Tailwind classes for simple layout
-const container = contentEl.createDiv({ cls: 'flex flex-col gap-4 p-5' })
-const button = container.createEl('button', {
-    cls: 'px-4 py-2 rounded font-medium',
-    text: 'Click me'
-})
-```
-
-**Example: Bad practice**
-
-```css
-/* Don't use custom CSS for things Tailwind can do */
-.my-container {
-    display: flex; /* Use @apply flex instead */
-    padding: 20px; /* Use @apply p-5 instead */
-    margin-bottom: 10px; /* Use @apply mb-2.5 instead */
-    border-radius: 4px; /* Use @apply rounded instead */
-}
-```
-
-## Community catalog review — preventative rules
-
-The community-plugin reviewer runs a fixed set of lint rules against every submitted release. Most warnings repeat across plugins and have known idiomatic fixes. **Apply these patterns from day one** — fixing them retroactively is much more expensive than getting them right the first time.
-
-### API conventions (DOM, timers, popouts)
-
-- `document` → `activeDocument` (so popout windows hit their own DOM).
-- Timers — `setTimeout`/`clearTimeout`/`setInterval`/`clearInterval`/`requestAnimationFrame`/`cancelAnimationFrame` → `window.X`. **Not `activeWindow.X`** — the rule complains either way for timers.
-- Timer handle types: declare as plain `number`, not `ReturnType<typeof setTimeout>`. With `@types/bun` in scope, the overload resolves to Bun's `Timer` and breaks the assignment from `window.setTimeout` (which returns `number`).
-- `document.createElement(tag)` → `createEl(tag, …)` / `createSpan(…)` / `createDiv(…)`. Prefer parent-bound `el.createEl(…)` when a parent exists; the child is appended automatically.
-- `globalThis.X` for plugin-injected globals (Excalidraw etc.) → `window.X`.
-- `processFrontMatter` callback param type: `(frontmatter: Record<string, unknown>) => …` — Obsidian's default is `any` and trips unsafe-access rules.
-- External SDKs that need a custom `fetch`: inject a `requestUrl`-based adapter via the SDK's `fetch` option (most SDKs that need a custom fetch — Replicate, OpenAI, etc. — expose one). Never `node-fetch`, never `globalThis.fetch = require('node-fetch')`. The adapter wraps `requestUrl` in a `fetch`-shaped function and refuses non-string/ArrayBuffer bodies; no streaming, no AbortSignal, no FormData. Adequate for plain GET/POST polling.
-
-### Lint / TypeScript rules
-
-- `eslint-disable @typescript-eslint/no-explicit-any` is **forbidden** — the reviewer treats both the violation and the disable as an **error** (blocks the scorecard). Type properly instead: `typeof Chart` for dynamically-imported classes, widen your custom interface rather than `as any`, narrow `unknown` at the call site.
-- Every other `eslint-disable-next-line <rule>` requires a `-- reason` description.
-- `new Array(n)` leaks `any[]` — write `new Array<T>(n)` or `Array.from({ length: n }, () => …)`. `Array.from` is cleaner when each slot needs a fresh sub-array.
-- `Object.values(union)` returns `any[]` for union types — annotate the local as `unknown[]` and narrow at use.
-- Drop redundant `as T` casts after `instanceof T` narrowing.
-- Switch over an enum: case labels reference enum members (`TimeGranularity.Daily`), not raw string literals.
-- `.catch((error: unknown) => …)`: coerce to `Error` before rethrowing — `error instanceof Error ? error : new Error(String(error))`.
-- Async function passed to a void-returning callback: wrap in `void (async () => { … })()`, or widen the callback type to `() => void | Promise<void>` for helpers you own.
-- "Legacy" ≠ "@deprecated": types that migration code intentionally keeps reading (V1 on-disk shapes etc.) are **legacy**, not deprecated. Drop the `@deprecated` tag and document them as legacy formats — the tag will otherwise fire the no-deprecated rule on every legitimate consumer.
-
-### CSS rules
-
-- No hand-written `!important`. Bump specificity with a doubled-class selector (`.foo.foo`) — that goes from 0,1,0 to 0,2,0 and beats most Obsidian defaults (`.setting-item-control button` 0,1,1; `.modal-container .modal` 0,2,0).
-- Before removing `!important`, identify what the rule is fighting and verify in a live vault with `getComputedStyle()`. Inline styles always win — keep `!important` only when the source it beats is itself inline.
-- When `!important` is genuinely load-bearing (visibility toggles like `.lt-hidden` are the canonical example), restore it and add a `/* stylelint-disable-next-line declaration-no-important -- reason: … */` comment. The reviewer accepts descriptive disables.
-- Collapse mirrored 4-value shorthands: `8px 0 12px 0` → `8px 0 12px`.
-- `obsidianmd/no-static-styles-assignment` only flags **literal** RHS — dynamic style assignments (template literals with expressions, ternaries, variable RHS) can stay inline. Move only the static ones to a CSS class.
-
-### Logging
-
-- The reviewer flags every `console.*` call in shipped code. The template's `src/utils/log.ts` ships with its `console.*` lines commented out — re-enable only behind a `debugModeEnabled` settings toggle when you actually need verbose logs.
-- Route stray `console.error(...)` from catch blocks through `log(msg, 'error', err)` so the suppression stays centralized.
-
-### Release workflow
-
-- Attach only `main.js`, `manifest.json`, and `styles.css` (if present) — never a zip. The CI release workflow in this template already does this; don't add zip-upload steps back.
-- Build in CI; don't post-edit `main.js`.
-- `bun-version-file: package.json` (already wired) keeps Bun pinned across CI and release. Update `packageManager` in `package.json` to bump.
-- `actions/attest-build-provenance@v3` (already wired) attaches provenance to release artifacts.
-
-## Mobile
-
-- Where feasible, test on iOS and Android.
-- Don't assume desktop-only behavior unless `isDesktopOnly` is `true`.
-- Avoid large in-memory structures; be mindful of memory and storage constraints.
-
-## Agent do/don't
-
-**Do**
-
-- Add commands with stable IDs (don't rename once released).
-- Provide defaults and validation in settings.
-- Write idempotent code paths so reload/unload doesn't leak listeners or intervals.
-- Use `this.register*` helpers for everything that needs cleanup.
-
-**Don't**
-
-- Introduce network calls without an obvious user-facing reason and documentation.
-- Ship features that require cloud services without clear disclosure and explicit opt-in.
-- Store or transmit vault contents unless essential and consented.
-
-## Common tasks
-
-### Organize code across multiple files
-
-**main.ts** (minimal, lifecycle only):
-
-```ts
-import { Plugin } from 'obsidian'
-import { MySettings, DEFAULT_SETTINGS } from './settings'
-import { registerCommands } from './commands'
-
-export default class TemplatePlugin extends Plugin {
-    settings: MySettings
-
-    async onload() {
-        this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData())
-        registerCommands(this)
-    }
-}
-```
-
-**settings.ts**:
-
-```ts
-export interface MySettings {
-    enabled: boolean
-    apiKey: string
-}
-
-export const DEFAULT_SETTINGS: MySettings = {
-    enabled: true,
-    apiKey: ''
-}
-```
-
-**commands/index.ts**:
-
-```ts
-import { Plugin } from 'obsidian'
-import { doSomething } from './my-command'
-
-export function registerCommands(plugin: Plugin) {
-    plugin.addCommand({
-        id: 'do-something',
-        name: 'Do something',
-        callback: () => doSomething(plugin)
-    })
-}
-```
-
-### Add a command
-
-```ts
-this.addCommand({
-    id: 'your-command-id',
-    name: 'Do the thing',
-    callback: () => this.doTheThing()
-})
-```
-
-### Persist settings
-
-```ts
-interface MySettings { enabled: boolean }
-const DEFAULT_SETTINGS: MySettings = { enabled: true };
-
-async onload() {
-  this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-  await this.saveData(this.settings);
-}
-```
-
-### Register listeners safely
-
-```ts
-this.registerEvent(
-    this.app.workspace.on('file-open', (f) => {
-        /* ... */
-    })
-)
-this.registerDomEvent(window, 'resize', () => {
-    /* ... */
-})
-this.registerInterval(
-    window.setInterval(() => {
-        /* ... */
-    }, 1000)
-)
-```
-
-## Troubleshooting
-
-- Plugin doesn't load after build: ensure `main.js` and `manifest.json` are at the top level of the plugin folder under `<Vault>/.obsidian/plugins/<plugin-id>/`.
-- Build issues: if `main.js` is missing, run `bun run build` or `bun run dev` to compile your TypeScript source code.
-- Commands not appearing: verify `addCommand` runs after `onload` and IDs are unique.
-- Settings not persisting: ensure `loadData`/`saveData` are awaited and you re-render the UI after changes.
-- Mobile-only issues: confirm you're not using desktop-only APIs; check `isDesktopOnly` and adjust.
-
-## References
-
-- Obsidian sample plugin using Bun: <https://github.com/rzbin/obsidian-plugin-template-bun>
-- API documentation: <https://docs.obsidian.md>
-- Bun documentation: <https://bun.com/docs>
-- Developer policies: <https://docs.obsidian.md/Developer+policies>
-- Plugin guidelines: <https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines>
-- Style guide: <https://help.obsidian.md/style-guide>
-- When fixing community-catalog review warnings, mine sibling plugin commits for prior fixes before re-inventing solutions — the same warnings recur across plugins and most have already been solved once.
+Do not read or modify root `TODO.md`, `documentation/archived/`, release archives, or attached build artifacts unless explicitly requested. Do not read or hand-edit generated `main.js` or `dist/`; builds may regenerate them. Dependencies in `node_modules/` are read-only. Never commit generated bundles, dependencies, vault data, credentials, or unrelated files. The tracked root `styles.css` is editable source, not a generated artifact.
