@@ -3,10 +3,10 @@ import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdo
 import { MAX_VERSES_IN_CHAPTER } from '@/utils/splitBibleReferenceForCitation';
 import type { BibleCitationProvider, BibleReference, LinkReplacerSettings } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
-import { createSettings } from './__helpers__/createSettings';
-import { createFakeEditor } from './__helpers__/createFakeEditor';
-import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
-import type { Mock } from 'vitest';
+import { createSettings } from '../__tests__/__helpers__/createSettings';
+import { createFakeEditor } from '../__tests__/__helpers__/createFakeEditor';
+import { initializeTestBibleBooks } from '../__tests__/__helpers__/initializeBibleBooksForTests';
+import { beforeAll, beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
 
 const JOHN_3_16: BibleReference = { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] };
 const JOHN_3_16_URL = 'jwlibrary:///finder?bible=43003016&wtlocale=E';
@@ -443,5 +443,89 @@ describe('insertBibleQuoteForCreatedLink', () => {
     });
 
     expect(editor.getContent()).toBe(`${link} ${other}\n\n${link}\n> ${QUOTE}`);
+  });
+
+  test('finds the link again when a quote above pushed it down during the lookup', async () => {
+    const link = createdLink(JOHN_3_16).trim();
+    // Written on line 1, then the quote of the reference above took two lines.
+    const content = `> [!quote] Rom 5:12\n> Through one man sin entered.\n${link}`;
+    const editor = createFakeEditor(content, { line: 2, ch: link.length });
+
+    const result = await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 1,
+      linkUrl: JOHN_3_16_URL,
+      createdLink: link,
+      uniqueInNote: true,
+    });
+
+    expect(result.inserted).toBe(true);
+    expect(editor.getContent()).toBe(
+      `> [!quote] Rom 5:12\n> Through one man sin entered.\n${link}\n> ${QUOTE}\n`,
+    );
+  });
+
+  test('keeps the created link when the template does not repeat it', async () => {
+    settings.bibleQuote.template = '> {bibleRef}: {quote}';
+    const link = createdLink(JOHN_3_16).trim();
+    const editor = createFakeEditor(link);
+
+    const result = await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 0,
+      linkUrl: JOHN_3_16_URL,
+      createdLink: link,
+    });
+
+    expect(result.inserted).toBe(true);
+    // Replacing the line would have deleted the link the user just created.
+    expect(editor.getContent()).toBe(`${link}\n\n> Joh 3:16: ${QUOTE}`);
+  });
+
+  test('puts the quote right below a paragraph followed by an unrelated callout', async () => {
+    const link = createdLink(JOHN_3_16).trim();
+    const paragraph = `Read ${link} today`;
+    const callout = '> [!note]\n> Unrelated.';
+    const editor = createFakeEditor(`${paragraph}\n${callout}`);
+
+    await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 0,
+      linkUrl: JOHN_3_16_URL,
+      createdLink: link,
+    });
+
+    expect(editor.getContent()).toBe(`${paragraph}\n\n${link}\n> ${QUOTE}\n\n${callout}`);
+  });
+
+  test('keeps a selection the user made while the text was loading', async () => {
+    const link = createdLink(JOHN_3_16).trim();
+    const editor = createFakeEditor(`Some words to make bold\n${link} in a sentence`);
+    editor.setSelection({ line: 0, ch: 5 }, { line: 0, ch: 10 });
+
+    await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 1,
+      linkUrl: JOHN_3_16_URL,
+      createdLink: link,
+    });
+
+    expect(editor.getCursor('anchor')).toEqual({ line: 0, ch: 5 });
+    expect(editor.getCursor('head')).toEqual({ line: 0, ch: 10 });
+  });
+
+  test('does not take the quote of a longer range for the quote of this verse', async () => {
+    settings.noLanguageParameter = true;
+    const url = 'jwlibrary:///finder?bible=43003016';
+    const link = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!.trim();
+    expect(link).toContain(`(${url})`);
+    const editor = createFakeEditor(
+      `${link} in a sentence\n> [Jn 3:16-18](jwlibrary:///finder?bible=43003016-43003018)\n> Text.`,
+    );
+
+    const result = await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 0,
+      linkUrl: url,
+      createdLink: link,
+    });
+
+    expect(result.alreadyExists).toBe(false);
+    expect(result.inserted).toBe(true);
   });
 });

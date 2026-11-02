@@ -11,10 +11,10 @@ import { AutoBibleQuoteInserter } from '@/services/AutoBibleQuoteInserter';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import type { BibleCitationProvider, BibleReference, LinkReplacerSettings } from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
-import { createSettings } from './__helpers__/createSettings';
-import { createFakeEditor } from './__helpers__/createFakeEditor';
-import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
-import type { Mock } from 'vitest';
+import { createSettings } from '../__tests__/__helpers__/createSettings';
+import { createFakeEditor } from '../__tests__/__helpers__/createFakeEditor';
+import { initializeTestBibleBooks } from '../__tests__/__helpers__/initializeBibleBooksForTests';
+import { beforeAll, beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
 
 const JOHN_3_16: BibleReference = { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 16 }] };
 const QUOTE = 'For God loved the world so much.';
@@ -246,5 +246,40 @@ describe('AutoBibleQuoteInserter', () => {
       expect(editor.getContent()).toBe(link);
       expect(Notice).not.toHaveBeenCalled();
     });
+  });
+
+  test('quotes each link of a list written one per line', async () => {
+    const romans: BibleReference = { book: 45, chapter: 5, verseRanges: [{ start: 12, end: 12 }] };
+    const john = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!.trim();
+    const rom = convertBibleTextToMarkdownLink(romans, settings)!.trim();
+    const editor = createFakeEditor(`${john}\n${rom}`, { line: 1, ch: rom.length });
+    const inserter = createInserter();
+
+    // Both links are created before the first text arrives; quoting John
+    // pushes Romans down.
+    inserter.scheduleForCreatedLink(editor, JOHN_3_16, john, 0);
+    inserter.scheduleForCreatedLink(editor, romans, rom, 1);
+
+    await vi.waitFor(() =>
+      expect(editor.getContent()).toBe(`${john}\n> ${QUOTE}\n\n${rom}\n> ${QUOTE}\n`),
+    );
+  });
+
+  test('quotes a link in an editor that is not matched to a note any more', async () => {
+    const link = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!;
+    const editor = createFakeEditor(link);
+    let filePath: string | null = 'board.canvas';
+    const inserter = new AutoBibleQuoteInserter(
+      () => settings,
+      provider,
+      t,
+      () => filePath,
+    );
+
+    inserter.scheduleForCreatedLink(editor, JOHN_3_16, link, 0);
+    // Like a Canvas card once another card is focused.
+    filePath = null;
+
+    await vi.waitFor(() => expect(editor.getContent()).toBe(`${link.trim()}\n> ${QUOTE}\n`));
   });
 });

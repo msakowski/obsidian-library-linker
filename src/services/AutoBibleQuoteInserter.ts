@@ -1,15 +1,15 @@
 import { Notice, type Editor } from 'obsidian';
 import type { BibleCitationProvider, BibleReference, LinkReplacerSettings } from '@/types';
+import { findJWLibraryLinksInLine } from '@/utils/findJWLibraryLinks';
 import {
   insertBibleQuoteForCreatedLink,
+  isLinkUrlUniqueInNote,
   type CreatedLinkAnchor,
   type CreatedLinkQuoteResult,
 } from '@/utils/insertBibleQuotes';
 import { logger } from '@/utils/logger';
 
 type TranslateFn = (key: string, variables?: Record<string, string>) => string;
-
-const JW_LIBRARY_URL = /jwlibrary:\/\/\/finder\?bible=\d{8}(?:-\d{8})?(?:&[^)\s]*)?/;
 
 /**
  * Inserts a Bible quote right after the suggester created a link, when the
@@ -53,7 +53,7 @@ export class AutoBibleQuoteInserter {
 
     // A multi-range reference produces several links; the first one anchors
     // the quote, which covers the whole reference anyway.
-    const linkUrl = JW_LIBRARY_URL.exec(createdLink)?.[0];
+    const linkUrl = findJWLibraryLinksInLine(createdLink, line)[0]?.url;
 
     if (!linkUrl) {
       logger.warn('AutoBibleQuoteInserter: no JW Library URL in created link', createdLink);
@@ -62,8 +62,13 @@ export class AutoBibleQuoteInserter {
 
     // Obsidian reuses the editor when another note is opened in the same tab,
     // so the note is recorded now and checked again once the text arrives.
+    // An editor outside a markdown view (a Canvas card) cannot always be
+    // matched to its note; an unknown path does not count as another note.
     const filePath = this.getEditorFilePath(editor);
-    const isSameNote = () => this.getEditorFilePath(editor) === filePath;
+    const isSameNote = () => {
+      const currentPath = this.getEditorFilePath(editor);
+      return filePath === null || currentPath === null || currentPath === filePath;
+    };
 
     const key = `${filePath ?? ''}:${line}:${linkUrl}`;
     const editorInFlight = this.inFlight.get(editor) ?? new Set<string>();
@@ -71,9 +76,12 @@ export class AutoBibleQuoteInserter {
     editorInFlight.add(key);
     this.inFlight.set(editor, editorInFlight);
 
-    void this.insertNow(editor, reference, { line, linkUrl, createdLink }, isSameNote).finally(() =>
-      editorInFlight.delete(key),
-    );
+    void this.insertNow(
+      editor,
+      reference,
+      { line, linkUrl, createdLink, uniqueInNote: isLinkUrlUniqueInNote(editor, linkUrl) },
+      isSameNote,
+    ).finally(() => editorInFlight.delete(key));
   }
 
   /**

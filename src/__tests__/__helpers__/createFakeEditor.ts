@@ -21,6 +21,8 @@ export function createFakeEditor(
 ): FakeEditor {
   let lines = content.split('\n');
   let currentCursor = { ...cursor };
+  // Start of the selection; equal to the cursor when nothing is selected.
+  let currentAnchor = { ...cursor };
 
   const toOffset = (position: EditorPosition): number => {
     const line = Math.min(position.line, lines.length - 1);
@@ -31,9 +33,15 @@ export function createFakeEditor(
   const editor = {
     getLine: (line: number) => lines[line] ?? '',
     lastLine: () => lines.length - 1,
-    getCursor: () => ({ ...currentCursor }),
+    getCursor: (side?: 'from' | 'to' | 'head' | 'anchor') =>
+      side === 'anchor' ? { ...currentAnchor } : { ...currentCursor },
     setCursor: (position: EditorPosition) => {
       currentCursor = { ...position };
+      currentAnchor = { ...position };
+    },
+    setSelection: (anchor: EditorPosition, head: EditorPosition = anchor) => {
+      currentAnchor = { ...anchor };
+      currentCursor = { ...head };
     },
     transaction: ({ changes }: { changes?: EditorChange[] }) => {
       if (!changes?.length) return;

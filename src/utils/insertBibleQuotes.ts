@@ -378,6 +378,12 @@ export interface CreatedLinkAnchor {
    * `linkUrl` counts as the created reference.
    */
   createdLink?: string;
+  /**
+   * Whether `linkUrl` appeared on a single line of the note right after the
+   * link was written. Only then may the link be looked for on another line
+   * when lines above it moved during the lookup.
+   */
+  uniqueInNote?: boolean;
 }
 
 export interface CreatedLinkQuoteResult {
@@ -389,18 +395,57 @@ export interface CreatedLinkQuoteResult {
 }
 
 /**
- * Checks that the created link is still on the line it was written to.
+ * Whether `text` contains `linkUrl` as a whole URL.
  *
- * The link is not searched for elsewhere: another line with the same URL is
- * an earlier mention of the verse (or the link was undone), and quoting it
- * would put the text somewhere the user did not ask for.
+ * A URL without a language parameter is a prefix of a longer range that starts
+ * with the same verse (`bible=43003016` in `bible=43003016-43003018`).
  */
-function isCreatedLinkInPlace(editor: Editor, anchor: CreatedLinkAnchor): boolean {
-  return (
+function containsLinkUrl(text: string, linkUrl: string): boolean {
+  for (let index = text.indexOf(linkUrl); index !== -1; index = text.indexOf(linkUrl, index + 1)) {
+    if (!/[\d-]/.test(text.charAt(index + linkUrl.length))) return true;
+  }
+
+  return false;
+}
+
+/** Lines of the note that contain `linkUrl`. */
+function findLinesWithLinkUrl(editor: Editor, linkUrl: string): number[] {
+  const lines: number[] = [];
+
+  for (let line = 0; line <= editor.lastLine(); line++) {
+    if (containsLinkUrl(editor.getLine(line), linkUrl)) lines.push(line);
+  }
+
+  return lines;
+}
+
+/** Whether `linkUrl` appears on exactly one line of the note. */
+export function isLinkUrlUniqueInNote(editor: Editor, linkUrl: string): boolean {
+  return findLinesWithLinkUrl(editor, linkUrl).length === 1;
+}
+
+/**
+ * Finds the line the created link is on now.
+ *
+ * Lines added above it during the lookup — by the user, or by the quote of a
+ * link created just before — push it down. It is then looked for elsewhere
+ * only when it was the single mention of that verse and still is: otherwise a
+ * line with the same URL may be an earlier mention, and quoting it would put
+ * the text where the user did not ask for it.
+ */
+function locateCreatedLink(editor: Editor, anchor: CreatedLinkAnchor): number | null {
+  if (
     anchor.line >= 0 &&
     anchor.line <= editor.lastLine() &&
-    editor.getLine(anchor.line).includes(anchor.linkUrl)
-  );
+    containsLinkUrl(editor.getLine(anchor.line), anchor.linkUrl)
+  ) {
+    return anchor.line;
+  }
+
+  if (!anchor.uniqueInNote) return null;
+
+  const lines = findLinesWithLinkUrl(editor, anchor.linkUrl);
+  return lines.length === 1 ? lines[0] : null;
 }
 
 /** Last line of the blockquote or callout that `line` belongs to. */
@@ -440,7 +485,7 @@ function hasQuoteBelow(editor: Editor, line: number, linkUrl: string): boolean {
   const blockEnd = findBlockquoteEnd(editor, line + 1);
 
   for (let quoteLine = line + 1; quoteLine <= blockEnd; quoteLine++) {
-    if (editor.getLine(quoteLine).includes(linkUrl)) return true;
+    if (containsLinkUrl(editor.getLine(quoteLine), linkUrl)) return true;
   }
 
   return false;
@@ -459,7 +504,9 @@ function isOnlyCreatedLinkOnLine(
 ): boolean {
   const created =
     anchor.createdLink?.trim() ||
-    lineText.match(MARKDOWN_LINK_WITH_JWLIBRARY)?.find((link) => link.includes(anchor.linkUrl));
+    lineText
+      .match(MARKDOWN_LINK_WITH_JWLIBRARY)
+      ?.find((link) => containsLinkUrl(link, anchor.linkUrl));
 
   if (!created || !lineText.includes(created)) {
     return false;
@@ -512,7 +559,9 @@ export async function insertBibleQuoteForCreatedLink(
     return { inserted: false, alreadyExists: false, fetchFailed: false, anchorLost: true };
   }
 
-  if (!isCreatedLinkInPlace(editor, anchor)) {
+  const targetLine = locateCreatedLink(editor, anchor);
+
+  if (targetLine === null) {
     logger.warn(
       'insertBibleQuoteForCreatedLink: created link no longer found, skipping insertion',
       anchor.linkUrl,
@@ -520,19 +569,26 @@ export async function insertBibleQuoteForCreatedLink(
     return { inserted: false, alreadyExists: false, fetchFailed: false, anchorLost: true };
   }
 
-  const targetLine = anchor.line;
-
   if (hasQuoteBelow(editor, targetLine, anchor.linkUrl)) {
     logger.log(`insertBibleQuoteForCreatedLink: line ${targetLine} is already quoted`);
     return { inserted: false, alreadyExists: true, fetchFailed: false, anchorLost: false };
   }
 
-  const cursorBefore = editor.getCursor();
-  const standalone = isOnlyCreatedLinkOnLine(editor.getLine(targetLine), anchor, settings);
+  const selectionBefore = { anchor: editor.getCursor('anchor'), head: editor.getCursor('head') };
+  const targetText = editor.getLine(targetLine);
+  // The quote only takes the place of the reference when it repeats the link,
+  // otherwise the link the user just created would be deleted.
+  const standalone =
+    settings.bibleQuote.template.includes('{bibleRefLinked}') &&
+    isOnlyCreatedLinkOnLine(targetText, anchor, settings);
 
   // A link inside a blockquote or callout gets its quote after the whole
-  // block, so the block is not split in two.
-  const insertLine = standalone ? targetLine : findBlockquoteEnd(editor, targetLine);
+  // block, so the block is not split in two. A link in a plain paragraph keeps
+  // its quote right below, even when an unrelated callout follows.
+  const insertLine =
+    standalone || !targetText.trim().startsWith('>')
+      ? targetLine
+      : findBlockquoteEnd(editor, targetLine);
   const change = buildQuoteChange(editor, insertLine, quoteText, standalone);
 
   // When the quote replaces the reference the user is done with that line, so
@@ -545,12 +601,18 @@ export async function insertBibleQuoteForCreatedLink(
 
   const insertedLineBreaks = change.text.split('\n').length - 1;
 
-  if (standalone && cursorBefore.line === targetLine) {
+  const hasSelection =
+    selectionBefore.anchor.line !== selectionBefore.head.line ||
+    selectionBefore.anchor.ch !== selectionBefore.head.ch;
+
+  if (standalone && !hasSelection && selectionBefore.head.line === targetLine) {
     // The reference became the quote — carry on below it.
     placeCursorAfterQuote(editor, targetLine, quoteText);
   } else {
-    // The reference sits in a sentence the user may still be writing.
-    restoreCursor(editor, cursorBefore, insertLine, insertedLineBreaks);
+    // The user is still writing or selecting elsewhere: keep their selection.
+    const follow = (position: EditorPosition) =>
+      followPosition(editor, position, insertLine, insertedLineBreaks);
+    editor.setSelection(follow(selectionBefore.anchor), follow(selectionBefore.head));
   }
 
   return { inserted: true, alreadyExists: false, fetchFailed: false, anchorLost: false };
@@ -568,18 +630,18 @@ function placeCursorAfterQuote(editor: Editor, targetLine: number, quoteText: st
 }
 
 /**
- * Puts the cursor back after an insertion the user did not ask for, following
- * the text it was sitting on if the quote pushed it further down.
+ * Where a position the user left ends up after an insertion they did not ask
+ * for: it follows its text if the quote pushed that text further down.
  */
-function restoreCursor(
+function followPosition(
   editor: Editor,
-  cursor: EditorPosition,
+  position: EditorPosition,
   insertLine: number,
   insertedLineBreaks: number,
-): void {
-  const followed = cursor.line > insertLine ? cursor.line + insertedLineBreaks : cursor.line;
+): EditorPosition {
+  const followed = position.line > insertLine ? position.line + insertedLineBreaks : position.line;
   const line = Math.min(Math.max(followed, 0), editor.lastLine());
-  const ch = Math.min(Math.max(cursor.ch, 0), editor.getLine(line).length);
+  const ch = Math.min(Math.max(position.ch, 0), editor.getLine(line).length);
 
-  editor.setCursor({ line, ch });
+  return { line, ch };
 }
