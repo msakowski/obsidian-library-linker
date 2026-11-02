@@ -1,3 +1,4 @@
+import { MAX_VERSES_IN_CHAPTER } from '@/utils/splitBibleReferenceForCitation';
 import type { DataAdapter } from 'obsidian';
 import type {
   BibleReference,
@@ -75,23 +76,29 @@ export class VaultOfflineBibleRepository implements OfflineBibleRepository {
       return null;
     }
 
-    // A range may run past the end of the chapter — a reference spanning
-    // chapters is looked up chapter by chapter with an open end.
-    const lastVerse = Object.keys(chapter.verses).reduce((highest, key) => {
-      const verse = Number(key);
-      return Number.isNaN(verse) ? highest : Math.max(highest, verse);
-    }, 0);
+    const verseNumbers = Object.keys(chapter.verses)
+      .map(Number)
+      .filter((verse) => !Number.isNaN(verse));
+    const lastVerse = Math.max(0, ...verseNumbers);
 
     const parts: string[] = [];
     for (const range of reference.verseRanges) {
-      const end = Math.min(range.end, lastVerse);
-      if (range.start > end) return null;
+      // Only the open end of a part split from a cross-chapter reference runs
+      // to the end of the chapter. Any other range past it is invalid and must
+      // fail rather than give a partial quote.
+      const end = range.end >= MAX_VERSES_IN_CHAPTER ? lastVerse : range.end;
+      if (range.start > end || end > lastVerse) return null;
 
+      const rangeParts: string[] = [];
       for (let verse = range.start; verse <= end; verse++) {
         const text = chapter.verses[String(verse)];
-        if (!text) return null;
-        parts.push(text);
+        // A gap before the chapter's last verse is a verse the translation
+        // omits (e.g. Matt. 17:21 in the NWT), not missing data.
+        if (text) rangeParts.push(text);
       }
+
+      if (rangeParts.length === 0) return null;
+      parts.push(...rangeParts);
     }
     return parts.join(' ');
   }
