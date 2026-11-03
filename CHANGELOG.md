@@ -1,5 +1,17 @@
 # obsidian-library-linker
 
+## 0.17.1
+
+### Patch Changes
+
+- [#345](https://github.com/msakowski/obsidian-library-linker/pull/345) [`e63c2bc`](https://github.com/msakowski/obsidian-library-linker/commit/e63c2bc536ed9131dd2fc52f5d0e1d01ed4be841) Thanks [@msakowski](https://github.com/msakowski)! - Update transitive dev dependency `brace-expansion` to 5.0.12 to fix CVE-2026-13149 and CVE-2026-102277.
+
+- [#339](https://github.com/msakowski/obsidian-library-linker/pull/339) [`b0ee48c`](https://github.com/msakowski/obsidian-library-linker/commit/b0ee48cf0caf656059fab4f4b14f60dc2eafde78) Thanks [@eliorpom-cmd](https://github.com/eliorpom-cmd)! - The "Expanded Callout" preset now uses `> [!quote]+`, which is expanded and foldable, instead of `> [!quote]`, which cannot be folded at all.
+
+- [#340](https://github.com/msakowski/obsidian-library-linker/pull/340) [`7017e31`](https://github.com/msakowski/obsidian-library-linker/commit/7017e3116e3315f987902328e42f5034d0ab66d9) Thanks [@eliorpom-cmd](https://github.com/eliorpom-cmd)! - The online fetcher now reports a failure when it finds no text for a reference, instead of returning the placeholder `Unable to extract Bible text`, which ended up written into the note as if it were the quote.
+
+- [#342](https://github.com/msakowski/obsidian-library-linker/pull/342) [`46ced90`](https://github.com/msakowski/obsidian-library-linker/commit/46ced90f2844cab8ec6250ddd8a469ee935371f0) Thanks [@eliorpom-cmd](https://github.com/eliorpom-cmd)! - Fix a line holding nothing but a reference not being recognised as such when the link is wrapped in the configured prefix and suffix (for example `(Matthew 24:14)`) or written as several comma-joined links: the quote was appended below instead of replacing the line, repeating the reference. The quotes of every link on such a line now replace it together in a single edit, and the line is kept when one of them cannot be fetched, so no reference is lost. A blank line is kept between the quote and any text that follows, so that text is not pulled into the blockquote.
+
 ## 0.17.0
 
 ### Minor Changes
