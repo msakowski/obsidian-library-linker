@@ -183,6 +183,26 @@ describe('BibleTextFetcher', () => {
         expect(result.text).not.toContain('+');
       });
 
+      test('removes the chapter number from the first verse in WOL format', async () => {
+        // As served by wol.jw.org for Matthew 4: verse 1 carries the chapter
+        // number instead of a verse number.
+        const html = `
+          <span id="v40-4-1-1" class="v"><a href="#" class="cl vx vp"><strong>4</strong> </a>Then Jesus was led by the spirit up into the wilderness.</span><span id="v40-4-2-1" class="v"><a href="#" class="vl vx vp">2 </a>After he had fasted for 40 days and 40 nights, he felt hungry. </span>
+        `;
+
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
+
+        const result = await BibleTextFetcher.fetchBibleText(
+          { book: 40, chapter: 4, verseRanges: [{ start: 1, end: 2 }] },
+          'E',
+        );
+
+        expect(result.success).toBe(true);
+        expect(result.text).toBe(
+          'Then Jesus was led by the spirit up into the wilderness. After he had fasted for 40 days and 40 nights, he felt hungry.',
+        );
+      });
+
       test('fails instead of returning placeholder text when the verse is missing', async () => {
         const html = `
           <div class="section" data-key="40-24-15">
