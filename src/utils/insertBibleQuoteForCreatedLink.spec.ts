@@ -359,7 +359,11 @@ describe('insertBibleQuoteForCreatedLink', () => {
     expect(result.inserted).toBe(true);
     expect(getCitation).toHaveBeenNthCalledWith(
       1,
-      { book: 40, chapter: 3, verseRanges: [{ start: 1, end: MAX_VERSES_IN_CHAPTER }] },
+      {
+        book: 40,
+        chapter: 3,
+        verseRanges: [{ start: 1, end: MAX_VERSES_IN_CHAPTER, toChapterEnd: true }],
+      },
       'E',
     );
     expect(getCitation).toHaveBeenNthCalledWith(

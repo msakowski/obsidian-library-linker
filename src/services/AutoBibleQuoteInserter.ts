@@ -1,4 +1,4 @@
-import { Notice, type Editor } from 'obsidian';
+import { Notice, type Editor, type EditorPosition } from 'obsidian';
 import type { BibleCitationProvider, BibleReference, LinkReplacerSettings } from '@/types';
 import { findJWLibraryLinksInLine } from '@/utils/findJWLibraryLinks';
 import {
@@ -8,6 +8,7 @@ import {
   type CreatedLinkQuoteResult,
 } from '@/utils/insertBibleQuotes';
 import { logger } from '@/utils/logger';
+import type { CreatedLinkTracker, TrackedRange } from '@/utils/createdLinkTracker';
 
 type TranslateFn = (key: string, variables?: Record<string, string>) => string;
 
@@ -37,6 +38,11 @@ export class AutoBibleQuoteInserter {
     private readonly t: TranslateFn,
     /** Path of the note shown in `editor`, or null when it cannot be told. */
     private readonly getEditorFilePath: (editor: Editor) => string | null,
+    /**
+     * Follows created links through edits. Without it, a link is found again
+     * by line, which is only safe while its verse is cited once in the note.
+     */
+    private readonly tracker?: CreatedLinkTracker,
   ) {}
 
   /**
@@ -47,10 +53,11 @@ export class AutoBibleQuoteInserter {
     editor: Editor,
     reference: BibleReference,
     createdLink: string,
-    line: number,
+    at: EditorPosition,
   ): void {
     if (!this.getSettings().bibleQuote.autoInsertOnLinkCreation) return;
 
+    const { line } = at;
     // A multi-range reference produces several links; the first one anchors
     // the quote, which covers the whole reference anyway.
     const linkUrl = findJWLibraryLinksInLine(createdLink, line)[0]?.url;
@@ -62,26 +69,55 @@ export class AutoBibleQuoteInserter {
 
     // Obsidian reuses the editor when another note is opened in the same tab,
     // so the note is recorded now and checked again once the text arrives.
-    // An editor outside a markdown view (a Canvas card) cannot always be
-    // matched to its note; an unknown path does not count as another note.
+    // When the note cannot be established, the edit is not risked at all.
     const filePath = this.getEditorFilePath(editor);
-    const isSameNote = () => {
-      const currentPath = this.getEditorFilePath(editor);
-      return filePath === null || currentPath === null || currentPath === filePath;
-    };
+    if (filePath === null) {
+      logger.warn('AutoBibleQuoteInserter: note of the editor unknown, not quoting');
+      return;
+    }
+    const isSameNote = () => this.getEditorFilePath(editor) === filePath;
 
-    const key = `${filePath ?? ''}:${line}:${linkUrl}`;
+    const key = `${filePath}:${line}:${linkUrl}`;
     const editorInFlight = this.inFlight.get(editor) ?? new Set<string>();
     if (editorInFlight.has(key)) return;
     editorInFlight.add(key);
     this.inFlight.set(editor, editorInFlight);
 
+    const range = this.trackCreatedLink(editor, createdLink, at);
+
     void this.insertNow(
       editor,
       reference,
-      { line, linkUrl, createdLink, uniqueInNote: isLinkUrlUniqueInNote(editor, linkUrl) },
+      { line, linkUrl, createdLink, uniqueInNote: isLinkUrlUniqueInNote(editor, linkUrl), range },
       isSameNote,
-    ).finally(() => editorInFlight.delete(key));
+    ).finally(() => {
+      editorInFlight.delete(key);
+      if (range) this.tracker?.release(editor, range);
+    });
+  }
+
+  /**
+   * Starts following the created link, without its surrounding whitespace, so
+   * the quote goes next to this very occurrence even when the same verse is
+   * cited elsewhere in the note.
+   */
+  private trackCreatedLink(
+    editor: Editor,
+    createdLink: string,
+    at: EditorPosition,
+  ): TrackedRange | undefined {
+    if (!this.tracker) return undefined;
+
+    const trimmed = createdLink.trim();
+    const from = editor.posToOffset(at) + createdLink.indexOf(trimmed);
+    const to = from + trimmed.length;
+
+    if (editor.getRange(editor.offsetToPos(from), editor.offsetToPos(to)) !== trimmed) {
+      logger.warn('AutoBibleQuoteInserter: created link not found where it was written');
+      return undefined;
+    }
+
+    return this.tracker.track(editor, from, to);
   }
 
   /**

@@ -225,7 +225,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     // Runs in the background so typing is never blocked.
     this.plugin
       .getAutoBibleQuoteInserter()
-      .scheduleForCreatedLink(editor, reference, convertedLink, context.start.line);
+      .scheduleForCreatedLink(editor, reference, convertedLink, context.start);
 
     // Handle opening links
     if (suggestion.command === 'open') {

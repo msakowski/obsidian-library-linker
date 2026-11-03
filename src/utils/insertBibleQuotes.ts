@@ -16,6 +16,7 @@ import {
 } from '@/utils/findJWLibraryLinks';
 import { splitBibleReferenceForCitation } from '@/utils/splitBibleReferenceForCitation';
 import { logger } from '@/utils/logger';
+import type { TrackedRange } from '@/utils/createdLinkTracker';
 import { getBookLanguage } from './signLanguage';
 
 const MARKDOWN_LINK_WITH_JWLIBRARY =
@@ -384,6 +385,12 @@ export interface CreatedLinkAnchor {
    * when lines above it moved during the lookup.
    */
   uniqueInNote?: boolean;
+  /**
+   * Current offsets of the created text, kept up to date through every edit
+   * (see `CreatedLinkTracker`). When set, the link is found by position, and
+   * the whole created reference (`createdLink`) must still be there unchanged.
+   */
+  range?: TrackedRange;
 }
 
 export interface CreatedLinkQuoteResult {
@@ -424,28 +431,58 @@ export function isLinkUrlUniqueInNote(editor: Editor, linkUrl: string): boolean 
   return findLinesWithLinkUrl(editor, linkUrl).length === 1;
 }
 
+/** Where the created link is now: its line, and its span on that line. */
+interface LocatedLink {
+  line: number;
+  /** Span of the complete created reference on the line, when known. */
+  from?: number;
+  to?: number;
+}
+
 /**
- * Finds the line the created link is on now.
+ * Finds the created link again once its text has arrived.
  *
- * Lines added above it during the lookup — by the user, or by the quote of a
- * link created just before — push it down. It is then looked for elsewhere
- * only when it was the single mention of that verse and still is: otherwise a
- * line with the same URL may be an earlier mention, and quoting it would put
- * the text where the user did not ask for it.
+ * With a tracked range, the very occurrence that was created is followed
+ * through every edit, and it counts only while the whole created reference is
+ * still there as written: a removed or edited part (one range of `Joh 3:16,
+ * 18`) cancels the quote rather than restore it.
+ *
+ * Without one, the link is found by its URL. Lines added above it during the
+ * lookup — by the user, or by the quote of a link created just before — push
+ * it down, and another mention of the same verse may then sit on the recorded
+ * line. So the link is only accepted while its URL is on a single line of the
+ * note: on the recorded line, or elsewhere if it was already the single
+ * mention when it was created.
  */
-function locateCreatedLink(editor: Editor, anchor: CreatedLinkAnchor): number | null {
-  if (
-    anchor.line >= 0 &&
-    anchor.line <= editor.lastLine() &&
-    containsLinkUrl(editor.getLine(anchor.line), anchor.linkUrl)
-  ) {
-    return anchor.line;
+function locateCreatedLink(editor: Editor, anchor: CreatedLinkAnchor): LocatedLink | null {
+  const created = anchor.createdLink?.trim();
+
+  if (anchor.range) {
+    if (!created) return null;
+
+    const from = editor.offsetToPos(anchor.range.from);
+    const to = editor.offsetToPos(anchor.range.to);
+    if (from.line !== to.line || editor.getRange(from, to) !== created) return null;
+
+    return { line: from.line, from: from.ch, to: to.ch };
   }
 
-  if (!anchor.uniqueInNote) return null;
-
   const lines = findLinesWithLinkUrl(editor, anchor.linkUrl);
-  return lines.length === 1 ? lines[0] : null;
+  const line = lines.includes(anchor.line)
+    ? anchor.line
+    : anchor.uniqueInNote && lines.length === 1
+      ? lines[0]
+      : null;
+  if (line === null) return null;
+
+  // Its own quote, right below, may repeat the URL; any other line with it
+  // makes the recorded line ambiguous.
+  const quoteEnd = hasBlockquoteBelow(editor, line) ? findBlockquoteEnd(editor, line + 1) : line;
+  if (lines.some((other) => other < line || other > quoteEnd)) return null;
+  // The whole created reference must still be there, not only its first link.
+  if (created && !editor.getLine(line).includes(created)) return null;
+
+  return { line };
 }
 
 /** Last line of the blockquote or callout that `line` belongs to. */
@@ -471,14 +508,18 @@ function findBlockquoteEnd(editor: Editor, line: number): number {
  * Any other blockquote or callout below is unrelated text, and must not stop
  * the quote from being inserted.
  */
-function hasQuoteBelow(editor: Editor, line: number, linkUrl: string): boolean {
-  if (
-    line >= editor.lastLine() ||
-    !editor
+function hasBlockquoteBelow(editor: Editor, line: number): boolean {
+  return (
+    line < editor.lastLine() &&
+    editor
       .getLine(line + 1)
       .trim()
       .startsWith('>')
-  ) {
+  );
+}
+
+function hasQuoteBelow(editor: Editor, line: number, linkUrl: string): boolean {
+  if (!hasBlockquoteBelow(editor, line)) {
     return false;
   }
 
@@ -500,19 +541,26 @@ function hasQuoteBelow(editor: Editor, line: number, linkUrl: string): boolean {
 function isOnlyCreatedLinkOnLine(
   lineText: string,
   anchor: CreatedLinkAnchor,
+  located: LocatedLink,
   decorations: LinkDecorations,
 ): boolean {
-  const created =
-    anchor.createdLink?.trim() ||
-    lineText
-      .match(MARKDOWN_LINK_WITH_JWLIBRARY)
-      ?.find((link) => containsLinkUrl(link, anchor.linkUrl));
+  let rest: string;
 
-  if (!created || !lineText.includes(created)) {
-    return false;
+  if (located.from !== undefined && located.to !== undefined) {
+    rest = lineText.slice(0, located.from) + lineText.slice(located.to);
+  } else {
+    const created =
+      anchor.createdLink?.trim() ||
+      lineText
+        .match(MARKDOWN_LINK_WITH_JWLIBRARY)
+        ?.find((link) => containsLinkUrl(link, anchor.linkUrl));
+
+    if (!created || !lineText.includes(created)) {
+      return false;
+    }
+
+    rest = lineText.replace(created, '');
   }
-
-  const rest = lineText.replace(created, '');
 
   return !rest.includes('jwlibrary:///') && isLinkStandaloneOnLine(rest, decorations);
 }
@@ -559,15 +607,17 @@ export async function insertBibleQuoteForCreatedLink(
     return { inserted: false, alreadyExists: false, fetchFailed: false, anchorLost: true };
   }
 
-  const targetLine = locateCreatedLink(editor, anchor);
+  const located = locateCreatedLink(editor, anchor);
 
-  if (targetLine === null) {
+  if (located === null) {
     logger.warn(
       'insertBibleQuoteForCreatedLink: created link no longer found, skipping insertion',
       anchor.linkUrl,
     );
     return { inserted: false, alreadyExists: false, fetchFailed: false, anchorLost: true };
   }
+
+  const targetLine = located.line;
 
   if (hasQuoteBelow(editor, targetLine, anchor.linkUrl)) {
     logger.log(`insertBibleQuoteForCreatedLink: line ${targetLine} is already quoted`);
@@ -580,7 +630,7 @@ export async function insertBibleQuoteForCreatedLink(
   // otherwise the link the user just created would be deleted.
   const standalone =
     settings.bibleQuote.template.includes('{bibleRefLinked}') &&
-    isOnlyCreatedLinkOnLine(targetText, anchor, settings);
+    isOnlyCreatedLinkOnLine(targetText, anchor, located, settings);
 
   // A link inside a blockquote or callout gets its quote after the whole
   // block, so the block is not split in two. A link in a plain paragraph keeps

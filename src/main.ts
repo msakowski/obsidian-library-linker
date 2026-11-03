@@ -9,6 +9,8 @@ import { OnlineBibleCitationProvider } from '@/services/OnlineBibleCitationProvi
 import { ConfiguredBibleCitationProvider } from '@/services/ConfiguredBibleCitationProvider';
 import { BibleEpubImportService } from '@/services/BibleEpubImportService';
 import { AutoBibleQuoteInserter } from '@/services/AutoBibleQuoteInserter';
+import { createCreatedLinkTrackingExtension } from '@/services/createdLinkTrackingExtension';
+import { CreatedLinkTracker } from '@/utils/createdLinkTracker';
 import { getOfflineBibleVaultPath } from '@/services/PluginDataPathService';
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 import { loadBibleBooks } from '@/stores/bibleBooks';
@@ -99,11 +101,16 @@ export default class JWLibraryLinkerPlugin extends Plugin {
       this.t,
     );
 
+    const createdLinkTracker = new CreatedLinkTracker();
+    const tracking = createCreatedLinkTrackingExtension(createdLinkTracker);
+    this.registerEditorExtension(tracking.extension);
+
     this.autoBibleQuoteInserter = new AutoBibleQuoteInserter(
       () => this.settings,
       this.bibleCitationProvider,
       this.t,
-      (editor) => this.getEditorFilePath(editor),
+      (editor) => tracking.getFilePath(editor) ?? this.getEditorFilePath(editor),
+      createdLinkTracker,
     );
     this.register(() => this.autoBibleQuoteInserter.dispose());
 
