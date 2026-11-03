@@ -21,16 +21,28 @@ jobs:
         with:
           token: ${{ secrets.USER_TOKEN }}
 
-      - name: Install changesets cli
-        run: npm i -D @changesets/cli @changesets/changelog-github
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Create changesets PR or Publish
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
-          title: 🚀 Release new version
-          version: npm run version
-          publish: npm run release
+          github-token: ${{ secrets.USER_TOKEN }}
+          pr-title: 🚀 Release new version
+          version-script: pnpm run version
+          publish-script: pnpm run release
+          push-with-git-cli: true
+          # The release script pushes version tags; release.yml creates GitHub releases.
+          create-github-releases: false
+          push-git-tags: false
         env:
-          GITHUB_TOKEN: ${{ secrets.USER_TOKEN }}
           SKIP_SIMPLE_GIT_HOOKS: 1
