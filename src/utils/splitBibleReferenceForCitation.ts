@@ -2,7 +2,8 @@ import type { BibleReference } from '@/types';
 
 /**
  * Highest verse number of any chapter in the Bible (Psalm 119).
- * Used as the end of an open range when a part runs to the end of a chapter.
+ * Used as the upper bound of a part that runs to the end of its chapter
+ * (see `VerseRange.toChapterEnd`).
  */
 export const MAX_VERSES_IN_CHAPTER = 176;
 
@@ -34,10 +35,15 @@ export function splitBibleReferenceForCitation(reference: BibleReference): Bible
         book,
         chapter: current,
         verseRanges: [
-          {
-            start: current === chapter ? start : 1,
-            end: current === endChapter ? end : MAX_VERSES_IN_CHAPTER,
-          },
+          current === endChapter
+            ? { start: current === chapter ? start : 1, end }
+            : {
+                start: current === chapter ? start : 1,
+                // `end` stays a valid upper bound for providers that scan
+                // verse by verse; the flag marks the open end explicitly.
+                end: MAX_VERSES_IN_CHAPTER,
+                toChapterEnd: true,
+              },
         ],
       });
     }

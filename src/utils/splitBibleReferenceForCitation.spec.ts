@@ -40,7 +40,11 @@ describe('splitBibleReferenceForCitation', () => {
     const reference = { book: 40, chapter: 3, endChapter: 4, verseRanges: [{ start: 1, end: 11 }] };
 
     expect(splitBibleReferenceForCitation(reference)).toEqual([
-      { book: 40, chapter: 3, verseRanges: [{ start: 1, end: MAX_VERSES_IN_CHAPTER }] },
+      {
+        book: 40,
+        chapter: 3,
+        verseRanges: [{ start: 1, end: MAX_VERSES_IN_CHAPTER, toChapterEnd: true }],
+      },
       { book: 40, chapter: 4, verseRanges: [{ start: 1, end: 11 }] },
     ]);
   });
@@ -55,10 +59,27 @@ describe('splitBibleReferenceForCitation', () => {
     };
 
     expect(splitBibleReferenceForCitation(reference)).toEqual([
-      { book: 40, chapter: 24, verseRanges: [{ start: 14, end: MAX_VERSES_IN_CHAPTER }] },
-      { book: 40, chapter: 25, verseRanges: [{ start: 1, end: MAX_VERSES_IN_CHAPTER }] },
+      {
+        book: 40,
+        chapter: 24,
+        verseRanges: [{ start: 14, end: MAX_VERSES_IN_CHAPTER, toChapterEnd: true }],
+      },
+      {
+        book: 40,
+        chapter: 25,
+        verseRanges: [{ start: 1, end: MAX_VERSES_IN_CHAPTER, toChapterEnd: true }],
+      },
       { book: 40, chapter: 26, verseRanges: [{ start: 1, end: 2 }] },
     ]);
+  });
+
+  test('leaves an explicit end verse unflagged, even at the maximum verse number', () => {
+    const reference = { book: 19, chapter: 119, verseRanges: [{ start: 170, end: 176 }] };
+
+    expect(splitBibleReferenceForCitation(reference)).toEqual([reference]);
+    expect(splitBibleReferenceForCitation(reference)[0].verseRanges?.[0].toChapterEnd).toBe(
+      undefined,
+    );
   });
 
   test('ignores an end chapter that equals the start chapter', () => {
