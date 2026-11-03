@@ -276,7 +276,14 @@ describe('insertAllBibleQuotes', () => {
 
       expect(result.inserted).toBe(1);
       expect((BibleTextFetcher.fetchBibleText as Mock).mock.calls).toEqual([
-        [{ book: 40, chapter: 3, verseRanges: [{ start: 1, end: MAX_VERSES_IN_CHAPTER }] }, 'E'],
+        [
+          {
+            book: 40,
+            chapter: 3,
+            verseRanges: [{ start: 1, end: MAX_VERSES_IN_CHAPTER, toChapterEnd: true }],
+          },
+          'E',
+        ],
         [{ book: 40, chapter: 4, verseRanges: [{ start: 1, end: 11 }] }, 'E'],
       ]);
       expect(mockTransaction).toHaveBeenCalledWith({

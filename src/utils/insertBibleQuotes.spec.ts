@@ -65,7 +65,7 @@ describe.each([
     url: MATTHEW_3_1_TO_4_11,
     label: 'Mt 3:1-4:11',
     parts: [
-      { chapter: 3, start: 1, end: MAX_VERSES_IN_CHAPTER },
+      { chapter: 3, start: 1, end: MAX_VERSES_IN_CHAPTER, toChapterEnd: true },
       { chapter: 4, start: 1, end: 11 },
     ],
   },
@@ -73,15 +73,15 @@ describe.each([
     url: MATTHEW_3_13_TO_4_2,
     label: 'Mt 3:13-4:2',
     parts: [
-      { chapter: 3, start: 13, end: MAX_VERSES_IN_CHAPTER },
+      { chapter: 3, start: 13, end: MAX_VERSES_IN_CHAPTER, toChapterEnd: true },
       { chapter: 4, start: 1, end: 2 },
     ],
   },
 ])('quoting the real cross-chapter link $label', ({ url, label, parts }): void => {
-  const expectedCalls = parts.map(({ chapter, start, end }) => ({
+  const expectedCalls = parts.map(({ chapter, ...range }) => ({
     book: 40,
     chapter,
-    verseRanges: [{ start, end }],
+    verseRanges: [range],
   }));
   // The quote keeps the label and target of the whole reference, not of its parts.
   const expectedQuote = `[${label}](${url})\n> Chapter 3. Chapter 4.`;
