@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Formatering av bibelsitat
     description: Angi hvordan bibelsitater skal formateres når de settes inn
+    autoInsert:
+      name: Sett inn sitat automatisk
+      description: Når dette er på, hentes bibelsitatet og settes inn rett etter at en lenke er opprettet fra forslagene. Krever internettforbindelse eller en importert frakoblet bibel.
     presets:
       name: Malforvalg
       short: Lenke + sitat

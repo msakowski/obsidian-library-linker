@@ -40,6 +40,7 @@ export const BIBLE_QUOTE_TEMPLATES = {
 
 interface BibleQuoteSettings {
   template: string; // Template for quote formatting
+  autoInsertOnLinkCreation: boolean; // Insert the quote right after the suggester created a link
 }
 
 interface OfflineBibleSettings {

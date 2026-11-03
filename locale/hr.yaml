@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Oblikovanje biblijskog citata
     description: Konfigurirajte oblikovanje biblijskih citata prilikom umetanja
+    autoInsert:
+      name: Automatski umetni citat
+      description: Kada je uključeno, biblijski se tekst dohvaća i umeće odmah nakon što se poveznica izradi iz prijedloga. Potrebna je internetska veza ili uvezena offline Biblija.
     presets:
       name: Predlošci predložaka
       short: Link + citat

@@ -111,4 +111,25 @@ describe('findJWLibraryLinks', () => {
       },
     });
   });
+
+  test('should keep the ending chapter of a cross-chapter range', () => {
+    const [link] = findJWLibraryLinksInLine('jwlibrary:///finder?bible=40003013-40004002', 0);
+
+    expect(link.reference).toEqual({
+      book: 40,
+      chapter: 3,
+      endChapter: 4,
+      verseRanges: [{ start: 13, end: 2 }],
+    });
+  });
+
+  test('should not add an ending chapter to a range inside one chapter', () => {
+    const [link] = findJWLibraryLinksInLine('jwlibrary:///finder?bible=40005003-40005005', 0);
+
+    expect(link.reference).toEqual({
+      book: 40,
+      chapter: 5,
+      verseRanges: [{ start: 3, end: 5 }],
+    });
+  });
 });

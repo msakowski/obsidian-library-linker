@@ -90,6 +90,49 @@ describe('VaultOfflineBibleRepository', () => {
     expect(text).toBeNull();
   });
 
+  test('getVerseRange clamps a range that runs past the end of the chapter', async () => {
+    const adapter = createInMemoryAdapter();
+    const repo = new VaultOfflineBibleRepository(adapter, ROOT);
+    await repo.saveCorpus(makeMetadata(), [makeChapter()]);
+
+    const text = await repo.getVerseRange(
+      { book: 1, chapter: 1, verseRanges: [{ start: 2, end: 176 }] },
+      'X',
+    );
+    expect(text).toBe('Die Erde war leer.');
+  });
+
+  test('getVerseRange fails a range that ends past the last verse of the chapter', async () => {
+    const adapter = createInMemoryAdapter();
+    const repo = new VaultOfflineBibleRepository(adapter, ROOT);
+    await repo.saveCorpus(makeMetadata(), [makeChapter()]);
+
+    // Only the open end of a cross-chapter part may run past the chapter;
+    // a typo such as verse 40 must not give a partial quote.
+    const text = await repo.getVerseRange(
+      { book: 1, chapter: 1, verseRanges: [{ start: 1, end: 40 }] },
+      'X',
+    );
+    expect(text).toBeNull();
+  });
+
+  test('getVerseRange skips a verse the translation omits', async () => {
+    const adapter = createInMemoryAdapter();
+    const repo = new VaultOfflineBibleRepository(adapter, ROOT);
+    // Like Matt. 17:21 in the NWT: the chapter has no verse 2.
+    await repo.saveCorpus(makeMetadata(), [makeChapter({ verses: { '1': 'A', '3': 'C' } })]);
+
+    expect(
+      await repo.getVerseRange({ book: 1, chapter: 1, verseRanges: [{ start: 1, end: 176 }] }, 'X'),
+    ).toBe('A C');
+    expect(
+      await repo.getVerseRange({ book: 1, chapter: 1, verseRanges: [{ start: 1, end: 3 }] }, 'X'),
+    ).toBe('A C');
+    expect(
+      await repo.getVerseRange({ book: 1, chapter: 1, verseRanges: [{ start: 2, end: 2 }] }, 'X'),
+    ).toBeNull();
+  });
+
   test('getVerseRange concatenates multiple verses with a single space', async () => {
     const adapter = createInMemoryAdapter();
     const repo = new VaultOfflineBibleRepository(adapter, ROOT);

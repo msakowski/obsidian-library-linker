@@ -45,7 +45,7 @@ describe('searchable settings', (): void => {
     const tab = await createTab();
     const repository = vi.spyOn(tab.plugin, 'getOfflineBibleRepository');
     const groups = getGroups(tab);
-    expect(groups.map((group) => group.items?.length)).toEqual([5, 8, 3, 5]);
+    expect(groups.map((group) => group.items?.length)).toEqual([5, 8, 4, 5]);
     expect(
       groups.flatMap((group) => group.items ?? []).map((item) => ('name' in item ? item.name : '')),
     ).toEqual([
@@ -62,6 +62,7 @@ describe('searchable settings', (): void => {
       'Font style',
       'Style presets',
       'Link preview',
+      'Insert quote automatically',
       'Quote template',
       'Template presets',
       'Bible quote preview',
