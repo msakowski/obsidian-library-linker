@@ -419,6 +419,26 @@ describe('AutoBibleQuoteInserter', () => {
       );
     });
 
+    test('quotes a link created again after the pending one was removed', async () => {
+      const link = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!.trim();
+      const editor = createEditor(link);
+      const inserter = createInserter();
+
+      inserter.scheduleForCreatedLink(editor, JOHN_3_16, link, { line: 0, ch: 0 });
+      // The link is undone, then created again on the same line.
+      editor.transaction({
+        changes: [{ from: { line: 0, ch: 0 }, to: { line: 0, ch: link.length }, text: '' }],
+      });
+      editor.transaction({
+        changes: [{ from: { line: 0, ch: 0 }, to: { line: 0, ch: 0 }, text: link }],
+      });
+      inserter.scheduleForCreatedLink(editor, JOHN_3_16, link, { line: 0, ch: 0 });
+      release();
+
+      await vi.waitFor(() => expect(editor.getContent()).toBe(`${link}\n> ${QUOTE}\n`));
+      expect(getCitation).toHaveBeenCalledTimes(2);
+    });
+
     describe.each([
       ['with tracking', true],
       ['without tracking', false],

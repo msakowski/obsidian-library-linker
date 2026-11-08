@@ -12,6 +12,14 @@ import type { CreatedLinkTracker, TrackedRange } from '@/utils/createdLinkTracke
 
 type TranslateFn = (key: string, variables?: Record<string, string>) => string;
 
+/** A link whose quote is being fetched. */
+interface PendingLink {
+  /** The created text, without its surrounding whitespace. */
+  text: string;
+  /** Where that text currently sits, when it is tracked. */
+  range?: TrackedRange;
+}
+
 /**
  * Inserts a Bible quote right after the suggester created a link, when the
  * user opted in to it.
@@ -27,7 +35,7 @@ export class AutoBibleQuoteInserter {
    * twice. Scoped to the editor and note: the same verse on the same line of
    * another note is a different link.
    */
-  private readonly inFlight = new WeakMap<Editor, Set<string>>();
+  private readonly inFlight = new WeakMap<Editor, Map<string, PendingLink>>();
 
   /** Set on plugin unload: lookups still pending must not touch any note. */
   private disposed = false;
@@ -78,12 +86,16 @@ export class AutoBibleQuoteInserter {
     const isSameNote = () => this.getEditorFilePath(editor) === filePath;
 
     const key = `${filePath}:${line}:${linkUrl}`;
-    const editorInFlight = this.inFlight.get(editor) ?? new Set<string>();
-    if (editorInFlight.has(key)) return;
-    editorInFlight.add(key);
-    this.inFlight.set(editor, editorInFlight);
+    const editorInFlight = this.inFlight.get(editor) ?? new Map<string, PendingLink>();
+    const previous = editorInFlight.get(key);
+    // A lookup whose link was removed meanwhile (undone, then created again
+    // on the same line) can no longer quote it: this creation gets its own.
+    if (previous && this.isStillWritten(editor, previous)) return;
 
     const range = this.trackCreatedLink(editor, createdLink, at);
+    const pending: PendingLink = { text: createdLink.trim(), range };
+    editorInFlight.set(key, pending);
+    this.inFlight.set(editor, editorInFlight);
 
     void this.insertNow(
       editor,
@@ -91,9 +103,18 @@ export class AutoBibleQuoteInserter {
       { line, linkUrl, createdLink, uniqueInNote: isLinkUrlUniqueInNote(editor, linkUrl), range },
       isSameNote,
     ).finally(() => {
-      editorInFlight.delete(key);
+      if (editorInFlight.get(key) === pending) editorInFlight.delete(key);
       if (range) this.tracker?.release(editor, range);
     });
+  }
+
+  /** Whether a pending link is still in the note as it was written. */
+  private isStillWritten(editor: Editor, pending: PendingLink): boolean {
+    // Without tracking, the link cannot be told apart from a new one.
+    if (!pending.range) return true;
+
+    const { from, to } = pending.range;
+    return editor.getRange(editor.offsetToPos(from), editor.offsetToPos(to)) === pending.text;
   }
 
   /**
