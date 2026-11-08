@@ -50,8 +50,10 @@ export function parseJWLibraryLink(url: string): BibleReference | null {
       book: startRef.book,
       chapter: startRef.chapter,
       // A cross-chapter range (e.g. Matt. 3:1-4:11) keeps its last chapter,
-      // otherwise the end verse would be read inside the first chapter.
-      ...(endRef.chapter > startRef.chapter && { endChapter: endRef.chapter }),
+      // otherwise the end verse would be read inside the first chapter. The
+      // end of a range spanning two books is not a chapter of the first one.
+      ...(endRef.book === startRef.book &&
+        endRef.chapter > startRef.chapter && { endChapter: endRef.chapter }),
       verseRanges: [
         {
           start: startRef.verseRanges![0].start,

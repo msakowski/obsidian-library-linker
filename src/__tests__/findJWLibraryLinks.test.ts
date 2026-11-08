@@ -132,4 +132,11 @@ describe('findJWLibraryLinks', () => {
       verseRanges: [{ start: 3, end: 5 }],
     });
   });
+
+  test('should not take the ending chapter from another book', () => {
+    // Matt. 27:1 - Mark 28:1 is not a chapter range of Matthew
+    const [link] = findJWLibraryLinksInLine('jwlibrary:///finder?bible=40027001-41028001', 0);
+
+    expect(link.reference.endChapter).toBeUndefined();
+  });
 });
