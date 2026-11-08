@@ -405,11 +405,12 @@ export interface CreatedLinkQuoteResult {
  * Whether `text` contains `linkUrl` as a whole URL.
  *
  * A URL without a language parameter is a prefix of a longer range that starts
- * with the same verse (`bible=43003016` in `bible=43003016-43003018`).
+ * with the same verse (`bible=43003016` in `bible=43003016-43003018`), and a
+ * language code can be a prefix of another one (`wtlocale=F` in `wtlocale=FI`).
  */
 function containsLinkUrl(text: string, linkUrl: string): boolean {
   for (let index = text.indexOf(linkUrl); index !== -1; index = text.indexOf(linkUrl, index + 1)) {
-    if (!/[\d-]/.test(text.charAt(index + linkUrl.length))) return true;
+    if (!/[\w&=-]/.test(text.charAt(index + linkUrl.length))) return true;
   }
 
   return false;

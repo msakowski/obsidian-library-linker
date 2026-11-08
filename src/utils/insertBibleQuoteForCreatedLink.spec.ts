@@ -532,4 +532,24 @@ describe('insertBibleQuoteForCreatedLink', () => {
     expect(result.alreadyExists).toBe(false);
     expect(result.inserted).toBe(true);
   });
+
+  test('does not take the quote of another language for the quote of this link', async () => {
+    // French (`F`) is a prefix of Finnish (`FI`)
+    settings.language = 'F';
+    const url = 'jwlibrary:///finder?bible=43003016&wtlocale=F';
+    const link = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!.trim();
+    expect(link).toContain(`(${url})`);
+    const editor = createFakeEditor(
+      `${link} in a sentence\n> [Joh 3:16](jwlibrary:///finder?bible=43003016&wtlocale=FI)\n> Text.`,
+    );
+
+    const result = await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 0,
+      linkUrl: url,
+      createdLink: link,
+    });
+
+    expect(result.alreadyExists).toBe(false);
+    expect(result.inserted).toBe(true);
+  });
 });
