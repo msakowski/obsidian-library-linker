@@ -86,6 +86,8 @@ export class VaultOfflineBibleRepository implements OfflineBibleRepository {
       // Only the open end of a part split from a cross-chapter reference runs
       // to the chapter's last verse. An explicit end is taken as written, so a
       // range past the chapter fails below rather than giving a partial quote.
+      // No verse counts are stored, so a missing last verse of the chapter
+      // goes unnoticed in an open-ended part.
       const end = range.toChapterEnd ? lastVerse : range.end;
       if (range.start > end) return null;
 

@@ -4,7 +4,9 @@
  * an offline chapter legitimately has no text for them.
  *
  * Keys are `book:chapter:verse`. Any other verse missing from an offline
- * chapter is incomplete data, not an omission.
+ * chapter is incomplete data, not an omission. A fixed list rather than data
+ * recorded at import: the importer cannot tell an omitted verse from a failed
+ * extraction, and the list also covers corpora imported before it existed.
  */
 const OMITTED_VERSES: ReadonlySet<string> = new Set([
   '40:17:21', // Matthew 17:21
