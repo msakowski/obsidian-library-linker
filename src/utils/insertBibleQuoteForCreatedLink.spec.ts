@@ -227,6 +227,22 @@ describe('insertBibleQuoteForCreatedLink', () => {
     expect(editor.getCursor()).toEqual({ line: 3, ch: 0 });
   });
 
+  test('does not leave a selection on a reference the quote replaced', async () => {
+    const link = createdLink(JOHN_3_16);
+    const editor = createFakeEditor(`intro\n${link}`);
+    // Part of the link is selected while the text is loading.
+    editor.setSelection({ line: 1, ch: 1 }, { line: 1, ch: 4 });
+
+    await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 1,
+      linkUrl: JOHN_3_16_URL,
+    });
+
+    expect(editor.getContent()).toBe(`intro\n${link.trim()}\n> ${QUOTE}\n`);
+    expect(editor.getCursor('anchor')).toEqual({ line: 3, ch: 0 });
+    expect(editor.getCursor('head')).toEqual({ line: 3, ch: 0 });
+  });
+
   test('puts the cursor on a blank line between the quote and the text below', async () => {
     const link = createdLink(JOHN_3_16);
     const editor = createFakeEditor(`${link}\nAn existing paragraph.`, {

@@ -652,12 +652,12 @@ export async function insertBibleQuoteForCreatedLink(
 
   const insertedLineBreaks = change.text.split('\n').length - 1;
 
-  const hasSelection =
-    selectionBefore.anchor.line !== selectionBefore.head.line ||
-    selectionBefore.anchor.ch !== selectionBefore.head.ch;
+  const onReplacedLine =
+    selectionBefore.anchor.line === targetLine || selectionBefore.head.line === targetLine;
 
-  if (standalone && !hasSelection && selectionBefore.head.line === targetLine) {
-    // The reference became the quote — carry on below it.
+  if (standalone && onReplacedLine) {
+    // The reference became the quote — carry on below it. A selection on the
+    // replaced line has no text left to follow.
     placeCursorAfterQuote(editor, targetLine, quoteText);
   } else {
     // The user is still writing or selecting elsewhere: keep their selection.
