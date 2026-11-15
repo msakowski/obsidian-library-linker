@@ -4,6 +4,7 @@ Consult this reference when changing Obsidian UI, DOM handling, networking, styl
 
 ## API conventions (DOM, timers, popouts)
 
+- For DOM type checks, use `node?.instanceOf(HTMLElement)` so elements from popout windows are recognized; guard nullable nodes.
 - `document` → `activeDocument` (so popout windows hit their own DOM).
 - Timers — `setTimeout`/`clearTimeout`/`setInterval`/`clearInterval`/`requestAnimationFrame`/`cancelAnimationFrame` → `window.X`. **Not `activeWindow.X`** — the rule complains either way for timers.
 - Browser timer handles are `number`; `ReturnType<typeof setTimeout>` can resolve to a server-runtime handle instead.

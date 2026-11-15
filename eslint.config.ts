@@ -8,7 +8,11 @@ export default defineConfig(
     ignores: ['node_modules/**', '.claude', '.worktrees', '*.js', '*.mjs', 'dist/**'],
   },
   ...obsidianmd.configs.recommended,
-  eslintPluginPrettierRecommended,
+  {
+    ...eslintPluginPrettierRecommended,
+    // The Obsidian preset also selects plain-text files such as LICENSE.
+    files: ['**/*.ts', '**/*.tsx', 'manifest.json'],
+  },
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {

@@ -242,7 +242,7 @@ export class BibleTextFetcher {
 
     while (Date.now() < deadline) {
       const webview = leaf.view.containerEl.querySelector('webview');
-      if (webview instanceof HTMLElement) {
+      if (webview?.instanceOf(HTMLElement)) {
         return webview;
       }
       await this.delay(100);
