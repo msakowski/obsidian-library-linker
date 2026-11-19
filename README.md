@@ -49,6 +49,8 @@ Complete references prefer exact book names and abbreviations. For example, Norw
 | Multi-chapter        | `/b mat 3:1-4:11`            | Matthew 3:1–4:11          |
 | Single-chapter books | `/b jude 3`                  | Jude 3                    |
 
+Use `John 3` for a whole chapter, or `Jude 1:*` for the whole chapter of a single-chapter book. `Jude 5` still means verse 5. Chapter links use verse `000` as the navigation target; JW Library controls how the chapter is displayed and highlighted. Quote insertion requires specific verses and leaves whole-chapter links intact.
+
 ### 2. Insert Bible Quotes
 
 Fetch actual Bible text from jw\.org and insert it directly into your notes.

@@ -1,5 +1,5 @@
 import { findBook } from '@/utils/findBook';
-import { SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
+import { chapterCounts, SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
 import type { Language, VerseRange, BibleReference } from '@/types';
 import { logger } from '@/utils/logger';
 
@@ -114,11 +114,11 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   // but we need "요한1서" + "1:1" to correctly identify 1 John.
   const fullPrefix = bookName + remainder;
   const colonIdx = fullPrefix.indexOf(':');
-  if (colonIdx > 0) {
-    const beforeColon = fullPrefix.substring(0, colonIdx);
+  {
+    const bookSearchPrefix = colonIdx > 0 ? fullPrefix.substring(0, colonIdx) : fullPrefix;
     // Try progressively longer book names (from longest to the greedy minimum)
-    for (let i = beforeColon.length - 1; i > bookName.length - 1; i--) {
-      const candidateBook = beforeColon.substring(0, i);
+    for (let i = bookSearchPrefix.length - 1; i > bookName.length - 1; i--) {
+      const candidateBook = bookSearchPrefix.substring(0, i);
       const candidateRemainder = fullPrefix.substring(i);
       // Only consider if remainder starts with a digit (valid chapter start)
       if (/^\d/.test(candidateRemainder)) {
@@ -171,10 +171,14 @@ export function parseBibleReference(input: string, language: Language): BibleRef
   let actualVersesPart: string;
 
   if (!hasColon) {
-    // No colon - format is "Book verse"
+    // No colon: chapter for multi-chapter books, verse for single-chapter books
     if (!isSingleChapterBook) {
-      // Multi-chapter books require "chapter:verse" format
-      throw new Error('errors.invalidFormat');
+      if (!/^\d+$/.test(numberPart)) throw new Error('errors.invalidFormat');
+      chapter = Number(numberPart);
+      if (chapter < 1 || chapter > chapterCounts[book.id]) {
+        throw new Error('errors.invalidChapter');
+      }
+      return { book: book.id, chapter };
     }
     // For single-chapter books, treat numberPart as verse
     chapter = 1;
@@ -184,9 +188,14 @@ export function parseBibleReference(input: string, language: Language): BibleRef
     chapter = parseInt(numberPart, 10);
     actualVersesPart = versesPart as string; // TypeScript: versesPart is defined when hasColon is true
 
-    if (chapter < 1 || (book.chapters !== undefined && chapter > book.chapters)) {
+    if (chapter < 1 || chapter > chapterCounts[book.id]) {
       throw new Error('errors.invalidChapter');
     }
+  }
+
+  if (actualVersesPart === '*') {
+    if (!/^\d+$/.test(numberPart)) throw new Error('errors.invalidFormat');
+    return { book: book.id, chapter };
   }
 
   // Check for multi-chapter reference (e.g., "1-4:11" meaning verse 1 to chapter 4 verse 11)

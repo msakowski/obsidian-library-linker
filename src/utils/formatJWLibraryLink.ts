@@ -12,15 +12,13 @@ export function formatJWLibraryLink(
     throw new Error('errors.bookNotFound');
   }
 
-  if (!verseRanges) {
-    throw new Error('errors.invalidReferenceFormat');
-  }
-
   const link = (range: string) =>
     `jwlibrary:///finder?bible=${range}${language ? `&wtlocale=${language}` : ''}`;
 
   const padRange = (book: number, chapter: number, start: number) =>
     `${padBook(book)}${padChapter(chapter)}${padVerse(start)}`;
+
+  if (!verseRanges) return link(padRange(book, chapter, 0));
 
   // For a single range, return a single string
   if (verseRanges.length === 1) {
