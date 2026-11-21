@@ -204,7 +204,6 @@ async function openOfflineBibleFolder(tab: SettingsTabContext): Promise<void> {
     await tab.app.vault.adapter.mkdir(vaultPath);
   }
   const folderPath = getOfflineBibleAbsolutePath(tab.app, tab.plugin.manifest.id);
-  // eslint-disable-next-line @typescript-eslint/no-require-imports -- dynamic require for desktop-only Electron API
   const { shell } = require('electron') as typeof import('electron');
   const error = await shell.openPath(folderPath);
 

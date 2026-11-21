@@ -4,7 +4,7 @@ This is the sole agent instruction file for JW Library Linker, an Obsidian commu
 
 ## Start here
 
-1. Read [Business rules](documentation/Business%20Rules.md), the latest `documentation/history/yyyy-mm-dd.md`, and any active plans relevant to the task under `documentation/plans/`.
+1. Read [Business rules](documentation/Business%20Rules.md) and any active plans relevant to the task under `documentation/plans/`. Consult existing history only when it provides relevant context.
 2. Inspect `git status`, the current branch, and relevant code before editing. Preserve unrelated changes; never reset, stash, overwrite, or commit someone else's work implicitly.
 3. Read [Architecture and testing](documentation/Architecture.md) for affected components and [Obsidian development](documentation/Obsidian%20Development.md) for UI, networking, styles, or catalog work. Consult installed `node_modules/obsidian/obsidian.d.ts` before using or extending Obsidian APIs; do not guess signatures.
 4. Follow the user's explicit scope. For implementation requests, carry the workflow below through a reviewable PR unless the user limits the task to local edits, investigation, or a draft.
@@ -64,7 +64,8 @@ Tests and builds do not prove GUI behavior. For UI or runtime changes, state wha
 ## Documentation and changesets
 
 - `README.md` is the landing page; `docs/` is for end users when present; `documentation/` is for architecture, business rules, history, and plans. `DEVELOPMENT.md` covers local setup and `LOCALIZATION.md` covers translations.
-- Update today's `documentation/history/yyyy-mm-dd.md` with changes, decisions, validation, and blockers. Store actionable plans in `documentation/plans/`; update or close them as work progresses. Plans never include timing estimates. Keep durable instructions free of session-specific state.
+- Report task changes, review findings, validation, and blockers in the final response and PR description where applicable. Record durable decisions in the relevant project documentation. Create or update daily files in `documentation/history/` only when explicitly requested; routine work must not leave session logs in the checkout.
+- Store actionable plans in `documentation/plans/`; update or close them as work progresses. Plans never include timing estimates. Keep durable instructions free of session-specific state.
 - Add or update a `.changeset/<descriptive-name>.md` when the released plugin changes: `'jw-library-linker': patch` for fixes or `minor` for features. Request approval for breaking behavior and a major release. Docs-only, test-only, CI-only, and development-tooling changes need no changeset unless they alter shipped behavior/artifacts. Reuse an existing changeset only when it covers the same logical change.
 - Do not manually bump versions for ordinary changes; Changesets and the existing release workflow handle versioning. Releases require explicit instructions; see [release checks](documentation/Obsidian%20Development.md#release-checks).
 
