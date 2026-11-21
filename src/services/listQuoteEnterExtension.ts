@@ -1,5 +1,6 @@
 import { Prec, type EditorState, type TransactionSpec } from '@codemirror/state';
 import { keymap } from '@codemirror/view';
+import { getQuoteNesting } from '@/utils/insertBibleQuotes';
 
 const LIST_ITEM = /^(\s*)([-*+]|\d+[.)])(\s+)(\[.\]\s+)?/;
 const JW_LIBRARY_LINK = 'jwlibrary:///';
@@ -24,7 +25,8 @@ export function continueListAfterQuote(state: EditorState): TransactionSpec | nu
   if (!item) return null;
 
   const [, leading, marker, spacing, task] = item;
-  const nestedIndent = leading + ' '.repeat(marker.length + spacing.length);
+  // The indentation the quote inserter gives a quote nested in this item
+  const nestedIndent = getQuoteNesting(line.text).indent;
   const isNested = (number: number) => {
     const text = state.doc.line(number).text;
     return text.startsWith(nestedIndent) && text.trim().length > 0;

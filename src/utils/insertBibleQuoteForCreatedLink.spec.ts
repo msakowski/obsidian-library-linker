@@ -147,6 +147,39 @@ describe('insertBibleQuoteForCreatedLink', () => {
     expect(editor.getContent()).toBe(content);
   });
 
+  test('writes nothing when the quote it wrote earlier follows a blank line', async () => {
+    const link = createdLink(JOHN_3_16);
+    const content = `As we read in ${link}\n\n${link.trim()}\n> ${QUOTE}`;
+    const editor = createFakeEditor(content);
+
+    const result = await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 0,
+      linkUrl: JOHN_3_16_URL,
+    });
+
+    expect(result.alreadyExists).toBe(true);
+    expect(editor.getContent()).toBe(content);
+  });
+
+  test('puts the quote before a paragraph that mentions the same verse again', async () => {
+    const link = createdLink(JOHN_3_16);
+    const content = `As we read in ${link}\n\nLater, ${link.trim()} again`;
+    const editor = createFakeEditor(content);
+    const from = content.indexOf(link.trim());
+
+    const result = await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 0,
+      linkUrl: JOHN_3_16_URL,
+      createdLink: link,
+      range: { from, to: from + link.trim().length },
+    });
+
+    expect(result.inserted).toBe(true);
+    expect(editor.getContent()).toBe(
+      `As we read in ${link}\n\n${link.trim()}\n> ${QUOTE}\n\nLater, ${link.trim()} again`,
+    );
+  });
+
   test('quotes a link that sits right above an unrelated blockquote', async () => {
     const link = createdLink(JOHN_3_16);
     const editor = createFakeEditor(`${link}\n> Something else entirely`, {

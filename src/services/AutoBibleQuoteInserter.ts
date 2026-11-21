@@ -100,7 +100,15 @@ export class AutoBibleQuoteInserter {
     void this.insertNow(
       editor,
       reference,
-      { line, linkUrl, createdLink, uniqueInNote: isLinkUrlUniqueInNote(editor, linkUrl), range },
+      {
+        line,
+        linkUrl,
+        createdLink,
+        // Only the line-based fallback needs it; a tracked link spares a scan
+        // of the whole note on every created link.
+        uniqueInNote: range ? undefined : isLinkUrlUniqueInNote(editor, linkUrl),
+        range,
+      },
       isSameNote,
     ).finally(() => {
       if (editorInFlight.get(key) === pending) editorInFlight.delete(key);

@@ -159,7 +159,7 @@ const LIST_ITEM_PREFIX = /^(\s*)([-*+]|\d+[.)])(\s+)/;
  * Below a list item the quote is indented to the item's text, which keeps it
  * inside the item. Any other line passes on its own indentation.
  */
-function getQuoteNesting(lineText: string): { indent: string; inListItem: boolean } {
+export function getQuoteNesting(lineText: string): { indent: string; inListItem: boolean } {
   const listItem = LIST_ITEM_PREFIX.exec(lineText);
   if (listItem) {
     const [, leading, marker, spacing] = listItem;
@@ -516,7 +516,10 @@ function locateCreatedLink(editor: Editor, anchor: CreatedLinkAnchor): LocatedLi
 
   // Its own quote, right below, may repeat the URL; any other line with it
   // makes the recorded line ambiguous.
-  const quoteEnd = hasBlockquoteBelow(editor, line) ? findBlockquoteEnd(editor, line + 1) : line;
+  const quoteEnd = Math.max(
+    hasBlockquoteBelow(editor, line) ? findBlockquoteEnd(editor, line + 1) : line,
+    findEndOfLineQuotes(editor, line),
+  );
   if (lines.some((other) => other < line || other > quoteEnd)) return null;
   // The whole created reference must still be there, not only its first link.
   if (created && !editor.getLine(line).includes(created)) return null;
@@ -551,11 +554,15 @@ function findEndOfLineQuotes(editor: Editor, line: number): number {
     let blockEnd = start;
     while (isQuoteLine(blockEnd + 1)) blockEnd++;
 
+    // A quote repeats one of the links and has blockquote lines: a paragraph
+    // that merely mentions the same verse again is the user's own text.
     let belongsToLine = false;
-    for (let quoteLine = start; quoteLine <= blockEnd && !belongsToLine; quoteLine++) {
-      belongsToLine = hasLink(quoteLine);
+    let isBlockquote = false;
+    for (let quoteLine = start; quoteLine <= blockEnd; quoteLine++) {
+      belongsToLine ||= hasLink(quoteLine);
+      isBlockquote ||= editor.getLine(quoteLine).trim().startsWith('>');
     }
-    if (!belongsToLine) break;
+    if (!belongsToLine || !isBlockquote) break;
 
     end = blockEnd;
   }
@@ -596,12 +603,16 @@ function hasBlockquoteBelow(editor: Editor, line: number): boolean {
   );
 }
 
+/**
+ * Whether `linkUrl` is already quoted below `line`: in the blockquote right
+ * below it, or in the quotes this plugin writes for the line's links, which
+ * follow a blank line and may start with the linked reference.
+ */
 function hasQuoteBelow(editor: Editor, line: number, linkUrl: string): boolean {
-  if (!hasBlockquoteBelow(editor, line)) {
-    return false;
-  }
-
-  const blockEnd = findBlockquoteEnd(editor, line + 1);
+  const blockEnd = Math.max(
+    hasBlockquoteBelow(editor, line) ? findBlockquoteEnd(editor, line + 1) : line,
+    findEndOfLineQuotes(editor, line),
+  );
 
   for (let quoteLine = line + 1; quoteLine <= blockEnd; quoteLine++) {
     if (containsLinkUrl(editor.getLine(quoteLine), linkUrl)) return true;
