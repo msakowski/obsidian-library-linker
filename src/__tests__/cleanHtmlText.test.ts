@@ -25,6 +25,23 @@ describe('cleanHtmlText', () => {
       expect(cleanHtmlText(html)).toBe('Hello world');
     });
 
+    it('should not leave a space where an inline tag sat before punctuation', () => {
+      // EPUB markup of the French NWT, John 3:16
+      const html =
+        'son Fils unique<span id="footnotesource21"></span><a epub:type="noteref" href="#footnote21">*</a>, afin que';
+      expect(cleanHtmlText(html)).toBe('son Fils unique, afin que');
+    });
+
+    it('should not split a word around an inline tag', () => {
+      const html = 'J<span class="x">é</span>hovah';
+      expect(cleanHtmlText(html)).toBe('Jéhovah');
+    });
+
+    it('should keep words apart across block tags', () => {
+      const html = '<p>first</p><p>second</p><div>third</div>fourth<br>fifth';
+      expect(cleanHtmlText(html)).toBe('first second third fourth fifth');
+    });
+
     it('should handle multiple consecutive tags', () => {
       const html = '<span></span><div></div>Text';
       expect(cleanHtmlText(html)).toBe('Text');

@@ -1,3 +1,9 @@
+const BLOCK_TAG =
+  /<\/?(?:address|article|aside|blockquote|br|dd|div|dl|dt|figcaption|figure|footer|h[1-6]|header|hr|li|main|nav|ol|p|pre|section|table|tbody|td|tfoot|th|thead|tr|ul)\b[^>]*>/gi;
+
+// Some EPUBs mark a line break inside a verse with an empty span
+const LINE_BREAK_SPAN = /<span\b[^>]*\bclass="[^"]*\blinebreak\b[^"]*"[^>]*>/gi;
+
 interface CleanHtmlTextOptions {
   removeFootnoteMarkers?: boolean;
 }
@@ -13,10 +19,15 @@ interface CleanHtmlTextOptions {
 export function cleanHtmlText(html: string, options: CleanHtmlTextOptions = {}): string {
   const { removeFootnoteMarkers = true } = options;
 
-  // Strip HTML tags and decode entities without external dependencies
-  // Replace all HTML tags with spaces to ensure words don't concatenate
-  // (double spaces will be normalized later)
-  let text = html.replace(/<[^>]*>/g, ' ');
+  // Strip HTML tags and decode entities without external dependencies.
+  // Block-level tags and line breaks become spaces so words on either side
+  // don't concatenate (double spaces are normalized later). Inline tags are
+  // dropped without a space: they sit inside running text, and a space there
+  // would split it, e.g. an empty footnote anchor before a comma ("unique ,").
+  let text = html
+    .replace(BLOCK_TAG, ' ')
+    .replace(LINE_BREAK_SPAN, ' ')
+    .replace(/<[^>]*>/g, '');
 
   // Decode HTML entities safely using DOMParser
   const parsed = new DOMParser().parseFromString(text, 'text/html');
