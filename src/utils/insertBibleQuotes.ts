@@ -524,6 +524,45 @@ function locateCreatedLink(editor: Editor, anchor: CreatedLinkAnchor): LocatedLi
   return { line };
 }
 
+const QUOTE_TRANSACTION_ORIGIN = 'bible-quote';
+
+/**
+ * Last line of the quotes right below `line` that belong to its links, or
+ * `line` itself when there are none. Each quote may follow a blank line and
+ * is made of blockquote lines and lines repeating one of the links, as the
+ * template writes them.
+ */
+function findEndOfLineQuotes(editor: Editor, line: number): number {
+  const urls = findJWLibraryLinksInLine(editor.getLine(line), line).map((link) => link.url);
+  const hasLink = (quoteLine: number) => {
+    const text = editor.getLine(quoteLine);
+    return urls.some((url) => containsLinkUrl(text, url));
+  };
+  const isQuoteLine = (quoteLine: number) =>
+    quoteLine <= editor.lastLine() &&
+    (editor.getLine(quoteLine).trim().startsWith('>') || hasLink(quoteLine));
+  let end = line;
+
+  for (;;) {
+    let start = end + 1;
+    if (start <= editor.lastLine() && isBlankLine(editor, start)) start++;
+    if (!isQuoteLine(start)) break;
+
+    let blockEnd = start;
+    while (isQuoteLine(blockEnd + 1)) blockEnd++;
+
+    let belongsToLine = false;
+    for (let quoteLine = start; quoteLine <= blockEnd && !belongsToLine; quoteLine++) {
+      belongsToLine = hasLink(quoteLine);
+    }
+    if (!belongsToLine) break;
+
+    end = blockEnd;
+  }
+
+  return end;
+}
+
 /** Last line of the blockquote or callout that `line` belongs to. */
 function findBlockquoteEnd(editor: Editor, line: number): number {
   let end = line;
@@ -674,10 +713,13 @@ export async function insertBibleQuoteForCreatedLink(
   // A link inside a blockquote or callout gets its quote after the whole
   // block, so the block is not split in two. A link in a plain paragraph keeps
   // its quote right below, even when an unrelated callout follows.
-  const insertLine =
-    standalone || !targetText.trim().startsWith('>')
-      ? targetLine
-      : findBlockquoteEnd(editor, targetLine);
+  // Quotes already written below for the other links of the line come first,
+  // so the quotes follow the order of their links.
+  const insertLine = standalone
+    ? targetLine
+    : targetText.trim().startsWith('>')
+      ? findBlockquoteEnd(editor, targetLine)
+      : findEndOfLineQuotes(editor, targetLine);
   const change = buildQuoteChange(editor, insertLine, quoteText, standalone);
 
   // When the quote replaces the reference the user is done with that line, so
@@ -686,7 +728,9 @@ export async function insertBibleQuoteForCreatedLink(
     change.text += '\n' + getQuoteNesting(targetText).indent;
   }
 
-  editor.transaction({ changes: [change] });
+  // An origin of its own keeps the quote out of the undo step of the typing
+  // that created the link: undo removes the quote alone.
+  editor.transaction({ changes: [change] }, QUOTE_TRANSACTION_ORIGIN);
 
   const insertedLineBreaks = change.text.split('\n').length - 1;
 

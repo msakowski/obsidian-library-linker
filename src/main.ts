@@ -10,6 +10,7 @@ import { ConfiguredBibleCitationProvider } from '@/services/ConfiguredBibleCitat
 import { BibleEpubImportService } from '@/services/BibleEpubImportService';
 import { AutoBibleQuoteInserter } from '@/services/AutoBibleQuoteInserter';
 import { createCreatedLinkTrackingExtension } from '@/services/createdLinkTrackingExtension';
+import { listQuoteEnterExtension } from '@/services/listQuoteEnterExtension';
 import { CreatedLinkTracker } from '@/utils/createdLinkTracker';
 import { getOfflineBibleVaultPath } from '@/services/PluginDataPathService';
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
@@ -104,6 +105,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     const createdLinkTracker = new CreatedLinkTracker();
     const tracking = createCreatedLinkTrackingExtension(createdLinkTracker);
     this.registerEditorExtension(tracking.extension);
+    this.registerEditorExtension(listQuoteEnterExtension);
 
     this.autoBibleQuoteInserter = new AutoBibleQuoteInserter(
       () => this.settings,

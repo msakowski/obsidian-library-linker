@@ -615,4 +615,27 @@ describe('insertBibleQuoteForCreatedLink', () => {
       expect(editor.getCursor()).toEqual({ line: 3, ch: 2 });
     });
   });
+
+  test('puts the quote of a second link of the line after the quote of the first', async () => {
+    const MATT_5_3: BibleReference = { book: 40, chapter: 5, verseRanges: [{ start: 3, end: 3 }] };
+    const john = createdLink(JOHN_3_16).trim();
+    const matt = createdLink(MATT_5_3).trim();
+    const mattUrl = /\((jwlibrary:[^)]*)\)/.exec(matt)![1];
+    const line = `- ${john}, ${matt}`;
+    const editor = createFakeEditor(`${line}\n  ${john}\n  > ${QUOTE}\n- Next`, {
+      line: 0,
+      ch: line.length,
+    });
+
+    const r = await insertBibleQuoteForCreatedLink(editor, MATT_5_3, settings, provider, {
+      line: 0,
+      linkUrl: mattUrl,
+    });
+    expect(r.inserted).toBe(true);
+
+    expect(editor.getContent()).toBe(
+      `${line}\n  ${john}\n  > ${QUOTE}\n\n  ${matt}\n  > ${QUOTE}\n\n- Next`,
+    );
+    expect(editor.getCursor()).toEqual({ line: 0, ch: line.length });
+  });
 });
