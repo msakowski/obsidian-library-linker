@@ -16,7 +16,14 @@ function suggestionsFor(query: string, language: Language) {
     settings: createSettings({ language }),
     getTranslationService: () => ({ t: (key: string) => key }),
   } as unknown as JWLibraryLinkerPlugin;
-  return new BibleReferenceSuggester(plugin).getSuggestions({ query } as EditorSuggestContext);
+  // The context Obsidian passes for a reference typed alone on the first line
+  const editor = { getLine: () => query };
+  return new BibleReferenceSuggester(plugin).getSuggestions({
+    query,
+    editor,
+    start: { line: 0, ch: 0 },
+    end: { line: 0, ch: query.length },
+  } as unknown as EditorSuggestContext);
 }
 
 describe('BibleReferenceSuggester silent mode', () => {
