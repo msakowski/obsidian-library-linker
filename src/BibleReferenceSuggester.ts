@@ -39,47 +39,62 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     return this.cachedBookRegex;
   }
 
+  /**
+   * Finds the unlinked reference that contains or ends at the cursor.
+   * Only that one is suggested: a line can hold links and other references,
+   * and a reference the cursor has moved past (e.g. after Escape) must not reopen the popup.
+   */
+  private findReferenceAtCursor(
+    line: string,
+    cursorCh: number,
+  ): { start: number; end: number; text: string } | null {
+    // Generic regex first; single-chapter books (e.g. "Jude 3") only match the book name regex
+    for (const regex of [BIBLE_REFERENCE_REGEX, this.getBookRegex()]) {
+      for (const match of line.matchAll(regex)) {
+        const rawStart = match.index;
+        if (rawStart > cursorCh) break;
+
+        // The regex may over-match leading words (e.g. "some text before John 3:16").
+        // Trim from the front to find the actual book name.
+        const result = extractBibleReferenceFromMatch(match[0], this.plugin.settings.language);
+        if (!result) continue;
+
+        const start = rawStart + result.offset;
+        const end = start + result.text.length;
+        if (cursorCh < start || cursorCh > end) continue;
+
+        // Skip a reference already inside a markdown link: [***text***](...)
+        const hasLinkBefore = /\[\*{0,2}$/.test(line.substring(0, start));
+        const hasLinkAfter = /^\*{0,2}\]\(/.test(line.substring(end));
+        if (hasLinkBefore && hasLinkAfter) return null;
+
+        return { start, end, text: result.text };
+      }
+    }
+
+    return null;
+  }
+
   onTrigger(cursor: EditorPosition, editor: Editor): EditorSuggestTriggerInfo | null {
     const line = editor.getLine(cursor.line);
 
     /**
-     * Silent mode: If there is a complete reference, show it as a suggestion
+     * Silent mode: If there is a complete reference at the cursor, show it as a suggestion
      */
-    const match = line.match(BIBLE_REFERENCE_REGEX) || line.match(this.getBookRegex());
+    const reference = line.includes(TRIGGER) ? null : this.findReferenceAtCursor(line, cursor.ch);
 
-    if (match?.[0]) {
-      // The regex may over-match leading words (e.g. "some text before John 3:16").
-      // Trim from the front to find the actual book name.
-      const result = extractBibleReferenceFromMatch(match[0], this.plugin.settings.language);
-
-      if (result) {
-        const rawMatchStart = line.indexOf(match[0]);
-        const matchStart = rawMatchStart + result.offset;
-        const matchEnd = matchStart + result.text.length;
-
-        // Check if the matched reference is already inside a markdown link
-        const beforeMatch = line.substring(0, matchStart);
-        const afterMatch = line.substring(matchEnd);
-
-        // Look for markdown link pattern: [***text***](...)
-        const hasLinkBefore = /\[\*{0,2}$/.test(beforeMatch);
-        const hasLinkAfter = /^\*{0,2}\]\(/.test(afterMatch);
-        const isAlreadyLinked = hasLinkBefore && hasLinkAfter;
-
-        if (!line.includes(TRIGGER) && !isAlreadyLinked) {
-          return {
-            start: {
-              ch: matchStart,
-              line: cursor.line,
-            },
-            end: {
-              ch: matchEnd,
-              line: cursor.line,
-            },
-            query: result.text,
-          };
-        }
-      }
+    if (reference) {
+      return {
+        start: {
+          ch: reference.start,
+          line: cursor.line,
+        },
+        end: {
+          ch: reference.end,
+          line: cursor.line,
+        },
+        query: reference.text,
+      };
     }
 
     /**
