@@ -192,5 +192,11 @@ describe('cleanHtmlText', () => {
       const html = '<p>First sentence.</p><p>Second sentence.</p>';
       expect(cleanHtmlText(html)).toBe('First sentence. Second sentence.');
     });
+
+    it('should keep a space between the lines of a jw.org poem', () => {
+      const html =
+        '<span class="style-b">eine Zeit,</span><span class="newblock"></span><span class="style-z">eine Zeit</span><span class="parabreak"></span>';
+      expect(cleanHtmlText(html)).toBe('eine Zeit, eine Zeit');
+    });
   });
 });

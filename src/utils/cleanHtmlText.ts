@@ -1,8 +1,10 @@
 const BLOCK_TAG =
   /<\/?(?:address|article|aside|blockquote|br|dd|div|dl|dt|figcaption|figure|footer|h[1-6]|header|hr|li|main|nav|ol|p|pre|section|table|tbody|td|tfoot|th|thead|tr|ul)\b[^>]*>/gi;
 
-// Some EPUBs mark a line break inside a verse with an empty span
-const LINE_BREAK_SPAN = /<span\b[^>]*\bclass="[^"]*\blinebreak\b[^"]*"[^>]*>/gi;
+// Empty spans that mark a line break inside a verse: `linebreak` in some EPUBs,
+// `newblock` (a poem line) and `parabreak` (a paragraph) on jw.org
+const LINE_BREAK_SPAN =
+  /<span\b[^>]*\bclass="[^"]*\b(?:linebreak|newblock|parabreak)\b[^"]*"[^>]*>/gi;
 
 interface CleanHtmlTextOptions {
   removeFootnoteMarkers?: boolean;
