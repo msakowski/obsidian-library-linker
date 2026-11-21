@@ -1,5 +1,6 @@
 import { findBook } from '@/utils/findBook';
 import { SINGLE_CHAPTER_BOOKS } from '@/consts/chapterCounts';
+import { verseCounts } from '@/consts/verseCounts';
 import type { Language, VerseRange, BibleReference } from '@/types';
 import { logger } from '@/utils/logger';
 
@@ -91,7 +92,47 @@ function parseVerseRanges(versePart: string): VerseRange[] {
   return ranges;
 }
 
+/**
+ * Parses a typed Bible reference, such as "John 3:16" or "1 Jn 3:16-18, 20".
+ *
+ * Throws when the text is not a reference, or when it names a verse the
+ * chapter does not have ("1 Jn 3:333"), so no link is made to a verse that
+ * does not exist.
+ */
 export function parseBibleReference(input: string, language: Language): BibleReference {
+  const reference = parseReferenceText(input, language);
+  assertVersesExist(reference);
+  return reference;
+}
+
+/** Throws when a verse of `reference` is past the last verse of its chapter. */
+function assertVersesExist(reference: BibleReference): void {
+  const chapters = verseCounts[reference.book];
+  if (!chapters) return;
+
+  const lastVerseOf = (chapter: number) => chapters[chapter - 1] ?? 0;
+  const ranges = reference.verseRanges ?? [];
+
+  if (reference.endChapter !== undefined) {
+    // "3:16-4:2": the start verse is in the first chapter, the end verse in the last one
+    const [range] = ranges;
+    if (
+      range &&
+      (range.start > lastVerseOf(reference.chapter) ||
+        range.end > lastVerseOf(reference.endChapter))
+    ) {
+      throw new Error('errors.invalidVerseFormat');
+    }
+    return;
+  }
+
+  const lastVerse = lastVerseOf(reference.chapter);
+  if (ranges.some((range) => range.start > lastVerse || range.end > lastVerse)) {
+    throw new Error('errors.invalidVerseFormat');
+  }
+}
+
+function parseReferenceText(input: string, language: Language): BibleReference {
   input = input
     .trim()
     .toLowerCase()
