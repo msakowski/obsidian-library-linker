@@ -127,8 +127,14 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       ];
     }
 
-    // Silent mode: use generic regex to avoid false positives
-    if (!isExplicitMode && !query.match(BIBLE_REFERENCE_REGEX)) {
+    // Silent mode: only what onTrigger detects, to avoid false positives: the
+    // generic "chapter:verse" regex, or the book names of the language, which
+    // also cover single-chapter books written without a colon ("Jude 3")
+    if (
+      !isExplicitMode &&
+      !query.match(BIBLE_REFERENCE_REGEX) &&
+      !query.match(this.getBookRegex())
+    ) {
       return [];
     }
 
