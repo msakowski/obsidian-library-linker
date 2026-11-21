@@ -1,8 +1,9 @@
+import { beforeAll, describe, expect, it } from 'vitest';
 import type { Editor, EditorPosition } from 'obsidian';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
 import type JWLibraryLinkerPlugin from '@/main';
-import { createSettings } from './__helpers__/createSettings';
-import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
+import { createSettings } from './__tests__/__helpers__/createSettings';
+import { initializeTestBibleBooks } from './__tests__/__helpers__/initializeBibleBooksForTests';
 
 beforeAll(() => {
   initializeTestBibleBooks();
