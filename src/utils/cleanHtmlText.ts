@@ -29,7 +29,11 @@ export function cleanHtmlText(html: string, options: CleanHtmlTextOptions = {}):
       .replace(/\*/g, ''); // Remove * symbols
   }
 
-  text = text.replace(/\s+/g, ' '); // Normalize whitespace
+  text = text
+    // Drop zero-width characters: jw.org puts one after hyphens ("Déplace-\u200btoi")
+    // to allow a line break there, which makes the copied text unsearchable
+    .replace(/[\u200b-\u200d\ufeff]/g, '')
+    .replace(/\s+/g, ' '); // Normalize whitespace
 
   // Fix spacing issues where sentences are concatenated without spaces after periods
   const result = text
