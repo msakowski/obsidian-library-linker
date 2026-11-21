@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Bijbelcitaat Formattering
     description: Configureer hoe bijbelcitaten worden geformatteerd wanneer ze worden ingevoegd
+    autoInsert:
+      name: Citaat automatisch invoegen
+      description: Wanneer ingeschakeld wordt het Bijbelcitaat opgehaald en ingevoegd zodra een link via de suggesties is gemaakt. Vereist een internetverbinding of een geïmporteerde offline Bijbel.
     presets:
       name: Sjabloonvoorinstellingen
       short: Link + citaat

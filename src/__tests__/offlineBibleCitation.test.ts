@@ -8,6 +8,8 @@ import { BibleEpubImportService } from '@/services/BibleEpubImportService';
 import { OfflineBibleCitationProvider } from '@/services/OfflineBibleCitationProvider';
 import { initializeTestBibleBooks } from './__helpers__/initializeBibleBooksForTests';
 import { createInMemoryAdapter } from './__helpers__/createInMemoryAdapter';
+import { splitBibleReferenceForCitation } from '@/utils/splitBibleReferenceForCitation';
+import type { OfflineBibleChapter } from '@/types';
 
 const ROOT = '.obsidian/plugins/jw-library-linker/offline-bible';
 
@@ -518,5 +520,95 @@ describe('offline Bible citation flow', () => {
 
     expect(citation.success).toBe(true);
     expect(citation.text).toBe('Zweiter Vers, mit Nachsatz im selben Absatz.');
+  });
+});
+
+describe('offline Bible citation of missing and open-ended verses', () => {
+  function makeChapter(
+    book: number,
+    chapter: number,
+    verseCount: number,
+    skip: number[] = [],
+  ): OfflineBibleChapter {
+    const verses: Record<string, string> = {};
+    for (let verse = 1; verse <= verseCount; verse++) {
+      if (!skip.includes(verse)) verses[String(verse)] = `v${chapter}:${verse}`;
+    }
+    return {
+      language: 'E',
+      book,
+      chapter,
+      verses,
+      source: { sourceFileChecksum: 'sha256:abc', importedAt: '2026-11-03T00:00:00.000Z' },
+    };
+  }
+
+  async function setUp(chapters: OfflineBibleChapter[]) {
+    const repository = new VaultOfflineBibleRepository(createInMemoryAdapter(), ROOT);
+    await repository.saveCorpus(
+      {
+        language: 'E',
+        sourceFileName: 'nwt_E.epub',
+        sourceFileChecksum: 'sha256:abc',
+        importedAt: '2026-11-03T00:00:00.000Z',
+        bookCount: 1,
+        chapterCount: chapters.length,
+        verseCount: chapters.reduce((sum, c) => sum + Object.keys(c.verses).length, 0),
+      },
+      chapters,
+    );
+    return new OfflineBibleCitationProvider(repository, (key) => key);
+  }
+
+  test('fails a range with an ordinary missing verse so the caller can fall back', async () => {
+    // John 3:17 was not extracted by the importer.
+    const provider = await setUp([makeChapter(43, 3, 36, [17])]);
+
+    const result = await provider.getCitation(
+      { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 18 }] },
+      'E',
+    );
+
+    expect(result.success).toBe(false);
+    expect(result.text).toBe('');
+  });
+
+  test('skips a verse the translation omits', async () => {
+    const provider = await setUp([makeChapter(40, 17, 27, [21])]);
+
+    const result = await provider.getCitation(
+      { book: 40, chapter: 17, verseRanges: [{ start: 20, end: 22 }] },
+      'E',
+    );
+
+    expect(result).toMatchObject({ success: true, text: 'v17:20 v17:22' });
+  });
+
+  test('fails an explicit end past the chapter, even at 176 or more', async () => {
+    const provider = await setUp([makeChapter(43, 3, 36)]);
+
+    for (const end of [176, 177]) {
+      const result = await provider.getCitation(
+        { book: 43, chapter: 3, verseRanges: [{ start: 16, end }] },
+        'E',
+      );
+      expect(result.success).toBe(false);
+    }
+  });
+
+  test('resolves an open-ended cross-chapter part through the final verse', async () => {
+    const provider = await setUp([makeChapter(43, 3, 36), makeChapter(43, 4, 54)]);
+
+    // John 3:35-4:2
+    const parts = splitBibleReferenceForCitation({
+      book: 43,
+      chapter: 3,
+      endChapter: 4,
+      verseRanges: [{ start: 35, end: 2 }],
+    });
+    const results = await Promise.all(parts.map((part) => provider.getCitation(part, 'E')));
+
+    expect(results.map((result) => result.success)).toEqual([true, true]);
+    expect(results.map((result) => result.text)).toEqual(['v3:35 v3:36', 'v4:1 v4:2']);
   });
 });
