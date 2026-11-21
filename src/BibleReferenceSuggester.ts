@@ -17,6 +17,28 @@ import { logger } from '@/utils/logger';
 
 const TRIGGER = '/b ';
 
+/**
+ * Where the `/b` command the cursor is in starts, or -1. The command must
+ * start the line or follow a space, so text such as "km/b 5" is no command;
+ * typing before a command keeps detecting references normally.
+ */
+function findCommandStart(line: string, cursorCh: number): number {
+  for (
+    let index = line.lastIndexOf(TRIGGER, cursorCh - TRIGGER.length);
+    index !== -1;
+    index = index > 0 ? line.lastIndexOf(TRIGGER, index - 1) : -1
+  ) {
+    if (index === 0 || /\s/.test(line.charAt(index - 1))) return index;
+  }
+
+  return -1;
+}
+
+/** Whether the suggestion was opened by the `/b` command. */
+function isCommandContext(context: EditorSuggestContext): boolean {
+  return context.editor.getLine(context.start.line).startsWith(TRIGGER, context.start.ch);
+}
+
 export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   plugin: JWLibraryLinkerPlugin;
   private t: (key: string, variables?: Record<string, string>) => string;
@@ -116,11 +138,12 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
   private findTrigger(cursor: EditorPosition, editor: Editor): EditorSuggestTriggerInfo | null {
     const line = editor.getLine(cursor.line);
+    const commandIndex = findCommandStart(line, cursor.ch);
 
     /**
      * Silent mode: If there is a complete reference at the cursor, show it as a suggestion
      */
-    const reference = line.includes(TRIGGER) ? null : this.findReferenceAtCursor(line, cursor.ch);
+    const reference = commandIndex === -1 ? this.findReferenceAtCursor(line, cursor.ch) : null;
 
     if (reference) {
       return {
@@ -140,13 +163,10 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
      * Command mode: If there is a /b, show detailed suggestions
      */
 
-    // Find position of /b
-    const trigger = TRIGGER;
-    const commandIndex = line.lastIndexOf(trigger);
     if (commandIndex === -1) return null;
 
     // Get the text after /b
-    const afterCommand = line.slice(commandIndex + trigger.length);
+    const afterCommand = line.slice(commandIndex + TRIGGER.length);
     // Show suggestions if there's any text after "/b "
     if (afterCommand.length > 0) {
       return {
@@ -174,7 +194,8 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   private buildSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
     const query = context.query;
 
-    const isExplicitMode = query.includes(TRIGGER);
+    // The query is the text after "/b ", so the command is read from the line
+    const isExplicitMode = isCommandContext(context);
 
     // If query is empty (just typed "/b "), show a simple typing message without the {text} placeholder
     if (query.length === 0 && isExplicitMode) {

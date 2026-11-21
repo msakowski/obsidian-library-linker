@@ -131,4 +131,27 @@ describe('BibleReferenceSuggester.onTrigger', () => {
       expect(triggerOn(suggester, editor, '- John 3:16|')?.query).toBe('John 3:16');
     });
   });
+
+  describe('/b command', () => {
+    it('is only a command at the start of the line or after a space', () => {
+      const result = trigger('km/b John 3:16|');
+
+      // A command would replace "/b John 3:16"; the reference keeps "km/b "
+      expect(result?.query).toBe('John 3:16');
+      expect(result?.start.ch).toBe('km/b '.length);
+    });
+
+    it('does not stop detecting references typed before it', () => {
+      expect(trigger('John 3:16| /b Matt 5')?.query).toBe('John 3:16');
+    });
+
+    it('offers to keep typing when the text is not a reference yet', () => {
+      const suggester = createSuggester();
+      const editor = {} as Editor;
+      const result = show(suggester, editor, '- /b Jo|');
+      const suggestions = suggester.getSuggestions({ ...result!, editor, file: null } as never);
+
+      expect(suggestions.map((s) => s.command)).toEqual(['typing']);
+    });
+  });
 });
