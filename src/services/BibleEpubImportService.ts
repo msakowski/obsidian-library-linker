@@ -394,10 +394,10 @@ export class BibleEpubImportService implements EpubImportService {
   }
 
   private normalizeText(html: string): string | null {
-    const normalized = cleanHtmlText(
-      html.replace(/\u00a0/g, ' ').replace(/[\u200b-\u200d\ufeff]/g, ''),
-      { removeFootnoteMarkers: false },
-    );
+    // cleanHtmlText also drops zero-width characters
+    const normalized = cleanHtmlText(html.replace(/\u00a0/g, ' '), {
+      removeFootnoteMarkers: false,
+    });
 
     return normalized || null;
   }
