@@ -683,7 +683,7 @@ export async function insertBibleQuoteForCreatedLink(
   // When the quote replaces the reference the user is done with that line, so
   // make sure there is a line left to keep writing on.
   if (standalone && insertLine >= editor.lastLine()) {
-    change.text += '\n';
+    change.text += '\n' + getQuoteNesting(targetText).indent;
   }
 
   editor.transaction({ changes: [change] });

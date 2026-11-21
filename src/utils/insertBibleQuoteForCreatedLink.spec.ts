@@ -568,4 +568,51 @@ describe('insertBibleQuoteForCreatedLink', () => {
     expect(result.alreadyExists).toBe(false);
     expect(result.inserted).toBe(true);
   });
+
+  describe('keeps the nesting of the line', () => {
+    async function insertFor(content: string, line: number) {
+      const editor = createFakeEditor(content, { line, ch: content.split('\n')[line].length });
+      await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+        line,
+        linkUrl: JOHN_3_16_URL,
+      });
+      return editor;
+    }
+
+    test('nests the quote inside a list item, keeping the list tight', async () => {
+      const link = createdLink(JOHN_3_16).trim();
+      const editor = await insertFor(`- ${link}\n- Next item`, 0);
+
+      expect(editor.getContent()).toBe(`- ${link}\n  ${link}\n  > ${QUOTE}\n- Next item`);
+    });
+
+    test('nests the quote inside an indented list item', async () => {
+      const link = createdLink(JOHN_3_16).trim();
+      const editor = await insertFor(`- Parent\n\t- See ${link}`, 1);
+
+      expect(editor.getContent()).toBe(`- Parent\n\t- See ${link}\n\t  ${link}\n\t  > ${QUOTE}`);
+    });
+
+    test('nests the quote inside a numbered list item', async () => {
+      const link = createdLink(JOHN_3_16).trim();
+      const editor = await insertFor(`10. ${link}`, 0);
+
+      expect(editor.getContent()).toBe(`10. ${link}\n    ${link}\n    > ${QUOTE}`);
+    });
+
+    test('keeps a blank line before a paragraph that follows a list item', async () => {
+      const link = createdLink(JOHN_3_16).trim();
+      const editor = await insertFor(`- ${link}\nParagraph`, 0);
+
+      expect(editor.getContent()).toBe(`- ${link}\n  ${link}\n  > ${QUOTE}\n\nParagraph`);
+    });
+
+    test('keeps the indentation of a line holding only the link', async () => {
+      const link = createdLink(JOHN_3_16).trim();
+      const editor = await insertFor(`- Parent\n  ${link}`, 1);
+
+      expect(editor.getContent()).toBe(`- Parent\n  ${link}\n  > ${QUOTE}\n  `);
+      expect(editor.getCursor()).toEqual({ line: 3, ch: 2 });
+    });
+  });
 });
