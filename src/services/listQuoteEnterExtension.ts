@@ -1,4 +1,4 @@
-import { Prec, type EditorState, type TransactionSpec } from '@codemirror/state';
+import { Prec, type ChangeSpec, type EditorState, type TransactionSpec } from '@codemirror/state';
 import { keymap } from '@codemirror/view';
 import { getQuoteNesting } from '@/utils/insertBibleQuotes';
 
@@ -69,9 +69,31 @@ export function continueListAfterQuote(state: EditorState): TransactionSpec | nu
   const nextMarker = ordered ? `${Number(ordered[1]) + 1}${ordered[2]}` : marker;
   const insert = `\n${leading}${nextMarker}${spacing}${task ? '[ ] ' : ''}`;
   const position = state.doc.line(last).to;
+  const changes: ChangeSpec[] = [{ from: position, insert }];
+
+  // Like Obsidian's own Enter, renumber the items that follow
+  if (ordered) {
+    let expected = Number(ordered[1]) + 2;
+    for (let number = last + 1; number <= state.doc.lines; number++) {
+      const next = state.doc.line(number);
+      if (
+        next.text.trim() === '' ||
+        (next.text.startsWith(leading) && /^\s/.test(next.text.slice(leading.length)))
+      ) {
+        continue; // a blank line or content nested in an item
+      }
+
+      const sibling = /^(\s*)(\d+)([.)])\s/.exec(next.text);
+      if (!sibling || sibling[1] !== leading || sibling[3] !== ordered[2]) break;
+
+      const from = next.from + leading.length;
+      changes.push({ from, to: from + sibling[2].length, insert: String(expected) });
+      expected++;
+    }
+  }
 
   return {
-    changes: { from: position, insert },
+    changes,
     selection: { anchor: position + insert.length },
     scrollIntoView: true,
     userEvent: 'input',

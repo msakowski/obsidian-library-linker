@@ -39,6 +39,16 @@ describe('continueListAfterQuote', () => {
     );
   });
 
+  test('renumbers the items that follow, as Obsidian does', () => {
+    expect(
+      enter(
+        `1. ${LINK}|\n   > ${LINK}\n   > Text.\n2. b\n   - nested\n3. c\n\nAfter\n1. other list`,
+      ),
+    ).toBe(
+      `1. ${LINK}\n   > ${LINK}\n   > Text.\n2. |\n3. b\n   - nested\n4. c\n\nAfter\n1. other list`,
+    );
+  });
+
   test('goes past several quotes of the item', () => {
     expect(enter(`- ${LINK}|\n  > ${LINK}\n  > One.\n\n  > ${LINK}\n  > Two.\n\nAfter`)).toBe(
       `- ${LINK}\n  > ${LINK}\n  > One.\n\n  > ${LINK}\n  > Two.\n- |\n\nAfter`,
