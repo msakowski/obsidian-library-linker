@@ -22,6 +22,11 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   private t: (key: string, variables?: Record<string, string>) => string;
   private cachedBookRegex: RegExp | null = null;
   private cachedBookRegexLanguage: string | null = null;
+  /** The suggestion on show: where it starts, and whether it offered anything. */
+  private shown: { editor: Editor; start: EditorPosition; hasSuggestions: boolean } | null = null;
+  /** Start of a suggestion the user closed without choosing it. */
+  private dismissed: { editor: Editor; start: EditorPosition } | null = null;
+  private selecting = false;
 
   constructor(plugin: JWLibraryLinkerPlugin) {
     super(plugin.app);
@@ -75,7 +80,41 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     return null;
   }
 
+  /**
+   * Keeps a suggestion the user closed (Escape, a click elsewhere) closed
+   * while they go on typing the same reference or `/b` command; a reference
+   * starting elsewhere, or moving the cursor away, ends this.
+   */
   onTrigger(cursor: EditorPosition, editor: Editor): EditorSuggestTriggerInfo | null {
+    const trigger = this.findTrigger(cursor, editor);
+    const dismissed = this.dismissed;
+
+    if (
+      trigger &&
+      dismissed?.editor === editor &&
+      dismissed.start.line === trigger.start.line &&
+      dismissed.start.ch === trigger.start.ch
+    ) {
+      this.shown = null;
+      return null;
+    }
+
+    this.dismissed = null;
+    this.shown = trigger ? { editor, start: trigger.start, hasSuggestions: false } : null;
+    return trigger;
+  }
+
+  close(): void {
+    // Closing a suggestion that is still triggered and offered something,
+    // without one being chosen, means the user dismissed it.
+    if (this.shown?.hasSuggestions && !this.selecting) {
+      this.dismissed = { editor: this.shown.editor, start: this.shown.start };
+    }
+    this.shown = null;
+    super.close();
+  }
+
+  private findTrigger(cursor: EditorPosition, editor: Editor): EditorSuggestTriggerInfo | null {
     const line = editor.getLine(cursor.line);
 
     /**
@@ -127,6 +166,12 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   }
 
   getSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
+    const suggestions = this.buildSuggestions(context);
+    if (this.shown) this.shown.hasSuggestions = suggestions.length > 0;
+    return suggestions;
+  }
+
+  private buildSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
     const query = context.query;
 
     const isExplicitMode = query.includes(TRIGGER);
@@ -234,7 +279,12 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     editor.replaceRange(convertedLink, context.start, context.end);
 
     // Force close the suggestion box to prevent it from staying open with italic formatting
-    this.close();
+    this.selecting = true;
+    try {
+      this.close();
+    } finally {
+      this.selecting = false;
+    }
 
     // Handle opening links
     if (suggestion.command === 'open') {
