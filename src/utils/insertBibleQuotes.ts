@@ -554,6 +554,8 @@ function locateCreatedLink(editor: Editor, anchor: CreatedLinkAnchor): LocatedLi
   return { line };
 }
 
+const QUOTE_TRANSACTION_ORIGIN = 'bible-quote';
+
 /** Last line of the blockquote or callout that `line` belongs to. */
 function findBlockquoteEnd(editor: Editor, line: number): number {
   let end = line;
@@ -716,7 +718,9 @@ export async function insertBibleQuoteForCreatedLink(
     change.text += '\n';
   }
 
-  editor.transaction({ changes: [change] });
+  // An origin of its own keeps the quote out of the undo step of the typing
+  // that created the link: undo removes the quote alone.
+  editor.transaction({ changes: [change] }, QUOTE_TRANSACTION_ORIGIN);
 
   const insertedLineBreaks = change.text.split('\n').length - 1;
 

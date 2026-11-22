@@ -65,6 +65,20 @@ describe('insertBibleQuoteForCreatedLink', () => {
     expect(editor.getContent()).toBe(`${link.trim()}\n> ${QUOTE}\n`);
   });
 
+  test('writes the quote with an origin of its own, so it is undone on its own', async () => {
+    const link = createdLink(JOHN_3_16);
+    const editor = createFakeEditor(link, { line: 0, ch: link.length });
+    const transaction = vi.spyOn(editor, 'transaction');
+
+    await insertBibleQuoteForCreatedLink(editor, JOHN_3_16, settings, provider, {
+      line: 0,
+      linkUrl: JOHN_3_16_URL,
+    });
+
+    // A separate origin keeps the quote out of the undo step of the typing
+    expect(transaction).toHaveBeenCalledWith(expect.anything(), 'bible-quote');
+  });
+
   test('appends the quote below the line when the link sits inside a sentence', async () => {
     const link = createdLink(JOHN_3_16);
     const line = `As we read in ${link}the good news is preached.`;

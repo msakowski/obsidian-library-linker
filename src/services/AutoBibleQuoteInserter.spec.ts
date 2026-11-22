@@ -167,6 +167,76 @@ describe('AutoBibleQuoteInserter', () => {
     expect(Notice).toHaveBeenCalledWith('notices.bibleQuoteFetchFailed');
   });
 
+  test('does not quote a whole-chapter link', async () => {
+    const JOHN_3: BibleReference = { book: 43, chapter: 3 };
+    const link = convertBibleTextToMarkdownLink(JOHN_3, settings)!;
+    const editor = createEditor(link);
+
+    createInserter().scheduleForCreatedLink(editor, JOHN_3, link, { line: 0, ch: 0 });
+
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+    expect(getCitation).not.toHaveBeenCalled();
+    expect(Notice).not.toHaveBeenCalled();
+    expect(editor.getContent()).toBe(link);
+  });
+
+  test('does not quote a reference of more than three chapters, and says why', async () => {
+    const PSALMS: BibleReference = {
+      book: 19,
+      chapter: 1,
+      endChapter: 150,
+      verseRanges: [{ start: 1, end: 6 }],
+    };
+    const link = convertBibleTextToMarkdownLink(PSALMS, settings)!;
+    const editor = createEditor(link);
+
+    createInserter().scheduleForCreatedLink(editor, PSALMS, link, { line: 0, ch: 0 });
+
+    await new Promise((resolve) => window.setTimeout(resolve, 0));
+    expect(getCitation).not.toHaveBeenCalled();
+    expect(Notice).toHaveBeenCalledWith('notices.bibleQuoteTooManyChapters');
+    expect(editor.getContent()).toBe(link);
+  });
+
+  test('shows the failure notice once per session when no Bible text is available', async () => {
+    getCitation.mockResolvedValue({
+      success: false,
+      source: 'offline',
+      text: '',
+      citation: '',
+      error: 'not installed',
+    });
+    (provider.isLanguageAvailable as Mock).mockResolvedValue(false);
+
+    const link = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!;
+    const inserter = createInserter();
+    const anchor = { line: 0, linkUrl: 'jwlibrary:///finder?bible=43003016&wtlocale=E' };
+
+    await inserter.insertNow(createEditor(link), JOHN_3_16, anchor);
+    await inserter.insertNow(createEditor(link), JOHN_3_16, anchor);
+
+    expect(Notice).toHaveBeenCalledTimes(1);
+  });
+
+  test('shows the failure notice every time while Bible text is available', async () => {
+    getCitation.mockResolvedValue({
+      success: false,
+      source: 'online',
+      text: '',
+      citation: '',
+      error: 'no connection',
+    });
+
+    const link = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!;
+    const inserter = createInserter();
+    const anchor = { line: 0, linkUrl: 'jwlibrary:///finder?bible=43003016&wtlocale=E' };
+
+    await inserter.insertNow(createEditor(link), JOHN_3_16, anchor);
+    await inserter.insertNow(createEditor(link), JOHN_3_16, anchor);
+
+    expect(Notice).toHaveBeenCalledTimes(2);
+  });
+
   test('shows a notice and does not throw when the insertion errors', async () => {
     getCitation.mockRejectedValue(new Error('boom'));
 
