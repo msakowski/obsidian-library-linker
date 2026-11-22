@@ -596,7 +596,7 @@ describe('insertAllBibleQuotes', () => {
 
       const result = await insertAllBibleQuotes(mockEditor, settings, provider);
 
-      expect(result).toEqual({ inserted: 0, linksFound: 1, fetchFailed: 1 });
+      expect(result).toEqual({ inserted: 0, linksFound: 1, fetchFailed: 1, tooManyChapters: 0 });
       expect(mockTransaction).not.toHaveBeenCalled();
     });
   });
