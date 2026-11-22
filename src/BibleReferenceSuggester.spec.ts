@@ -198,3 +198,35 @@ describe('BibleReferenceSuggester.onTrigger', () => {
     });
   });
 });
+
+describe('BibleReferenceSuggester.selectSuggestion', () => {
+  // Chooses the link suggestion for the command in `line`, which ends at `endCh`
+  function choose(line: string, endCh: number): string {
+    const replaceRange = vi.fn();
+    const editor = { getLine: () => line, replaceRange } as unknown as Editor;
+    const suggester = createSuggester();
+    // The default setting: a space after the link to keep typing
+    suggester.plugin.settings.suffixOutsideLink = ' ';
+    suggester.context = {
+      editor,
+      start: { line: 0, ch: line.indexOf('/b') },
+      end: { line: 0, ch: endCh },
+      query: 'John 3:16',
+      file: null,
+    } as never;
+
+    suggester.selectSuggestion({ text: 'John 3:16', command: 'link', description: '' });
+    return replaceRange.mock.calls[0][0] as string;
+  }
+
+  it('keeps the space after the link at the end of the line', () => {
+    expect(choose('/b John 3:16', '/b John 3:16'.length)).toMatch(/\) $/);
+  });
+
+  it.each(['(/b John 3:16)', '**/b John 3:16**', '/b John 3:16 and more'])(
+    'drops the space after the link before what follows in %s',
+    (line) => {
+      expect(choose(line, line.indexOf('16') + 2)).toMatch(/\)$/);
+    },
+  );
+});

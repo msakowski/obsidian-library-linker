@@ -18,6 +18,8 @@ import { logger } from '@/utils/logger';
 const TRIGGER = '/b ';
 /** Characters that continue a reference after the cursor: "6" in "John 3:1|6". */
 const REFERENCE_CONTINUATION = /^[\p{L}\p{N}:.,\-–]*/u;
+/** A character after which the link needs no trailing space. */
+const CLOSING_OR_SPACE = /^[\s)\]}*_"'”’»]$/;
 /** What may come right before a command: a space, or opening punctuation or markup. */
 const BEFORE_COMMAND = /[\s([{*_>"'“‘«]/;
 
@@ -310,8 +312,13 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       return;
     }
 
+    // The link ends with the space after it (`suffixOutsideLink`). Before closing markup or a
+    // space, as in "(/b John 3:16)", that space would only be in the way.
+    const next = editor.getLine(context.end.line).charAt(context.end.ch);
+    const linkText = CLOSING_OR_SPACE.test(next) ? convertedLink.trimEnd() : convertedLink;
+
     // Replace the entire command and reference with the converted link
-    editor.replaceRange(convertedLink, context.start, context.end);
+    editor.replaceRange(linkText, context.start, context.end);
 
     // Force close the suggestion box to prevent it from staying open with italic formatting
     this.selecting = true;
