@@ -11,7 +11,7 @@
     "test:lint": "pnpm test:lint-ts && pnpm test:lint-md",
     "test:lint-fix": "pnpm test:lint-ts-fix && pnpm test:lint-md-fix",
     "test:lint-ts": "eslint --max-warnings 0",
-    "test:lint-ts-fix": "eslint --fix --max-warnings 0",
+    "test:lint-ts-fix": "eslint --fix --max-warnings 0 --no-warn-ignored",
     "test:lint-md": "remark . --frail --quiet",
     "test:lint-md-fix": "remark . --output --quiet",
     "test:types": "tsc --noEmit -skipLibCheck",
@@ -28,7 +28,7 @@
     "pre-push": "sh scripts/pre-push.sh"
   },
   "nano-staged": {
-    "*.{ts,js,mjs,cjs}": "eslint --fix --max-warnings 0",
+    "*.{ts,js,mjs,cjs}": "eslint --fix --max-warnings 0 --no-warn-ignored",
     "*.md": "remark --output --quiet --frail --silently-ignore"
   },
   "keywords": [],
