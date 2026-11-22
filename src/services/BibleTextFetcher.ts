@@ -363,8 +363,12 @@ export class BibleTextFetcher {
       for (const verseEl of verseElements) {
         const clone = verseEl.cloneNode(true) as HTMLElement;
 
-        // Remove footnote/cross-reference links (both jw.org and WOL formats)
-        clone.querySelectorAll('a.footnoteLink, a.xrefLink, a.b').forEach((el) => el.remove());
+        // Remove footnote/cross-reference links (both jw.org and WOL formats).
+        // Removing the WOL footnote link (a.fn) instead of stripping its "*" later
+        // keeps its tag from leaving a space before the next punctuation mark.
+        clone
+          .querySelectorAll('a.footnoteLink, a.xrefLink, a.b, a.fn')
+          .forEach((el) => el.remove());
 
         // Remove study note sections
         clone.querySelectorAll('.studyBible, .study-notes, .notes').forEach((el) => el.remove());
