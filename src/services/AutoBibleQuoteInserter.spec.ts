@@ -218,6 +218,33 @@ describe('AutoBibleQuoteInserter', () => {
     expect(Notice).toHaveBeenCalledTimes(1);
   });
 
+  test('shows the notice again for another language or once text was available', async () => {
+    getCitation.mockResolvedValue({
+      success: false,
+      source: 'offline',
+      text: '',
+      citation: '',
+      error: 'not installed',
+    });
+    (provider.isLanguageAvailable as Mock).mockResolvedValue(false);
+
+    const link = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!;
+    const inserter = createInserter();
+    const anchor = { line: 0, linkUrl: 'jwlibrary:///finder?bible=43003016&wtlocale=E' };
+    const fail = () => inserter.insertNow(createEditor(link), JOHN_3_16, anchor);
+
+    await fail();
+    settings.language = 'F';
+    await fail();
+    expect(Notice).toHaveBeenCalledTimes(2);
+
+    // The Bible is imported, then removed again
+    (provider.isLanguageAvailable as Mock).mockResolvedValueOnce(true);
+    await fail();
+    await fail();
+    expect(Notice).toHaveBeenCalledTimes(4);
+  });
+
   test('shows the failure notice every time while Bible text is available', async () => {
     getCitation.mockResolvedValue({
       success: false,
