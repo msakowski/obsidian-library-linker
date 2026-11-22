@@ -56,6 +56,9 @@ async function generateBibleQuoteText(
   settings: LinkReplacerSettings,
   provider: BibleCitationProvider,
 ): Promise<string | null> {
+  // Chapter navigation links do not specify verses to quote. Keep them in the note.
+  if (!linkInfo.reference.verseRanges?.length) return null;
+
   try {
     logger.log('generateBibleQuoteText: fetching text for', linkInfo.reference);
     const result = await provider.getCitation(

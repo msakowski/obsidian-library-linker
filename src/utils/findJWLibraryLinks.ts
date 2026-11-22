@@ -24,6 +24,8 @@ function parseSingleBibleCode(code: string): BibleReference | null {
 
   if (isNaN(book) || isNaN(chapter) || isNaN(verse)) return null;
 
+  if (verse === 0) return { book, chapter };
+
   return {
     book,
     chapter,
@@ -44,15 +46,15 @@ export function parseJWLibraryLink(url: string): BibleReference | null {
     const startRef = parseSingleBibleCode(start);
     const endRef = parseSingleBibleCode(end);
 
-    if (!startRef || !endRef) return null;
+    if (!startRef?.verseRanges || !endRef?.verseRanges) return null;
 
     return {
       book: startRef.book,
       chapter: startRef.chapter,
       verseRanges: [
         {
-          start: startRef.verseRanges![0].start,
-          end: endRef.verseRanges![0].start,
+          start: startRef.verseRanges[0].start,
+          end: endRef.verseRanges[0].start,
         },
       ],
     };
