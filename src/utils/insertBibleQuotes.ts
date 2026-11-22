@@ -298,6 +298,9 @@ export async function insertAllBibleQuotes(
     const quoteTexts: string[] = [];
 
     for (const linkInfo of lineLinks) {
+      // A whole-chapter link names no verses: nothing to quote, nothing failed
+      if (!linkInfo.reference.verseRanges?.length) continue;
+
       if (exceedsQuoteChapterLimit(linkInfo.reference)) {
         tooManyChapters++;
         continue;
@@ -400,16 +403,23 @@ export async function insertBibleQuoteAtCursor(
 
   const quoteTexts: string[] = [];
   let tooManyChapters = false;
+  let failed = 0;
   for (const linkInfo of linksOnTargetLine) {
     const reference = parseJWLibraryLink(linkInfo.url);
     logger.log('reference', reference);
-    if (reference && exceedsQuoteChapterLimit(reference)) {
+    // A whole-chapter link names no verses: nothing to quote, nothing failed
+    if (!reference?.verseRanges?.length) continue;
+
+    if (exceedsQuoteChapterLimit(reference)) {
       tooManyChapters = true;
-    } else if (reference) {
-      const quoteText = await generateBibleQuoteText(reference, settings, provider);
-      if (quoteText) {
-        quoteTexts.push(quoteText);
-      }
+      continue;
+    }
+
+    const quoteText = await generateBibleQuoteText(reference, settings, provider);
+    if (quoteText) {
+      quoteTexts.push(quoteText);
+    } else {
+      failed++;
     }
   }
 
@@ -429,7 +439,7 @@ export async function insertBibleQuoteAtCursor(
   return {
     inserted: false,
     alreadyExists: false,
-    fetchFailed: !tooManyChapters && linksOnTargetLine.length > 0,
+    fetchFailed: failed > 0,
     tooManyChapters,
   };
 }
