@@ -98,6 +98,11 @@ describe('cleanHtmlText', () => {
   });
 
   describe('Whitespace normalization', () => {
+    it('should remove zero-width characters', () => {
+      const html = 'Déplace-\u200btoi, bénis-\u200bmoi\ufeff';
+      expect(cleanHtmlText(html)).toBe('Déplace-toi, bénis-moi');
+    });
+
     it('should normalize multiple spaces to single space', () => {
       const html = 'Hello    world';
       expect(cleanHtmlText(html)).toBe('Hello world');
