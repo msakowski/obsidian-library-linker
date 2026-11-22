@@ -103,6 +103,9 @@ async function generateBibleQuoteText(
   settings: LinkReplacerSettings,
   provider: BibleCitationProvider,
 ): Promise<string | null> {
+  // Chapter navigation links do not specify verses to quote. Keep them in the note.
+  if (!reference.verseRanges?.length) return null;
+
   try {
     logger.log('generateBibleQuoteText: fetching text for', reference);
     const text = await fetchCitationText(reference, settings, provider);
@@ -149,12 +152,45 @@ function isBlankLine(editor: Editor, line: number): boolean {
   return line > editor.lastLine() || editor.getLine(line).trim().length === 0;
 }
 
+const LIST_ITEM_PREFIX = /^(\s*)([-*+]|\d+[.)])(\s+)/;
+
+/**
+ * How a quote keeps the nesting of the line holding its link: the indentation
+ * each quote line starts with, and whether the line is a list item.
+ *
+ * Below a list item the quote is indented to the item's text, which keeps it
+ * inside the item. Any other line passes on its own indentation.
+ */
+function getQuoteNesting(lineText: string): { indent: string; inListItem: boolean } {
+  const listItem = LIST_ITEM_PREFIX.exec(lineText);
+  if (listItem) {
+    const [, leading, marker, spacing] = listItem;
+    return { indent: leading + ' '.repeat(marker.length + spacing.length), inListItem: true };
+  }
+
+  return { indent: /^\s*/.exec(lineText)?.[0] ?? '', inListItem: false };
+}
+
+/** Prefixes every non-empty line of `text` with `indent`. */
+function indentLines(text: string, indent: string): string {
+  if (!indent) return text;
+
+  return text
+    .split('\n')
+    .map((line) => (line ? indent + line : line))
+    .join('\n');
+}
+
 /**
  * Builds the edit that puts a quote next to the reference on `line`.
  *
  * With `replaceLine` the quote takes the place of the reference, otherwise it
  * goes below the line after a blank one. A blank line is kept before any text
  * that follows, so that text is not pulled into the blockquote.
+ *
+ * Below a list item the quote is nested in the item and no blank lines are
+ * added around it, so a tight list stays tight; a following list item cannot
+ * be pulled into the blockquote.
  */
 function buildQuoteChange(
   editor: Editor,
@@ -163,12 +199,17 @@ function buildQuoteChange(
   replaceLine: boolean,
 ): QuoteChange {
   const lineText = editor.getLine(line);
-  const separator = isBlankLine(editor, line + 1) ? '' : '\n';
+  const { indent, inListItem } = getQuoteNesting(lineText);
+  const nextLine = line + 1;
+  const nextIsListItem =
+    nextLine <= editor.lastLine() && LIST_ITEM_PREFIX.test(editor.getLine(nextLine));
+  const separator = isBlankLine(editor, nextLine) || (inListItem && nextIsListItem) ? '' : '\n';
+  const before = replaceLine ? '' : inListItem ? '\n' : '\n\n';
 
   return {
     from: { line, ch: replaceLine ? 0 : lineText.length },
     to: { line, ch: lineText.length },
-    text: (replaceLine ? '' : '\n\n') + quoteText + separator,
+    text: before + indentLines(quoteText, indent) + separator,
   };
 }
 

@@ -25,7 +25,7 @@ Read relevant sections when changing reference parsing, localization, settings, 
 - UI YAML is bundled as `BUNDLED_LOCALES` through `locale:all`.
 - Call `loadBibleBooks()` before `getBibleBooks()`; the store uses `Map<Language, BibleBook[]>`.
 - Input → `parseBibleReference()` → `BibleReference` → `formatJWLibraryLink()` → `convertBibleTextToMarkdownLink()`.
-- `BibleReference` contains `book`, `chapter`, optional `endChapter`, and optional `verseRanges`. A single-verse `VerseRange` has equal `start` and `end`.
+- `BibleReference` contains `book`, `chapter`, optional `endChapter`, and optional `verseRanges`. A single-verse `VerseRange` has equal `start` and `end`. Absent `verseRanges` means whole-chapter navigation (verse `000` in the link); it is not a verse-zero quotation request.
 - Utility errors use translation keys as messages, for example `errors.invalidReferenceFormat`.
 - Follow [Contributing a new language](../LOCALIZATION.md#contributing-a-new-language) when adding language support.
 
