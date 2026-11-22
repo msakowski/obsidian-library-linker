@@ -114,6 +114,7 @@ notices:
   bibleQuoteAlreadyExists: A bibliai idézet már létezik
   errorInsertingQuotes: Hiba a bibliai idézetek beszúrásakor
   bibleQuoteFetchFailed: A bibliai szöveget nem sikerült letölteni — próbáld újra
+  bibleQuoteTooManyChapters: Egy idézet legfeljebb {{max}} fejezetet fedhet le — válassz rövidebb részt
   offlineBibleImported: Offline Biblia importálva {{language}} nyelvhez
   offlineBibleRemoved: Offline Biblia eltávolítva {{language}} nyelvhez
   offlineBibleAlreadyInstalled: Már telepítve van offline Biblia {{language}} nyelvhez. Az újbóli importáláshoz először távolítsd el.

@@ -23,6 +23,9 @@ interface VerseTarget {
   anchor: string;
 }
 
+/** Paragraph classes of JW EPUBs that carry on the verse before them. */
+const VERSE_CONTINUATION_CLASSES = ['sz', 'sb', 'ss'];
+
 export class BibleEpubImportService implements EpubImportService {
   constructor(private readonly repository: OfflineBibleRepository) {}
 
@@ -356,7 +359,7 @@ export class BibleEpubImportService implements EpubImportService {
       range.setEndBefore(nextVerse);
     } else {
       const verseContainer = this.findVerseContentContainer(start, body);
-      range.setEndAfter(verseContainer);
+      range.setEndAfter(this.findLastVerseEnd(verseContainer));
     }
 
     // chapterDoc is a detached DOMParser document without a window, so createDiv() is unavailable;
@@ -365,11 +368,48 @@ export class BibleEpubImportService implements EpubImportService {
     wrapper.append(range.cloneContents());
     wrapper
       .querySelectorAll(
-        'a[epub\\:type="noteref"], a[href^="#footnote"], .pageNum, .w_ch, sup, aside, .groupFootnote',
+        'a[epub\\:type="noteref"], a[href^="#footnote"], .pageNum, .w_ch, sup, aside, .groupFootnote, p.ss',
       )
       .forEach((node) => node.remove());
 
     return this.normalizeText(wrapper.innerHTML);
+  }
+
+  /**
+   * Where the last verse of a chapter ends.
+   *
+   * Without a next verse to stop at, the text ends with the verse's block,
+   * unless the verse runs on in the paragraphs that follow: the lines of a
+   * poem (`sz`) or a second prose paragraph (`sb`), possibly around a heading
+   * (`ss`, removed later). JW EPUBs mark these with their own paragraph
+   * classes; any other block, such as footnotes or the closing note of the
+   * Hebrew Scriptures (`sd`), is not part of the verse.
+   */
+  private findLastVerseEnd(container: Node): Node {
+    let end = container;
+
+    for (let node = container.nextSibling; node; node = node.nextSibling) {
+      if (node.nodeType === Node.TEXT_NODE && !node.textContent?.trim()) continue;
+      if (node.nodeType !== Node.ELEMENT_NODE) break;
+
+      const element = node as Element;
+      if (
+        element.localName === 'span' &&
+        (element.classList.contains('pageNum') || !element.textContent?.trim())
+      ) {
+        continue;
+      }
+
+      const continuesVerse =
+        element.localName === 'p' &&
+        VERSE_CONTINUATION_CLASSES.some((className) => element.classList.contains(className)) &&
+        !element.querySelector('[id^="chapter"][id*="_verse"]');
+      if (!continuesVerse) break;
+
+      end = element;
+    }
+
+    return end;
   }
 
   private findVerseContentContainer(start: Element, body: HTMLElement): Node {
@@ -394,10 +434,10 @@ export class BibleEpubImportService implements EpubImportService {
   }
 
   private normalizeText(html: string): string | null {
-    const normalized = cleanHtmlText(
-      html.replace(/\u00a0/g, ' ').replace(/[\u200b-\u200d\ufeff]/g, ''),
-      { removeFootnoteMarkers: false },
-    );
+    // cleanHtmlText also drops zero-width characters
+    const normalized = cleanHtmlText(html.replace(/\u00a0/g, ' '), {
+      removeFootnoteMarkers: false,
+    });
 
     return normalized || null;
   }

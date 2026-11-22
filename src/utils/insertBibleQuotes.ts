@@ -14,7 +14,10 @@ import {
   type JWLibraryLinkInfo,
   type ContentSelection,
 } from '@/utils/findJWLibraryLinks';
-import { splitBibleReferenceForCitation } from '@/utils/splitBibleReferenceForCitation';
+import {
+  exceedsQuoteChapterLimit,
+  splitBibleReferenceForCitation,
+} from '@/utils/splitBibleReferenceForCitation';
 import { logger } from '@/utils/logger';
 import type { TrackedRange } from '@/utils/createdLinkTracker';
 import { getBookLanguage } from './signLanguage';
@@ -104,6 +107,9 @@ async function generateBibleQuoteText(
   settings: LinkReplacerSettings,
   provider: BibleCitationProvider,
 ): Promise<string | null> {
+  // Chapter navigation links do not specify verses to quote. Keep them in the note.
+  if (!reference.verseRanges?.length) return null;
+
   try {
     logger.log('generateBibleQuoteText: fetching text for', reference);
     const text = await fetchCitationText(reference, settings, provider);
@@ -150,12 +156,45 @@ function isBlankLine(editor: Editor, line: number): boolean {
   return line > editor.lastLine() || editor.getLine(line).trim().length === 0;
 }
 
+const LIST_ITEM_PREFIX = /^(\s*)([-*+]|\d+[.)])(\s+)/;
+
+/**
+ * How a quote keeps the nesting of the line holding its link: the indentation
+ * each quote line starts with, and whether the line is a list item.
+ *
+ * Below a list item the quote is indented to the item's text, which keeps it
+ * inside the item. Any other line passes on its own indentation.
+ */
+function getQuoteNesting(lineText: string): { indent: string; inListItem: boolean } {
+  const listItem = LIST_ITEM_PREFIX.exec(lineText);
+  if (listItem) {
+    const [, leading, marker, spacing] = listItem;
+    return { indent: leading + ' '.repeat(marker.length + spacing.length), inListItem: true };
+  }
+
+  return { indent: /^\s*/.exec(lineText)?.[0] ?? '', inListItem: false };
+}
+
+/** Prefixes every non-empty line of `text` with `indent`. */
+function indentLines(text: string, indent: string): string {
+  if (!indent) return text;
+
+  return text
+    .split('\n')
+    .map((line) => (line ? indent + line : line))
+    .join('\n');
+}
+
 /**
  * Builds the edit that puts a quote next to the reference on `line`.
  *
  * With `replaceLine` the quote takes the place of the reference, otherwise it
  * goes below the line after a blank one. A blank line is kept before any text
  * that follows, so that text is not pulled into the blockquote.
+ *
+ * Below a list item the quote is nested in the item and no blank lines are
+ * added around it, so a tight list stays tight; a following list item cannot
+ * be pulled into the blockquote.
  */
 function buildQuoteChange(
   editor: Editor,
@@ -164,12 +203,17 @@ function buildQuoteChange(
   replaceLine: boolean,
 ): QuoteChange {
   const lineText = editor.getLine(line);
-  const separator = isBlankLine(editor, line + 1) ? '' : '\n';
+  const { indent, inListItem } = getQuoteNesting(lineText);
+  const nextLine = line + 1;
+  const nextIsListItem =
+    nextLine <= editor.lastLine() && LIST_ITEM_PREFIX.test(editor.getLine(nextLine));
+  const separator = isBlankLine(editor, nextLine) || (inListItem && nextIsListItem) ? '' : '\n';
+  const before = replaceLine ? '' : inListItem ? '\n' : '\n\n';
 
   return {
     from: { line, ch: replaceLine ? 0 : lineText.length },
     to: { line, ch: lineText.length },
-    text: (replaceLine ? '' : '\n\n') + quoteText + separator,
+    text: before + indentLines(quoteText, indent) + separator,
   };
 }
 
@@ -177,6 +221,16 @@ interface InsertQuotesResult {
   inserted: number;
   linksFound: number;
   fetchFailed: number;
+  /** Links not quoted because they span more than `MAX_QUOTE_CHAPTERS` chapters. */
+  tooManyChapters: number;
+}
+
+interface InsertQuoteAtCursorResult {
+  inserted: boolean;
+  alreadyExists: boolean;
+  fetchFailed: boolean;
+  /** A link was not quoted because it spans more than `MAX_QUOTE_CHAPTERS` chapters. */
+  tooManyChapters: boolean;
 }
 
 export async function insertAllBibleQuotes(
@@ -202,7 +256,7 @@ export async function insertAllBibleQuotes(
         );
       }
     }
-    return { inserted: 0, linksFound: 0, fetchFailed: 0 };
+    return { inserted: 0, linksFound: 0, fetchFailed: 0, tooManyChapters: 0 };
   }
 
   // Several links can share a line (a multi-range reference, or references
@@ -220,6 +274,7 @@ export async function insertAllBibleQuotes(
   let inserted = 0;
   let skippedAlreadyQuoted = 0;
   let fetchFailed = 0;
+  let tooManyChapters = 0;
 
   for (const [lineNumber, lineLinks] of linksByLine) {
     if (lineNumber > editor.lastLine()) {
@@ -244,6 +299,11 @@ export async function insertAllBibleQuotes(
     const quoteTexts: string[] = [];
 
     for (const linkInfo of lineLinks) {
+      if (exceedsQuoteChapterLimit(linkInfo.reference)) {
+        tooManyChapters++;
+        continue;
+      }
+
       try {
         const quoteText = await generateBibleQuoteText(linkInfo.reference, settings, provider);
         if (quoteText) {
@@ -284,21 +344,21 @@ export async function insertAllBibleQuotes(
     editor.transaction({ changes });
   }
 
-  return { inserted, linksFound: links.length, fetchFailed };
+  return { inserted, linksFound: links.length, fetchFailed, tooManyChapters };
 }
 
 export async function insertBibleQuoteAtCursor(
   editor: Editor,
   settings: LinkReplacerSettings,
   provider: BibleCitationProvider,
-): Promise<{ inserted: boolean; alreadyExists: boolean; fetchFailed: boolean }> {
+): Promise<InsertQuoteAtCursorResult> {
   const cursor = editor.getCursor();
   const cursorLine = cursor.line;
 
   logger.log('insertBibleQuoteAtCursor', cursorLine);
 
   if (cursorLine > editor.lastLine()) {
-    return { inserted: false, alreadyExists: false, fetchFailed: false };
+    return { inserted: false, alreadyExists: false, fetchFailed: false, tooManyChapters: false };
   }
 
   const currentLine = editor.getLine(cursorLine);
@@ -311,7 +371,7 @@ export async function insertBibleQuoteAtCursor(
     nextLine &&
     nextLine.trim().startsWith('>')
   ) {
-    return { inserted: false, alreadyExists: true, fetchFailed: false };
+    return { inserted: false, alreadyExists: true, fetchFailed: false, tooManyChapters: false };
   }
 
   const candidateLineNumbers = [
@@ -336,14 +396,17 @@ export async function insertBibleQuoteAtCursor(
   }
 
   if (linksOnTargetLine.length === 0) {
-    return { inserted: false, alreadyExists: false, fetchFailed: false };
+    return { inserted: false, alreadyExists: false, fetchFailed: false, tooManyChapters: false };
   }
 
   const quoteTexts: string[] = [];
+  let tooManyChapters = false;
   for (const linkInfo of linksOnTargetLine) {
     const reference = parseJWLibraryLink(linkInfo.url);
     logger.log('reference', reference);
-    if (reference) {
+    if (reference && exceedsQuoteChapterLimit(reference)) {
+      tooManyChapters = true;
+    } else if (reference) {
       const quoteText = await generateBibleQuoteText(reference, settings, provider);
       if (quoteText) {
         quoteTexts.push(quoteText);
@@ -361,10 +424,15 @@ export async function insertBibleQuoteAtCursor(
     editor.transaction({
       changes: [buildQuoteChange(editor, targetLineNumber, quoteTexts.join('\n\n'), replaceLine)],
     });
-    return { inserted: true, alreadyExists: false, fetchFailed: false };
+    return { inserted: true, alreadyExists: false, fetchFailed: false, tooManyChapters };
   }
 
-  return { inserted: false, alreadyExists: false, fetchFailed: linksOnTargetLine.length > 0 };
+  return {
+    inserted: false,
+    alreadyExists: false,
+    fetchFailed: !tooManyChapters && linksOnTargetLine.length > 0,
+    tooManyChapters,
+  };
 }
 
 /** Where a freshly created link was written, so its quote can be placed next to it. */

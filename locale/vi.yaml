@@ -114,6 +114,7 @@ notices:
   bibleQuoteAlreadyExists: Câu trích Kinh Thánh đã tồn tại
   errorInsertingQuotes: Lỗi khi chèn câu trích Kinh Thánh
   bibleQuoteFetchFailed: Không thể tải văn bản Kinh Thánh — vui lòng thử lại
+  bibleQuoteTooManyChapters: Một trích dẫn chỉ có thể gồm tối đa {{max}} chương — vui lòng chọn đoạn ngắn hơn
   offlineBibleImported: Đã nhập Kinh Thánh ngoại tuyến cho {{language}}
   offlineBibleRemoved: Đã xóa Kinh Thánh ngoại tuyến cho {{language}}
   offlineBibleAlreadyInstalled: Đã có Kinh Thánh ngoại tuyến được cài đặt cho {{language}}. Hãy xóa nó trước để nhập lại.

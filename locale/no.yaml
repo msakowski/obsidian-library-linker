@@ -114,6 +114,7 @@ notices:
   bibleQuoteAlreadyExists: Bibelsitatet finnes allerede
   errorInsertingQuotes: Feil ved innsetting av bibelsitater
   bibleQuoteFetchFailed: Kunne ikke hente bibeltekst – prøv igjen
+  bibleQuoteTooManyChapters: Et sitat kan dekke høyst {{max}} kapitler – velg et kortere avsnitt
   offlineBibleImported: Offline bibel importert for {{language}}
   offlineBibleRemoved: Offline bibel fjernet for {{language}}
   offlineBibleAlreadyInstalled: En offline bibel for {{language}} er allerede installert. Fjern den først for å importere på nytt.
