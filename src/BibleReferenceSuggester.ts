@@ -16,6 +16,8 @@ import { buildBookNameRegex } from '@/utils/buildBookNameRegex';
 import { logger } from '@/utils/logger';
 
 const TRIGGER = '/b ';
+/** Characters that continue a reference after the cursor: "6" in "John 3:1|6". */
+const REFERENCE_CONTINUATION = /^[\p{L}\p{N}:.,\-–]*/u;
 /** What may come right before a command: a space, or opening punctuation or markup. */
 const BEFORE_COMMAND = /[\s([{*_>"'“‘«]/;
 
@@ -169,8 +171,11 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
 
     if (commandIndex === -1) return null;
 
-    // Get the text after /b
-    const afterCommand = line.slice(commandIndex + TRIGGER.length);
+    // The command runs to the cursor, plus the rest of a reference being
+    // edited in the middle ("/b John 3:1|6"). Text after it, such as the
+    // closing bracket of "(/b John 3:16)", stays in the note.
+    const end = cursor.ch + (REFERENCE_CONTINUATION.exec(line.slice(cursor.ch))?.[0].length ?? 0);
+    const afterCommand = line.slice(commandIndex + TRIGGER.length, end);
     // Show suggestions if there's any text after "/b "
     if (afterCommand.length > 0) {
       return {
@@ -179,7 +184,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
           line: cursor.line,
         },
         end: {
-          ch: line.length,
+          ch: end,
           line: cursor.line,
         },
         query: afterCommand.trim(), // Trim to handle the space case

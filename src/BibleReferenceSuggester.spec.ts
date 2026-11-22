@@ -151,6 +151,25 @@ describe('BibleReferenceSuggester.onTrigger', () => {
       },
     );
 
+    it.each([
+      ['(/b John 3:16|)', ')'],
+      ['**/b John 3:16|**', '**'],
+      ['[/b John 3:16|]', ']'],
+    ])('leaves the closing markup of %s in the note', (line, closing) => {
+      const result = trigger(line);
+      const text = line.replace('|', '');
+
+      expect(result?.query).toBe('John 3:16');
+      expect(text.slice(result!.end.ch)).toBe(closing);
+    });
+
+    it('covers the rest of a reference edited in the middle', () => {
+      const result = trigger('/b John 3:1|6 and more');
+
+      expect(result?.query).toBe('John 3:16');
+      expect(result?.end.ch).toBe('/b John 3:16'.length);
+    });
+
     it('does not stop detecting references typed before it', () => {
       expect(trigger('John 3:16| /b Matt 5')?.query).toBe('John 3:16');
     });
