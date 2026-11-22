@@ -1,5 +1,10 @@
 import { Notice, type Editor, type EditorPosition } from 'obsidian';
-import type { BibleCitationProvider, BibleReference, LinkReplacerSettings } from '@/types';
+import type {
+  BibleCitationProvider,
+  BibleReference,
+  Language,
+  LinkReplacerSettings,
+} from '@/types';
 import { findJWLibraryLinksInLine } from '@/utils/findJWLibraryLinks';
 import {
   insertBibleQuoteForCreatedLink,
@@ -48,9 +53,10 @@ export class AutoBibleQuoteInserter {
   /**
    * Whether the failure notice was shown while no Bible text is available at
    * all (offline only, with no Bible imported): every created link would fail
-   * the same way, so it is shown once per session.
+   * the same way, so it is shown once per session and language, until text
+   * becomes available for that language again.
    */
-  private unavailableNoticeShown = false;
+  private readonly unavailableNoticeShown = new Set<Language>();
 
   constructor(
     private readonly getSettings: () => LinkReplacerSettings,
@@ -186,9 +192,11 @@ export class AutoBibleQuoteInserter {
     const language = getBookLanguage(this.getSettings().language);
     const available = await this.provider.isLanguageAvailable(language).catch(() => true);
 
-    if (!available) {
-      if (this.unavailableNoticeShown) return;
-      this.unavailableNoticeShown = true;
+    if (available) {
+      this.unavailableNoticeShown.delete(language);
+    } else {
+      if (this.unavailableNoticeShown.has(language)) return;
+      this.unavailableNoticeShown.add(language);
     }
 
     new Notice(this.t('notices.bibleQuoteFetchFailed'));
