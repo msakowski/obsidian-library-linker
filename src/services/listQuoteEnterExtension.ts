@@ -33,7 +33,8 @@ export function continueListAfterQuote(state: EditorState): TransactionSpec | nu
   };
   // A line of a quote as the inserter writes it: a blockquote line, or the
   // link repeated by the template. A nested list item or deeper content is
-  // the user's own, so the scan stops there instead of skipping its sub-tree.
+  // the user's own: a sub-list whose quote comes further down is no quote of
+  // this item.
   const isQuoteLine = (number: number) => {
     const content = state.doc.line(number).text.slice(nestedIndent.length);
     if (content.startsWith('>')) return true;
@@ -42,7 +43,7 @@ export function continueListAfterQuote(state: EditorState): TransactionSpec | nu
 
   if (line.number >= state.doc.lines || !isNested(line.number + 1)) return null;
 
-  // The quotes nested in the item, quotes separated by a blank line included
+  // The quotes right below the item, quotes separated by a blank line included
   let last = line.number;
   let hasLink = false;
   let hasBlockquote = false;
@@ -65,13 +66,20 @@ export function continueListAfterQuote(state: EditorState): TransactionSpec | nu
   }
 
   // Only a quote right below the item, such as one this plugin inserted
-  const firstNested = state.doc.line(line.number + 1).text.trim();
-  if (
-    !hasLink ||
-    !hasBlockquote ||
-    !(firstNested.startsWith('>') || firstNested.includes(JW_LIBRARY_LINK))
-  ) {
-    return null;
+  if (!hasLink || !hasBlockquote) return null;
+
+  // The rest of the item, such as its sub-list, stays with it: the new item
+  // goes after everything nested in it
+  for (let number = last + 1; number <= state.doc.lines; number++) {
+    if (isNested(number)) {
+      last = number;
+    } else if (
+      state.doc.line(number).text.trim() !== '' ||
+      number === state.doc.lines ||
+      !isNested(number + 1)
+    ) {
+      break;
+    }
   }
 
   const ordered = /^(\d+)([.)])$/.exec(marker);

@@ -67,8 +67,14 @@ describe('continueListAfterQuote', () => {
 
   test('does not skip a nested sub-list whose quote comes further down', () => {
     expect(enter(`- Parent|\n  - ${LINK}\n    > ${LINK}\n    > Text.\n- Next`)).toBeNull();
-    expect(enter(`- ${LINK}|\n  > ${LINK}\n  > Text.\n  - Child ${LINK}\n    > Text.`)).toBe(
-      `- ${LINK}\n  > ${LINK}\n  > Text.\n- |\n  - Child ${LINK}\n    > Text.`,
+    expect(
+      enter(`- ${LINK}|\n  > ${LINK}\n  > Text.\n  - Child ${LINK}\n    > Text.\n- Next`),
+    ).toBe(`- ${LINK}\n  > ${LINK}\n  > Text.\n  - Child ${LINK}\n    > Text.\n- |\n- Next`);
+  });
+
+  test('keeps the sub-list of the item with it, after its quote', () => {
+    expect(enter(`- item ${LINK}|\n  > ${LINK}\n  > Text.\n\n  - sub-point\n- Next`)).toBe(
+      `- item ${LINK}\n  > ${LINK}\n  > Text.\n\n  - sub-point\n- |\n- Next`,
     );
   });
 
