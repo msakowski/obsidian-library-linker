@@ -111,6 +111,7 @@ notices:
   bibleQuoteAlreadyExists: La citation biblique existe déjà
   errorInsertingQuotes: Erreur lors de l'insertion des citations bibliques
   bibleQuoteFetchFailed: Impossible de récupérer le texte biblique — veuillez réessayer
+  bibleQuoteTooManyChapters: Une citation peut couvrir au plus {{max}} chapitres — choisissez un passage plus court
   offlineBibleImported: Bible hors ligne importée pour {{language}}
   offlineBibleRemoved: Bible hors ligne supprimée pour {{language}}
   offlineBibleAlreadyInstalled: Une Bible hors ligne pour {{language}} est déjà installée. Supprimez-la d'abord pour la réimporter.

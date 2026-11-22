@@ -111,6 +111,7 @@ notices:
   bibleQuoteAlreadyExists: La citazione biblica esiste già
   errorInsertingQuotes: Errore durante l'inserimento delle citazioni bibliche
   bibleQuoteFetchFailed: Impossibile recuperare il testo biblico — riprova
+  bibleQuoteTooManyChapters: Una citazione può coprire al massimo {{max}} capitoli — scegli un passo più breve
   offlineBibleImported: Bibbia offline importata per {{language}}
   offlineBibleRemoved: Bibbia offline rimossa per {{language}}
   offlineBibleAlreadyInstalled: Una Bibbia offline per {{language}} è già installata. Rimuovila prima di reimportare.

@@ -14,7 +14,10 @@ import {
   type JWLibraryLinkInfo,
   type ContentSelection,
 } from '@/utils/findJWLibraryLinks';
-import { splitBibleReferenceForCitation } from '@/utils/splitBibleReferenceForCitation';
+import {
+  exceedsQuoteChapterLimit,
+  splitBibleReferenceForCitation,
+} from '@/utils/splitBibleReferenceForCitation';
 import { logger } from '@/utils/logger';
 import { getBookLanguage } from './signLanguage';
 
@@ -217,6 +220,16 @@ interface InsertQuotesResult {
   inserted: number;
   linksFound: number;
   fetchFailed: number;
+  /** Links not quoted because they span more than `MAX_QUOTE_CHAPTERS` chapters. */
+  tooManyChapters: number;
+}
+
+interface InsertQuoteAtCursorResult {
+  inserted: boolean;
+  alreadyExists: boolean;
+  fetchFailed: boolean;
+  /** A link was not quoted because it spans more than `MAX_QUOTE_CHAPTERS` chapters. */
+  tooManyChapters: boolean;
 }
 
 export async function insertAllBibleQuotes(
@@ -242,7 +255,7 @@ export async function insertAllBibleQuotes(
         );
       }
     }
-    return { inserted: 0, linksFound: 0, fetchFailed: 0 };
+    return { inserted: 0, linksFound: 0, fetchFailed: 0, tooManyChapters: 0 };
   }
 
   // Several links can share a line (a multi-range reference, or references
@@ -260,6 +273,7 @@ export async function insertAllBibleQuotes(
   let inserted = 0;
   let skippedAlreadyQuoted = 0;
   let fetchFailed = 0;
+  let tooManyChapters = 0;
 
   for (const [lineNumber, lineLinks] of linksByLine) {
     if (lineNumber > editor.lastLine()) {
@@ -284,6 +298,11 @@ export async function insertAllBibleQuotes(
     const quoteTexts: string[] = [];
 
     for (const linkInfo of lineLinks) {
+      if (exceedsQuoteChapterLimit(linkInfo.reference)) {
+        tooManyChapters++;
+        continue;
+      }
+
       try {
         const quoteText = await generateBibleQuoteText(linkInfo.reference, settings, provider);
         if (quoteText) {
@@ -324,21 +343,21 @@ export async function insertAllBibleQuotes(
     editor.transaction({ changes });
   }
 
-  return { inserted, linksFound: links.length, fetchFailed };
+  return { inserted, linksFound: links.length, fetchFailed, tooManyChapters };
 }
 
 export async function insertBibleQuoteAtCursor(
   editor: Editor,
   settings: LinkReplacerSettings,
   provider: BibleCitationProvider,
-): Promise<{ inserted: boolean; alreadyExists: boolean; fetchFailed: boolean }> {
+): Promise<InsertQuoteAtCursorResult> {
   const cursor = editor.getCursor();
   const cursorLine = cursor.line;
 
   logger.log('insertBibleQuoteAtCursor', cursorLine);
 
   if (cursorLine > editor.lastLine()) {
-    return { inserted: false, alreadyExists: false, fetchFailed: false };
+    return { inserted: false, alreadyExists: false, fetchFailed: false, tooManyChapters: false };
   }
 
   const currentLine = editor.getLine(cursorLine);
@@ -351,7 +370,7 @@ export async function insertBibleQuoteAtCursor(
     nextLine &&
     nextLine.trim().startsWith('>')
   ) {
-    return { inserted: false, alreadyExists: true, fetchFailed: false };
+    return { inserted: false, alreadyExists: true, fetchFailed: false, tooManyChapters: false };
   }
 
   const candidateLineNumbers = [
@@ -376,14 +395,17 @@ export async function insertBibleQuoteAtCursor(
   }
 
   if (linksOnTargetLine.length === 0) {
-    return { inserted: false, alreadyExists: false, fetchFailed: false };
+    return { inserted: false, alreadyExists: false, fetchFailed: false, tooManyChapters: false };
   }
 
   const quoteTexts: string[] = [];
+  let tooManyChapters = false;
   for (const linkInfo of linksOnTargetLine) {
     const reference = parseJWLibraryLink(linkInfo.url);
     logger.log('reference', reference);
-    if (reference) {
+    if (reference && exceedsQuoteChapterLimit(reference)) {
+      tooManyChapters = true;
+    } else if (reference) {
       const quoteText = await generateBibleQuoteText(reference, settings, provider);
       if (quoteText) {
         quoteTexts.push(quoteText);
@@ -401,8 +423,13 @@ export async function insertBibleQuoteAtCursor(
     editor.transaction({
       changes: [buildQuoteChange(editor, targetLineNumber, quoteTexts.join('\n\n'), replaceLine)],
     });
-    return { inserted: true, alreadyExists: false, fetchFailed: false };
+    return { inserted: true, alreadyExists: false, fetchFailed: false, tooManyChapters };
   }
 
-  return { inserted: false, alreadyExists: false, fetchFailed: linksOnTargetLine.length > 0 };
+  return {
+    inserted: false,
+    alreadyExists: false,
+    fetchFailed: !tooManyChapters && linksOnTargetLine.length > 0,
+    tooManyChapters,
+  };
 }
