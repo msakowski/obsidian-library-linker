@@ -16,6 +16,8 @@ function createSuggester(): BibleReferenceSuggester {
     app: {},
     settings: createSettings(),
     getTranslationService: () => ({ t: (key: string) => key }),
+    // Used once automatic quotes are in (#343); harmless before
+    getAutoBibleQuoteInserter: () => ({ scheduleForCreatedLink: () => {} }),
   } as unknown as JWLibraryLinkerPlugin;
   return new BibleReferenceSuggester(plugin);
 }
