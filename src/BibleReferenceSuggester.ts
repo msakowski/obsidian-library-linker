@@ -16,11 +16,15 @@ import { buildBookNameRegex } from '@/utils/buildBookNameRegex';
 import { logger } from '@/utils/logger';
 
 const TRIGGER = '/b ';
+/** What may come right before a command: a space, or opening punctuation or markup. */
+const BEFORE_COMMAND = /[\s([{*_>"'“‘«]/;
 
 /**
  * Where the `/b` command the cursor is in starts, or -1. The command must
- * start the line or follow a space, so text such as "km/b 5" is no command;
- * typing before a command keeps detecting references normally.
+ * start the line or follow a space or opening punctuation or markup (a
+ * parenthesis, bracket, emphasis mark or quote), so text such as "km/b 5" is
+ * no command; typing before a
+ * command keeps detecting references normally.
  */
 function findCommandStart(line: string, cursorCh: number): number {
   for (
@@ -28,7 +32,7 @@ function findCommandStart(line: string, cursorCh: number): number {
     index !== -1;
     index = index > 0 ? line.lastIndexOf(TRIGGER, index - 1) : -1
   ) {
-    if (index === 0 || /\s/.test(line.charAt(index - 1))) return index;
+    if (index === 0 || BEFORE_COMMAND.test(line.charAt(index - 1))) return index;
   }
 
   return -1;
@@ -224,7 +228,8 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     try {
       reference = parseBibleReference(query, this.plugin.settings.language);
     } catch (error: unknown) {
-      logger.error(error instanceof Error ? error.message : String(error));
+      // Expected while the reference is still being typed ("/b J", "/b Jo")
+      logger.debug(error instanceof Error ? error.message : String(error));
 
       if (!isExplicitMode) return [];
 

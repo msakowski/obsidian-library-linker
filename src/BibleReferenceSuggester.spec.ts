@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import type { Editor, EditorPosition } from 'obsidian';
 import { BibleReferenceSuggester } from '@/BibleReferenceSuggester';
 import type JWLibraryLinkerPlugin from '@/main';
@@ -141,6 +141,16 @@ describe('BibleReferenceSuggester.onTrigger', () => {
       expect(result?.start.ch).toBe('km/b '.length);
     });
 
+    it.each(['(', '[', '*', '**', '_', '> ', '"', '“', '«'])(
+      'is a command right after %s',
+      (before) => {
+        const result = trigger(`${before}/b John 3:16|`);
+
+        expect(result?.query).toBe('John 3:16');
+        expect(result?.start.ch).toBe(before.length);
+      },
+    );
+
     it('does not stop detecting references typed before it', () => {
       expect(trigger('John 3:16| /b Matt 5')?.query).toBe('John 3:16');
     });
@@ -152,6 +162,20 @@ describe('BibleReferenceSuggester.onTrigger', () => {
       const suggestions = suggester.getSuggestions({ ...result!, editor, file: null } as never);
 
       expect(suggestions.map((s) => s.command)).toEqual(['typing']);
+    });
+
+    it('does not log an error for each keystroke of a partial reference', () => {
+      const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const suggester = createSuggester();
+      const editor = {} as Editor;
+
+      for (const line of ['/b J|', '/b Jo|', '/b Joh|', '/b John 3:|']) {
+        const result = show(suggester, editor, line);
+        suggester.getSuggestions({ ...result!, editor, file: null } as never);
+      }
+
+      expect(error).not.toHaveBeenCalled();
+      error.mockRestore();
     });
   });
 });
