@@ -4,6 +4,12 @@ import { verseCounts } from '@/consts/verseCounts';
 import type { Language, VerseRange, BibleReference } from '@/types';
 import { logger } from '@/utils/logger';
 
+/**
+ * The book was found, but the chapter or verse is past its end ("1 John 3:30").
+ * The message stays the translation key of the error shown to the user.
+ */
+export class ReferenceOutOfRangeError extends Error {}
+
 function parseVerseNumber(verse: string): number {
   const num = parseInt(verse, 10);
   if (isNaN(num) || num < 1) {
@@ -121,14 +127,14 @@ function assertVersesExist(reference: BibleReference): void {
       (range.start > lastVerseOf(reference.chapter) ||
         range.end > lastVerseOf(reference.endChapter))
     ) {
-      throw new Error('errors.invalidVerseFormat');
+      throw new ReferenceOutOfRangeError('errors.invalidVerseFormat');
     }
     return;
   }
 
   const lastVerse = lastVerseOf(reference.chapter);
   if (ranges.some((range) => range.start > lastVerse || range.end > lastVerse)) {
-    throw new Error('errors.invalidVerseFormat');
+    throw new ReferenceOutOfRangeError('errors.invalidVerseFormat');
   }
 }
 
@@ -217,7 +223,7 @@ function parseReferenceText(input: string, language: Language): BibleReference {
       if (!/^\d+$/.test(numberPart)) throw new Error('errors.invalidFormat');
       chapter = Number(numberPart);
       if (chapter < 1 || chapter > chapterCounts[book.id]) {
-        throw new Error('errors.invalidChapter');
+        throw new ReferenceOutOfRangeError('errors.invalidChapter');
       }
       return { book: book.id, chapter };
     }
@@ -230,7 +236,7 @@ function parseReferenceText(input: string, language: Language): BibleReference {
     actualVersesPart = versesPart as string; // TypeScript: versesPart is defined when hasColon is true
 
     if (chapter < 1 || chapter > chapterCounts[book.id]) {
-      throw new Error('errors.invalidChapter');
+      throw new ReferenceOutOfRangeError('errors.invalidChapter');
     }
   }
 
@@ -249,7 +255,7 @@ function parseReferenceText(input: string, language: Language): BibleReference {
 
     // Validate end chapter
     if (endChapterNumber < 1 || (book.chapters !== undefined && endChapterNumber > book.chapters)) {
-      throw new Error('errors.invalidChapter');
+      throw new ReferenceOutOfRangeError('errors.invalidChapter');
     }
 
     // End chapter must be greater than start chapter
@@ -322,7 +328,8 @@ function parseReferenceText(input: string, language: Language): BibleReference {
 
 /**
  * Attempts to parse a Bible reference from a regex match that may contain leading words.
- * Progressively trims leading words until a valid book name is found.
+ * Progressively trims leading words until a valid book name is found, but
+ * stops when a book is found and its chapter or verse does not exist.
  * Returns the parsed reference, the trimmed text, and the character offset from the original match.
  */
 export function extractBibleReferenceFromMatch(
@@ -336,7 +343,10 @@ export function extractBibleReferenceFromMatch(
     try {
       const reference = parseBibleReference(text, language);
       return { text, offset, reference };
-    } catch {
+    } catch (error: unknown) {
+      // The book is right but the chapter or verse is not: dropping the leading
+      // number would make "1 John 3:30" a reference to John 3:30
+      if (error instanceof ReferenceOutOfRangeError) return null;
       const spaceIdx = text.search(/\s/);
       if (spaceIdx === -1) return null;
       offset += spaceIdx + 1;

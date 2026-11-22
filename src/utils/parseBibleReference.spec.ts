@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, test } from 'vitest';
-import { parseBibleReference } from '@/utils/parseBibleReference';
+import { extractBibleReferenceFromMatch, parseBibleReference } from '@/utils/parseBibleReference';
 import { verseCounts } from '@/consts/verseCounts';
 import { chapterCounts } from '@/consts/chapterCounts';
 import { initializeTestBibleBooks } from '../__tests__/__helpers__/initializeBibleBooksForTests';
@@ -34,7 +34,34 @@ describe('parseBibleReference: verses that do not exist', () => {
   });
 });
 
+describe('extractBibleReferenceFromMatch: a missing verse of a numbered book', () => {
+  // Dropping the leading number would turn these into references to John
+  test.each(['1 John 3:30', '1 John 5:22', '2 John 14', '3 John 15', '1 John 7'])(
+    'finds no reference in %s',
+    (text) => {
+      expect(extractBibleReferenceFromMatch(text, 'E')).toBeNull();
+    },
+  );
+
+  test('still drops leading words that are not a book', () => {
+    expect(extractBibleReferenceFromMatch('read 1 John 3:16', 'E')).toMatchObject({
+      text: '1 John 3:16',
+      offset: 'read '.length,
+      reference: { book: 62, chapter: 3, verseRanges: [{ start: 16, end: 16 }] },
+    });
+  });
+});
+
 describe('verseCounts', () => {
+  test.each([
+    ['Mark 16', 41, 16, 8],
+    ['John 7', 43, 7, 52],
+    ['Psalm 119', 19, 119, 176],
+    ['3 John', 64, 1, 14],
+  ])('%s has the NWT verse count', (_, book, chapter, verses) => {
+    expect(verseCounts[book][chapter - 1]).toBe(verses);
+  });
+
   test('has a verse count for every chapter of every book', () => {
     for (let book = 1; book <= 66; book++) {
       expect(verseCounts[book]).toHaveLength(chapterCounts[book]);
