@@ -128,7 +128,11 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     }
 
     // Silent mode: use generic regex to avoid false positives
-    if (!isExplicitMode && !query.match(BIBLE_REFERENCE_REGEX)) {
+    if (
+      !isExplicitMode &&
+      !query.match(BIBLE_REFERENCE_REGEX) &&
+      !query.match(this.getBookRegex())
+    ) {
       return [];
     }
 
