@@ -87,6 +87,8 @@ You can also create your own template using the variables `{bibleRef}`, `{bibleR
 
 Convert `jwpub://` links, publication links, and jw\.org web links into `jwlibrary://` links that open directly in JW Library.
 
+Conversion runs entirely offline. Supported web links are HTTPS JW\.org finder links containing `bible` or `docid`, direct WOL document links without fragments, and WOL Bible links with an explicit `#v=book:chapter:verse` target (including ranges). Web-link labels and target language are preserved. WOL `/bc/` and `/pc/` citation links require online resolution and are left unchanged, as are titled Markdown web links and unsupported URL forms, fragments, or parameters.
+
 1. Select text containing links
 2. Open the command palette (Ctrl/Cmd + P)
 3. Run "Convert links in selection to JW Library links"

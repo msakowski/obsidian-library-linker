@@ -1,8 +1,9 @@
+import { convertWebLink } from '@/utils/convertWebLink';
 import { convertPublicationReference } from '@/utils/convertPublicationReference';
 import { parseBibleReferenceFromUrl } from '@/utils/parseBibleReference';
-import { LinkReplacerSettings } from '@/types';
-import { convertBibleTextToMarkdownLink } from './convertBibleTextToMarkdownLink';
-import { parseJWLibraryLink } from './findJWLibraryLinks';
+import type { LinkReplacerSettings } from '@/types';
+import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
+import { parseJWLibraryLink } from '@/utils/findJWLibraryLinks';
 
 export type ConversionType = 'bible' | 'publication' | 'all';
 
@@ -43,17 +44,7 @@ export function convertLinks(
     if (url.startsWith('jwpub://p/') && (type === 'publication' || type === 'all')) {
       return `[${text}](${convertPublicationReference(url)})`;
     }
-    // if (url.startsWith('https://www.jw.org/') && type === 'web') {
-    //   return `[${text}](${convertWebLink(url)})`;
-    // }
-    return match;
+    const webLink = convertWebLink(url, type);
+    return webLink ? `[${text}](${webLink})` : match;
   });
 }
-
-// export function convertWebLink(url: string): string {
-//   // Replaces jw.org links with jwlibrary:// links, removing the srcid parameter which is not needed.
-//   if (url.includes('srcid=')) {
-//     url = url.replace(/&?srcid=[^&]+/, '');
-//   }
-//   return url.replace('https://www.jw.org/', 'jwlibrary:///');
-// }
