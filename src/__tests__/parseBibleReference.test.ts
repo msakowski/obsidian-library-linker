@@ -380,10 +380,9 @@ describe('parseBibleReference', () => {
       expect(parseResult).toEqual(expected);
     });
 
-    test('throws error when multi-chapter book uses verse-only format', () => {
-      // John has 21 chapters, so "John 3" without colon should fail
-      expect(() => parseBibleReference('John 3', 'E')).toThrow('errors.invalidFormat');
-      expect(() => parseBibleReference('Psalm 23', 'E')).toThrow('errors.invalidFormat');
+    test('parses chapter-only references in multi-chapter books', () => {
+      expect(parseBibleReference('John 3', 'E')).toEqual({ book: 43, chapter: 3 });
+      expect(parseBibleReference('Psalm 23', 'E')).toEqual({ book: 19, chapter: 23 });
     });
   });
 
