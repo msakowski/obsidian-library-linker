@@ -38,6 +38,7 @@ Opt-in through `bibleQuote.autoInsertOnLinkCreation` (off by default). The quote
 - `src/utils/createdLinkTracker.ts` (`CreatedLinkTracker`) follows the created link by document offsets through every edit made during the lookup, so the quote goes next to that very occurrence even when the same verse is cited elsewhere. The whole created reference must still be there unchanged before anything is written.
 - `src/services/createdLinkTrackingExtension.ts` is the CodeMirror extension registered with `registerEditorExtension()`: it maps edits through the tracker and tells which note an `Editor` shows.
 - `insertBibleQuoteForCreatedLink()` in `src/utils/insertBibleQuotes.ts` writes the quote in its own transaction origin, so undo removes the quote without the link.
+- `src/services/listQuoteEnterExtension.ts` is a high-precedence Enter keymap, active only while the setting is on (read on each key press): at the end of a list item followed by its quote, it starts the next item after the quote. It returns `false` in every other case so Obsidian's own list handling runs.
 
 ## Test support
 

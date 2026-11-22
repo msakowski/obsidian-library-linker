@@ -31,15 +31,23 @@ export function continueListAfterQuote(state: EditorState): TransactionSpec | nu
     const text = state.doc.line(number).text;
     return text.startsWith(nestedIndent) && text.trim().length > 0;
   };
+  // A line of a quote as the inserter writes it: a blockquote line, or the
+  // link repeated by the template. A nested list item or deeper content is
+  // the user's own, so the scan stops there instead of skipping its sub-tree.
+  const isQuoteLine = (number: number) => {
+    const content = state.doc.line(number).text.slice(nestedIndent.length);
+    if (content.startsWith('>')) return true;
+    return content.includes(JW_LIBRARY_LINK) && !/^\s/.test(content) && !LIST_ITEM.test(content);
+  };
 
   if (line.number >= state.doc.lines || !isNested(line.number + 1)) return null;
 
-  // The quote and anything else nested in the item, quotes separated by a blank line included
+  // The quotes nested in the item, quotes separated by a blank line included
   let last = line.number;
   let hasLink = false;
   let hasBlockquote = false;
   for (let number = line.number + 1; number <= state.doc.lines; number++) {
-    if (isNested(number)) {
+    if (isNested(number) && isQuoteLine(number)) {
       const text = state.doc.line(number).text.trim();
       hasLink ||= text.includes(JW_LIBRARY_LINK);
       hasBlockquote ||= text.startsWith('>');
@@ -47,7 +55,8 @@ export function continueListAfterQuote(state: EditorState): TransactionSpec | nu
     } else if (
       state.doc.line(number).text.trim() === '' &&
       number < state.doc.lines &&
-      isNested(number + 1)
+      isNested(number + 1) &&
+      isQuoteLine(number + 1)
     ) {
       continue;
     } else {
@@ -100,17 +109,25 @@ export function continueListAfterQuote(state: EditorState): TransactionSpec | nu
   };
 }
 
-/** Keymap that runs {@link continueListAfterQuote} before Obsidian's own Enter. */
-export const listQuoteEnterExtension = Prec.high(
-  keymap.of([
-    {
-      key: 'Enter',
-      run: (view) => {
-        const spec = continueListAfterQuote(view.state);
-        if (!spec) return false;
-        view.dispatch(spec);
-        return true;
+/**
+ * Keymap that runs {@link continueListAfterQuote} before Obsidian's own Enter,
+ * only while `isEnabled()` holds — the automatic quote setting. It is read on
+ * every key press, so turning the setting off hands Enter straight back to
+ * Obsidian and other plugins, with no reload.
+ */
+export function createListQuoteEnterExtension(isEnabled: () => boolean) {
+  return Prec.high(
+    keymap.of([
+      {
+        key: 'Enter',
+        run: (view) => {
+          if (!isEnabled()) return false;
+          const spec = continueListAfterQuote(view.state);
+          if (!spec) return false;
+          view.dispatch(spec);
+          return true;
+        },
       },
-    },
-  ]),
-);
+    ]),
+  );
+}

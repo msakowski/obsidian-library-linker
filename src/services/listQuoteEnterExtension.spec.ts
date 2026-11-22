@@ -1,6 +1,10 @@
 import { EditorState } from '@codemirror/state';
+import { EditorView, runScopeHandlers } from '@codemirror/view';
 import { describe, expect, test } from 'vitest';
-import { continueListAfterQuote } from '@/services/listQuoteEnterExtension';
+import {
+  continueListAfterQuote,
+  createListQuoteEnterExtension,
+} from '@/services/listQuoteEnterExtension';
 
 const LINK = '[John 3:16](jwlibrary:///finder?bible=43003016&wtlocale=E)';
 
@@ -61,8 +65,66 @@ describe('continueListAfterQuote', () => {
     expect(enter(`- Parent|\n  > A quote without a link`)).toBeNull();
   });
 
+  test('does not skip a nested sub-list whose quote comes further down', () => {
+    expect(enter(`- Parent|\n  - ${LINK}\n    > ${LINK}\n    > Text.\n- Next`)).toBeNull();
+    expect(enter(`- ${LINK}|\n  > ${LINK}\n  > Text.\n  - Child ${LINK}\n    > Text.`)).toBe(
+      `- ${LINK}\n  > ${LINK}\n  > Text.\n- |\n  - Child ${LINK}\n    > Text.`,
+    );
+  });
+
   test('leaves Enter alone before the end of the line or outside a list', () => {
     expect(enter(`- ${LINK.slice(0, 5)}|${LINK.slice(5)}\n  > ${LINK}\n  > Text.`)).toBeNull();
     expect(enter(`${LINK}|\n> ${LINK}\n> Text.`)).toBeNull();
+  });
+});
+
+describe('createListQuoteEnterExtension', () => {
+  const doc = `- ${LINK}\n  > ${LINK}\n  > Text.`;
+
+  // Presses Enter in a real editor view at the end of the first line.
+  function pressEnter(enabled: () => boolean): boolean {
+    const view = new EditorView({
+      state: EditorState.create({
+        doc,
+        selection: { anchor: doc.indexOf('\n') },
+        extensions: createListQuoteEnterExtension(enabled),
+      }),
+    });
+    const handled = runScopeHandlers(
+      view,
+      new KeyboardEvent('keydown', { key: 'Enter' }),
+      'editor',
+    );
+    view.destroy();
+    return handled;
+  }
+
+  test('handles Enter while automatic quotes are on', () => {
+    expect(pressEnter(() => true)).toBe(true);
+  });
+
+  test('leaves Enter untouched while automatic quotes are off', () => {
+    expect(pressEnter(() => false)).toBe(false);
+  });
+
+  test('follows the setting as it changes, without a reload', () => {
+    let enabled = true;
+    const view = new EditorView({
+      state: EditorState.create({
+        doc,
+        selection: { anchor: doc.indexOf('\n') },
+        extensions: createListQuoteEnterExtension(() => enabled),
+      }),
+    });
+    const enter = () =>
+      runScopeHandlers(view, new KeyboardEvent('keydown', { key: 'Enter' }), 'editor');
+
+    enabled = false;
+    expect(enter()).toBe(false);
+    expect(view.state.doc.toString()).toBe(doc);
+
+    enabled = true;
+    expect(enter()).toBe(true);
+    view.destroy();
   });
 });
