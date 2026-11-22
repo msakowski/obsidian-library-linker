@@ -4473,15 +4473,6 @@
     "isRTL": false
   },
   {
-    "code": "L",
-    "locale": "lt",
-    "vernacular": "lietuvių",
-    "script": "ROMAN",
-    "name": "Lithuanian",
-    "isSignLanguage": false,
-    "isRTL": false
-  },
-  {
     "code": "LTS",
     "locale": "lls",
     "vernacular": "lietuvių gestų",

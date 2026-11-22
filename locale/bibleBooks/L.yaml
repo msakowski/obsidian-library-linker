@@ -1,0 +1,413 @@
+- id: 1
+  aliases: []
+  name:
+    long: Pradžios
+    medium: Pr
+    short: Pr
+- id: 2
+  aliases: []
+  name:
+    long: Išėjimo
+    medium: Iš
+    short: Iš
+- id: 3
+  aliases: []
+  name:
+    long: Kunigų
+    medium: Kun
+    short: Kun
+- id: 4
+  aliases: []
+  name:
+    long: Skaičių
+    medium: Sk
+    short: Sk
+- id: 5
+  aliases: []
+  name:
+    long: Pakartoto Įstatymo
+    medium: Įst
+    short: Įst
+- id: 6
+  aliases: []
+  name:
+    long: Jozuės
+    medium: Joz
+    short: Joz
+- id: 7
+  aliases: []
+  name:
+    long: Teisėjų
+    medium: Ts
+    short: Ts
+- id: 8
+  aliases: []
+  name:
+    long: Rūtos
+    medium: Rūt
+    short: Rūt
+- id: 9
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Samuelio
+    medium: 1 Sam
+    short: 1Sa
+- id: 10
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Samuelio
+    medium: 2 Sam
+    short: 2Sa
+- id: 11
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Karalių
+    medium: 1 Kar
+    short: 1Ka
+- id: 12
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Karalių
+    medium: 2 Kar
+    short: 2Ka
+- id: 13
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Metraščių
+    medium: 1 Met
+    short: 1Me
+- id: 14
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Metraščių
+    medium: 2 Met
+    short: 2Me
+- id: 15
+  aliases: []
+  name:
+    long: Ezros
+    medium: Ezr
+    short: Ezr
+- id: 16
+  aliases: []
+  name:
+    long: Nehemijo
+    medium: Neh
+    short: Neh
+- id: 17
+  aliases: []
+  name:
+    long: Esteros
+    medium: Est
+    short: Est
+- id: 18
+  aliases: []
+  name:
+    long: Jobo
+    medium: Job
+    short: Job
+- id: 19
+  aliases: []
+  name:
+    long: Psalmynas
+    medium: Ps
+    short: Ps
+- id: 20
+  aliases: []
+  name:
+    long: Patarlių
+    medium: Pat
+    short: Pat
+- id: 21
+  aliases: []
+  name:
+    long: Mokytojo
+    medium: Mok
+    short: Mok
+- id: 22
+  aliases: []
+  name:
+    long: Giesmių giesmė
+    medium: Gg
+    short: Gg
+- id: 23
+  aliases: []
+  name:
+    long: Izaijo
+    medium: Iz
+    short: Iz
+- id: 24
+  aliases: []
+  name:
+    long: Jeremijo
+    medium: Jer
+    short: Jer
+- id: 25
+  aliases: []
+  name:
+    long: Raudų
+    medium: Rd
+    short: Rd
+- id: 26
+  aliases: []
+  name:
+    long: Ezechielio
+    medium: Ez
+    short: Ez
+- id: 27
+  aliases: []
+  name:
+    long: Danieliaus
+    medium: Dan
+    short: Dan
+- id: 28
+  aliases: []
+  name:
+    long: Ozėjo
+    medium: Oz
+    short: Oz
+- id: 29
+  aliases: []
+  name:
+    long: Joelio
+    medium: Jl
+    short: Jl
+- id: 30
+  aliases: []
+  name:
+    long: Amoso
+    medium: Am
+    short: Am
+- id: 31
+  aliases: []
+  name:
+    long: Abdijo
+    medium: Abd
+    short: Abd
+- id: 32
+  aliases: []
+  name:
+    long: Jonos
+    medium: Jon
+    short: Jon
+- id: 33
+  aliases: []
+  name:
+    long: Michėjo
+    medium: Mch
+    short: Mch
+- id: 34
+  aliases: []
+  name:
+    long: Nahumo
+    medium: Nah
+    short: Nah
+- id: 35
+  aliases: []
+  name:
+    long: Habakuko
+    medium: Hab
+    short: Hab
+- id: 36
+  aliases: []
+  name:
+    long: Sofonijo
+    medium: Sof
+    short: Sof
+- id: 37
+  aliases: []
+  name:
+    long: Agėjo
+    medium: Ag
+    short: Ag
+- id: 38
+  aliases: []
+  name:
+    long: Zacharijo
+    medium: Zch
+    short: Zch
+- id: 39
+  aliases: []
+  name:
+    long: Malachijo
+    medium: Mal
+    short: Mal
+- id: 40
+  aliases: []
+  name:
+    long: Mato
+    medium: Mt
+    short: Mt
+- id: 41
+  aliases: []
+  name:
+    long: Morkaus
+    medium: Mk
+    short: Mk
+- id: 42
+  aliases: []
+  name:
+    long: Luko
+    medium: Lk
+    short: Lk
+- id: 43
+  aliases: []
+  name:
+    long: Jono
+    medium: Jn
+    short: Jn
+- id: 44
+  aliases: []
+  name:
+    long: Apaštalų darbai
+    medium: Apd
+    short: Apd
+- id: 45
+  aliases: []
+  name:
+    long: Romiečiams
+    medium: Rom
+    short: Rom
+- id: 46
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Korintiečiams
+    medium: 1 Kor
+    short: 1Ko
+- id: 47
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Korintiečiams
+    medium: 2 Kor
+    short: 2Ko
+- id: 48
+  aliases: []
+  name:
+    long: Galatams
+    medium: Gal
+    short: Gal
+- id: 49
+  aliases: []
+  name:
+    long: Efeziečiams
+    medium: Ef
+    short: Ef
+- id: 50
+  aliases: []
+  name:
+    long: Filipiečiams
+    medium: Fil
+    short: Fil
+- id: 51
+  aliases: []
+  name:
+    long: Kolosiečiams
+    medium: Kol
+    short: Kol
+- id: 52
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Tesalonikiečiams
+    medium: 1 Tes
+    short: 1Te
+- id: 53
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Tesalonikiečiams
+    medium: 2 Tes
+    short: 2Te
+- id: 54
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Timotiejui
+    medium: 1 Tim
+    short: 1Ti
+- id: 55
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Timotiejui
+    medium: 2 Tim
+    short: 2Ti
+- id: 56
+  aliases: []
+  name:
+    long: Titui
+    medium: Tit
+    short: Tit
+- id: 57
+  aliases: []
+  name:
+    long: Filemonui
+    medium: Fm
+    short: Fm
+- id: 58
+  aliases: []
+  name:
+    long: Hebrajams
+    medium: Hbr
+    short: Hbr
+- id: 59
+  aliases: []
+  name:
+    long: Jokūbo
+    medium: Jok
+    short: Jok
+- id: 60
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Petro
+    medium: 1 Pt
+    short: 1Pt
+- id: 61
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Petro
+    medium: 2 Pt
+    short: 2Pt
+- id: 62
+  prefix: '1'
+  aliases: []
+  name:
+    long: 1 Jono
+    medium: 1 Jn
+    short: 1Jn
+- id: 63
+  prefix: '2'
+  aliases: []
+  name:
+    long: 2 Jono
+    medium: 2 Jn
+    short: 2Jn
+- id: 64
+  prefix: '3'
+  aliases: []
+  name:
+    long: 3 Jono
+    medium: 3 Jn
+    short: 3Jn
+- id: 65
+  aliases: []
+  name:
+    long: Judo
+    medium: Jud
+    short: Jud
+- id: 66
+  aliases: []
+  name:
+    long: Apreiškimas
+    medium: Apr
+    short: Apr
