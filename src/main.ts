@@ -320,13 +320,13 @@ export default class JWLibraryLinkerPlugin extends Plugin {
     logger.log('Plugin loaded');
   }
 
-  /**
-   * Get the translation service instance
-   */
   private tooManyChaptersNotice(): string {
     return this.t('notices.bibleQuoteTooManyChapters', { max: String(MAX_QUOTE_CHAPTERS) });
   }
 
+  /**
+   * Get the translation service instance
+   */
   getTranslationService(): TranslationService {
     return this.translationService;
   }
