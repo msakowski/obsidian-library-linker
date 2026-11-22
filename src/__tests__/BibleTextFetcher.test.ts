@@ -367,6 +367,29 @@ describe('BibleTextFetcher', () => {
         expect(result.text).not.toContain('xrefLink');
         expect(result.text).not.toContain('footnoteLink');
       });
+
+      test('removes WOL footnote markers without leaving a space before punctuation', async () => {
+        // Markup as served by wol.jw.org for the French NWT, John 3:16
+        const html = `
+          <p class="sb"><span id="v43-3-16-1" class="v"><a href="#" class="vl vx vp">16 </a>« Car Dieu a tellement aimé le monde qu’il a donné son Fils unique<a id="footnotesource21" data-fnid="21" class="fn pr" href="#">*</a><a href="#" data-bid="82-1" class="b">+</a>, afin que tous ceux qui exercent la foi en lui ne soient pas détruits mais aient la vie éternelle<a href="#" data-bid="83-1" class="b">+</a>. </span><span id="v43-3-17-1" class="v"><a href="#" class="vl vx vp">17 </a>Car Dieu n’a pas envoyé son Fils dans le monde pour qu’il juge<a id="footnotesource22" data-fnid="22" class="fn" href="#">*</a> le monde.</span></p>
+        `;
+
+        mockedRequestUrl.mockResolvedValue({ status: 200, text: html });
+
+        const result = await BibleTextFetcher.fetchBibleText(
+          {
+            book: 43,
+            chapter: 3,
+            verseRanges: [{ start: 16, end: 17 }],
+          },
+          'F',
+        );
+
+        expect(result.success).toBe(true);
+        expect(result.text).toBe(
+          '« Car Dieu a tellement aimé le monde qu’il a donné son Fils unique, afin que tous ceux qui exercent la foi en lui ne soient pas détruits mais aient la vie éternelle. Car Dieu n’a pas envoyé son Fils dans le monde pour qu’il juge le monde.',
+        );
+      });
     });
 
     describe('network fallback behavior', () => {

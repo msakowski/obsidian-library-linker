@@ -93,7 +93,7 @@ describe.each([
 
     const result = await insertAllBibleQuotes(editor, settings, provider);
 
-    expect(result).toEqual({ inserted: 1, linksFound: 1, fetchFailed: 0 });
+    expect(result).toEqual({ inserted: 1, linksFound: 1, fetchFailed: 0, tooManyChapters: 0 });
     expect(calls).toEqual(expectedCalls);
     expect(changes).toHaveLength(1);
     expect(changes[0].text).toBe(expectedQuote);
@@ -105,7 +105,12 @@ describe.each([
 
     const result = await insertBibleQuoteAtCursor(editor, settings, provider);
 
-    expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
+    expect(result).toEqual({
+      inserted: true,
+      alreadyExists: false,
+      fetchFailed: false,
+      tooManyChapters: false,
+    });
     expect(calls).toEqual(expectedCalls);
     expect(changes).toHaveLength(1);
     expect(changes[0].text).toBe(expectedQuote);

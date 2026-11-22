@@ -315,8 +315,44 @@ describe('insertAllBibleQuotes', () => {
 
       const result = await insertAllBibleQuotes(mockEditor, settings, provider);
 
-      expect(result).toEqual({ inserted: 0, linksFound: 1, fetchFailed: 1 });
+      expect(result).toEqual({ inserted: 0, linksFound: 1, fetchFailed: 1, tooManyChapters: 0 });
       expect(mockTransaction).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('with a reference that spans more than three chapters', () => {
+    const linkTo = (endChapter: number, url: string) => ({
+      url,
+      reference: { book: 19, chapter: 1, endChapter, verseRanges: [{ start: 1, end: 6 }] },
+      lineNumber: 0,
+      lineText: url,
+    });
+
+    beforeEach(() => {
+      mockLastLine.mockReturnValue(0);
+    });
+
+    test('inserts nothing and fetches nothing', async () => {
+      const url = 'jwlibrary:///finder?bible=19001001-19150006';
+      mockGetLine.mockReturnValue(url);
+      (findJWLibraryLinks as Mock).mockReturnValue([linkTo(150, url)]);
+
+      const result = await insertAllBibleQuotes(mockEditor, settings, provider);
+
+      expect(result).toMatchObject({ inserted: 0, fetchFailed: 0, tooManyChapters: 1 });
+      expect((BibleTextFetcher.fetchBibleText as Mock).mock.calls).toHaveLength(0);
+      expect(mockTransaction).not.toHaveBeenCalled();
+    });
+
+    test('still quotes a reference of exactly three chapters', async () => {
+      const url = 'jwlibrary:///finder?bible=19001001-19003006';
+      mockGetLine.mockReturnValue(url);
+      (findJWLibraryLinks as Mock).mockReturnValue([linkTo(3, url)]);
+
+      const result = await insertAllBibleQuotes(mockEditor, settings, provider);
+
+      expect(result).toMatchObject({ inserted: 1, tooManyChapters: 0 });
+      expect((BibleTextFetcher.fetchBibleText as Mock).mock.calls).toHaveLength(3);
     });
   });
 
@@ -381,7 +417,7 @@ describe('insertAllBibleQuotes', () => {
 
       const result = await insertAllBibleQuotes(mockEditor, settings, provider);
 
-      expect(result).toEqual({ inserted: 1, linksFound: 2, fetchFailed: 1 });
+      expect(result).toEqual({ inserted: 1, linksFound: 2, fetchFailed: 1, tooManyChapters: 0 });
       expect(mockTransaction).toHaveBeenCalledWith({
         changes: [
           {
@@ -560,7 +596,7 @@ describe('insertAllBibleQuotes', () => {
 
       const result = await insertAllBibleQuotes(mockEditor, settings, provider);
 
-      expect(result).toEqual({ inserted: 0, linksFound: 1, fetchFailed: 1 });
+      expect(result).toEqual({ inserted: 0, linksFound: 1, fetchFailed: 1, tooManyChapters: 0 });
       expect(mockTransaction).not.toHaveBeenCalled();
     });
   });
@@ -573,7 +609,7 @@ describe('insertAllBibleQuotes', () => {
 
     const result = await insertAllBibleQuotes(mockEditor, settings, provider);
 
-    expect(result).toEqual({ inserted: 0, linksFound: 0, fetchFailed: 0 });
+    expect(result).toEqual({ inserted: 0, linksFound: 0, fetchFailed: 0, tooManyChapters: 0 });
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
@@ -599,7 +635,7 @@ describe('insertAllBibleQuotes', () => {
     const result = await insertAllBibleQuotes(mockEditor, settings, provider);
     warnSpy.mockRestore();
 
-    expect(result).toEqual({ inserted: 0, linksFound: 1, fetchFailed: 1 });
+    expect(result).toEqual({ inserted: 0, linksFound: 1, fetchFailed: 1, tooManyChapters: 0 });
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
@@ -737,7 +773,12 @@ describe('insertBibleQuoteAtCursor', () => {
 
     const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
-    expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
+    expect(result).toEqual({
+      inserted: true,
+      alreadyExists: false,
+      fetchFailed: false,
+      tooManyChapters: false,
+    });
     expect(mockTransaction).toHaveBeenCalledWith({
       changes: [
         {
@@ -749,6 +790,23 @@ describe('insertBibleQuoteAtCursor', () => {
     });
   });
 
+  test('inserts nothing for a reference of more than three chapters', async () => {
+    mockGetCursor.mockReturnValue({ line: 0, ch: 10 });
+    mockLastLine.mockReturnValue(0);
+    mockGetLine.mockReturnValue('jwlibrary:///finder?bible=19001001-19150006');
+
+    const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
+
+    expect(result).toEqual({
+      inserted: false,
+      alreadyExists: false,
+      fetchFailed: false,
+      tooManyChapters: true,
+    });
+    expect((BibleTextFetcher.fetchBibleText as Mock).mock.calls).toHaveLength(0);
+    expect(mockTransaction).not.toHaveBeenCalled();
+  });
+
   test('should detect existing quote', async () => {
     mockGetCursor.mockReturnValue({ line: 0, ch: 10 });
     mockLastLine.mockReturnValue(1);
@@ -757,7 +815,12 @@ describe('insertBibleQuoteAtCursor', () => {
 
     const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
-    expect(result).toEqual({ inserted: false, alreadyExists: true, fetchFailed: false });
+    expect(result).toEqual({
+      inserted: false,
+      alreadyExists: true,
+      fetchFailed: false,
+      tooManyChapters: false,
+    });
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
@@ -768,7 +831,12 @@ describe('insertBibleQuoteAtCursor', () => {
 
     const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
-    expect(result).toEqual({ inserted: false, alreadyExists: false, fetchFailed: false });
+    expect(result).toEqual({
+      inserted: false,
+      alreadyExists: false,
+      fetchFailed: false,
+      tooManyChapters: false,
+    });
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
@@ -778,7 +846,12 @@ describe('insertBibleQuoteAtCursor', () => {
 
     const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
-    expect(result).toEqual({ inserted: false, alreadyExists: false, fetchFailed: false });
+    expect(result).toEqual({
+      inserted: false,
+      alreadyExists: false,
+      fetchFailed: false,
+      tooManyChapters: false,
+    });
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
@@ -805,7 +878,12 @@ describe('insertBibleQuoteAtCursor', () => {
 
     const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
-    expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
+    expect(result).toEqual({
+      inserted: true,
+      alreadyExists: false,
+      fetchFailed: false,
+      tooManyChapters: false,
+    });
     expect(mockTransaction).toHaveBeenCalledWith({
       changes: [
         {
@@ -842,7 +920,12 @@ describe('insertBibleQuoteAtCursor', () => {
 
     const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
-    expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
+    expect(result).toEqual({
+      inserted: true,
+      alreadyExists: false,
+      fetchFailed: false,
+      tooManyChapters: false,
+    });
     expect(mockTransaction).toHaveBeenCalledWith({
       changes: [
         {
@@ -864,7 +947,12 @@ describe('insertBibleQuoteAtCursor', () => {
 
     const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
-    expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
+    expect(result).toEqual({
+      inserted: true,
+      alreadyExists: false,
+      fetchFailed: false,
+      tooManyChapters: false,
+    });
     expect(mockTransaction).toHaveBeenCalledWith({
       changes: [
         {
@@ -887,7 +975,12 @@ describe('insertBibleQuoteAtCursor', () => {
 
     const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
-    expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
+    expect(result).toEqual({
+      inserted: true,
+      alreadyExists: false,
+      fetchFailed: false,
+      tooManyChapters: false,
+    });
     expect(mockTransaction).toHaveBeenCalledWith({
       changes: [
         {
@@ -918,7 +1011,12 @@ describe('insertBibleQuoteAtCursor', () => {
 
     const result = await insertBibleQuoteAtCursor(mockEditor, settings, provider);
 
-    expect(result).toEqual({ inserted: true, alreadyExists: false, fetchFailed: false });
+    expect(result).toEqual({
+      inserted: true,
+      alreadyExists: false,
+      fetchFailed: false,
+      tooManyChapters: false,
+    });
     expect(mockTransaction).toHaveBeenCalledWith({
       changes: [
         {

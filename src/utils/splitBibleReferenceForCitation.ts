@@ -8,6 +8,19 @@ import type { BibleReference } from '@/types';
 export const MAX_VERSES_IN_CHAPTER = 176;
 
 /**
+ * Most chapters one quote may span. Each chapter is a separate lookup, which
+ * online means a request to wol.jw.org, so a reference such as `Ps 1:1-150:6`
+ * would load the site heavily and write a whole book into the note.
+ */
+export const MAX_QUOTE_CHAPTERS = 3;
+
+/** Whether a quote of `reference` would span more than `MAX_QUOTE_CHAPTERS` chapters. */
+export function exceedsQuoteChapterLimit(reference: BibleReference): boolean {
+  const { chapter, endChapter } = reference;
+  return endChapter !== undefined && endChapter - chapter + 1 > MAX_QUOTE_CHAPTERS;
+}
+
+/**
  * Splits a reference into the parts a citation provider can look up.
  *
  * Providers resolve a single verse range inside a single chapter, so

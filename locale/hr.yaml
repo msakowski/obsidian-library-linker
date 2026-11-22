@@ -114,6 +114,7 @@ notices:
   bibleQuoteAlreadyExists: Biblijski citat već postoji
   errorInsertingQuotes: Greška prilikom umetanja biblijskih citata
   bibleQuoteFetchFailed: Nije moguće dohvatiti biblijski tekst — pokušajte ponovo
+  bibleQuoteTooManyChapters: Citat može obuhvatiti najviše {{max}} poglavlja — odaberite kraći odlomak
   offlineBibleImported: Izvanmrežna Biblija uvezena za {{language}}
   offlineBibleRemoved: Izvanmrežna Biblija uklonjena za {{language}}
   offlineBibleAlreadyInstalled: Izvanmrežna Biblija za {{language}} je već instalirana. Uklonite je prvo da biste je ponovno uvezli.

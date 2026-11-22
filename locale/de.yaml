@@ -114,6 +114,7 @@ notices:
   bibleQuoteAlreadyExists: Bibelzitat existiert bereits
   errorInsertingQuotes: Fehler beim Einfügen der Bibelzitate
   bibleQuoteFetchFailed: Bibeltext konnte nicht abgerufen werden — bitte erneut versuchen
+  bibleQuoteTooManyChapters: Ein Zitat kann höchstens {{max}} Kapitel umfassen — bitte einen kürzeren Abschnitt wählen
   offlineBibleImported: Offline-Bibel für {{language}} importiert
   offlineBibleRemoved: Offline-Bibel für {{language}} entfernt
   offlineBibleAlreadyInstalled: Für {{language}} ist bereits eine Offline-Bibel installiert. Zuerst entfernen, um sie erneut zu importieren.

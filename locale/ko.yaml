@@ -114,6 +114,7 @@ notices:
   bibleQuoteAlreadyExists: 성경 인용문이 이미 존재함
   errorInsertingQuotes: 성경 인용문 삽입 오류
   bibleQuoteFetchFailed: 성경 본문을 가져올 수 없습니다 — 다시 시도해 주세요
+  bibleQuoteTooManyChapters: 인용은 최대 {{max}}장까지 가능합니다 — 더 짧은 구절을 선택해 주세요
   offlineBibleImported: '{{language}}용 오프라인 성경을 가져왔습니다'
   offlineBibleRemoved: '{{language}}용 오프라인 성경을 제거했습니다'
   offlineBibleAlreadyInstalled: '{{language}}용 오프라인 성경이 이미 설치되어 있습니다. 다시 가져오려면 먼저 제거하세요.'

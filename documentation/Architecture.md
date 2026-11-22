@@ -25,9 +25,19 @@ Read relevant sections when changing reference parsing, localization, settings, 
 - UI YAML is bundled as `BUNDLED_LOCALES` through `locale:all`.
 - Call `loadBibleBooks()` before `getBibleBooks()`; the store uses `Map<Language, BibleBook[]>`.
 - Input → `parseBibleReference()` → `BibleReference` → `formatJWLibraryLink()` → `convertBibleTextToMarkdownLink()`.
-- `BibleReference` contains `book`, `chapter`, optional `endChapter`, and optional `verseRanges`. A single-verse `VerseRange` has equal `start` and `end`.
+- `BibleReference` contains `book`, `chapter`, optional `endChapter`, and optional `verseRanges`. A single-verse `VerseRange` has equal `start` and `end`. Absent `verseRanges` means whole-chapter navigation (verse `000` in the link); it is not a verse-zero quotation request.
 - Utility errors use translation keys as messages, for example `errors.invalidReferenceFormat`.
 - Follow [Contributing a new language](../LOCALIZATION.md#contributing-a-new-language) when adding language support.
+
+### Automatic quotes
+
+Opt-in through `bibleQuote.autoInsertOnLinkCreation` (off by default). The quote text comes from the configured citation provider, so it follows the offline Bible settings: offline first, online fallback only when enabled.
+
+- `BibleReferenceSuggester` calls `AutoBibleQuoteInserter.scheduleForCreatedLink()` after it writes a link. It returns at once; the lookup never runs in the typing path.
+- `src/services/AutoBibleQuoteInserter.ts` skips whole-chapter links and references of more than `MAX_QUOTE_CHAPTERS` chapters, records the note of the editor, keeps one lookup per link, and checks again when the text arrives that the setting is still on, the plugin loaded, and the note unchanged. Failures show a notice and leave the note untouched; while no Bible text is available at all, that notice is shown once per session.
+- `src/utils/createdLinkTracker.ts` (`CreatedLinkTracker`) follows the created link by document offsets through every edit made during the lookup, so the quote goes next to that very occurrence even when the same verse is cited elsewhere. The whole created reference must still be there unchanged before anything is written.
+- `src/services/createdLinkTrackingExtension.ts` is the CodeMirror extension registered with `registerEditorExtension()`: it maps edits through the tracker and tells which note an `Editor` shows.
+- `insertBibleQuoteForCreatedLink()` in `src/utils/insertBibleQuotes.ts` writes the quote in its own transaction origin, so undo removes the quote without the link.
 
 ## Test support
 
