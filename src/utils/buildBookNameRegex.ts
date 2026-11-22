@@ -70,8 +70,10 @@ export function buildBookNameRegex(language: Language): RegExp {
   // Combine: (any book + chapter:verse) OR (single-chapter book + verse-only)
   // chapter:verse pattern listed first so "Jude 1:3" matches fully rather than just "Jude 1"
   const combined = singleChapterBookPattern
-    ? `(?:${bookPattern})${chapterVersePattern}|(?:${singleChapterBookPattern})${verseOnlyPattern}`
+    ? `(?:${bookPattern})${chapterVersePattern}|(?:${singleChapterBookPattern})${verseOnlyPattern}(?![\\d:])`
     : `(?:${bookPattern})${chapterVersePattern}`;
 
-  return new RegExp(combined, 'giu');
+  // Chapter-only references use known book names and reject unfinished verse syntax.
+  const chapterPattern = `(?:${bookPattern})\\.?\\s?\\d+(?::\\*)?(?![\\p{L}\\d:\\-])(?!,\\s*\\d)`;
+  return new RegExp(`(?<![\\p{L}\\d])(?:${combined}|${chapterPattern})`, 'giu');
 }
