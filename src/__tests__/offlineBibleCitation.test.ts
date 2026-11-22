@@ -458,6 +458,70 @@ describe('offline Bible citation flow', () => {
     expect(citation.text).toBe('Zweiter Vers mit weiterem Satz.');
   });
 
+  test('keeps the lines of a poem that run on after the last verse of a chapter', async () => {
+    const adapter = createInMemoryAdapter();
+    const repository = new VaultOfflineBibleRepository(adapter, ROOT);
+    const importer = new BibleEpubImportService(repository);
+    const provider = new OfflineBibleCitationProvider(repository, (key) => key);
+
+    const archive = zipSync({
+      mimetype: strToU8('application/epub+zip'),
+      'META-INF/container.xml': strToU8(`<?xml version="1.0" encoding="utf-8"?>
+<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
+  <rootfiles>
+    <rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/>
+  </rootfiles>
+</container>`),
+      'OEBPS/content.opf': strToU8(`<?xml version="1.0" encoding="utf-8"?>
+<package version="3.0" xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookId">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:title>Test Bible</dc:title>
+    <dc:language>de</dc:language>
+  </metadata>
+</package>`),
+      'OEBPS/bibleversenav1_1.xhtml': strToU8(`<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <body>
+    <ol class="verse-nav">
+      <li><a href="genesis1.xhtml#chapter1_verse1">1</a></li>
+      <li><a href="genesis1.xhtml#chapter1_verse2">2</a></li>
+    </ol>
+  </body>
+</html>`),
+      'OEBPS/genesis1.xhtml': strToU8(`<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <body>
+    <p class="sz"><span id="chapter1_verse1"></span>Erster Vers.</p>
+    <p class="sl"><span id="chapter1_verse2"></span>Zweiter Vers,</p>
+    <p class="sz">zweite Zeile;</p>
+    <p class="ss">ש [<em>Shin</em>]</p>
+    <p class="sz">dritte Zeile.</p>
+    <p class="sd">(Ende der Hebräischen Schriften.)</p>
+    <p class="sz">Nach dem Abschluss.</p>
+  </body>
+</html>`),
+    });
+
+    const importResult = await importer.importBible({
+      fileData: archive,
+      overwriteExisting: false,
+    });
+
+    expect(importResult.success).toBe(true);
+
+    const citation = await provider.getCitation(
+      {
+        book: 1,
+        chapter: 1,
+        verseRanges: [{ start: 2, end: 2 }],
+      },
+      'X',
+    );
+
+    expect(citation.success).toBe(true);
+    expect(citation.text).toBe('Zweiter Vers, zweite Zeile; dritte Zeile.');
+  });
+
   test('keeps inline content that belongs to the last verse inside the same block', async () => {
     const adapter = createInMemoryAdapter();
     const repository = new VaultOfflineBibleRepository(adapter, ROOT);
