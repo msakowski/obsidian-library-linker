@@ -16,6 +16,7 @@
 | IN   | Bahasa Indonesia / Indonesian     |
 | J    | 日本語 / Japanese                    |
 | KO   | 한국어 / Korean                      |
+| L    | lietuvių / Lithuanian             |
 | N    | Norsk / Norwegian                 |
 | O    | Nederlands / Dutch                |
 | S    | español / Spanish                 |

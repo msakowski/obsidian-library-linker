@@ -36,6 +36,7 @@ const WOL_LANG_CONFIG: Record<string, WOLLangConfig> = {
   TPO: { region: 'r296', lp: 'lp-tpo' },
   C: { region: 'r19', lp: 'lp-c' },
   VT: { region: 'r47', lp: 'lp-vt' },
+  L: { region: 'r32', lp: 'lp-l' },
 };
 
 export class BibleTextFetcher {

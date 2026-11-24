@@ -40,6 +40,12 @@ describe('BibleTextFetcher', () => {
       );
     });
 
+    test('builds correct URL for Lithuanian', () => {
+      expect(BibleTextFetcher.buildWOLUrl(43, 3, 'L')).toBe(
+        'https://wol.jw.org/lt/wol/b/r32/lp-l/nwt/43/3',
+      );
+    });
+
     test('builds correct URL for Croatian', () => {
       expect(BibleTextFetcher.buildWOLUrl(19, 23, 'C')).toBe(
         'https://wol.jw.org/hr/wol/b/r19/lp-c/nwt/19/23',
