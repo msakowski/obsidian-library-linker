@@ -66,12 +66,6 @@ settings:
   offlineBible:
     name: Biblija be interneto
     description: Vieną kartą importuokite Biblijos EPUB failą ir naudokite vietinius skyrių duomenis citatoms be interneto.
-    enabled:
-      name: Įjungti Bibliją be interneto
-      description: Leisti citatoms naudoti importuotus vietinius Biblijos duomenis.
-    preferOffline:
-      name: Pirmenybė citatoms be interneto
-      description: Prieš bandant gauti tekstą internetu, patikrinti importuotą Bibliją.
     allowOnlineFallback:
       name: Leisti atsarginį gavimą internetu
       description: Jei vietinių duomenų nėra, leisti papildiniui bandyti gauti citatą internetu.
