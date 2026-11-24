@@ -16,65 +16,36 @@ export class ConfiguredBibleCitationProvider implements BibleCitationProvider {
     private readonly t: TranslateFn,
   ) {}
 
+  /**
+   * Offline first: the imported Bible is always checked first. The online
+   * provider is only asked when the offline lookup fails and online fallback
+   * is allowed.
+   */
   async getCitation(reference: BibleReference, language: Language): Promise<BibleCitationResult> {
-    const settings = this.getSettings();
-    const { offlineBible } = settings;
-
-    if (offlineBible.enabled && offlineBible.preferOffline) {
-      const offlineResult = await this.offlineProvider.getCitation(reference, language);
-      if (offlineResult.success) {
-        return offlineResult;
-      }
-
-      if (!offlineBible.allowOnlineFallback) {
-        return {
-          ...offlineResult,
-          error: `${offlineResult.error ?? this.t('errors.offlineBibleLookupFailed')} ${this.t('errors.onlineFallbackDisabled')}`,
-        };
-      }
+    const offlineResult = await this.offlineProvider.getCitation(reference, language);
+    if (offlineResult.success) {
+      return offlineResult;
     }
 
-    const onlineResult = await this.onlineProvider.getCitation(reference, language);
-    if (onlineResult.success) {
-      return onlineResult;
-    }
-
-    if (offlineBible.enabled && !offlineBible.preferOffline) {
-      const offlineResult = await this.offlineProvider.getCitation(reference, language);
-      if (offlineResult.success) {
-        return offlineResult;
-      }
-
+    if (!this.getSettings().offlineBible.allowOnlineFallback) {
       return {
-        ...onlineResult,
-        error: offlineBible.allowOnlineFallback
-          ? onlineResult.error
-          : (offlineResult.error ?? onlineResult.error),
+        ...offlineResult,
+        error: `${offlineResult.error ?? this.t('errors.offlineBibleLookupFailed')} ${this.t('errors.onlineFallbackDisabled')}`,
       };
     }
 
-    return onlineResult;
+    return this.onlineProvider.getCitation(reference, language);
   }
 
   async isLanguageAvailable(language: Language): Promise<boolean> {
-    const settings = this.getSettings();
-
-    if (settings.offlineBible.enabled && settings.offlineBible.preferOffline) {
-      const offlineAvailable = await this.offlineProvider.isLanguageAvailable(language);
-      if (offlineAvailable || !settings.offlineBible.allowOnlineFallback) {
-        return offlineAvailable;
-      }
-    }
-
-    const onlineAvailable = await this.onlineProvider.isLanguageAvailable(language);
-    if (onlineAvailable) {
+    if (await this.offlineProvider.isLanguageAvailable(language)) {
       return true;
     }
 
-    if (settings.offlineBible.enabled && !settings.offlineBible.preferOffline) {
-      return this.offlineProvider.isLanguageAvailable(language);
+    if (!this.getSettings().offlineBible.allowOnlineFallback) {
+      return false;
     }
 
-    return false;
+    return this.onlineProvider.isLanguageAvailable(language);
   }
 }

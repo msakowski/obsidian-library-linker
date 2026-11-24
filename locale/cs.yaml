@@ -66,12 +66,6 @@ settings:
   offlineBible:
     name: Offline Bible
     description: Naimportujte jednou biblické EPUB a používejte místní data kapitol pro offline vyhledávání citací.
-    enabled:
-      name: Povolit offline Bibli
-      description: Umožní citačnímu procesu používat importovaná místní biblická data.
-    preferOffline:
-      name: Upřednostnit offline citace
-      description: Nejprve zkontroluje importovanou offline Bibli, než se pokusí o online načtení.
     allowOnlineFallback:
       name: Povolit online zálohu
       description: Pokud offline data chybí, plugin se může pokusit použít online poskytovatele citací.

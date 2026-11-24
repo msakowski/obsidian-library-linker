@@ -51,8 +51,6 @@ type Translation = {
     offlineBible: {
       name: string;
       description: string;
-      enabled: { name: string; description: string };
-      preferOffline: { name: string; description: string };
       allowOnlineFallback: { name: string; description: string };
       installedList: {
         name: string;
