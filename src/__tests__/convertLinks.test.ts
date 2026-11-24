@@ -119,6 +119,18 @@ describe('convertLinks', () => {
       expect(result).toBe(input);
     });
 
+    test('keeps the end chapter of a cross-chapter link', () => {
+      const settings: LinkReplacerSettings = {
+        ...TEST_DEFAULT_SETTINGS,
+        reconvertExistingLinks: true,
+        updatedLinkStructure: 'usePluginSettings',
+        bookLength: 'short',
+      };
+      const input = '[Matthew 3:1-4:11](jwlibrary:///finder?bible=40003001-40004011&wtlocale=E)';
+      const result = convertLinks(input, 'bible', settings);
+      expect(result).toBe('[Mt 3:1-4:11](jwlibrary:///finder?bible=40003001-40004011&wtlocale=E)');
+    });
+
     test('reconverts link text when bookLength changes', () => {
       const settings: LinkReplacerSettings = {
         ...TEST_DEFAULT_SETTINGS,

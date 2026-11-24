@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Oblikovanje biblijskog citata
     description: Konfigurirajte oblikovanje biblijskih citata prilikom umetanja
+    autoInsert:
+      name: Automatski umetni citat
+      description: Kada je uključeno, biblijski se tekst dohvaća i umeće odmah nakon što se poveznica izradi iz prijedloga. Potrebna je internetska veza ili uvezena offline Biblija.
     presets:
       name: Predlošci predložaka
       short: Link + citat
@@ -111,6 +114,7 @@ notices:
   bibleQuoteAlreadyExists: Biblijski citat već postoji
   errorInsertingQuotes: Greška prilikom umetanja biblijskih citata
   bibleQuoteFetchFailed: Nije moguće dohvatiti biblijski tekst — pokušajte ponovo
+  bibleQuoteTooManyChapters: Citat može obuhvatiti najviše {{max}} poglavlja — odaberite kraći odlomak
   offlineBibleImported: Izvanmrežna Biblija uvezena za {{language}}
   offlineBibleRemoved: Izvanmrežna Biblija uklonjena za {{language}}
   offlineBibleAlreadyInstalled: Izvanmrežna Biblija za {{language}} je već instalirana. Uklonite je prvo da biste je ponovno uvezli.

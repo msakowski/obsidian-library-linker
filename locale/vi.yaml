@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Định dạng trích dẫn Kinh Thánh
     description: Cấu hình cách trích dẫn Kinh Thánh được định dạng khi chèn vào
+    autoInsert:
+      name: Tự động chèn câu Kinh Thánh
+      description: Khi bật, phần Kinh Thánh sẽ được tải và chèn ngay sau khi liên kết được tạo từ gợi ý. Cần kết nối Internet hoặc một bản Kinh Thánh ngoại tuyến đã nhập.
     presets:
       name: Mẫu định dạng
       short: Liên kết + câu trích
@@ -111,6 +114,7 @@ notices:
   bibleQuoteAlreadyExists: Câu trích Kinh Thánh đã tồn tại
   errorInsertingQuotes: Lỗi khi chèn câu trích Kinh Thánh
   bibleQuoteFetchFailed: Không thể tải văn bản Kinh Thánh — vui lòng thử lại
+  bibleQuoteTooManyChapters: Một trích dẫn chỉ có thể gồm tối đa {{max}} chương — vui lòng chọn đoạn ngắn hơn
   offlineBibleImported: Đã nhập Kinh Thánh ngoại tuyến cho {{language}}
   offlineBibleRemoved: Đã xóa Kinh Thánh ngoại tuyến cho {{language}}
   offlineBibleAlreadyInstalled: Đã có Kinh Thánh ngoại tuyến được cài đặt cho {{language}}. Hãy xóa nó trước để nhập lại.

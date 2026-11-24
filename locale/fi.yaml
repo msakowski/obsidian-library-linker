@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Raamatunlainauksen Muotoilu
     description: Määritä miten raamatunlainaukset muotoillaan kun ne lisätään
+    autoInsert:
+      name: Lisää lainaus automaattisesti
+      description: Kun tämä on käytössä, raamatunkohta haetaan ja lisätään heti kun linkki luodaan ehdotuksista. Vaatii internetyhteyden tai tuodun offline-Raamatun.
     presets:
       name: Malliesiasutukset
       short: Linkki + lainaus
@@ -111,6 +114,7 @@ notices:
   bibleQuoteAlreadyExists: Raamatunlainaus on jo olemassa
   errorInsertingQuotes: Virhe raamatunlainausten lisäämisessä
   bibleQuoteFetchFailed: Raamatuntekstiä ei voitu hakea — yritä uudelleen
+  bibleQuoteTooManyChapters: Lainaus voi kattaa enintään {{max}} lukua — valitse lyhyempi kohta
   offlineBibleImported: Offline-Raamattu tuotu kielelle {{language}}
   offlineBibleRemoved: Offline-Raamattu poistettu kieleltä {{language}}
   offlineBibleAlreadyInstalled: Kielelle {{language}} on jo asennettu offline-Raamattu. Poista se ensin tuodaksesi uudelleen.

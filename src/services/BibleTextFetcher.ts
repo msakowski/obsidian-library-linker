@@ -376,8 +376,9 @@ export class BibleTextFetcher {
 
         // Remove verse number elements
         clone.querySelectorAll('.chapterNum, .verseNum').forEach((el) => el.remove());
-        // WOL: verse number links have class "vl"
-        clone.querySelectorAll('a.vl').forEach((el) => el.remove());
+        // WOL: verse number links have class "vl"; the first verse of a
+        // chapter carries the chapter number instead, with class "cl"
+        clone.querySelectorAll('a.vl, a.cl').forEach((el) => el.remove());
 
         const rawText = cleanHtmlText(clone.innerHTML).trim();
         if (rawText) {
