@@ -556,5 +556,14 @@
     "name": "Indonesian Sign Language",
     "isSignLanguage": true,
     "isRTL": false
+  },
+  {
+    "code": "L",
+    "locale": "lt",
+    "vernacular": "lietuvių",
+    "script": "ROMAN",
+    "name": "Lithuanian",
+    "isSignLanguage": false,
+    "isRTL": false
   }
 ]
