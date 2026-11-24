@@ -516,7 +516,8 @@
   {
     "language": "Lithuanian",
     "users": 2492,
-    "supported": false
+    "supported": true,
+    "languageCode": "L"
   },
   {
     "language": "Ewondo",

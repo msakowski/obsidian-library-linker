@@ -37,7 +37,9 @@ export class PluginSettingTab {
 }
 export class Editor {}
 export class EditorPosition {}
-export class EditorSuggest {}
+export class EditorSuggest {
+  close(): void {}
+}
 export class AbstractInputSuggest<T> {
   constructor(_app: App, _inputEl: HTMLInputElement) {}
   getSuggestions(_query: string): T[] {
