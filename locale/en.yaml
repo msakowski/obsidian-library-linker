@@ -50,6 +50,9 @@ settings:
     preview:
       name: Link preview
   bibleQuote:
+    includeVerseNumbers:
+      name: Include verse numbers
+      description: Show verse numbers in quotes containing multiple verses. Single-verse quotes stay unnumbered.
     name: Bible quote formatting
     description: Configure how Bible quotes are formatted when inserted
     presets:

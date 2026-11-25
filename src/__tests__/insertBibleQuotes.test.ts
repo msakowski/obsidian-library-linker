@@ -50,6 +50,7 @@ describe('insertAllBibleQuotes', () => {
     settings = {
       ...TEST_DEFAULT_SETTINGS,
       bibleQuote: {
+        includeVerseNumbers: false,
         template: BIBLE_QUOTE_TEMPLATES.short,
       },
     } satisfies LinkReplacerSettings;
@@ -487,6 +488,7 @@ describe('insertBibleQuoteAtCursor', () => {
     settings = {
       ...TEST_DEFAULT_SETTINGS,
       bibleQuote: {
+        includeVerseNumbers: false,
         template: BIBLE_QUOTE_TEMPLATES.short,
       },
     } satisfies LinkReplacerSettings;

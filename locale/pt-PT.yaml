@@ -50,6 +50,9 @@ settings:
     preview:
       name: Pré-visualização do estilo da hiperligação
   bibleQuote:
+    includeVerseNumbers:
+      name: Incluir números dos versículos
+      description: Mostrar os números nas citações de vários versículos. As citações de um só versículo ficam sem número.
     name: Foramato da citação bíblica
     description: Configure o formato das citações bíblicas inseridas
     presets:

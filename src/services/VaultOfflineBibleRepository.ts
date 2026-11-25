@@ -6,6 +6,7 @@ import type {
   OfflineBibleCorpusMetadata,
   OfflineBibleRepository,
 } from '@/types';
+import { formatQuotedVerses } from '@/utils/formatQuotedVerses';
 import { padBook, padChapter } from '@/utils/padNumber';
 
 interface SchemaFile {
@@ -65,7 +66,11 @@ export class VaultOfflineBibleRepository implements OfflineBibleRepository {
     }
   }
 
-  async getVerseRange(reference: BibleReference, language: Language): Promise<string | null> {
+  async getVerseRange(
+    reference: BibleReference,
+    language: Language,
+    includeVerseNumbers = false,
+  ): Promise<string | null> {
     if (reference.endChapter && reference.endChapter !== reference.chapter) {
       return null;
     }
@@ -75,15 +80,15 @@ export class VaultOfflineBibleRepository implements OfflineBibleRepository {
       return null;
     }
 
-    const parts: string[] = [];
+    const parts: { number: number; text: string }[] = [];
     for (const range of reference.verseRanges) {
       for (let verse = range.start; verse <= range.end; verse++) {
         const text = chapter.verses[String(verse)];
         if (!text) return null;
-        parts.push(text);
+        parts.push({ number: verse, text });
       }
     }
-    return parts.join(' ');
+    return formatQuotedVerses(parts, includeVerseNumbers);
   }
 
   async saveCorpus(

@@ -50,6 +50,9 @@ settings:
     preview:
       name: Linkin esikatselu
   bibleQuote:
+    includeVerseNumbers:
+      name: Sisällytä jaenumerot
+      description: Näytä jaenumerot usean jakeen lainauksissa. Yhden jakeen lainaukset pysyvät numeroimattomina.
     name: Raamatunlainauksen Muotoilu
     description: Määritä miten raamatunlainaukset muotoillaan kun ne lisätään
     presets:

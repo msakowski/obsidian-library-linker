@@ -50,6 +50,9 @@ settings:
     preview:
       name: Aperçu du lien
   bibleQuote:
+    includeVerseNumbers:
+      name: Inclure les numéros de verset
+      description: Afficher les numéros dans les citations de plusieurs versets. Les citations d’un seul verset restent sans numéro.
     name: Formatage des citations bibliques
     description: Configurez la façon dont les citations bibliques sont formatées lors de l'insertion
     presets:

@@ -2,8 +2,12 @@ import type { BibleCitationProvider, BibleCitationResult, BibleReference, Langua
 import { BibleTextFetcher } from '@/services/BibleTextFetcher';
 
 export class OnlineBibleCitationProvider implements BibleCitationProvider {
-  async getCitation(reference: BibleReference, language: Language): Promise<BibleCitationResult> {
-    const result = await BibleTextFetcher.fetchBibleText(reference, language);
+  async getCitation(
+    reference: BibleReference,
+    language: Language,
+    includeVerseNumbers = false,
+  ): Promise<BibleCitationResult> {
+    const result = await BibleTextFetcher.fetchBibleText(reference, language, includeVerseNumbers);
 
     return {
       success: result.success,

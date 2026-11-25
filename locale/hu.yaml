@@ -50,6 +50,9 @@ settings:
     preview:
       name: Hivatkozás előnézete
   bibleQuote:
+    includeVerseNumbers:
+      name: Versszámok megjelenítése
+      description: Versszámok megjelenítése több verset tartalmazó idézetekben. Az egyetlen versből álló idézetek számozatlanok maradnak.
     name: Bibliai idézet formázása
     description: Állítsd be, hogyan formázódjanak a beszúrt bibliai idézetek
     presets:

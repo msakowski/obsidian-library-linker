@@ -39,6 +39,7 @@ export const BIBLE_QUOTE_TEMPLATES = {
 } as const;
 
 interface BibleQuoteSettings {
+  includeVerseNumbers: boolean;
   template: string; // Template for quote formatting
 }
 
@@ -125,7 +126,11 @@ export interface BibleCitationResult {
 }
 
 export interface BibleCitationProvider {
-  getCitation(reference: BibleReference, language: Language): Promise<BibleCitationResult>;
+  getCitation(
+    reference: BibleReference,
+    language: Language,
+    includeVerseNumbers?: boolean,
+  ): Promise<BibleCitationResult>;
   isLanguageAvailable(language: Language): Promise<boolean>;
 }
 
@@ -137,7 +142,11 @@ export interface OfflineBibleRepository {
     book: number,
     chapter: number,
   ): Promise<OfflineBibleChapter | null>;
-  getVerseRange(reference: BibleReference, language: Language): Promise<string | null>;
+  getVerseRange(
+    reference: BibleReference,
+    language: Language,
+    includeVerseNumbers?: boolean,
+  ): Promise<string | null>;
   saveCorpus(metadata: OfflineBibleCorpusMetadata, chapters: OfflineBibleChapter[]): Promise<void>;
   removeLanguage(language: Language): Promise<void>;
 }

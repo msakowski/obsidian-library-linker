@@ -50,6 +50,9 @@ settings:
     preview:
       name: Pregled linka
   bibleQuote:
+    includeVerseNumbers:
+      name: Uključi brojeve redaka
+      description: Prikaži brojeve u citatima s više redaka. Citati jednog retka ostaju bez broja.
     name: Oblikovanje biblijskog citata
     description: Konfigurirajte oblikovanje biblijskih citata prilikom umetanja
     presets:

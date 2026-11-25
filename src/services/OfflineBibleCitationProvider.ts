@@ -11,7 +11,11 @@ export class OfflineBibleCitationProvider implements BibleCitationProvider {
     private readonly t: TranslateFn,
   ) {}
 
-  async getCitation(reference: BibleReference, language: Language): Promise<BibleCitationResult> {
+  async getCitation(
+    reference: BibleReference,
+    language: Language,
+    includeVerseNumbers = false,
+  ): Promise<BibleCitationResult> {
     const metadata = await this.repository.getMetadata(language);
 
     if (!metadata) {
@@ -24,7 +28,7 @@ export class OfflineBibleCitationProvider implements BibleCitationProvider {
       };
     }
 
-    const text = await this.repository.getVerseRange(reference, language);
+    const text = await this.repository.getVerseRange(reference, language, includeVerseNumbers);
 
     if (!text) {
       return {

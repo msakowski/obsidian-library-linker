@@ -50,6 +50,9 @@ settings:
     preview:
       name: Xem trước liên kết
   bibleQuote:
+    includeVerseNumbers:
+      name: Bao gồm số câu
+      description: Hiển thị số câu trong phần trích dẫn nhiều câu. Phần trích dẫn một câu vẫn không có số.
     name: Định dạng trích dẫn Kinh Thánh
     description: Cấu hình cách trích dẫn Kinh Thánh được định dạng khi chèn vào
     presets:
