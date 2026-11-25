@@ -1,5 +1,43 @@
 # obsidian-library-linker
 
+## 0.18.0
+
+### Minor Changes
+
+- [#369](https://github.com/msakowski/obsidian-library-linker/pull/369) [`33420fa`](https://github.com/msakowski/obsidian-library-linker/commit/33420fa78a676df9fa8ebe5dcb5a79e41ae43e31) Thanks [@msakowski](https://github.com/msakowski)! - Add Lithuanian (L): Bible book names for references and suggestions, the Lithuanian interface, and online quotes from wol.jw.org.
+
+- [#355](https://github.com/msakowski/obsidian-library-linker/pull/355) [`0302702`](https://github.com/msakowski/obsidian-library-linker/commit/03027023daca196b74ee3a817cb1abf9f4259b3b) Thanks [@msakowski](https://github.com/msakowski)! - Create whole-chapter Bible links from references such as `John 3` or `Jude 1:*`, while preserving verse shorthand and keeping chapter links intact during quote insertion.
+
+- [#356](https://github.com/msakowski/obsidian-library-linker/pull/356) [`5ca535a`](https://github.com/msakowski/obsidian-library-linker/commit/5ca535adab547d679746922af74f2c9c41748910) Thanks [@msakowski](https://github.com/msakowski)! - Convert direct JW.org finder and supported WOL Bible/document links to JW Library links entirely offline, preserving link labels and target language. Leave unresolved WOL citation links unchanged.
+
+- [#371](https://github.com/msakowski/obsidian-library-linker/pull/371) [`063f6ff`](https://github.com/msakowski/obsidian-library-linker/commit/063f6ffef37dcf511ed6349a370ccce370112bc4) Thanks [@msakowski](https://github.com/msakowski)! - Quotes always use the imported offline Bible first. The **Enable offline Bible** and **Prefer offline quotes** switches are gone; **Allow online fallback** is the only switch, and when it is off the plugin never contacts wol.jw.org.
+
+### Patch Changes
+
+- [#345](https://github.com/msakowski/obsidian-library-linker/pull/345) [`e63c2bc`](https://github.com/msakowski/obsidian-library-linker/commit/e63c2bc536ed9131dd2fc52f5d0e1d01ed4be841) Thanks [@msakowski](https://github.com/msakowski)! - Update transitive dev dependency `brace-expansion` to 5.0.12 to fix CVE-2026-13149 and CVE-2026-102277.
+
+- [#368](https://github.com/msakowski/obsidian-library-linker/pull/368) [`da5ec24`](https://github.com/msakowski/obsidian-library-linker/commit/da5ec247d8574457955c9491654a64dbe0447785) Thanks [@msakowski](https://github.com/msakowski)! - Extract quote text from HTML with the browser's parser instead of regular expressions, so a stray `<` in a verse no longer removes text after it.
+
+- [#354](https://github.com/msakowski/obsidian-library-linker/pull/354) [`9730b97`](https://github.com/msakowski/obsidian-library-linker/commit/9730b979ab77450122a5db541c0bd6fa40549e02) Thanks [@dependabot](https://github.com/apps/dependabot)! - Recognize Bible quote webviews across Obsidian windows.
+
+- [#361](https://github.com/msakowski/obsidian-library-linker/pull/361) [`f0a848f`](https://github.com/msakowski/obsidian-library-linker/commit/f0a848fe64a5e8387d11c6d6e421d195981f60c5) Thanks [@eliorpom-cmd](https://github.com/eliorpom-cmd)! - Fix offline quotes of the last verse of a chapter stopping after its first line when the verse runs on in the next paragraphs, as in poems (Psalm 83:18, Habakkuk 3:19). Acrostic letters and subscriptions such as "ב [Beth]" are no longer appended to the verse before them, matching the online text. An offline Bible imported before this fix keeps these errors until it is imported again.
+
+- [#339](https://github.com/msakowski/obsidian-library-linker/pull/339) [`b0ee48c`](https://github.com/msakowski/obsidian-library-linker/commit/b0ee48cf0caf656059fab4f4b14f60dc2eafde78) Thanks [@eliorpom-cmd](https://github.com/eliorpom-cmd)! - The "Expanded Callout" preset now uses `> [!quote]+`, which is expanded and foldable, instead of `> [!quote]`, which cannot be folded at all.
+
+- [#340](https://github.com/msakowski/obsidian-library-linker/pull/340) [`7017e31`](https://github.com/msakowski/obsidian-library-linker/commit/7017e3116e3315f987902328e42f5034d0ab66d9) Thanks [@eliorpom-cmd](https://github.com/eliorpom-cmd)! - The online fetcher now reports a failure when it finds no text for a reference, instead of returning the placeholder `Unable to extract Bible text`, which ended up written into the note as if it were the quote.
+
+- [#359](https://github.com/msakowski/obsidian-library-linker/pull/359) [`976cc5b`](https://github.com/msakowski/obsidian-library-linker/commit/976cc5b02367c66d0792f0eacdaa7b89dfe965de) Thanks [@eliorpom-cmd](https://github.com/eliorpom-cmd)! - Fix quotes showing a space before punctuation ("Fils unique , afin"), online and offline. Inline tags such as an empty footnote anchor no longer turn into spaces when the verse text is cleaned; the WOL footnote marker is removed with its link. An offline Bible imported before this fix keeps the spaces until it is imported again.
+
+- [#360](https://github.com/msakowski/obsidian-library-linker/pull/360) [`15b5052`](https://github.com/msakowski/obsidian-library-linker/commit/15b505224883b0f4e33bf02d720b09b8405c746e) Thanks [@eliorpom-cmd](https://github.com/eliorpom-cmd)! - Remove the invisible zero-width spaces jw.org puts after hyphens ("Déplace-toi") from online quotes, as offline quotes already do, so the quoted text can be searched.
+
+- [#364](https://github.com/msakowski/obsidian-library-linker/pull/364) [`48d04a3`](https://github.com/msakowski/obsidian-library-linker/commit/48d04a3d0a6ad6babbc78a57baa432fd52593daa) Thanks [@eliorpom-cmd](https://github.com/eliorpom-cmd)! - Keep a quote inside the list item or indentation its link is on: the quote is indented to the item's text instead of starting at the beginning of the line, which took it out of the list.
+
+- [#342](https://github.com/msakowski/obsidian-library-linker/pull/342) [`46ced90`](https://github.com/msakowski/obsidian-library-linker/commit/46ced90f2844cab8ec6250ddd8a469ee935371f0) Thanks [@eliorpom-cmd](https://github.com/eliorpom-cmd)! - Fix a line holding nothing but a reference not being recognised as such when the link is wrapped in the configured prefix and suffix (for example `(Matthew 24:14)`) or written as several comma-joined links: the quote was appended below instead of replacing the line, repeating the reference. The quotes of every link on such a line now replace it together in a single edit, and the line is kept when one of them cannot be fetched, so no reference is lost. A blank line is kept between the quote and any text that follows, so that text is not pulled into the blockquote.
+
+- [#362](https://github.com/msakowski/obsidian-library-linker/pull/362) [`d9fdf75`](https://github.com/msakowski/obsidian-library-linker/commit/d9fdf753e8193f7c8e645decfcb4d19407c5d1a4) Thanks [@eliorpom-cmd](https://github.com/eliorpom-cmd)! - Stop suggesting and linking verses that do not exist: a reference past the last verse of its chapter, such as "1 John 3:333", is no longer recognised as a reference, from the suggestions to the link commands. A missing verse of a numbered book ("1 John 3:30", "2 John 14") is not suggested as the same verse of another book either.
+
+- [#358](https://github.com/msakowski/obsidian-library-linker/pull/358) [`569a88d`](https://github.com/msakowski/obsidian-library-linker/commit/569a88dd9673b03db7f334508c08014d59c10aa5) Thanks [@eliorpom-cmd](https://github.com/eliorpom-cmd)! - Suggest the reference or `/b` command at the cursor: a reference typed after a link on the same line (e.g. in a list item) is suggested again, and a suggestion closed with Escape no longer reopens while typing goes on. `/b` only counts as the command at the start of a line, after a space, or after opening punctuation or markup such as `(` or `**`, and the command shows its typing hint again until the text is a reference.
+
 ## 0.17.0
 
 ### Minor Changes
