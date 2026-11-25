@@ -142,7 +142,7 @@ Re-process already converted `jwlibrary://` links with your current formatting s
 
 ### Bible Quote Template
 
-Customize the format of inserted Bible quotes with a live preview. Choose from presets or write your own template.
+Customize the format of inserted Bible quotes with a live preview. Choose from presets or write your own template. Enable **Include verse numbers** to prefix each verse in multi-verse quotes with its number (for example, `16 First verse. 17 Next verse.`). This is off by default and works with imported offline Bibles and the allowed online fallback. Single-verse quotes stay unnumbered.
 
 ## Commands
 

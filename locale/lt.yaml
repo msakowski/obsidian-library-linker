@@ -50,6 +50,9 @@ settings:
     preview:
       name: Nuorodos peržiūra
   bibleQuote:
+    includeVerseNumbers:
+      name: Įtraukti eilučių numerius
+      description: Rodyti eilučių numerius kelių eilučių citatose. Vienos eilutės citatos lieka be numerio.
     name: Biblijos citatų formatavimas
     description: Nustatykite, kaip formatuojamos įterpiamos Biblijos citatos
     presets:

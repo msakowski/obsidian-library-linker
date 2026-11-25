@@ -50,6 +50,9 @@ settings:
     preview:
       name: Ukumona linki
   bibleQuote:
+    includeVerseNumbers:
+      name: Lundamo amanambala ya mavesi
+      description: Langisha amanambala ya mavesi mu malembelo ayali na mavesi ayengi. Ivesi limo lyalaba ukwabula inambala.
     name: Ukupwililika amashiwi ya Baibolo
     description: Pekanya ifyo amashiwi ya Baibolo yakaba ilyo yabikwa
     presets:

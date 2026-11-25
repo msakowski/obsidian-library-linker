@@ -50,6 +50,9 @@ settings:
     preview:
       name: Preview ng link
   bibleQuote:
+    includeVerseNumbers:
+      name: Isama ang mga numero ng talata
+      description: Ipakita ang mga numero sa mga siping may maraming talata. Walang numero ang mga siping may isang talata lang.
     name: Pag-format ng sipi sa Bibliya
     description: I-configure kung paano nakaformat ang mga sipi sa Bibliya kapag inilagay
     presets:

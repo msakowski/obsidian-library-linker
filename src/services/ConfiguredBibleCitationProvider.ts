@@ -22,7 +22,12 @@ export class ConfiguredBibleCitationProvider implements BibleCitationProvider {
    * is allowed.
    */
   async getCitation(reference: BibleReference, language: Language): Promise<BibleCitationResult> {
-    const offlineResult = await this.offlineProvider.getCitation(reference, language);
+    const includeVerseNumbers = this.getSettings().bibleQuote.includeVerseNumbers;
+    const offlineResult = await this.offlineProvider.getCitation(
+      reference,
+      language,
+      includeVerseNumbers,
+    );
     if (offlineResult.success) {
       return offlineResult;
     }
@@ -34,7 +39,7 @@ export class ConfiguredBibleCitationProvider implements BibleCitationProvider {
       };
     }
 
-    return this.onlineProvider.getCitation(reference, language);
+    return this.onlineProvider.getCitation(reference, language, includeVerseNumbers);
   }
 
   async isLanguageAvailable(language: Language): Promise<boolean> {

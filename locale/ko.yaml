@@ -50,6 +50,9 @@ settings:
     preview:
       name: 링크 미리보기
   bibleQuote:
+    includeVerseNumbers:
+      name: 절 번호 포함
+      description: 여러 절을 인용할 때 절 번호를 표시합니다. 한 절만 인용할 때는 번호를 표시하지 않습니다.
     name: 성경 인용문 형식
     description: 성경 인용문이 삽입될 때의 형식을 구성합니다
     presets:

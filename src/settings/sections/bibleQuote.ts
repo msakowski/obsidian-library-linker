@@ -1,3 +1,4 @@
+import { formatQuotedVerses } from '@/utils/formatQuotedVerses';
 import { MarkdownRenderer } from 'obsidian';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
@@ -19,6 +20,21 @@ export function getBibleQuoteDefinitions(tab: SettingsTabContext): SettingDefini
     cls: 'jw-library-linker',
     heading: tab.t('settings.bibleQuote.name'),
     items: [
+      {
+        name: tab.t('settings.bibleQuote.includeVerseNumbers.name'),
+        desc: tab.t('settings.bibleQuote.includeVerseNumbers.description'),
+        render: (setting): void => {
+          setting.addToggle((toggle) =>
+            toggle
+              .setValue(tab.plugin.settings.bibleQuote.includeVerseNumbers)
+              .onChange(async (value) => {
+                tab.plugin.settings.bibleQuote.includeVerseNumbers = value;
+                await tab.plugin.saveSettings();
+                tab.updateBibleQuotePreview();
+              }),
+          );
+        },
+      },
       {
         name: tab.t('settings.bibleQuote.template.name'),
         desc: tab.t('settings.bibleQuote.template.description'),
@@ -87,7 +103,7 @@ export function updateBibleQuotePreview(tab: SettingsTabContext): void {
   const container = activeDocument.getElementById('bible-quote-preview-container');
   if (!container) return;
 
-  const sampleReference = { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 14 }] };
+  const sampleReference = { book: 40, chapter: 24, verseRanges: [{ start: 14, end: 15 }] };
 
   const bibleRefLinked = convertBibleTextToMarkdownLink(sampleReference, tab.plugin.settings);
   if (!bibleRefLinked) return;
@@ -102,10 +118,18 @@ export function updateBibleQuotePreview(tab: SettingsTabContext): void {
   const sampleText =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 
+  const quote = formatQuotedVerses(
+    [
+      { number: 14, text: sampleText },
+      { number: 15, text: sampleText },
+    ],
+    tab.plugin.settings.bibleQuote.includeVerseNumbers,
+  );
+
   const markdown = tab.plugin.settings.bibleQuote.template
     .replace(/\{bibleRef\}/g, bibleRef)
     .replace(/\{bibleRefLinked\}/g, bibleRefLinked)
-    .replace(/\{quote\}/g, sampleText);
+    .replace(/\{quote\}/g, quote);
 
   container.empty();
   const component = new MarkdownComponent();

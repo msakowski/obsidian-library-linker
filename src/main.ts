@@ -36,6 +36,7 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
   noLanguageParameter: false,
   reconvertExistingLinks: false,
   bibleQuote: {
+    includeVerseNumbers: false,
     template: BIBLE_QUOTE_TEMPLATES.short,
   },
   offlineBible: {

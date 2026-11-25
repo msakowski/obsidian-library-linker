@@ -8,7 +8,7 @@ Read relevant sections when changing reference parsing, localization, settings, 
 - `src/BibleReferenceSuggester.ts`: reference suggestions and silent detection.
 - `src/ConvertSuggester.ts`: conversion selection modal.
 - `src/settings/`: settings tab, sections, controls, and language suggestions.
-- `src/services/`: translations, Bible text fetching, configured online/offline citation providers, EPUB import, vault offline storage, and plugin data paths.
+- `src/services/`: translations, Bible text fetching, configured online/offline citation providers, EPUB import, vault offline storage, and plugin data paths. The configured provider reads `bibleQuote.includeVerseNumbers` for each lookup and passes it to either provider. Offline storage keeps verse text unchanged; offline lookup and online HTML extraction share `formatQuotedVerses()` to number multi-verse quotes. Online cache entries contain raw chapter HTML, so toggling the setting needs no refetch.
 - `src/stores/bibleBooks.ts`: book data cache.
 - `src/utils/`: parsers, formatters, conversion, quote insertion, and logger.
 - `src/consts/`: chapter counts and language metadata.

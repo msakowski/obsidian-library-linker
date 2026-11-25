@@ -36,6 +36,7 @@ type Translation = {
       preview: { name: string };
     };
     bibleQuote: {
+      includeVerseNumbers: { name: string; description: string };
       name: string;
       description: string;
       presets: {

@@ -50,6 +50,9 @@ settings:
     preview:
       name: リンクのプレビュー
   bibleQuote:
+    includeVerseNumbers:
+      name: 節番号を含める
+      description: 複数の節を含む引用に節番号を表示します。1節のみの引用には番号を付けません。
     name: 聖書引用のフォーマット
     description: 聖書の引用を挿入する際のフォーマットを設定します
     presets:

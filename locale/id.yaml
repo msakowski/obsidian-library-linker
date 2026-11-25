@@ -50,6 +50,9 @@ settings:
     preview:
       name: Pratinjau tautan
   bibleQuote:
+    includeVerseNumbers:
+      name: Sertakan nomor ayat
+      description: Tampilkan nomor ayat dalam kutipan beberapa ayat. Kutipan satu ayat tetap tanpa nomor.
     name: Format kutipan Alkitab
     description: Atur bagaimana kutipan Alkitab diformat ketika dimasukkan
     presets:

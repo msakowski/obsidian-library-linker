@@ -50,6 +50,9 @@ settings:
     preview:
       name: Forhåndsvisning af link
   bibleQuote:
+    includeVerseNumbers:
+      name: Medtag versnumre
+      description: Vis versnumre i citater med flere vers. Citater med ét vers forbliver uden nummer.
     name: Formatering af bibelcitat
     description: Angiv hvordan bibelcitater skal formateres, når de indsættes
     presets:

@@ -2,6 +2,7 @@ import type { BibleReference, Language } from '@/types';
 import type { App, WorkspaceLeaf } from 'obsidian';
 import { padChapter, padVerse } from '@/utils/padNumber';
 import { Platform, requestUrl } from 'obsidian';
+import { formatQuotedVerses } from '@/utils/formatQuotedVerses';
 import { cleanHtmlText } from '@/utils/cleanHtmlText';
 import { logger } from '@/utils/logger';
 import { getLocaleFromLanguage } from '@/utils/getLocaleFromLanguage';
@@ -60,12 +61,17 @@ export class BibleTextFetcher {
   static async fetchBibleText(
     reference: BibleReference,
     language: Language = 'E',
+    includeVerseNumbers = false,
   ): Promise<BibleTextResult> {
     logger.log('fetchBibleText', reference, language);
     try {
       const { book, chapter, verseRanges } = reference;
 
-      if (!verseRanges || verseRanges.length === 0) {
+      if (
+        !verseRanges ||
+        verseRanges.length === 0 ||
+        (reference.endChapter && reference.endChapter !== chapter)
+      ) {
         return {
           text: '',
           citation: '',
@@ -75,7 +81,7 @@ export class BibleTextFetcher {
       }
 
       const html = await this.fetchChapterHtml(book, chapter, language);
-      const result = this.extractBibleText(html, reference);
+      const result = this.extractBibleText(html, reference, includeVerseNumbers);
 
       if (!result.text) {
         // Better no quote than a placeholder written into the user's note.
@@ -328,17 +334,20 @@ export class BibleTextFetcher {
   private static extractBibleText(
     html: string,
     reference: BibleReference,
+    includeVerseNumbers = false,
   ): { text: string; citation: string } {
     const { book, chapter, verseRanges } = reference;
 
-    if (!verseRanges || verseRanges.length === 0) {
+    if (
+      !verseRanges ||
+      verseRanges.length === 0 ||
+      (reference.endChapter && reference.endChapter !== chapter)
+    ) {
       return {
         text: '',
         citation: this.generateCitation(reference),
       };
     }
-
-    const { start, end } = verseRanges[0];
 
     const doc = new DOMParser().parseFromString(html, 'text/html');
 
@@ -346,47 +355,56 @@ export class BibleTextFetcher {
     // then fall back to jw.org format (id="v{paddedBook}{paddedChapter}{paddedVerse}")
     const isWOL = doc.querySelector(`[id^="v${book}-${chapter}-"]`) !== null;
 
-    const textParts: string[] = [];
+    const verses: { number: number; text: string }[] = [];
 
-    for (let v = start; v <= end; v++) {
-      const verseElements = isWOL
-        ? Array.from(doc.querySelectorAll(`span[id^="v${book}-${chapter}-${v}-"]`)).sort((a, b) => {
-            const aSegment = Number(a.id.split('-').pop()) || 0;
-            const bSegment = Number(b.id.split('-').pop()) || 0;
-            return aSegment - bSegment;
-          })
-        : (() => {
-            const verseId = `v${book}${padChapter(chapter)}${padVerse(v)}`;
-            const verseEl = doc.getElementById(verseId);
-            return verseEl ? [verseEl] : [];
-          })();
+    for (const { start, end } of verseRanges) {
+      for (let v = start; v <= end; v++) {
+        const textParts: string[] = [];
+        const verseElements = isWOL
+          ? Array.from(doc.querySelectorAll(`span[id^="v${book}-${chapter}-${v}-"]`)).sort(
+              (a, b) => {
+                const aSegment = Number(a.id.split('-').pop()) || 0;
+                const bSegment = Number(b.id.split('-').pop()) || 0;
+                return aSegment - bSegment;
+              },
+            )
+          : (() => {
+              const verseId = `v${book}${padChapter(chapter)}${padVerse(v)}`;
+              const verseEl = doc.getElementById(verseId);
+              return verseEl ? [verseEl] : [];
+            })();
 
-      for (const verseEl of verseElements) {
-        const clone = verseEl.cloneNode(true) as HTMLElement;
+        for (const verseEl of verseElements) {
+          const clone = verseEl.cloneNode(true) as HTMLElement;
 
-        // Remove footnote/cross-reference links (both jw.org and WOL formats).
-        // Removing the WOL footnote link (a.fn) instead of stripping its "*" later
-        // keeps its tag from leaving a space before the next punctuation mark.
-        clone
-          .querySelectorAll('a.footnoteLink, a.xrefLink, a.b, a.fn')
-          .forEach((el) => el.remove());
+          // Remove footnote/cross-reference links (both jw.org and WOL formats).
+          // Removing the WOL footnote link (a.fn) instead of stripping its "*" later
+          // keeps its tag from leaving a space before the next punctuation mark.
+          clone
+            .querySelectorAll('a.footnoteLink, a.xrefLink, a.b, a.fn')
+            .forEach((el) => el.remove());
 
-        // Remove study note sections
-        clone.querySelectorAll('.studyBible, .study-notes, .notes').forEach((el) => el.remove());
+          // Remove study note sections
+          clone.querySelectorAll('.studyBible, .study-notes, .notes').forEach((el) => el.remove());
 
-        // Remove verse number elements
-        clone.querySelectorAll('.chapterNum, .verseNum').forEach((el) => el.remove());
-        // WOL: verse number links have class "vl"
-        clone.querySelectorAll('a.vl').forEach((el) => el.remove());
+          // Remove verse number elements
+          clone.querySelectorAll('.chapterNum, .verseNum').forEach((el) => el.remove());
+          // WOL: verse number links have class "vl"
+          clone.querySelectorAll('a.vl').forEach((el) => el.remove());
 
-        const rawText = cleanHtmlText(clone.innerHTML).trim();
-        if (rawText) {
-          textParts.push(rawText);
+          const rawText = cleanHtmlText(clone.innerHTML).trim();
+          if (rawText) {
+            textParts.push(rawText);
+          }
         }
+
+        const text = textParts.join(' ');
+        if (!text) return { text: '', citation: this.generateCitation(reference) };
+        verses.push({ number: v, text });
       }
     }
 
-    const extractedText = textParts.join(' ');
+    const extractedText = formatQuotedVerses(verses, includeVerseNumbers);
     const citation = this.generateCitation(reference);
 
     return {

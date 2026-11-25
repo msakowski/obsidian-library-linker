@@ -50,6 +50,9 @@ settings:
     preview:
       name: Náhled odkazu
   bibleQuote:
+    includeVerseNumbers:
+      name: Zahrnout čísla veršů
+      description: Zobrazit čísla veršů v citacích více veršů. Samostatné verše zůstanou bez čísel.
     name: Formátování biblické citace
     description: Nakonfigurujte formátování biblických citací při vkládání
     presets:

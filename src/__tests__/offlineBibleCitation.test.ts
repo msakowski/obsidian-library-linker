@@ -78,6 +78,15 @@ describe('offline Bible citation flow', () => {
       'X',
     );
 
+    const numbered = await provider.getCitation(
+      { book: 1, chapter: 1, verseRanges: [{ start: 1, end: 2 }] },
+      'X',
+      true,
+    );
+    expect(numbered.text).toBe(
+      '1 Im Anfang erschuf Gott Himmel und Erde. 2 Die Erde war formlos und leer.',
+    );
+
     expect(citation).toEqual({
       success: true,
       source: 'offline',

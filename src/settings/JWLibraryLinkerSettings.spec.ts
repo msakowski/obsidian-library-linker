@@ -45,7 +45,7 @@ describe('searchable settings', (): void => {
     const tab = await createTab();
     const repository = vi.spyOn(tab.plugin, 'getOfflineBibleRepository');
     const groups = getGroups(tab);
-    expect(groups.map((group) => group.items?.length)).toEqual([5, 8, 3, 3]);
+    expect(groups.map((group) => group.items?.length)).toEqual([5, 8, 4, 3]);
     expect(
       groups.flatMap((group) => group.items ?? []).map((item) => ('name' in item ? item.name : '')),
     ).toEqual([
@@ -62,6 +62,7 @@ describe('searchable settings', (): void => {
       'Font style',
       'Style presets',
       'Link preview',
+      'Include verse numbers',
       'Quote template',
       'Template presets',
       'Bible quote preview',
@@ -128,4 +129,48 @@ describe('offline Bible settings migration', (): void => {
     await tab.plugin.loadSettings();
     expect(tab.plugin.settings.offlineBible).toEqual({ allowOnlineFallback: expected });
   });
+});
+
+test.each([
+  undefined,
+  { template: 'Custom {quote}' },
+  { template: 'Custom {quote}', includeVerseNumbers: true },
+])('loads verse number preferences compatibly: %s', async (bibleQuote) => {
+  const tab = await createTab();
+  vi.spyOn(tab.plugin, 'loadData').mockResolvedValue(bibleQuote ? { bibleQuote } : null);
+  await tab.plugin.loadSettings();
+  expect(tab.plugin.settings.bibleQuote.includeVerseNumbers).toBe(
+    bibleQuote?.includeVerseNumbers ?? false,
+  );
+  expect(tab.plugin.settings.bibleQuote.template).toBe(
+    bibleQuote?.template ?? DEFAULT_SETTINGS.bibleQuote.template,
+  );
+});
+
+test('persists the verse-number toggle and refreshes the preview', async () => {
+  const tab = await createTab();
+  const save = vi.spyOn(tab.plugin, 'saveSettings').mockResolvedValue();
+  const preview = vi.spyOn(tab, 'updateBibleQuotePreview').mockImplementation(() => {});
+  let change: ((value: boolean) => void | Promise<void>) | undefined;
+  const toggle = {
+    setValue: vi.fn().mockReturnThis(),
+    onChange: vi.fn((callback: (value: boolean) => void | Promise<void>) => {
+      change = callback;
+      return toggle;
+    }),
+  };
+  const setting = new Setting(document.createElement('div'));
+  vi.spyOn(setting, 'addToggle').mockImplementation((callback) => {
+    callback(toggle as unknown as ToggleComponent);
+    return setting;
+  });
+  const definition = findDefinition(tab, 'Include verse numbers');
+  if (!definition.render) throw new Error('Expected toggle renderer');
+  definition.render(setting, {} as import('obsidian').SettingGroup);
+  expect(toggle.setValue).toHaveBeenCalledWith(false);
+  expect(change).toBeDefined();
+  await change?.(true);
+  expect(tab.plugin.settings.bibleQuote.includeVerseNumbers).toBe(true);
+  expect(save).toHaveBeenCalledOnce();
+  expect(preview).toHaveBeenCalledOnce();
 });
