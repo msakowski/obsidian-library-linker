@@ -22,10 +22,16 @@ function createSuggester(): BibleReferenceSuggester {
   return new BibleReferenceSuggester(plugin);
 }
 
+// Splits a test line at its `|` cursor marker into the line text and the cursor column.
+function splitAtCursor(lineWithCursor: string): { line: string; ch: number } {
+  const ch = lineWithCursor.indexOf('|');
+  if (ch === -1) throw new Error(`Missing cursor marker in: ${lineWithCursor}`);
+  return { line: lineWithCursor.slice(0, ch) + lineWithCursor.slice(ch + 1), ch };
+}
+
 // Calls onTrigger with the cursor where `|` is, as Obsidian does after each edit.
 function triggerOn(suggester: BibleReferenceSuggester, editor: Editor, lineWithCursor: string) {
-  const ch = lineWithCursor.indexOf('|');
-  const line = lineWithCursor.replace('|', '');
+  const { line, ch } = splitAtCursor(lineWithCursor);
   (editor as unknown as { getLine: () => string }).getLine = () => line;
   const cursor: EditorPosition = { line: 0, ch };
   return suggester.onTrigger(cursor, editor);
@@ -159,7 +165,7 @@ describe('BibleReferenceSuggester.onTrigger', () => {
       ['[/b John 3:16|]', ']'],
     ])('leaves the closing markup of %s in the note', (line, closing) => {
       const result = trigger(line);
-      const text = line.replace('|', '');
+      const text = splitAtCursor(line).line;
 
       expect(result?.query).toBe('John 3:16');
       expect(text.slice(result!.end.ch)).toBe(closing);
