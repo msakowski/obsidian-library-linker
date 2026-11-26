@@ -202,7 +202,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
               : this.t('notices.bibleQuotesInserted');
             new Notice(notice);
           } else if (result.fetchFailed > 0) {
-            new Notice(this.t('notices.bibleQuoteFetchFailed'));
+            new Notice(result.fetchError ?? this.t('notices.bibleQuoteFetchFailed'));
           } else if (result.tooManyChapters === 0) {
             new Notice(this.t('notices.noBibleLinksFound'));
           }
@@ -235,7 +235,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
           } else if (result.alreadyExists) {
             new Notice(this.t('notices.bibleQuoteAlreadyExists'));
           } else if (result.fetchFailed) {
-            new Notice(this.t('notices.bibleQuoteFetchFailed'));
+            new Notice(result.fetchError ?? this.t('notices.bibleQuoteFetchFailed'));
           } else if (!result.tooManyChapters) {
             new Notice(this.t('notices.noBibleLinkAtCursor'));
           }
@@ -280,7 +280,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
                   } else if (result.alreadyExists) {
                     new Notice(this.t('notices.bibleQuoteAlreadyExists'));
                   } else if (result.fetchFailed) {
-                    new Notice(this.t('notices.bibleQuoteFetchFailed'));
+                    new Notice(result.fetchError ?? this.t('notices.bibleQuoteFetchFailed'));
                   } else if (!result.tooManyChapters) {
                     new Notice(this.t('notices.noBibleLinkAtCursor'));
                   }
