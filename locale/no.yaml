@@ -69,12 +69,6 @@ settings:
   offlineBible:
     name: Offline bibel
     description: Importer en bibel-EPUB én gang, og bruk lokale kapitteldata for offline sitatoppslag.
-    enabled:
-      name: Aktiver offline bibel
-      description: Tillat at sitatfunksjonen bruker importerte, lokale bibeldata.
-    preferOffline:
-      name: Foretrekk offline sitater
-      description: Sjekk den importerte offline bibelen før det forsøkes å hente sitatet på nettet.
     allowOnlineFallback:
       name: Tillat online reserveløsning
       description: Hvis offline data mangler, tillat at pluginet forsøker den nettbaserte sitatkilden.

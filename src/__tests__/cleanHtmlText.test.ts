@@ -48,6 +48,27 @@ describe('cleanHtmlText', () => {
     });
   });
 
+  describe('Malformed and unsafe markup', () => {
+    it('should not reassemble a tag from nested fragments', () => {
+      const html = 'a<scr<script>alert(1)</script>ipt>b';
+      expect(cleanHtmlText(html)).not.toMatch(/<[a-z/!]/i);
+    });
+
+    it('should drop script and style contents', () => {
+      const html = 'before<script>alert(1)</script><style>p{}</style>after';
+      expect(cleanHtmlText(html)).toBe('beforeafter');
+    });
+
+    it('should keep comparison signs in plain text', () => {
+      expect(cleanHtmlText('1 < 2 and 3 > 2')).toBe('1 < 2 and 3 > 2');
+    });
+
+    it('should treat a line-break span with single-quoted class as a break', () => {
+      const html = "first<span class='newblock'></span>second";
+      expect(cleanHtmlText(html)).toBe('first second');
+    });
+  });
+
   describe('HTML entity decoding', () => {
     it('should decode common HTML entities', () => {
       const html = 'Hello&nbsp;world&amp;test';

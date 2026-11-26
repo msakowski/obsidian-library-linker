@@ -69,12 +69,6 @@ settings:
   offlineBible:
     name: Offline na Bibliya
     description: Mag-import ng Bible EPUB nang isang beses at gamitin ang lokal na data ng kabanata para sa offline na paghahanap ng sipi.
-    enabled:
-      name: Paganahin ang offline na Bibliya
-      description: Payagan ang pipeline ng sipi na gamitin ang na-import na lokal na data ng Bibliya.
-    preferOffline:
-      name: Mas gusto ang mga offline na sipi
-      description: Suriin ang na-import na offline na Bibliya bago subukang kunin online.
     allowOnlineFallback:
       name: Payagan ang online na fallback
       description: Kung walang offline na data, payagan ang plugin na subukan ang online na tagapagbigay ng sipi.

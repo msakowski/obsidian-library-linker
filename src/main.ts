@@ -44,8 +44,6 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
     autoInsertOnLinkCreation: false,
   },
   offlineBible: {
-    enabled: true,
-    preferOffline: true,
     allowOnlineFallback: true,
   },
   ...DEFAULT_STYLES,
@@ -222,7 +220,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
               : this.t('notices.bibleQuotesInserted');
             new Notice(notice);
           } else if (result.fetchFailed > 0) {
-            new Notice(this.t('notices.bibleQuoteFetchFailed'));
+            new Notice(result.fetchError ?? this.t('notices.bibleQuoteFetchFailed'));
           } else if (result.tooManyChapters === 0) {
             new Notice(this.t('notices.noBibleLinksFound'));
           }
@@ -255,7 +253,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
           } else if (result.alreadyExists) {
             new Notice(this.t('notices.bibleQuoteAlreadyExists'));
           } else if (result.fetchFailed) {
-            new Notice(this.t('notices.bibleQuoteFetchFailed'));
+            new Notice(result.fetchError ?? this.t('notices.bibleQuoteFetchFailed'));
           } else if (!result.tooManyChapters) {
             new Notice(this.t('notices.noBibleLinkAtCursor'));
           }
@@ -300,7 +298,7 @@ export default class JWLibraryLinkerPlugin extends Plugin {
                   } else if (result.alreadyExists) {
                     new Notice(this.t('notices.bibleQuoteAlreadyExists'));
                   } else if (result.fetchFailed) {
-                    new Notice(this.t('notices.bibleQuoteFetchFailed'));
+                    new Notice(result.fetchError ?? this.t('notices.bibleQuoteFetchFailed'));
                   } else if (!result.tooManyChapters) {
                     new Notice(this.t('notices.noBibleLinkAtCursor'));
                   }
@@ -370,9 +368,12 @@ export default class JWLibraryLinkerPlugin extends Plugin {
         ...DEFAULT_SETTINGS.bibleQuote,
         ...savedData?.bibleQuote,
       },
+      // Only `allowOnlineFallback` is kept; the removed `enabled` and
+      // `preferOffline` switches are dropped from older saved settings
       offlineBible: {
-        ...DEFAULT_SETTINGS.offlineBible,
-        ...savedData?.offlineBible,
+        allowOnlineFallback:
+          savedData?.offlineBible?.allowOnlineFallback ??
+          DEFAULT_SETTINGS.offlineBible.allowOnlineFallback,
       },
     };
 

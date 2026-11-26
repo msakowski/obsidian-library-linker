@@ -44,8 +44,6 @@ interface BibleQuoteSettings {
 }
 
 interface OfflineBibleSettings {
-  enabled: boolean;
-  preferOffline: boolean;
   allowOnlineFallback: boolean;
 }
 

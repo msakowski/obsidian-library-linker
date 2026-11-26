@@ -69,12 +69,6 @@ settings:
   offlineBible:
     name: Offline Biblia
     description: Importálj egyszer egy Biblia EPUB-fájlt, és használd a helyi fejezetadatokat offline idézetkereséshez.
-    enabled:
-      name: Offline Biblia engedélyezése
-      description: Engedélyezi, hogy az idézetkeresés az importált helyi bibliai adatokat használja.
-    preferOffline:
-      name: Offline idézetek előnyben részesítése
-      description: Először az importált offline Bibliát ellenőrzi, mielőtt online kérést indít.
     allowOnlineFallback:
       name: Online tartalék engedélyezése
       description: Ha az offline adatok hiányoznak, a plugin megpróbálhatja az online idézetszolgáltatót.

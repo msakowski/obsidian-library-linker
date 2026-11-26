@@ -16,8 +16,8 @@ export function getOfflineBibleDefinitions(tab: SettingsTabContext): SettingDefi
     heading: tab.t('settings.offlineBible.name'),
     items: [
       {
-        name: tab.t('settings.offlineBible.enabled.name'),
-        desc: tab.t('settings.offlineBible.enabled.description'),
+        name: tab.t('settings.offlineBible.allowOnlineFallback.name'),
+        desc: tab.t('settings.offlineBible.allowOnlineFallback.description'),
         render: (setting, group): void => {
           const description = group.listEl.createDiv({
             cls: 'setting-item-description',
@@ -25,38 +25,8 @@ export function getOfflineBibleDefinitions(tab: SettingsTabContext): SettingDefi
           });
           group.listEl.prepend(description);
           setting.addToggle((toggle) =>
-            toggle.setValue(tab.plugin.settings.offlineBible.enabled).onChange(async (value) => {
-              tab.plugin.settings.offlineBible.enabled = value;
-              await tab.plugin.saveSettings();
-              tab.update();
-            }),
-          );
-        },
-      },
-      {
-        name: tab.t('settings.offlineBible.preferOffline.name'),
-        desc: tab.t('settings.offlineBible.preferOffline.description'),
-        render: (setting): void => {
-          setting.addToggle((toggle) =>
-            toggle
-              .setValue(tab.plugin.settings.offlineBible.preferOffline)
-              .setDisabled(!tab.plugin.settings.offlineBible.enabled)
-              .onChange(async (value) => {
-                tab.plugin.settings.offlineBible.preferOffline = value;
-                await tab.plugin.saveSettings();
-                tab.update();
-              }),
-          );
-        },
-      },
-      {
-        name: tab.t('settings.offlineBible.allowOnlineFallback.name'),
-        desc: tab.t('settings.offlineBible.allowOnlineFallback.description'),
-        render: (setting): void => {
-          setting.addToggle((toggle) =>
             toggle
               .setValue(tab.plugin.settings.offlineBible.allowOnlineFallback)
-              .setDisabled(!tab.plugin.settings.offlineBible.enabled)
               .onChange(async (value) => {
                 tab.plugin.settings.offlineBible.allowOnlineFallback = value;
                 await tab.plugin.saveSettings();

@@ -69,12 +69,6 @@ settings:
   offlineBible:
     name: Baibolo wa kunse kwa intaneti
     description: Letapo Baibolo wa EPUB umuku umo lwekela kabili bomfya amasambililo ya pa makompyuta nga taupo intaneti.
-    enabled:
-      name: Suminisha Baibolo wa kunse kwa intaneti
-      description: Suminisha amalembo ukubomfya Baibolo wa kuli kompyuta uo waletele.
-    preferOffline:
-      name: Cabilisha Baibolo wa kunse kwa intaneti
-      description: Tala umona Baibolo wakuli kompyuta pa ntaanshi ya ukufwaya pa intaneti.
     allowOnlineFallback:
       name: Suminisha ukufwaya pa intaneti
       description: Nga Baibolo wakuli kompyuta tabaliko, plugin ikafwaye pa intaneti.

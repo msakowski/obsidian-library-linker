@@ -45,7 +45,7 @@ describe('searchable settings', (): void => {
     const tab = await createTab();
     const repository = vi.spyOn(tab.plugin, 'getOfflineBibleRepository');
     const groups = getGroups(tab);
-    expect(groups.map((group) => group.items?.length)).toEqual([5, 8, 4, 5]);
+    expect(groups.map((group) => group.items?.length)).toEqual([5, 8, 4, 3]);
     expect(
       groups.flatMap((group) => group.items ?? []).map((item) => ('name' in item ? item.name : '')),
     ).toEqual([
@@ -66,8 +66,6 @@ describe('searchable settings', (): void => {
       'Quote template',
       'Template presets',
       'Bible quote preview',
-      'Enable offline Bible',
-      'Prefer offline quotes',
       'Allow online fallback',
       'Offline Bible actions',
       'Installed offline Bibles',
@@ -83,40 +81,52 @@ describe('searchable settings', (): void => {
     expect(tab.t('settings.language.name')).not.toBe('Language');
   });
 
+  test('offers only the online fallback switch and persists changes', async (): Promise<void> => {
+    const tab = await createTab();
+    const save = vi.spyOn(tab.plugin, 'saveSettings').mockResolvedValue();
+    let change: ((value: boolean) => void | Promise<void>) | undefined;
+    const toggle = {
+      setValue: vi.fn().mockReturnThis(),
+      setDisabled: vi.fn().mockReturnThis(),
+      onChange: vi.fn((callback: (value: boolean) => void | Promise<void>) => {
+        change = callback;
+        return toggle;
+      }),
+    };
+    const setting = new Setting(document.createElement('div'));
+    vi.spyOn(setting, 'addToggle').mockImplementation((callback) => {
+      callback(toggle as unknown as ToggleComponent);
+      return setting;
+    });
+    const definition = findDefinition(tab, 'Allow online fallback');
+    const listEl = document.createElement('div');
+    const group = {
+      listEl: Object.assign(listEl, { createDiv: () => document.createElement('div') }),
+    };
+    if (!definition.render) throw new Error('Expected custom control renderer');
+    definition.render(setting, group as unknown as import('obsidian').SettingGroup);
+    expect(toggle.setDisabled).not.toHaveBeenCalled();
+    await change?.(false);
+    expect(tab.plugin.settings.offlineBible).toEqual({ allowOnlineFallback: false });
+    expect(save).toHaveBeenCalledOnce();
+    expect(() => findDefinition(tab, 'Prefer offline quotes')).toThrow();
+    expect(() => findDefinition(tab, 'Enable offline Bible')).toThrow();
+  });
+});
+
+describe('offline Bible settings migration', (): void => {
   test.each([
-    { name: 'Allow online fallback', key: 'allowOnlineFallback', refreshes: false },
-    { name: 'Prefer offline quotes', key: 'preferOffline', refreshes: true },
-  ] as const)(
-    'preserves disabled $name and persists changes',
-    async ({ name, key, refreshes }): Promise<void> => {
-      const tab = await createTab();
-      tab.plugin.settings.offlineBible.enabled = false;
-      const save = vi.spyOn(tab.plugin, 'saveSettings').mockResolvedValue();
-      const update = vi.fn();
-      tab.update = update;
-      let change: ((value: boolean) => void | Promise<void>) | undefined;
-      const toggle = {
-        setValue: vi.fn().mockReturnThis(),
-        setDisabled: vi.fn().mockReturnThis(),
-        onChange: vi.fn((callback: (value: boolean) => void | Promise<void>) => {
-          change = callback;
-          return toggle;
-        }),
-      };
-      const setting = new Setting(document.createElement('div'));
-      vi.spyOn(setting, 'addToggle').mockImplementation((callback) => {
-        callback(toggle as unknown as ToggleComponent);
-        return setting;
-      });
-      const definition = findDefinition(tab, name);
-      const group = { listEl: document.createElement('div') };
-      if (!definition.render) throw new Error('Expected custom control renderer');
-      definition.render(setting, group as unknown as import('obsidian').SettingGroup);
-      expect(toggle.setDisabled).toHaveBeenCalledWith(true);
-      await change?.(false);
-      expect(tab.plugin.settings.offlineBible[key]).toBe(false);
-      expect(save).toHaveBeenCalledOnce();
-      expect(update).toHaveBeenCalledTimes(refreshes ? 1 : 0);
+    {
+      saved: { enabled: false, preferOffline: false, allowOnlineFallback: false },
+      expected: false,
     },
-  );
+    { saved: { enabled: true, preferOffline: false, allowOnlineFallback: true }, expected: true },
+    { saved: undefined, expected: true },
+  ])('keeps only allowOnlineFallback from $saved', async ({ saved, expected }): Promise<void> => {
+    const tab = await createTab();
+    vi.spyOn(tab.plugin, 'loadData').mockResolvedValue(saved ? { offlineBible: saved } : null);
+    vi.spyOn(tab.plugin, 'saveSettings').mockResolvedValue();
+    await tab.plugin.loadSettings();
+    expect(tab.plugin.settings.offlineBible).toEqual({ allowOnlineFallback: expected });
+  });
 });

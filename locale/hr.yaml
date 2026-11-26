@@ -69,12 +69,6 @@ settings:
   offlineBible:
     name: Offline Bible
     description: Import a Bible EPUB once and use local chapter data for offline citation lookup.
-    enabled:
-      name: Enable offline Bible
-      description: Allow the citation pipeline to use imported local Bible data.
-    preferOffline:
-      name: Prefer offline quotes
-      description: Check the imported offline Bible before attempting online retrieval.
     allowOnlineFallback:
       name: Allow online fallback
       description: If offline data is missing, allow the plugin to try the online citation provider.

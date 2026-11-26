@@ -69,12 +69,6 @@ settings:
   offlineBible:
     name: オフライン聖書
     description: 聖書のEPUBを一度インポートし、ローカルの章データをオフラインの引用検索に使用します。
-    enabled:
-      name: オフライン聖書を有効にする
-      description: 引用パイプラインがインポートされたローカル聖書データを使用できるようにします。
-    preferOffline:
-      name: オフライン引用を優先する
-      description: オンライン取得を試みる前に、インポートされたオフライン聖書を確認します。
     allowOnlineFallback:
       name: オンラインフォールバックを許可する
       description: オフラインデータが不足している場合、プラグインがオンラインの引用プロバイダーを試すことを許可します。

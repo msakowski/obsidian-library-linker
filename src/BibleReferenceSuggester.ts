@@ -16,12 +16,47 @@ import { buildBookNameRegex } from '@/utils/buildBookNameRegex';
 import { logger } from '@/utils/logger';
 
 const TRIGGER = '/b ';
+/** Characters that continue a reference after the cursor: "6" in "John 3:1|6". */
+const REFERENCE_CONTINUATION = /^[\p{L}\p{N}:.,\-–]*/u;
+/** A character after which the link needs no trailing space. */
+const CLOSING_OR_SPACE = /^[\s)\]}*_"'”’»]$/;
+/** What may come right before a command: a space, or opening punctuation or markup. */
+const BEFORE_COMMAND = /[\s([{*_>"'“‘«]/;
+
+/**
+ * Where the `/b` command the cursor is in starts, or -1. The command must
+ * start the line or follow a space or opening punctuation or markup (a
+ * parenthesis, bracket, emphasis mark or quote), so text such as "km/b 5" is
+ * no command; typing before a
+ * command keeps detecting references normally.
+ */
+function findCommandStart(line: string, cursorCh: number): number {
+  for (
+    let index = line.lastIndexOf(TRIGGER, cursorCh - TRIGGER.length);
+    index !== -1;
+    index = index > 0 ? line.lastIndexOf(TRIGGER, index - 1) : -1
+  ) {
+    if (index === 0 || BEFORE_COMMAND.test(line.charAt(index - 1))) return index;
+  }
+
+  return -1;
+}
+
+/** Whether the suggestion was opened by the `/b` command. */
+function isCommandContext(context: EditorSuggestContext): boolean {
+  return context.editor.getLine(context.start.line).startsWith(TRIGGER, context.start.ch);
+}
 
 export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   plugin: JWLibraryLinkerPlugin;
   private t: (key: string, variables?: Record<string, string>) => string;
   private cachedBookRegex: RegExp | null = null;
   private cachedBookRegexLanguage: string | null = null;
+  /** The suggestion on show: where it starts, and whether it offered anything. */
+  private shown: { editor: Editor; start: EditorPosition; hasSuggestions: boolean } | null = null;
+  /** Start of a suggestion the user closed without choosing it. */
+  private dismissed: { editor: Editor; start: EditorPosition } | null = null;
+  private selecting = false;
 
   constructor(plugin: JWLibraryLinkerPlugin) {
     super(plugin.app);
@@ -39,60 +74,110 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     return this.cachedBookRegex;
   }
 
+  /**
+   * Finds the unlinked reference that contains or ends at the cursor.
+   * Only that one is suggested: a line can hold links and other references,
+   * and a reference the cursor has moved past (e.g. after Escape) must not reopen the popup.
+   */
+  private findReferenceAtCursor(
+    line: string,
+    cursorCh: number,
+  ): { start: number; end: number; text: string } | null {
+    // Generic regex first; single-chapter books (e.g. "Jude 3") only match the book name regex
+    for (const regex of [BIBLE_REFERENCE_REGEX, this.getBookRegex()]) {
+      for (const match of line.matchAll(regex)) {
+        const rawStart = match.index;
+        if (rawStart > cursorCh) break;
+
+        // The regex may over-match leading words (e.g. "some text before John 3:16").
+        // Trim from the front to find the actual book name.
+        const result = extractBibleReferenceFromMatch(match[0], this.plugin.settings.language);
+        if (!result) continue;
+
+        const start = rawStart + result.offset;
+        const end = start + result.text.length;
+        if (cursorCh < start || cursorCh > end) continue;
+
+        // Skip a reference already inside a markdown link: [***text***](...)
+        const hasLinkBefore = /\[\*{0,2}$/.test(line.substring(0, start));
+        const hasLinkAfter = /^\*{0,2}\]\(/.test(line.substring(end));
+        if (hasLinkBefore && hasLinkAfter) return null;
+
+        return { start, end, text: result.text };
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Keeps a suggestion the user closed (Escape, a click elsewhere) closed
+   * while they go on typing the same reference or `/b` command; a reference
+   * starting elsewhere, or moving the cursor away, ends this.
+   */
   onTrigger(cursor: EditorPosition, editor: Editor): EditorSuggestTriggerInfo | null {
+    const trigger = this.findTrigger(cursor, editor);
+    const dismissed = this.dismissed;
+
+    if (
+      trigger &&
+      dismissed?.editor === editor &&
+      dismissed.start.line === trigger.start.line &&
+      dismissed.start.ch === trigger.start.ch
+    ) {
+      this.shown = null;
+      return null;
+    }
+
+    this.dismissed = null;
+    this.shown = trigger ? { editor, start: trigger.start, hasSuggestions: false } : null;
+    return trigger;
+  }
+
+  close(): void {
+    // Closing a suggestion that is still triggered and offered something,
+    // without one being chosen, means the user dismissed it.
+    if (this.shown?.hasSuggestions && !this.selecting) {
+      this.dismissed = { editor: this.shown.editor, start: this.shown.start };
+    }
+    this.shown = null;
+    super.close();
+  }
+
+  private findTrigger(cursor: EditorPosition, editor: Editor): EditorSuggestTriggerInfo | null {
     const line = editor.getLine(cursor.line);
+    const commandIndex = findCommandStart(line, cursor.ch);
 
     /**
-     * Silent mode: If there is a complete reference, show it as a suggestion
+     * Silent mode: If there is a complete reference at the cursor, show it as a suggestion
      */
-    const match = line.match(BIBLE_REFERENCE_REGEX) || line.match(this.getBookRegex());
+    const reference = commandIndex === -1 ? this.findReferenceAtCursor(line, cursor.ch) : null;
 
-    if (match?.[0]) {
-      // The regex may over-match leading words (e.g. "some text before John 3:16").
-      // Trim from the front to find the actual book name.
-      const result = extractBibleReferenceFromMatch(match[0], this.plugin.settings.language);
-
-      if (result) {
-        const rawMatchStart = line.indexOf(match[0]);
-        const matchStart = rawMatchStart + result.offset;
-        const matchEnd = matchStart + result.text.length;
-
-        // Check if the matched reference is already inside a markdown link
-        const beforeMatch = line.substring(0, matchStart);
-        const afterMatch = line.substring(matchEnd);
-
-        // Look for markdown link pattern: [***text***](...)
-        const hasLinkBefore = /\[\*{0,2}$/.test(beforeMatch);
-        const hasLinkAfter = /^\*{0,2}\]\(/.test(afterMatch);
-        const isAlreadyLinked = hasLinkBefore && hasLinkAfter;
-
-        if (!line.includes(TRIGGER) && !isAlreadyLinked) {
-          return {
-            start: {
-              ch: matchStart,
-              line: cursor.line,
-            },
-            end: {
-              ch: matchEnd,
-              line: cursor.line,
-            },
-            query: result.text,
-          };
-        }
-      }
+    if (reference) {
+      return {
+        start: {
+          ch: reference.start,
+          line: cursor.line,
+        },
+        end: {
+          ch: reference.end,
+          line: cursor.line,
+        },
+        query: reference.text,
+      };
     }
 
     /**
      * Command mode: If there is a /b, show detailed suggestions
      */
 
-    // Find position of /b
-    const trigger = TRIGGER;
-    const commandIndex = line.lastIndexOf(trigger);
     if (commandIndex === -1) return null;
 
-    // Get the text after /b
-    const afterCommand = line.slice(commandIndex + trigger.length);
+    // The command runs to the cursor, plus the rest of a reference being
+    // edited in the middle ("/b John 3:1|6"). Text after it, such as the
+    // closing bracket of "(/b John 3:16)", stays in the note.
+    const end = cursor.ch + (REFERENCE_CONTINUATION.exec(line.slice(cursor.ch))?.[0].length ?? 0);
+    const afterCommand = line.slice(commandIndex + TRIGGER.length, end);
     // Show suggestions if there's any text after "/b "
     if (afterCommand.length > 0) {
       return {
@@ -101,7 +186,7 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
           line: cursor.line,
         },
         end: {
-          ch: line.length,
+          ch: end,
           line: cursor.line,
         },
         query: afterCommand.trim(), // Trim to handle the space case
@@ -112,9 +197,16 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
   }
 
   getSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
+    const suggestions = this.buildSuggestions(context);
+    if (this.shown) this.shown.hasSuggestions = suggestions.length > 0;
+    return suggestions;
+  }
+
+  private buildSuggestions(context: EditorSuggestContext): BibleSuggestion[] {
     const query = context.query;
 
-    const isExplicitMode = query.includes(TRIGGER);
+    // The query is the text after "/b ", so the command is read from the line
+    const isExplicitMode = isCommandContext(context);
 
     // If query is empty (just typed "/b "), show a simple typing message without the {text} placeholder
     if (query.length === 0 && isExplicitMode) {
@@ -143,7 +235,8 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
     try {
       reference = parseBibleReference(query, this.plugin.settings.language);
     } catch (error: unknown) {
-      logger.error(error instanceof Error ? error.message : String(error));
+      // Expected while the reference is still being typed ("/b J", "/b Jo")
+      logger.debug(error instanceof Error ? error.message : String(error));
 
       if (!isExplicitMode) return [];
 
@@ -219,11 +312,21 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       return;
     }
 
+    // The link ends with the space after it (`suffixOutsideLink`). Before closing markup or a
+    // space, as in "(/b John 3:16)", that space would only be in the way.
+    const next = editor.getLine(context.end.line).charAt(context.end.ch);
+    const linkText = CLOSING_OR_SPACE.test(next) ? convertedLink.trimEnd() : convertedLink;
+
     // Replace the entire command and reference with the converted link
-    editor.replaceRange(convertedLink, context.start, context.end);
+    editor.replaceRange(linkText, context.start, context.end);
 
     // Force close the suggestion box to prevent it from staying open with italic formatting
-    this.close();
+    this.selecting = true;
+    try {
+      this.close();
+    } finally {
+      this.selecting = false;
+    }
 
     // Opt-in: fetch and insert the quote for the link that was just created.
     // Runs in the background so typing is never blocked.
