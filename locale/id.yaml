@@ -66,12 +66,6 @@ settings:
   offlineBible:
     name: Alkitab offline
     description: Impor EPUB Alkitab dan gunakan data lokal untuk pencarian kutipan offline.
-    enabled:
-      name: Aktifkan Alkitab offline
-      description: Izinkan alur kerja kutipan untuk menggunakan data Alkitab lokal yang telah diimpor.
-    preferOffline:
-      name: Utamakan kutipan offline
-      description: Cek Alkitab offline terimpor sebelum mencoba untuk mengambil kutipan secara online.
     allowOnlineFallback:
       name: Gunakan Pengalihan Online
       description: Jika data offline tidak ada, izinkan plugin ini untuk mencoba menggunakan provider kutipan online

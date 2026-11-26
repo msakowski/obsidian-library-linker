@@ -40,8 +40,6 @@ export const DEFAULT_SETTINGS: LinkReplacerSettings = {
     template: BIBLE_QUOTE_TEMPLATES.short,
   },
   offlineBible: {
-    enabled: true,
-    preferOffline: true,
     allowOnlineFallback: true,
   },
   ...DEFAULT_STYLES,
@@ -334,9 +332,12 @@ export default class JWLibraryLinkerPlugin extends Plugin {
         ...DEFAULT_SETTINGS.bibleQuote,
         ...savedData?.bibleQuote,
       },
+      // Only `allowOnlineFallback` is kept; the removed `enabled` and
+      // `preferOffline` switches are dropped from older saved settings
       offlineBible: {
-        ...DEFAULT_SETTINGS.offlineBible,
-        ...savedData?.offlineBible,
+        allowOnlineFallback:
+          savedData?.offlineBible?.allowOnlineFallback ??
+          DEFAULT_SETTINGS.offlineBible.allowOnlineFallback,
       },
     };
 

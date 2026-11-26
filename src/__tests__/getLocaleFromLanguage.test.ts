@@ -13,6 +13,7 @@ describe('getLocaleFromLanguage', () => {
     ['C', 'hr'],
     ['VT', 'vi'],
     ['B', 'cs'],
+    ['L', 'lt'],
   ] as const)('%s → %s', (language, expected) => {
     expect(getLocaleFromLanguage(language)).toBe(expected);
   });

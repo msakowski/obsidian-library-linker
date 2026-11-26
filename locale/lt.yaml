@@ -1,0 +1,130 @@
+settings:
+  language:
+    name: Kalba
+    description: Pasirinkite Biblijos nuorodų kalbą
+  openAutomatically:
+    name: Atidaryti nuorodas automatiškai
+    description: Perkelia komandą „Susieti ir atidaryti“ į sąrašo viršų
+  updatedLinkStructure:
+    name: Išlaikyti nuorodos tekstą
+    description: Įjungus, konvertuojant Biblijos tekstą bus išlaikytas dabartinis nuorodos tekstas
+    keepCurrentStructure: Išlaikyti dabartinę struktūrą
+    usePluginSettings: Naudoti papildinio nustatymus
+  noLanguageParameter:
+    name: Kurti nuorodas be kalbos
+    description: Įjungus, prie nuorodos nepridedamas kalbos parametras. Nuorodos atsidarys JW Library nustatyta kalba
+  reconvertExistingLinks:
+    name: Iš naujo konvertuoti esamas nuorodas
+    description: Įjungus, jau konvertuotos jwlibrary:// nuorodos bus konvertuojamos iš naujo pagal dabartinius formatavimo nustatymus. Taip visas nuorodas galite suderinti su naujausiais nustatymais.
+  bookLength:
+    name: Nuorodos teksto ilgis
+    description: Pasirinkite nuorodos teksto ilgį
+    short: Trumpas
+    medium: Vidutinis
+    long: Ilgas
+  linkStyling:
+    name: Nuorodos stilius
+    description: Pasirinkite simbolius ar jaustukus, pridedamus prieš nuorodą, po jos arba jos viduje, ir šrifto stilių
+    reset: 'Atkurti numatytąjį: „{{default}}“'
+    prefixOutsideLink:
+      name: Priešdėlis už nuorodos
+      description: Tekstas, pridedamas prieš nuorodą
+    prefixInsideLink:
+      name: Priešdėlis nuorodoje
+      description: Tekstas, pridedamas nuorodos teksto pradžioje
+    suffixInsideLink:
+      name: Priesaga nuorodoje
+      description: Tekstas, pridedamas nuorodos teksto pabaigoje
+    suffixOutsideLink:
+      name: Priesaga už nuorodos
+      description: Tekstas, pridedamas po nuorodos
+    presets:
+      name: Stiliaus šablonai
+      description: Pasirinkite nuorodos stiliaus šabloną
+    fontStyle:
+      name: Šrifto stilius
+      description: Pasirinkite nuorodos teksto šrifto stilių
+      normal: Įprastas
+      italic: Pasvirasis
+      bold: Paryškintas
+    preview:
+      name: Nuorodos peržiūra
+  bibleQuote:
+    name: Biblijos citatų formatavimas
+    description: Nustatykite, kaip formatuojamos įterpiamos Biblijos citatos
+    presets:
+      name: Šablonai
+      short: Nuoroda + citata
+      plain: Nuoroda citatoje
+      foldable: Suskleidžiamas paaiškinimo blokas (callout)
+      expanded: Išskleistas paaiškinimo blokas (callout)
+    template:
+      name: Citatos šablonas
+      description: 'Pritaikykite citatos formatą naudodami kintamuosius: {bibleRef}, {bibleRefLinked}, {quote}'
+    preview:
+      name: Biblijos citatos peržiūra
+  offlineBible:
+    name: Biblija be interneto
+    description: Vieną kartą importuokite Biblijos EPUB failą ir naudokite vietinius skyrių duomenis citatoms be interneto.
+    allowOnlineFallback:
+      name: Leisti atsarginį gavimą internetu
+      description: Jei vietinių duomenų nėra, leisti papildiniui bandyti gauti citatą internetu.
+    installedList:
+      name: Įdiegtos Biblijos be interneto
+      description: Kiekvienai kalbai galima įdiegti vieną Bibliją. Kalba nustatoma pagal EPUB metaduomenis.
+      empty: Dar neįdiegta nė viena Biblija be interneto.
+      entry: '{{sourceFileName}} — skyrių: {{chapterCount}}, importuota {{importedAt}}'
+    actions:
+      name: Biblijos be interneto veiksmai
+      description: Importuokite EPUB failą, kad pridėtumėte naują kalbą. Norėdami pakeisti esamą, pirmiausia ją pašalinkite.
+      import: Importuoti Biblijos EPUB
+      importing: Importuojama...
+      openFolder: Atidaryti Biblijos be interneto aplanką
+commands:
+  linkUnlinkedBibleReferences: Susieti nesusietas Biblijos nuorodas
+  convertToJWLibraryLinks: Konvertuoti pažymėtas nuorodas į JW Library nuorodas
+  insertBibleQuotes: Įterpti Biblijos citatas JW Library nuorodoms
+  insertBibleQuoteAtCursor: Įterpti Biblijos citatą žymeklio vietoje
+convertSuggester:
+  emptyStateText: Pasirinkite konvertavimo tipą
+  options:
+    all: Visos
+    bible: Biblijos nuorodos
+    publication: Leidiniai
+contextMenu:
+  insertBibleQuote: Įterpti Biblijos citatą
+notices:
+  convertedBibleReferences: 'Konvertuota Biblijos nuorodų: {{count}}'
+  pleaseSelectText: Pažymėkite konvertuojamą tekstą
+  noBibleReferencesFound: Biblijos nuorodų nerasta
+  bibleQuotesInserted: Biblijos citatos sėkmingai įterptos
+  bibleQuotesInsertedSelection: Biblijos citatos įterptos pažymėtai sričiai
+  bibleQuoteInsertedAtCursor: Biblijos citata įterpta žymeklio vietoje
+  noBibleLinksFound: JW Library nuorodų nerasta
+  noBibleLinkAtCursor: Žymeklio vietoje JW Library nuorodos nerasta
+  bibleQuoteAlreadyExists: Biblijos citata jau yra
+  errorInsertingQuotes: Klaida įterpiant Biblijos citatas
+  bibleQuoteFetchFailed: Nepavyko gauti Biblijos teksto — bandykite dar kartą
+  offlineBibleImported: 'Biblija be interneto importuota: {{language}}'
+  offlineBibleRemoved: 'Biblija be interneto pašalinta: {{language}}'
+  offlineBibleAlreadyInstalled: 'Biblija be interneto kalbai {{language}} jau įdiegta. Norėdami importuoti iš naujo, pirmiausia ją pašalinkite.'
+  offlineBibleImportFailed: Nepavyko importuoti Biblijos EPUB failo
+  offlineBibleOpenFolderFailed: Nepavyko atidaryti Biblijos be interneto aplanko
+suggestions:
+  createLink: 'Sukurti nuorodą: {{text}}'
+  createLinks: 'Sukurti nuorodas: {{text}}'
+  createAndOpen: 'Sukurti nuorodą ir atidaryti: {{text}}'
+  createMultipleAndOpenFirst: 'Sukurti nuorodas ir atidaryti pirmąją: {{text}}'
+  typing: 'Įveskite Biblijos nuorodą: {{text}}'
+  typingEmpty: Įveskite Biblijos nuorodą
+errors:
+  invalidVerseNumber: Neteisingas eilutės numeris
+  versesAscendingOrder: Eilutės turi būti didėjimo tvarka
+  chaptersAscendingOrder: Skyriai turi būti didėjimo tvarka
+  invalidVerseFormat: Neteisingas eilutės formatas
+  invalidReferenceFormat: Neteisingas nuorodos formatas
+  unsupportedLanguage: Nepalaikoma kalba
+  offlineBibleNotInstalled: 'Biblija be interneto kalbai {{language}} neįdiegta. Kad galėtumėte naudoti citatas be interneto, nustatymuose importuokite Biblijos EPUB failą.'
+  offlineBibleVerseMissing: 'Prašomų eilučių Biblijoje be interneto ({{language}}) nėra arba jų nepavyksta perskaityti.'
+  offlineBibleLookupFailed: Nepavyko rasti teksto Biblijoje be interneto.
+  onlineFallbackDisabled: Atsarginis gavimas internetu išjungtas.
