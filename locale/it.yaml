@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Formattazione della citazione biblica
     description: Configura come vengono formattate le citazioni bibliche quando vengono inserite
+    autoInsert:
+      name: Inserisci automaticamente la citazione
+      description: Se attivo, il testo biblico viene recuperato e inserito subito dopo la creazione di un link dai suggerimenti. Richiede una connessione a Internet o una Bibbia offline importata.
     presets:
       name: Preset di modello
       short: Link + citazione
@@ -105,6 +108,7 @@ notices:
   bibleQuoteAlreadyExists: La citazione biblica esiste già
   errorInsertingQuotes: Errore durante l'inserimento delle citazioni bibliche
   bibleQuoteFetchFailed: Impossibile recuperare il testo biblico — riprova
+  bibleQuoteTooManyChapters: Una citazione può coprire al massimo {{max}} capitoli — scegli un passo più breve
   offlineBibleImported: Bibbia offline importata per {{language}}
   offlineBibleRemoved: Bibbia offline rimossa per {{language}}
   offlineBibleAlreadyInstalled: Una Bibbia offline per {{language}} è già installata. Rimuovila prima di reimportare.

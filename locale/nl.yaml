@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Bijbelcitaat Formattering
     description: Configureer hoe bijbelcitaten worden geformatteerd wanneer ze worden ingevoegd
+    autoInsert:
+      name: Citaat automatisch invoegen
+      description: Wanneer ingeschakeld wordt het Bijbelcitaat opgehaald en ingevoegd zodra een link via de suggesties is gemaakt. Vereist een internetverbinding of een geïmporteerde offline Bijbel.
     presets:
       name: Sjabloonvoorinstellingen
       short: Link + citaat
@@ -105,6 +108,7 @@ notices:
   bibleQuoteAlreadyExists: Bijbelcitaat bestaat al
   errorInsertingQuotes: Fout bij het toevoegen van bijbelcitaten
   bibleQuoteFetchFailed: Bijbeltekst kon niet worden opgehaald — probeer het opnieuw
+  bibleQuoteTooManyChapters: Een citaat kan maximaal {{max}} hoofdstukken beslaan — kies een korter gedeelte
   offlineBibleImported: Offline Bijbel geïmporteerd voor {{language}}
   offlineBibleRemoved: Offline Bijbel verwijderd voor {{language}}
   offlineBibleAlreadyInstalled: Er is al een offline Bijbel geïnstalleerd voor {{language}}. Verwijder deze eerst om opnieuw te importeren.

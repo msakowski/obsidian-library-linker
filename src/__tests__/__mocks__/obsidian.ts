@@ -14,6 +14,8 @@ export class Plugin {
   removeChild(component: Component) {}
   addCommand() {}
   addSettingTab() {}
+  register() {}
+  registerEditorExtension() {}
   registerEditorSuggest() {}
   registerEvent() {}
   loadData() {
@@ -224,3 +226,6 @@ export const activeWindow = globalThis.window;
 export const getLanguage = vi.fn(() => 'en');
 
 // Add any other Obsidian classes/types you need to mock
+
+/** Stand-in for the CodeMirror state field that links an editor to its note. */
+export const editorInfoField = {};

@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Bibelzitat-Formatierung
     description: Konfiguriere die Formatierung von eingefügten Bibelzitaten
+    autoInsert:
+      name: Zitat automatisch einfügen
+      description: Wenn aktiviert, wird das Bibelzitat direkt nach dem Erstellen eines Links über die Vorschläge abgerufen und eingefügt. Erfordert eine Internetverbindung oder eine importierte Offline-Bibel.
     presets:
       name: Vorlagenvoreinstellungen
       short: Link + Zitat
@@ -105,6 +108,7 @@ notices:
   bibleQuoteAlreadyExists: Bibelzitat existiert bereits
   errorInsertingQuotes: Fehler beim Einfügen der Bibelzitate
   bibleQuoteFetchFailed: Bibeltext konnte nicht abgerufen werden — bitte erneut versuchen
+  bibleQuoteTooManyChapters: Ein Zitat kann höchstens {{max}} Kapitel umfassen — bitte einen kürzeren Abschnitt wählen
   offlineBibleImported: Offline-Bibel für {{language}} importiert
   offlineBibleRemoved: Offline-Bibel für {{language}} entfernt
   offlineBibleAlreadyInstalled: Für {{language}} ist bereits eine Offline-Bibel installiert. Zuerst entfernen, um sie erneut zu importieren.

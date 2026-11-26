@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Formátování biblické citace
     description: Nakonfigurujte formátování biblických citací při vkládání
+    autoInsert:
+      name: Vložit citát automaticky
+      description: Když je zapnuto, biblický text se načte a vloží hned po vytvoření odkazu z nabídky. Vyžaduje připojení k internetu nebo importovanou offline Bibli.
     presets:
       name: Přednastavené šablony
       short: Odkaz + citace
@@ -105,6 +108,7 @@ notices:
   bibleQuoteAlreadyExists: Biblická citace již existuje
   errorInsertingQuotes: Chyba při vkládání biblických citací
   bibleQuoteFetchFailed: Biblický text se nepodařilo načíst, zkuste to prosím znovu
+  bibleQuoteTooManyChapters: Citát může zahrnovat nejvýše {{max}} kapitoly — vyberte kratší úsek
   offlineBibleImported: Offline Bible byla importována pro jazyk {{language}}
   offlineBibleRemoved: Offline Bible byla odstraněna pro jazyk {{language}}
   offlineBibleAlreadyInstalled: Offline Bible pro jazyk {{language}} je již nainstalována. Pro opětovný import ji nejprve odstraňte.

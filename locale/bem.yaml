@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Ukupwililika amashiwi ya Baibolo
     description: Pekanya ifyo amashiwi ya Baibolo yakaba ilyo yabikwa
+    autoInsert:
+      name: Insert quote automatically
+      description: When enabled, the Bible quote is fetched and inserted right after a link is created from the suggestions. Needs an internet connection or an imported offline Bible.
     presets:
       name: Ifya kubomfya ifyalipekanishiwa
       short: Linki + ishiwi
@@ -105,6 +108,7 @@ notices:
   bibleQuoteAlreadyExists: Amashiwi ya Baibolo nayalibapo kale
   errorInsertingQuotes: Kwacitika ubulufyanya pa kubika amashiwi ya Baibolo
   bibleQuoteFetchFailed: Te kufwaya amashiwi ya Baibolo — mukwai eseni cipya
+  bibleQuoteTooManyChapters: Amashiwi ya Baibolo tayafwile ukucila pa fipandwa {{max}} — sontseni ifyebo ifinono
   offlineBibleImported: 'Baibolo wa kunse kwa intaneti waletwa wa {{language}}'
   offlineBibleRemoved: 'Baibolo wa kunse kwa intaneti wafumishiwa wa {{language}}'
   offlineBibleAlreadyInstalled: 'Baibolo wa kunse kwa intaneti uwa {{language}} naulipo kale. Mufumyepo intaanshi ya kuleta nakabili.'

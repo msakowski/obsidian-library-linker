@@ -1,3 +1,4 @@
+import { isOmittedVerse } from '@/consts/omittedVerses';
 import type { DataAdapter } from 'obsidian';
 import type {
   BibleReference,
@@ -75,13 +76,35 @@ export class VaultOfflineBibleRepository implements OfflineBibleRepository {
       return null;
     }
 
+    const verseNumbers = Object.keys(chapter.verses)
+      .map(Number)
+      .filter((verse) => !Number.isNaN(verse));
+    const lastVerse = Math.max(0, ...verseNumbers);
+
     const parts: string[] = [];
     for (const range of reference.verseRanges) {
-      for (let verse = range.start; verse <= range.end; verse++) {
+      // Only the open end of a part split from a cross-chapter reference runs
+      // to the chapter's last verse. An explicit end is taken as written, so a
+      // range past the chapter fails below rather than giving a partial quote.
+      // No verse counts are stored, so a missing last verse of the chapter
+      // goes unnoticed in an open-ended part.
+      const end = range.toChapterEnd ? lastVerse : range.end;
+      if (range.start > end) return null;
+
+      const rangeParts: string[] = [];
+      for (let verse = range.start; verse <= end; verse++) {
         const text = chapter.verses[String(verse)];
-        if (!text) return null;
-        parts.push(text);
+        if (text) {
+          rangeParts.push(text);
+        } else if (!isOmittedVerse(reference.book, reference.chapter, verse)) {
+          // Missing data (e.g. a verse the importer could not extract), not a
+          // verse the translation omits: fail so the caller can fall back.
+          return null;
+        }
       }
+
+      if (rangeParts.length === 0) return null;
+      parts.push(...rangeParts);
     }
     return parts.join(' ');
   }

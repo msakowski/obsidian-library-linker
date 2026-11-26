@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Bible quote formatting
     description: Configure how Bible quotes are formatted when inserted
+    autoInsert:
+      name: Insert quote automatically
+      description: When enabled, the Bible quote is fetched and inserted right after a link is created from the suggestions. Needs an internet connection or an imported offline Bible.
     presets:
       name: Template presets
       short: Link + quote
@@ -105,6 +108,7 @@ notices:
   bibleQuoteAlreadyExists: Bible quote already exists
   errorInsertingQuotes: Error inserting Bible quotes
   bibleQuoteFetchFailed: Could not fetch Bible text — please try again
+  bibleQuoteTooManyChapters: A quote can span at most {{max}} chapters — choose a shorter passage
   offlineBibleImported: Offline Bible imported for {{language}}
   offlineBibleRemoved: Offline Bible removed for {{language}}
   offlineBibleAlreadyInstalled: An offline Bible for {{language}} is already installed. Remove it first to re-import.

@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: 聖書引用のフォーマット
     description: 聖書の引用を挿入する際のフォーマットを設定します
+    autoInsert:
+      name: 引用を自動的に挿入
+      description: 有効にすると、候補からリンクを作成した直後に聖句が取得されて挿入されます。インターネット接続またはインポート済みのオフライン聖書が必要です。
     presets:
       name: テンプレートプリセット
       short: リンク + 引用
@@ -105,6 +108,7 @@ notices:
   bibleQuoteAlreadyExists: 聖書引用はすでに存在しています
   errorInsertingQuotes: 聖書引用の挿入中にエラーが発生しました
   bibleQuoteFetchFailed: 聖書の本文を取得できませんでした — もう一度お試しください
+  bibleQuoteTooManyChapters: 引用できるのは{{max}}章までです — もっと短い箇所を選んでください
   offlineBibleImported: '{{language}}のオフライン聖書をインポートしました'
   offlineBibleRemoved: '{{language}}のオフライン聖書を削除しました'
   offlineBibleAlreadyInstalled: '{{language}}のオフライン聖書はすでにインストールされています。再インポートするにはまず削除してください。'

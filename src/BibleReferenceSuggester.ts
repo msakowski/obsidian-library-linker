@@ -328,6 +328,12 @@ export class BibleReferenceSuggester extends EditorSuggest<BibleSuggestion> {
       this.selecting = false;
     }
 
+    // Opt-in: fetch and insert the quote for the link that was just created.
+    // Runs in the background so typing is never blocked.
+    this.plugin
+      .getAutoBibleQuoteInserter()
+      .scheduleForCreatedLink(editor, reference, convertedLink, context.start);
+
     // Handle opening links
     if (suggestion.command === 'open') {
       const url = formatJWLibraryLink(reference, linkLanguage);

@@ -40,6 +40,7 @@ export const BIBLE_QUOTE_TEMPLATES = {
 
 interface BibleQuoteSettings {
   template: string; // Template for quote formatting
+  autoInsertOnLinkCreation: boolean; // Insert the quote right after the suggester created a link
 }
 
 interface OfflineBibleSettings {
@@ -67,6 +68,12 @@ export interface BibleBook {
 export interface VerseRange {
   start: number;
   end: number;
+  /**
+   * Set only on a part split from a cross-chapter reference: the range runs
+   * through the last verse of its chapter, whatever `end` says. Keeps the open
+   * end apart from a verse number the user wrote.
+   */
+  toChapterEnd?: boolean;
 }
 
 export interface BibleReference {

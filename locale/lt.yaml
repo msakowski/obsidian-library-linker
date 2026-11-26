@@ -52,6 +52,9 @@ settings:
   bibleQuote:
     name: Biblijos citatų formatavimas
     description: Nustatykite, kaip formatuojamos įterpiamos Biblijos citatos
+    autoInsert:
+      name: Įterpti citatą automatiškai
+      description: Įjungus, sukūrus nuorodą iš pasiūlymų, Biblijos citata gaunama ir įterpiama iš karto po jos. Reikia interneto ryšio arba importuotos Biblijos be interneto.
     presets:
       name: Šablonai
       short: Nuoroda + citata
@@ -105,6 +108,7 @@ notices:
   bibleQuoteAlreadyExists: Biblijos citata jau yra
   errorInsertingQuotes: Klaida įterpiant Biblijos citatas
   bibleQuoteFetchFailed: Nepavyko gauti Biblijos teksto — bandykite dar kartą
+  bibleQuoteTooManyChapters: Citata gali apimti ne daugiau kaip {{max}} skyrius — pasirinkite trumpesnę ištrauką
   offlineBibleImported: 'Biblija be interneto importuota: {{language}}'
   offlineBibleRemoved: 'Biblija be interneto pašalinta: {{language}}'
   offlineBibleAlreadyInstalled: 'Biblija be interneto kalbai {{language}} jau įdiegta. Norėdami importuoti iš naujo, pirmiausia ją pašalinkite.'
