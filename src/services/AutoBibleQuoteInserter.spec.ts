@@ -9,7 +9,15 @@ vi.mock('obsidian', async () => ({
 
 import { AutoBibleQuoteInserter } from '@/services/AutoBibleQuoteInserter';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
-import type { BibleCitationProvider, BibleReference, LinkReplacerSettings } from '@/types';
+import { ConfiguredBibleCitationProvider } from '@/services/ConfiguredBibleCitationProvider';
+import { OfflineBibleCitationProvider } from '@/services/OfflineBibleCitationProvider';
+import type {
+  BibleCitationProvider,
+  BibleReference,
+  LinkReplacerSettings,
+  OfflineBibleCorpusMetadata,
+  OfflineBibleRepository,
+} from '@/types';
 import { BIBLE_QUOTE_TEMPLATES } from '@/types';
 import { createSettings } from '../__tests__/__helpers__/createSettings';
 import { createFakeEditor } from '../__tests__/__helpers__/createFakeEditor';
@@ -166,6 +174,44 @@ describe('AutoBibleQuoteInserter', () => {
     expect(editor.getContent()).toBe(link);
     expect(Notice).toHaveBeenCalledWith('notices.bibleQuoteFetchFailed');
   });
+
+  test.each([
+    { bibleImported: false, reason: 'errors.offlineBibleNotInstalled' },
+    { bibleImported: true, reason: 'errors.offlineBibleVerseMissing' },
+  ])(
+    'with only the offline Bible, says why the quote failed and never goes online (Bible imported: $bibleImported)',
+    async ({ bibleImported, reason }) => {
+      // The real offline and configured providers, over a repository without
+      // the Bible or without the verse, and online fallback turned off.
+      const repository = {
+        getInstalledLanguages: () => Promise.resolve(bibleImported ? ['E'] : []),
+        getMetadata: () =>
+          Promise.resolve(bibleImported ? ({ language: 'E' } as OfflineBibleCorpusMetadata) : null),
+        getChapter: () => Promise.resolve(null),
+        getVerseRange: () => Promise.resolve(null),
+      } as unknown as OfflineBibleRepository;
+      settings.offlineBible = { allowOnlineFallback: false };
+      provider = new ConfiguredBibleCitationProvider(
+        () => settings,
+        new OfflineBibleCitationProvider(repository, t),
+        { getCitation, isLanguageAvailable: vi.fn().mockResolvedValue(true) },
+        t,
+      );
+
+      const link = convertBibleTextToMarkdownLink(JOHN_3_16, settings)!;
+      const editor = createEditor(link);
+
+      const result = await createInserter().insertNow(editor, JOHN_3_16, {
+        line: 0,
+        linkUrl: 'jwlibrary:///finder?bible=43003016&wtlocale=E',
+      });
+
+      expect(result.fetchFailed).toBe(true);
+      expect(editor.getContent()).toBe(link);
+      expect(getCitation).not.toHaveBeenCalled();
+      expect(Notice).toHaveBeenCalledWith(`${reason} errors.onlineFallbackDisabled`);
+    },
+  );
 
   test('does not quote a whole-chapter link', async () => {
     const JOHN_3: BibleReference = { book: 43, chapter: 3 };

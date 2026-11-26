@@ -506,6 +506,8 @@ export interface CreatedLinkQuoteResult {
   inserted: boolean;
   alreadyExists: boolean;
   fetchFailed: boolean;
+  /** The provider's reason for a failed lookup, when it gave a specific one. */
+  fetchError?: string;
   /** The created link was gone by the time the text arrived — nothing was written. */
   anchorLost: boolean;
 }
@@ -705,11 +707,17 @@ export async function insertBibleQuoteForCreatedLink(
   anchor: CreatedLinkAnchor,
   shouldStillInsert: () => boolean = () => true,
 ): Promise<CreatedLinkQuoteResult> {
-  const generated = await generateBibleQuoteText(reference, settings, provider);
-  const quoteText = generated && openCollapsedCallout(generated);
+  const { quote, error } = await generateBibleQuoteText(reference, settings, provider);
+  const quoteText = quote && openCollapsedCallout(quote);
 
   if (!quoteText) {
-    return { inserted: false, alreadyExists: false, fetchFailed: true, anchorLost: false };
+    return {
+      inserted: false,
+      alreadyExists: false,
+      fetchFailed: true,
+      fetchError: error,
+      anchorLost: false,
+    };
   }
 
   // The lookup can take seconds: the user may have opened another note in the

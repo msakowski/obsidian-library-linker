@@ -180,7 +180,12 @@ export class AutoBibleQuoteInserter {
     return !this.disposed && this.getSettings().bibleQuote.autoInsertOnLinkCreation;
   }
 
-  private async notifyFetchFailed(): Promise<void> {
+  /**
+   * Shows why the quote could not be fetched: the provider's reason when it
+   * gave one (offline Bible missing or lacking the verses, with online
+   * fallback off), the generic notice otherwise.
+   */
+  private async notifyFetchFailed(reason?: string): Promise<void> {
     const language = getBookLanguage(this.getSettings().language);
     const available = await this.provider.isLanguageAvailable(language).catch(() => true);
 
@@ -191,7 +196,7 @@ export class AutoBibleQuoteInserter {
       this.unavailableNoticeShown.add(language);
     }
 
-    new Notice(this.t('notices.bibleQuoteFetchFailed'));
+    new Notice(reason ?? this.t('notices.bibleQuoteFetchFailed'));
   }
 
   /**
@@ -217,7 +222,7 @@ export class AutoBibleQuoteInserter {
       );
 
       if (result.fetchFailed && this.isActive()) {
-        await this.notifyFetchFailed();
+        await this.notifyFetchFailed(result.fetchError);
       }
 
       return result;
