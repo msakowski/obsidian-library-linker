@@ -1,0 +1,72 @@
+import type { BibleReference } from '@/types';
+
+/**
+ * Highest verse number of any chapter in the Bible (Psalm 119).
+ * Used as the upper bound of a part that runs to the end of its chapter
+ * (see `VerseRange.toChapterEnd`).
+ */
+export const MAX_VERSES_IN_CHAPTER = 176;
+
+/**
+ * Most chapters one quote may span. Each chapter is a separate lookup, which
+ * online means a request to wol.jw.org, so a reference such as `Ps 1:1-150:6`
+ * would load the site heavily and write a whole book into the note.
+ */
+export const MAX_QUOTE_CHAPTERS = 3;
+
+/** Whether a quote of `reference` would span more than `MAX_QUOTE_CHAPTERS` chapters. */
+export function exceedsQuoteChapterLimit(reference: BibleReference): boolean {
+  const { chapter, endChapter } = reference;
+  return endChapter !== undefined && endChapter - chapter + 1 > MAX_QUOTE_CHAPTERS;
+}
+
+/**
+ * Splits a reference into the parts a citation provider can look up.
+ *
+ * Providers resolve a single verse range inside a single chapter, so
+ * multi-range references (`Joh 1:1,3-4`) and multi-chapter references
+ * (`Matt 3:1-4:11`) have to be requested piece by piece.
+ *
+ * The parts are returned in reading order and together cover the whole
+ * reference. Simple references are returned unchanged.
+ */
+export function splitBibleReferenceForCitation(reference: BibleReference): BibleReference[] {
+  const { book, chapter, endChapter, verseRanges } = reference;
+
+  if (!verseRanges?.length) {
+    return [];
+  }
+
+  if (endChapter && endChapter > chapter) {
+    // A multi-chapter reference always carries exactly one range: the start
+    // verse in the first chapter and the end verse in the last chapter.
+    const { start, end } = verseRanges[0];
+    const parts: BibleReference[] = [];
+
+    for (let current = chapter; current <= endChapter; current++) {
+      parts.push({
+        book,
+        chapter: current,
+        verseRanges: [
+          current === endChapter
+            ? { start: current === chapter ? start : 1, end }
+            : {
+                start: current === chapter ? start : 1,
+                // `end` stays a valid upper bound for providers that scan
+                // verse by verse; the flag marks the open end explicitly.
+                end: MAX_VERSES_IN_CHAPTER,
+                toChapterEnd: true,
+              },
+        ],
+      });
+    }
+
+    return parts;
+  }
+
+  if (verseRanges.length === 1) {
+    return [reference];
+  }
+
+  return verseRanges.map((range) => ({ book, chapter, verseRanges: [range] }));
+}

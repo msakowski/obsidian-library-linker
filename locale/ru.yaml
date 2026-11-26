@@ -105,6 +105,7 @@ notices:
   bibleQuoteAlreadyExists: Библейская цитата уже существует
   errorInsertingQuotes: Ошибка при вставке библейских цитат
   bibleQuoteFetchFailed: Не удалось получить библейский текст — попробуйте ещё раз
+  bibleQuoteTooManyChapters: Цитата может охватывать не более {{max}} глав — выберите отрывок короче
   offlineBibleImported: 'Офлайн-Библия импортирована для языка: {{language}}'
   offlineBibleRemoved: 'Офлайн-Библия удалена для языка: {{language}}'
   offlineBibleAlreadyInstalled: 'Офлайн-Библия для языка {{language}} уже установлена. Удалите её, чтобы импортировать заново.'

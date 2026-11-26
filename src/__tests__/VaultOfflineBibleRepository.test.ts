@@ -90,6 +90,84 @@ describe('VaultOfflineBibleRepository', () => {
     expect(text).toBeNull();
   });
 
+  test('getVerseRange runs an open-ended split part through the last verse', async () => {
+    const adapter = createInMemoryAdapter();
+    const repo = new VaultOfflineBibleRepository(adapter, ROOT);
+    await repo.saveCorpus(makeMetadata(), [makeChapter()]);
+
+    const text = await repo.getVerseRange(
+      { book: 1, chapter: 1, verseRanges: [{ start: 2, end: 176, toChapterEnd: true }] },
+      'X',
+    );
+    expect(text).toBe('Die Erde war leer.');
+  });
+
+  test('getVerseRange fails a range that ends past the last verse of the chapter', async () => {
+    const adapter = createInMemoryAdapter();
+    const repo = new VaultOfflineBibleRepository(adapter, ROOT);
+    await repo.saveCorpus(makeMetadata(), [makeChapter()]);
+
+    // Only the open end of a cross-chapter part may run past the chapter; an
+    // explicit end, even 176 or more, must not give a partial quote.
+    for (const end of [40, 176, 177]) {
+      const text = await repo.getVerseRange(
+        { book: 1, chapter: 1, verseRanges: [{ start: 1, end }] },
+        'X',
+      );
+      expect(text).toBeNull();
+    }
+  });
+
+  test('getVerseRange skips a verse the translation omits', async () => {
+    const adapter = createInMemoryAdapter();
+    const repo = new VaultOfflineBibleRepository(adapter, ROOT);
+    // Matt. 17:21 is not in the NWT main text.
+    await repo.saveCorpus(makeMetadata(), [
+      makeChapter({ book: 40, chapter: 17, verses: { '20': 'A', '22': 'C' } }),
+    ]);
+
+    expect(
+      await repo.getVerseRange(
+        { book: 40, chapter: 17, verseRanges: [{ start: 20, end: 22 }] },
+        'X',
+      ),
+    ).toBe('A C');
+    expect(
+      await repo.getVerseRange(
+        { book: 40, chapter: 17, verseRanges: [{ start: 20, end: 176, toChapterEnd: true }] },
+        'X',
+      ),
+    ).toBe('A C');
+    expect(
+      await repo.getVerseRange(
+        { book: 40, chapter: 17, verseRanges: [{ start: 21, end: 21 }] },
+        'X',
+      ),
+    ).toBeNull();
+  });
+
+  test('getVerseRange fails when an ordinary verse is missing inside a range', async () => {
+    const adapter = createInMemoryAdapter();
+    const repo = new VaultOfflineBibleRepository(adapter, ROOT);
+    // Incomplete import: John 3:17 could not be extracted.
+    await repo.saveCorpus(makeMetadata(), [
+      makeChapter({ book: 43, chapter: 3, verses: { '16': 'A', '18': 'C', '19': 'D' } }),
+    ]);
+
+    expect(
+      await repo.getVerseRange(
+        { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 18 }] },
+        'X',
+      ),
+    ).toBeNull();
+    expect(
+      await repo.getVerseRange(
+        { book: 43, chapter: 3, verseRanges: [{ start: 16, end: 176, toChapterEnd: true }] },
+        'X',
+      ),
+    ).toBeNull();
+  });
+
   test('getVerseRange concatenates multiple verses with a single space', async () => {
     const adapter = createInMemoryAdapter();
     const repo = new VaultOfflineBibleRepository(adapter, ROOT);

@@ -105,6 +105,7 @@ notices:
   bibleQuoteAlreadyExists: Kutipan Alkitab sudah ada
   errorInsertingQuotes: Gagal memasukkan kutipan Alkitab
   bibleQuoteFetchFailed: Gagal mengambil teks Alkitab - silakan coba kembali
+  bibleQuoteTooManyChapters: Kutipan paling banyak mencakup {{max}} pasal - pilih bagian yang lebih pendek
   offlineBibleImported: Alkitab offline telah diimpor untuk {{language}}
   offlineBibleRemoved: Alkitab offline telah dihapus untuk {{language}}
   offlineBibleAlreadyInstalled: Alkitab offline untuk {{language}} sudah terinstal. Silakan hapus terlebih dahulu untuk mengimpor kembali.

@@ -105,6 +105,7 @@ notices:
   bibleQuoteAlreadyExists: Mayroon nang sipi sa Bibliya
   errorInsertingQuotes: Error sa pagpasok ng mga sipi sa Bibliya
   bibleQuoteFetchFailed: Hindi makuha ang teksto ng Bibliya — mangyaring subukan muli
+  bibleQuoteTooManyChapters: Hanggang {{max}} kabanata lang ang masasakop ng isang sipi — pumili ng mas maikling bahagi
   offlineBibleImported: 'Na-import ang offline na Bibliya para sa {{language}}'
   offlineBibleRemoved: 'Inalis ang offline na Bibliya para sa {{language}}'
   offlineBibleAlreadyInstalled: 'May naka-install nang offline na Bibliya para sa {{language}}. Alisin muna ito upang muling mag-import.'

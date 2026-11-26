@@ -105,6 +105,7 @@ notices:
   bibleQuoteAlreadyExists: Amashiwi ya Baibolo nayalibapo kale
   errorInsertingQuotes: Kwacitika ubulufyanya pa kubika amashiwi ya Baibolo
   bibleQuoteFetchFailed: Te kufwaya amashiwi ya Baibolo — mukwai eseni cipya
+  bibleQuoteTooManyChapters: Amashiwi ya Baibolo tayafwile ukucila pa fipandwa {{max}} — sontseni ifyebo ifinono
   offlineBibleImported: 'Baibolo wa kunse kwa intaneti waletwa wa {{language}}'
   offlineBibleRemoved: 'Baibolo wa kunse kwa intaneti wafumishiwa wa {{language}}'
   offlineBibleAlreadyInstalled: 'Baibolo wa kunse kwa intaneti uwa {{language}} naulipo kale. Mufumyepo intaanshi ya kuleta nakabili.'

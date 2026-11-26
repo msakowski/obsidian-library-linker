@@ -1,7 +1,13 @@
 import { Editor, EditorPosition } from 'obsidian';
 import { convertBibleTextToMarkdownLink } from '@/utils/convertBibleTextToMarkdownLink';
 import { formatBibleText } from '@/utils/formatBibleText';
-import type { BibleCitationProvider, LinkReplacerSettings, LinkStyles } from '@/types';
+import type {
+  BibleCitationProvider,
+  BibleCitationResult,
+  BibleReference,
+  LinkReplacerSettings,
+  LinkStyles,
+} from '@/types';
 import {
   findJWLibraryLinks,
   findJWLibraryLinksInLine,
@@ -9,6 +15,10 @@ import {
   type JWLibraryLinkInfo,
   type ContentSelection,
 } from '@/utils/findJWLibraryLinks';
+import {
+  exceedsQuoteChapterLimit,
+  splitBibleReferenceForCitation,
+} from '@/utils/splitBibleReferenceForCitation';
 import { logger } from '@/utils/logger';
 import { getBookLanguage } from './signLanguage';
 
@@ -51,54 +61,105 @@ function processTemplate(
     .replace(/\{quote\}/g, variables.quote.trim());
 }
 
-async function generateBibleQuoteText(
-  linkInfo: JWLibraryLinkInfo,
+/**
+ * The outcome of a lookup: the text, or `null` with the reason to show the
+ * user when there is a specific one.
+ */
+type CitationTextLookup = { text: string; error?: undefined } | { text: null; error?: string };
+type QuoteLookup = { quote: string; error?: undefined } | { quote: null; error?: string };
+
+/**
+ * The provider's own message for an offline failure: the offline Bible is not
+ * imported or lacks the verses, with online fallback turned off. It tells the
+ * user what to fix, where "please try again" would not help. An online failure
+ * (network, page layout) keeps the generic notice.
+ */
+function offlineFailureReason(result: BibleCitationResult): string | undefined {
+  return result.source === 'offline' ? result.error : undefined;
+}
+
+/**
+ * Fetches the text of a reference, one provider lookup per part.
+ *
+ * Multi-range and multi-chapter references cannot be resolved in a single
+ * lookup, so they are split up and the parts are stitched back together.
+ * A missing part fails the whole citation — a partial quote would silently
+ * misrepresent the reference.
+ */
+async function fetchCitationText(
+  reference: BibleReference,
   settings: LinkReplacerSettings,
   provider: BibleCitationProvider,
-): Promise<string | null> {
-  // Chapter navigation links do not specify verses to quote. Keep them in the note.
-  if (!linkInfo.reference.verseRanges?.length) return null;
+): Promise<CitationTextLookup> {
+  const parts = splitBibleReferenceForCitation(reference);
 
-  try {
-    logger.log('generateBibleQuoteText: fetching text for', linkInfo.reference);
-    const result = await provider.getCitation(
-      linkInfo.reference,
-      getBookLanguage(settings.language),
-    );
+  if (parts.length === 0) {
+    logger.warn('fetchCitationText: reference has no verse ranges', reference);
+    return { text: null };
+  }
+
+  const texts: string[] = [];
+
+  for (const part of parts) {
+    const result = await provider.getCitation(part, getBookLanguage(settings.language));
 
     if (!result.success || !result.text) {
       logger.warn(
-        'generateBibleQuoteText: fetch failed —',
+        'fetchCitationText: fetch failed —',
         result.error ?? 'empty text',
         'success:',
         result.success,
       );
-      return null;
+      return { text: null, error: offlineFailureReason(result) };
     }
 
-    logger.log('generateBibleQuoteText: fetched text length:', result.text.length);
+    texts.push(result.text.trim());
+  }
 
-    const bibleRefLinked = convertBibleTextToMarkdownLink(linkInfo.reference, settings);
+  return { text: texts.join(' ') };
+}
+
+async function generateBibleQuoteText(
+  reference: BibleReference,
+  settings: LinkReplacerSettings,
+  provider: BibleCitationProvider,
+): Promise<QuoteLookup> {
+  // Chapter navigation links do not specify verses to quote. Keep them in the note.
+  if (!reference.verseRanges?.length) return { quote: null };
+
+  try {
+    logger.log('generateBibleQuoteText: fetching text for', reference);
+    const { text, error } = await fetchCitationText(reference, settings, provider);
+
+    if (!text) {
+      return { quote: null, error };
+    }
+
+    logger.log('generateBibleQuoteText: fetched text length:', text.length);
+
+    // The quote is labelled with the reference the user wrote, not with the
+    // parts it was fetched in.
+    const bibleRefLinked = convertBibleTextToMarkdownLink(reference, settings);
     if (!bibleRefLinked) {
       logger.warn('generateBibleQuoteText: convertBibleTextToMarkdownLink returned falsy');
-      return null;
+      return { quote: null };
     }
 
-    const bibleRef = formatBibleText(linkInfo.reference, settings.bookLength, settings.language);
+    const bibleRef = formatBibleText(reference, settings.bookLength, settings.language);
 
-    const processed = processTemplate(settings.bibleQuote.template, {
+    const quote = processTemplate(settings.bibleQuote.template, {
       bibleRef,
       bibleRefLinked,
-      quote: result.text,
+      quote: text,
     });
 
-    return processed;
+    return { quote };
   } catch (error: unknown) {
     logger.error(
       'generateBibleQuoteText: error:',
       error instanceof Error ? error.message : String(error),
     );
-    return null;
+    return { quote: null };
   }
 }
 
@@ -177,6 +238,20 @@ interface InsertQuotesResult {
   inserted: number;
   linksFound: number;
   fetchFailed: number;
+  /** The provider's reason for the first failed lookup, when it gave a specific one. */
+  fetchError?: string;
+  /** Links not quoted because they span more than `MAX_QUOTE_CHAPTERS` chapters. */
+  tooManyChapters: number;
+}
+
+interface InsertQuoteAtCursorResult {
+  inserted: boolean;
+  alreadyExists: boolean;
+  fetchFailed: boolean;
+  /** The provider's reason for the first failed lookup, when it gave a specific one. */
+  fetchError?: string;
+  /** A link was not quoted because it spans more than `MAX_QUOTE_CHAPTERS` chapters. */
+  tooManyChapters: boolean;
 }
 
 export async function insertAllBibleQuotes(
@@ -202,7 +277,7 @@ export async function insertAllBibleQuotes(
         );
       }
     }
-    return { inserted: 0, linksFound: 0, fetchFailed: 0 };
+    return { inserted: 0, linksFound: 0, fetchFailed: 0, tooManyChapters: 0 };
   }
 
   // Several links can share a line (a multi-range reference, or references
@@ -220,6 +295,8 @@ export async function insertAllBibleQuotes(
   let inserted = 0;
   let skippedAlreadyQuoted = 0;
   let fetchFailed = 0;
+  let fetchError: string | undefined;
+  let tooManyChapters = 0;
 
   for (const [lineNumber, lineLinks] of linksByLine) {
     if (lineNumber > editor.lastLine()) {
@@ -244,12 +321,25 @@ export async function insertAllBibleQuotes(
     const quoteTexts: string[] = [];
 
     for (const linkInfo of lineLinks) {
+      // A whole-chapter link names no verses: nothing to quote, nothing failed
+      if (!linkInfo.reference.verseRanges?.length) continue;
+
+      if (exceedsQuoteChapterLimit(linkInfo.reference)) {
+        tooManyChapters++;
+        continue;
+      }
+
       try {
-        const quoteText = await generateBibleQuoteText(linkInfo, settings, provider);
-        if (quoteText) {
-          quoteTexts.push(quoteText);
+        const { quote, error } = await generateBibleQuoteText(
+          linkInfo.reference,
+          settings,
+          provider,
+        );
+        if (quote) {
+          quoteTexts.push(quote);
         } else {
           fetchFailed++;
+          fetchError ??= error;
           logger.warn(
             `insertAllBibleQuotes: generateBibleQuoteText returned null for link on line ${lineNumber}`,
           );
@@ -284,21 +374,21 @@ export async function insertAllBibleQuotes(
     editor.transaction({ changes });
   }
 
-  return { inserted, linksFound: links.length, fetchFailed };
+  return { inserted, linksFound: links.length, fetchFailed, fetchError, tooManyChapters };
 }
 
 export async function insertBibleQuoteAtCursor(
   editor: Editor,
   settings: LinkReplacerSettings,
   provider: BibleCitationProvider,
-): Promise<{ inserted: boolean; alreadyExists: boolean; fetchFailed: boolean }> {
+): Promise<InsertQuoteAtCursorResult> {
   const cursor = editor.getCursor();
   const cursorLine = cursor.line;
 
   logger.log('insertBibleQuoteAtCursor', cursorLine);
 
   if (cursorLine > editor.lastLine()) {
-    return { inserted: false, alreadyExists: false, fetchFailed: false };
+    return { inserted: false, alreadyExists: false, fetchFailed: false, tooManyChapters: false };
   }
 
   const currentLine = editor.getLine(cursorLine);
@@ -311,7 +401,7 @@ export async function insertBibleQuoteAtCursor(
     nextLine &&
     nextLine.trim().startsWith('>')
   ) {
-    return { inserted: false, alreadyExists: true, fetchFailed: false };
+    return { inserted: false, alreadyExists: true, fetchFailed: false, tooManyChapters: false };
   }
 
   const candidateLineNumbers = [
@@ -336,25 +426,30 @@ export async function insertBibleQuoteAtCursor(
   }
 
   if (linksOnTargetLine.length === 0) {
-    return { inserted: false, alreadyExists: false, fetchFailed: false };
+    return { inserted: false, alreadyExists: false, fetchFailed: false, tooManyChapters: false };
   }
 
   const quoteTexts: string[] = [];
+  let tooManyChapters = false;
+  let failed = 0;
+  let fetchError: string | undefined;
   for (const linkInfo of linksOnTargetLine) {
     const reference = parseJWLibraryLink(linkInfo.url);
     logger.log('reference', reference);
-    if (reference) {
-      const quoteText = await generateBibleQuoteText(
-        {
-          ...linkInfo,
-          reference,
-        },
-        settings,
-        provider,
-      );
-      if (quoteText) {
-        quoteTexts.push(quoteText);
-      }
+    // A whole-chapter link names no verses: nothing to quote, nothing failed
+    if (!reference?.verseRanges?.length) continue;
+
+    if (exceedsQuoteChapterLimit(reference)) {
+      tooManyChapters = true;
+      continue;
+    }
+
+    const { quote, error } = await generateBibleQuoteText(reference, settings, provider);
+    if (quote) {
+      quoteTexts.push(quote);
+    } else {
+      failed++;
+      fetchError ??= error;
     }
   }
 
@@ -368,8 +463,14 @@ export async function insertBibleQuoteAtCursor(
     editor.transaction({
       changes: [buildQuoteChange(editor, targetLineNumber, quoteTexts.join('\n\n'), replaceLine)],
     });
-    return { inserted: true, alreadyExists: false, fetchFailed: false };
+    return { inserted: true, alreadyExists: false, fetchFailed: false, tooManyChapters };
   }
 
-  return { inserted: false, alreadyExists: false, fetchFailed: linksOnTargetLine.length > 0 };
+  return {
+    inserted: false,
+    alreadyExists: false,
+    fetchFailed: failed > 0,
+    fetchError,
+    tooManyChapters,
+  };
 }

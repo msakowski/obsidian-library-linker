@@ -105,6 +105,7 @@ notices:
   bibleQuoteAlreadyExists: Biblická citace již existuje
   errorInsertingQuotes: Chyba při vkládání biblických citací
   bibleQuoteFetchFailed: Biblický text se nepodařilo načíst, zkuste to prosím znovu
+  bibleQuoteTooManyChapters: Citát může zahrnovat nejvýše {{max}} kapitoly — vyberte kratší úsek
   offlineBibleImported: Offline Bible byla importována pro jazyk {{language}}
   offlineBibleRemoved: Offline Bible byla odstraněna pro jazyk {{language}}
   offlineBibleAlreadyInstalled: Offline Bible pro jazyk {{language}} je již nainstalována. Pro opětovný import ji nejprve odstraňte.
